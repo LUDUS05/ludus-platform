@@ -1,0 +1,36 @@
+services:
+  - type: web
+    name: ludus-backend
+    env: node
+    plan: starter
+    buildCommand: cd server && npm install
+    startCommand: cd server && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: MONGODB_URI
+        sync: false # Set in Render dashboard
+      - key: JWT_SECRET
+        sync: false # Set in Render dashboard
+      - key: JWT_REFRESH_SECRET
+        sync: false # Set in Render dashboard
+      - key: MOYASAR_SECRET_KEY
+        sync: false # Set in Render dashboard
+      - key: MOYASAR_PUBLISHABLE_KEY
+        sync: false # Set in Render dashboard
+      - key: MOYASAR_WEBHOOK_SECRET
+        sync: false # Set in Render dashboard
+      - key: CLIENT_URL
+        value: https://ludus-platform.vercel.app
+
+  - type: web
+    name: ludus-frontend
+    env: static
+    buildCommand: cd client && npm install && npm run build
+    staticPublishPath: client/build
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
