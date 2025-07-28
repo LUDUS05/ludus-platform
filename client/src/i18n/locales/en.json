@@ -18,7 +18,8 @@
     "submit": "Submit",
     "login": "Login",
     "logout": "Logout",
-    "register": "Register"
+    "register": "Register",
+    "or": "or"
   },
   "navigation": {
     "home": "Home",
@@ -134,5 +135,51 @@
     "english": "English",
     "arabic": "العربية",
     "switchLanguage": "Switch Language"
+  },
+  "howItWorks": {
+    "title": "How LUDUS Works",
+    "subtitle": "Discover, book, and enjoy amazing local activities in just a few simple steps.",
+    "gettingStarted": "Getting Started is Easy",
+    "whyChoose": "Why Choose LUDUS?",
+    "readyToStart": "Ready to Start Exploring?",
+    "joinAdventurers": "Join thousands of adventurers who have discovered amazing experiences through LUDUS.",
+    "browseActivities": "Browse Activities",
+    "signUpNow": "Sign Up Now",
+    "steps": {
+      "browse": {
+        "title": "Browse Activities",
+        "description": "Explore our wide selection of local activities and experiences in Saudi Arabia."
+      },
+      "choose": {
+        "title": "Choose & Book",
+        "description": "Select your preferred activity, choose a date and time, and book instantly."
+      },
+      "pay": {
+        "title": "Secure Payment",
+        "description": "Pay safely using MADA, credit cards, Apple Pay, or STC Pay."
+      },
+      "enjoy": {
+        "title": "Enjoy Experience",
+        "description": "Show up and enjoy your amazing local experience with professional guides."
+      }
+    },
+    "features": {
+      "verified": {
+        "title": "Verified Vendors",
+        "description": "All our activity providers are thoroughly vetted and verified."
+      },
+      "instant": {
+        "title": "Instant Booking",
+        "description": "Book activities instantly with real-time availability."
+      },
+      "secure": {
+        "title": "Secure Payments",
+        "description": "Your payments are secure with our trusted payment partners."
+      },
+      "support": {
+        "title": "24/7 Support",
+        "description": "Get help whenever you need it from our customer support team."
+      }
+    }
   }
 }

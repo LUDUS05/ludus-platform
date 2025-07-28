@@ -4,6 +4,7 @@ import { SpeedInsights } from '@vercel/speed-insights/react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Header from './components/common/Header';
 import LoginForm from './components/auth/LoginForm';
+import RegisterForm from './components/auth/RegisterForm';
 import AdminRoutes from './pages/admin/AdminRoutes';
 import ActivitiesPageComponent from './pages/ActivitiesPage';
 import ActivityDetailPage from './pages/ActivityDetailPage';
@@ -11,6 +12,9 @@ import DashboardPage from './pages/DashboardPage';
 import VendorProfilePage from './pages/VendorProfilePage';
 import BookingPage from './pages/BookingPage';
 import PaymentSuccessPage from './pages/PaymentSuccessPage';
+import ProfilePage from './pages/ProfilePage';
+import HowItWorksPage from './pages/HowItWorksPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import './index.css';
 
 // Protected Route Component
@@ -111,6 +115,14 @@ function App() {
                 </main>
               </>
             } />
+            <Route path="/register" element={
+              <>
+                <Header />
+                <main>
+                  <RegisterForm />
+                </main>
+              </>
+            } />
             <Route path="/activities" element={
               <>
                 <Header />
@@ -178,6 +190,35 @@ function App() {
                 </>
               } 
             />
+            <Route 
+              path="/profile" 
+              element={
+                <>
+                  <Header />
+                  <main>
+                    <ProtectedRoute>
+                      <ProfilePage />
+                    </ProtectedRoute>
+                  </main>
+                </>
+              } 
+            />
+            <Route path="/how-it-works" element={
+              <>
+                <Header />
+                <main>
+                  <HowItWorksPage />
+                </main>
+              </>
+            } />
+            <Route path="/forgot-password" element={
+              <>
+                <Header />
+                <main>
+                  <ForgotPasswordPage />
+                </main>
+              </>
+            } />
           </Routes>
         </div>
         <SpeedInsights />
