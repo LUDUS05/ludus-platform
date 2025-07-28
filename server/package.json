@@ -4,7 +4,7 @@
   "description": "Backend for LUDUS platform",
   "main": "src/app.js",
   "scripts": {
-    "start": "node src/app.js",
+    "start": "node test-server.js",
     "dev": "nodemon src/app.js",
     "test": "jest",
     "seed": "node src/seeds/index.js",
