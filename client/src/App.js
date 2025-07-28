@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Header from './components/common/Header';
@@ -15,6 +16,7 @@ import PaymentSuccessPage from './pages/PaymentSuccessPage';
 import ProfilePage from './pages/ProfilePage';
 import HowItWorksPage from './pages/HowItWorksPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import UIShowcasePage from './pages/UIShowcasePage';
 import './index.css';
 
 // Protected Route Component
@@ -37,29 +39,33 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
-// Temporary Home Page Component
-const HomePage = () => (
-  <div className="min-h-screen bg-gray-50">
-    <div className="max-w-7xl mx-auto container-padding py-12">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">
-          Welcome to LUDUS
-        </h1>
-        <p className="text-xl text-gray-600 mb-8">
-          Discover amazing local activities and experiences
-        </p>
-        <div className="space-x-4">
-          <a href="/activities" className="btn-primary">
-            Explore Activities
-          </a>
-          <a href="/register" className="btn-outline">
-            Get Started
-          </a>
+// Home Page Component
+const HomePage = () => {
+  const { t } = useTranslation();
+  
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto container-padding py-12">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            {t('home.welcomeTitle')}
+          </h1>
+          <p className="text-xl text-gray-600 mb-8">
+            {t('home.welcomeSubtitle')}
+          </p>
+          <div className="space-x-4">
+            <a href="/activities" className="btn-primary">
+              {t('home.exploreActivities')}
+            </a>
+            <a href="/register" className="btn-outline">
+              {t('home.getStarted')}
+            </a>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 
 
@@ -216,6 +222,14 @@ function App() {
                 <Header />
                 <main>
                   <ForgotPasswordPage />
+                </main>
+              </>
+            } />
+            <Route path="/ui-showcase" element={
+              <>
+                <Header />
+                <main>
+                  <UIShowcasePage />
                 </main>
               </>
             } />

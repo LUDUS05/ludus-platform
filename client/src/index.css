@@ -11,6 +11,54 @@
 }
 
 @layer components {
+  /* LUDUS Typography Classes */
+  .text-display-xl { @apply text-4xl font-bold leading-tight tracking-tight; }
+  .text-display-lg { @apply text-3xl font-semibold leading-tight tracking-tight; }
+  .text-display-md { @apply text-2xl font-semibold leading-tight; }
+  .text-display-sm { @apply text-xl font-semibold leading-normal; }
+  .text-display-xs { @apply text-lg font-semibold leading-normal; }
+
+  .text-body-lg { @apply text-lg font-normal leading-relaxed; }
+  .text-body-md { @apply text-base font-normal leading-normal; }
+  .text-body-sm { @apply text-sm font-normal leading-normal; }
+  .text-body-xs { @apply text-xs font-normal leading-normal; }
+
+  .text-label-lg { @apply text-base font-medium leading-normal; }
+  .text-label-md { @apply text-sm font-medium leading-normal; }
+  .text-label-sm { @apply text-xs font-medium leading-normal uppercase tracking-wider; }
+
+  /* LUDUS Button Components */
+  .btn-ludus-primary {
+    @apply bg-ludus-orange hover:bg-ludus-orange-dark text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  
+  .btn-ludus-secondary {
+    @apply bg-white border-2 border-ludus-orange text-ludus-orange hover:bg-ludus-orange hover:text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200;
+  }
+  
+  .btn-ludus-ghost {
+    @apply bg-transparent text-charcoal hover:bg-warm-light font-medium py-3 px-4 rounded-xl transition-all duration-200;
+  }
+  
+  /* LUDUS Input Components */
+  .input-ludus {
+    @apply w-full px-4 py-3 rounded-xl border-2 border-warm bg-white text-charcoal placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-ludus-orange/20 focus:border-ludus-orange transition-colors duration-200;
+  }
+  
+  .input-ludus-error {
+    @apply border-error-red focus:border-error-red focus:ring-error-red/20;
+  }
+  
+  /* LUDUS Card Components */
+  .card-ludus {
+    @apply bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden;
+  }
+  
+  .card-ludus-hover {
+    @apply transition-all duration-300 ease-out hover:shadow-xl hover:-translate-y-1;
+  }
+  
+  /* Legacy Components for Compatibility */
   .btn-primary {
     @apply bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
   }
@@ -47,6 +95,37 @@
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+  
+  /* Line clamping utilities */
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
+  
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+  
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+  
+  /* Animation utilities */
+  .animate-scale-in {
+    animation: scaleIn 0.2s ease-out;
+  }
+  
+  .animate-bounce-in {
+    animation: bounceIn 0.6s ease-out;
   }
   
   /* RTL Support for Arabic */

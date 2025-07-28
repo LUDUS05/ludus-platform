@@ -19,7 +19,19 @@
     "login": "Login",
     "logout": "Logout",
     "register": "Register",
-    "or": "or"
+    "or": "or",
+    "welcome": "Welcome",
+    "explore": "Explore",
+    "getStarted": "Get Started",
+    "signIn": "Sign in",
+    "signUp": "Sign up",
+    "account": "account",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "forgotPasswordLink": "Forgot your password?",
+    "noAccount": "Don't have an account?",
+    "haveAccount": "Already have an account?",
+    "signInHere": "Sign in here"
   },
   "navigation": {
     "home": "Home",
@@ -29,6 +41,11 @@
     "admin": "Admin",
     "about": "About",
     "contact": "Contact"
+  },
+  "profile": {
+    "manageAccount": "Manage your account settings and personal information",
+    "profileUpdated": "Profile updated successfully",
+    "updateFailed": "Failed to update profile"
   },
   "auth": {
     "login": "Login",
@@ -44,7 +61,15 @@
     "loginSuccess": "Login successful",
     "registerSuccess": "Registration successful",
     "loginError": "Invalid email or password",
-    "registerError": "Registration failed"
+    "registerError": "Registration failed",
+    "signInToAccount": "Sign in to your account",
+    "createNewAccount": "Create a new account",
+    "enterEmail": "Enter your email",
+    "enterPassword": "Enter your password",
+    "confirmNewPassword": "Confirm your new password",
+    "enterFirstName": "Enter your first name",
+    "enterLastName": "Enter your last name",
+    "enterPhoneNumber": "Enter your phone number"
   },
   "activities": {
     "title": "Activities",
@@ -181,5 +206,20 @@
         "description": "Get help whenever you need it from our customer support team."
       }
     }
+  },
+  "home": {
+    "welcomeTitle": "Welcome to LUDUS",
+    "welcomeSubtitle": "Discover amazing local activities and experiences",
+    "exploreActivities": "Explore Activities",
+    "getStarted": "Get Started"
+  },
+  "forgotPassword": {
+    "title": "Forgot Password?",
+    "subtitle": "Enter your email address and we'll send you a link to reset your password.",
+    "sendResetLink": "Send Reset Link",
+    "resetSent": "Password reset instructions have been sent to your email.",
+    "resetFailed": "Failed to send password reset email. Please try again.",
+    "backToLogin": "Back to Login",
+    "enterEmailAddress": "Enter your email address"
   }
 }

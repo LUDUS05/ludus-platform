@@ -1,16 +1,41 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const LanguageSwitcher = () => {
   const { i18n, t } = useTranslation();
 
+  // Ensure proper RTL setup on component mount and language change
+  useEffect(() => {
+    const updateDocumentDirection = () => {
+      const currentLang = i18n.language;
+      const isRTL = currentLang === 'ar';
+      
+      // Update document attributes
+      document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+      document.documentElement.lang = currentLang;
+      
+      // Update body class for additional styling if needed
+      document.body.classList.remove('rtl', 'ltr');
+      document.body.classList.add(isRTL ? 'rtl' : 'ltr');
+      
+      // Store preference in localStorage
+      localStorage.setItem('preferred-language', currentLang);
+    };
+
+    updateDocumentDirection();
+    
+    // Listen for language changes
+    i18n.on('languageChanged', updateDocumentDirection);
+    
+    // Cleanup listener on unmount
+    return () => {
+      i18n.off('languageChanged', updateDocumentDirection);
+    };
+  }, [i18n]);
+
   const toggleLanguage = () => {
     const newLang = i18n.language === 'en' ? 'ar' : 'en';
     i18n.changeLanguage(newLang);
-    
-    // Update document direction for RTL support
-    document.documentElement.dir = newLang === 'ar' ? 'rtl' : 'ltr';
-    document.documentElement.lang = newLang;
   };
 
   return (

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 
 const LoginForm = () => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -44,15 +46,15 @@ const LoginForm = () => {
             <span className="text-white font-bold text-xl">L</span>
           </div>
           <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
-            Sign in to your account
+            {t('auth.signInToAccount')}
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Or{' '}
+            {t('common.or')}{' '}
             <Link
               to="/register"
               className="font-medium text-primary-600 hover:text-primary-500"
             >
-              create a new account
+              {t('auth.createNewAccount')}
             </Link>
           </p>
         </div>
@@ -67,7 +69,7 @@ const LoginForm = () => {
           <div className="space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                Email address
+                {t('auth.email')}
               </label>
               <input
                 id="email"
@@ -76,7 +78,7 @@ const LoginForm = () => {
                 autoComplete="email"
                 required
                 className="input-field"
-                placeholder="Enter your email"
+                placeholder={t('auth.enterEmail')}
                 value={formData.email}
                 onChange={handleChange}
                 disabled={isLoading}
@@ -85,7 +87,7 @@ const LoginForm = () => {
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                Password
+                {t('auth.password')}
               </label>
               <div className="relative">
                 <input
@@ -95,7 +97,7 @@ const LoginForm = () => {
                   autoComplete="current-password"
                   required
                   className="input-field pr-10"
-                  placeholder="Enter your password"
+                  placeholder={t('auth.enterPassword')}
                   value={formData.password}
                   onChange={handleChange}
                   disabled={isLoading}
@@ -129,7 +131,7 @@ const LoginForm = () => {
                 className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
               />
               <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                Remember me
+                {t('auth.rememberMe')}
               </label>
             </div>
 
@@ -138,7 +140,7 @@ const LoginForm = () => {
                 to="/forgot-password"
                 className="font-medium text-primary-600 hover:text-primary-500"
               >
-                Forgot your password?
+                {t('auth.forgotPassword')}
               </Link>
             </div>
           </div>
@@ -155,10 +157,10 @@ const LoginForm = () => {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  Signing in...
+                  {t('common.loading')}
                 </div>
               ) : (
-                'Sign in'
+                t('auth.login')
               )}
             </button>
           </div>

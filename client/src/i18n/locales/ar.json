@@ -19,7 +19,19 @@
     "login": "تسجيل الدخول",
     "logout": "تسجيل الخروج",
     "register": "التسجيل",
-    "or": "أو"
+    "or": "أو",
+    "welcome": "مرحباً",
+    "explore": "استكشف",
+    "getStarted": "ابدأ الآن",
+    "signIn": "تسجيل الدخول",
+    "signUp": "إنشاء حساب",
+    "account": "الحساب",
+    "showPassword": "إظهار كلمة المرور",
+    "hidePassword": "إخفاء كلمة المرور",
+    "forgotPasswordLink": "نسيت كلمة المرور؟",
+    "noAccount": "ليس لديك حساب؟",
+    "haveAccount": "لديك حساب بالفعل؟",
+    "signInHere": "سجل الدخول هنا"
   },
   "navigation": {
     "home": "الرئيسية",
@@ -29,6 +41,11 @@
     "admin": "الإدارة",
     "about": "حول",
     "contact": "اتصل بنا"
+  },
+  "profile": {
+    "manageAccount": "إدارة إعدادات حسابك والمعلومات الشخصية",
+    "profileUpdated": "تم تحديث الملف الشخصي بنجاح",
+    "updateFailed": "فشل في تحديث الملف الشخصي"
   },
   "auth": {
     "login": "تسجيل الدخول",
@@ -44,7 +61,15 @@
     "loginSuccess": "تم تسجيل الدخول بنجاح",
     "registerSuccess": "تم التسجيل بنجاح",
     "loginError": "البريد الإلكتروني أو كلمة المرور غير صحيحة",
-    "registerError": "فشل في التسجيل"
+    "registerError": "فشل في التسجيل",
+    "signInToAccount": "تسجيل الدخول إلى حسابك",
+    "createNewAccount": "إنشاء حساب جديد",
+    "enterEmail": "أدخل بريدك الإلكتروني",
+    "enterPassword": "أدخل كلمة المرور",
+    "confirmNewPassword": "تأكيد كلمة المرور الجديدة",
+    "enterFirstName": "أدخل اسمك الأول",
+    "enterLastName": "أدخل اسم العائلة",
+    "enterPhoneNumber": "أدخل رقم الهاتف"
   },
   "activities": {
     "title": "الأنشطة",
@@ -181,5 +206,20 @@
         "description": "احصل على المساعدة متى احتجت إليها من فريق خدمة العملاء."
       }
     }
+  },
+  "home": {
+    "welcomeTitle": "مرحباً بك في لودوس",
+    "welcomeSubtitle": "اكتشف الأنشطة والتجارب المحلية المذهلة",
+    "exploreActivities": "استكشف الأنشطة",
+    "getStarted": "ابدأ الآن"
+  },
+  "forgotPassword": {
+    "title": "نسيت كلمة المرور؟",
+    "subtitle": "أدخل عنوان بريدك الإلكتروني وسنرسل لك رابطاً لإعادة تعيين كلمة المرور.",
+    "sendResetLink": "إرسال رابط إعادة التعيين",
+    "resetSent": "تم إرسال تعليمات إعادة تعيين كلمة المرور إلى بريدك الإلكتروني.",
+    "resetFailed": "فشل في إرسال بريد إعادة تعيين كلمة المرور. الرجاء المحاولة مرة أخرى.",
+    "backToLogin": "العودة إلى تسجيل الدخول",
+    "enterEmailAddress": "أدخل عنوان بريدك الإلكتروني"
   }
 }

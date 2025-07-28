@@ -42,9 +42,9 @@ const ProfilePage = () => {
     
     try {
       await updateProfile(formData);
-      setMessage('Profile updated successfully');
+      setMessage(t('profile.profileUpdated'));
     } catch (error) {
-      setError(error.response?.data?.message || 'Failed to update profile');
+      setError(error.response?.data?.message || t('profile.updateFailed'));
     } finally {
       setLoading(false);
     }
@@ -64,7 +64,7 @@ const ProfilePage = () => {
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-200">
             <h1 className="text-2xl font-bold text-gray-900">{t('navigation.profile')}</h1>
-            <p className="text-gray-600 mt-1">Manage your account settings and personal information</p>
+            <p className="text-gray-600 mt-1">{t('profile.manageAccount')}</p>
           </div>
           
           <form onSubmit={handleSubmit} className="p-6">

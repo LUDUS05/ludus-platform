@@ -21,9 +21,9 @@ const ForgotPasswordPage = () => {
       // Simulate API call delay
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      setMessage('Password reset instructions have been sent to your email.');
+      setMessage(t('forgotPassword.resetSent'));
     } catch (error) {
-      setError('Failed to send password reset email. Please try again.');
+      setError(t('forgotPassword.resetFailed'));
     } finally {
       setLoading(false);
     }
@@ -34,10 +34,10 @@ const ForgotPasswordPage = () => {
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="text-center">
           <h2 className="text-3xl font-bold text-gray-900">
-            {t('auth.forgotPassword')}
+            {t('forgotPassword.title')}
           </h2>
           <p className="mt-2 text-sm text-gray-600">
-            Enter your email address and we'll send you a link to reset your password.
+            {t('forgotPassword.subtitle')}
           </p>
         </div>
       </div>
@@ -71,7 +71,7 @@ const ForgotPasswordPage = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="input-field"
-                  placeholder="Enter your email address"
+                  placeholder={t('forgotPassword.enterEmailAddress')}
                 />
               </div>
             </div>
@@ -82,7 +82,7 @@ const ForgotPasswordPage = () => {
                 disabled={loading}
                 className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? t('common.loading') : 'Send Reset Link'}
+                {loading ? t('common.loading') : t('forgotPassword.sendResetLink')}
               </button>
             </div>
           </form>
@@ -102,7 +102,7 @@ const ForgotPasswordPage = () => {
                 to="/login"
                 className="text-primary-600 hover:text-primary-500 font-medium"
               >
-                Back to {t('auth.login')}
+                {t('forgotPassword.backToLogin')}
               </Link>
             </div>
             
