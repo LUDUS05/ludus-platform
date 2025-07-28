@@ -27,7 +27,12 @@ if (process.env.NODE_ENV !== 'test' && process.env.MONGODB_URI) {
 // Security middleware
 app.use(helmet());
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  origin: [
+    process.env.CLIENT_URL || 'http://localhost:3000',
+    'https://app.letsludus.com',
+    'https://ludus-platform.vercel.app',
+    'http://localhost:3000'
+  ],
   credentials: true
 }));
 
