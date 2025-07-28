@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Header from './components/common/Header';
 import LoginForm from './components/auth/LoginForm';
@@ -179,6 +180,7 @@ function App() {
             />
           </Routes>
         </div>
+        <SpeedInsights />
       </Router>
     </AuthProvider>
   );
