@@ -10,7 +10,7 @@
     "seed": "node src/seeds/index.js",
     "test-api": "node test-api.js",
     "setup": "npm run seed && echo '✅ Setup complete! Run npm run dev to start the server.'",
-    "build": "echo 'No build step required for backend'",
+    "build": "npm ci --production",
     "postinstall": "echo 'Backend dependencies installed successfully'"
   },
   "dependencies": {
