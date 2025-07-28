@@ -287,9 +287,9 @@ const ActivitiesPage = () => {
                   <div className="text-sm text-gray-500">
                     📍 {activity.location?.city}
                   </div>
-                  {activity.vendor?.rating && (
+                  {activity.vendor?.rating?.average > 0 && (
                     <div className="flex items-center text-sm text-gray-500">
-                      ⭐ {activity.vendor.rating.toFixed(1)}
+                      ⭐ {activity.vendor.rating.average.toFixed(1)}
                     </div>
                   )}
                 </div>

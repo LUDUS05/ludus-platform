@@ -5,7 +5,7 @@ import './i18n';
 import App from './App';
 
 // Initialize Sentry for error tracking (only in production)
-if (process.env.NODE_ENV === 'production' && process.env.REACT_APP_SENTRY_DSN) {
+if (process.env.NODE_ENV === 'production' && process.env.REACT_APP_SENTRY_DSN && !process.env.REACT_APP_SENTRY_DSN.includes('your-sentry')) {
   import('@sentry/react').then(({ init }) => {
     import('@sentry/tracing').then(({ BrowserTracing }) => {
       init({

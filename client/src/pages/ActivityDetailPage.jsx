@@ -141,8 +141,8 @@ const ActivityDetailPage = () => {
                       {getCategoryIcon(activity.category)} {activity.category}
                     </span>
                     <span>📍 {activity.location?.city}, {activity.location?.state}</span>
-                    {activity.vendor?.rating && (
-                      <span>⭐ {activity.vendor.rating.toFixed(1)} ({activity.vendor.totalReviews || 0} reviews)</span>
+                    {activity.vendor?.rating?.average > 0 && (
+                      <span>⭐ {activity.vendor.rating.average.toFixed(1)} ({activity.vendor.rating.count || 0} reviews)</span>
                     )}
                   </div>
                 </div>
@@ -226,11 +226,11 @@ const ActivityDetailPage = () => {
                       {activity.vendor.description}
                     </p>
                   )}
-                  {activity.vendor?.rating && (
+                  {activity.vendor?.rating?.average > 0 && (
                     <div className="mb-3 flex items-center space-x-2">
                       <span className="text-yellow-400">⭐⭐⭐⭐⭐</span>
                       <span className="text-sm text-gray-600">
-                        {activity.vendor.rating.toFixed(1)} ({activity.vendor.totalReviews || 0} reviews)
+                        {activity.vendor.rating.average.toFixed(1)} ({activity.vendor.rating.count || 0} reviews)
                       </span>
                     </div>
                   )}
