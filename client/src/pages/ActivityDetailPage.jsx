@@ -169,7 +169,12 @@ const ActivityDetailPage = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <h3 className="font-medium text-gray-900 mb-2">Duration</h3>
-                  <p className="text-gray-600">{activity.duration || 'Varies'}</p>
+                  <p className="text-gray-600">
+                    {activity.duration 
+                      ? `${activity.duration.hours}h ${activity.duration.minutes}m`
+                      : 'Varies'
+                    }
+                  </p>
                 </div>
                 <div>
                   <h3 className="font-medium text-gray-900 mb-2">Group Size</h3>
