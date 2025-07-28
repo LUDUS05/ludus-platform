@@ -1,65 +1,160 @@
 import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { motion } from 'framer-motion';
 import {
-  HeartIcon,
-  StarIcon,
-  MapPinIcon,
-  CalendarIcon,
   UserIcon,
   MagnifyingGlassIcon as SearchIcon,
   BellIcon,
   Bars3Icon as MenuIcon,
   GlobeAltIcon as CompassIcon,
   DocumentTextIcon as TicketIcon,
-  PlayIcon,
-  ChevronRightIcon,
+  CalendarIcon,
   CheckIcon,
   ExclamationTriangleIcon,
-  InformationCircleIcon
+  InformationCircleIcon,
+  PlusIcon,
+  PhotoIcon,
+  SparklesIcon
 } from '@heroicons/react/24/outline';
-import {
-  HeartIcon as HeartSolidIcon,
-  StarIcon as StarSolidIcon
-} from '@heroicons/react/24/solid';
+
+// Import enhanced components
+import ActivityCard from '../components/ui/ActivityCard';
+import ProgressiveImage from '../components/ui/ProgressiveImage';
+import ThemeToggle from '../components/ui/ThemeToggle';
+import FloatingActionButton from '../components/ui/FloatingActionButton';
 
 const UIShowcasePage = () => {
-  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('discover');
   const [selectedCategory, setSelectedCategory] = useState('sports');
-  const [isLiked, setIsLiked] = useState(false);
-  const [rating, setRating] = useState(4);
+  const [showAnimations, setShowAnimations] = useState(true);
+  const [notifications, setNotifications] = useState(3);
 
   // Sample data
   const categories = ['sports', 'music', 'art', 'food', 'adventure', 'cultural'];
   
-  const sampleActivity = {
-    id: 1,
-    title: 'Desert Safari Adventure',
-    description: 'Experience the thrill of dune bashing and traditional Bedouin culture',
-    price: 250,
-    image: 'https://images.unsplash.com/photo-1539650116574-75c0c6d73273?w=400',
-    category: 'Adventure',
-    location: 'Riyadh Desert',
-    rating: 4.8,
-    duration: '6 hours',
-    participants: 12
-  };
+  const sampleActivities = [
+    {
+      id: 1,
+      title: 'Desert Safari Adventure',
+      description: 'Experience the thrill of dune bashing and traditional Bedouin culture',
+      price: 250,
+      category: 'adventure',
+      location: 'Riyadh Desert',
+      rating: 4.8,
+      duration: '6 hours',
+      participants: 12,
+      isSaved: false
+    },
+    {
+      id: 2,
+      title: 'Traditional Music Concert',
+      description: 'Enjoy an evening of traditional Saudi music and poetry',
+      price: 150,
+      category: 'music',
+      location: 'King Fahd Cultural Centre',
+      rating: 4.9,
+      duration: '3 hours',
+      participants: 50,
+      isSaved: true
+    },
+    {
+      id: 3,
+      title: 'Rock Climbing Experience',
+      description: 'Challenge yourself with guided rock climbing in scenic locations',
+      price: 180,
+      category: 'sports',
+      location: 'Edge of the World',
+      rating: 4.7,
+      duration: '4 hours',
+      participants: 8,
+      isSaved: false
+    }
+  ];
 
   return (
-    <div className="min-h-screen bg-soft-white">
-      {/* Header Section */}
-      <div className="bg-white shadow-sm border-b border-warm">
-        <div className="max-w-7xl mx-auto px-4 py-6">
+    <div className="min-h-screen bg-soft-white dark:bg-dark-bg-primary transition-colors duration-300">
+      {/* Enhanced Header Section with Animation */}
+      <motion.div 
+        className="bg-white dark:bg-dark-bg-secondary shadow-sm border-b border-warm dark:border-dark-border-secondary"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="text-center mb-8">
-            <h1 className="text-display-xl text-charcoal mb-4">
-              LUDUS Design System
-            </h1>
-            <p className="text-body-lg text-gray-600 max-w-2xl mx-auto">
-              A comprehensive showcase of all UI components and design elements following the LUDUS brand guidelines
-            </p>
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="mb-6"
+            >
+              <h1 className="text-display-xl text-charcoal dark:text-dark-text-primary mb-4">
+                LUDUS Design System
+                <motion.span
+                  className="inline-block ml-2"
+                  animate={{ rotate: [0, 10, 0] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                >
+                  ✨
+                </motion.span>
+              </h1>
+              <p className="text-body-lg text-gray-600 dark:text-dark-text-secondary max-w-3xl mx-auto">
+                A comprehensive showcase featuring advanced animations, glass morphism effects, 
+                Unsplash integration, and dark theme support - all following LUDUS brand guidelines
+              </p>
+            </motion.div>
+
+            {/* Theme Toggle and Controls */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.5 }}
+              className="flex items-center justify-center gap-4 mb-6"
+            >
+              <ThemeToggle />
+              <button
+                onClick={() => setShowAnimations(!showAnimations)}
+                className={`px-4 py-2 rounded-xl font-medium transition-all duration-200 ${
+                  showAnimations
+                    ? 'bg-ludus-orange text-white shadow-lg'
+                    : 'bg-white dark:bg-dark-bg-tertiary text-charcoal dark:text-dark-text-primary border border-warm dark:border-dark-border-secondary'
+                }`}
+              >
+                {showAnimations ? 'Animations ON' : 'Animations OFF'}
+              </button>
+            </motion.div>
+
+            {/* Feature badges */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6, duration: 0.5 }}
+              className="flex flex-wrap items-center justify-center gap-3"
+            >
+              {[
+                { icon: SparklesIcon, label: 'Framer Motion', color: 'bg-purple-100 text-purple-700' },
+                { icon: PhotoIcon, label: 'Unsplash API', color: 'bg-blue-100 text-blue-700' },
+                { icon: '🌙', label: 'Dark Theme', color: 'bg-gray-100 text-gray-700' },
+                { icon: '🪞', label: 'Glass Morphism', color: 'bg-cyan-100 text-cyan-700' }
+              ].map(({ icon: Icon, label, color }, index) => (
+                <motion.div
+                  key={label}
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.8 + index * 0.1, duration: 0.3 }}
+                  className={`px-3 py-1 rounded-full text-xs font-medium ${color} flex items-center gap-1`}
+                >
+                  {typeof Icon === 'string' ? (
+                    <span>{Icon}</span>
+                  ) : (
+                    <Icon className="w-3 h-3" />
+                  )}
+                  {label}
+                </motion.div>
+              ))}
+            </motion.div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 py-8 space-y-12">
@@ -367,112 +462,107 @@ const UIShowcasePage = () => {
           </div>
         </section>
 
-        {/* Card Components */}
+        {/* Enhanced Activity Cards with Unsplash */}
         <section>
-          <h2 className="text-display-lg text-charcoal mb-6">Cards</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            
-            {/* Activity Card */}
-            <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden group">
-              <div className="relative h-48 bg-warm overflow-hidden">
-                <img 
-                  src={sampleActivity.image} 
-                  alt={sampleActivity.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <button 
-                  onClick={() => setIsLiked(!isLiked)}
-                  className="absolute top-4 right-4 p-2 bg-white/80 backdrop-blur-sm rounded-full hover:bg-white transition-colors"
+          <motion.h2 
+            className="text-display-lg text-charcoal dark:text-dark-text-primary mb-6"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            Enhanced Activity Cards
+          </motion.h2>
+          
+          <div className="space-y-8">
+            {/* Card Variants */}
+            <div className="bg-white dark:bg-dark-bg-secondary rounded-2xl p-6 shadow-lg">
+              <h3 className="text-label-md text-gray-500 dark:text-dark-text-tertiary mb-4">Different Variants</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {sampleActivities.map((activity, index) => (
+                  <ActivityCard
+                    key={activity.id}
+                    activity={activity}
+                    index={showAnimations ? index : 0}
+                    animate={showAnimations}
+                    onBook={(activity) => console.log('Book:', activity.title)}
+                    onSave={(activity, saved) => console.log('Save:', activity.title, saved)}
+                    variant={index === 0 ? 'default' : index === 1 ? 'compact' : 'featured'}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Progressive Image Showcase */}
+            <div className="bg-white dark:bg-dark-bg-secondary rounded-2xl p-6 shadow-lg">
+              <h3 className="text-label-md text-gray-500 dark:text-dark-text-tertiary mb-4">Progressive Image Loading</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {['sports', 'music', 'art', 'food'].map((category, index) => (
+                  <motion.div
+                    key={category}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: index * 0.1, duration: 0.5 }}
+                    className="group"
+                  >
+                    <ProgressiveImage
+                      category={category}
+                      width={200}
+                      height={150}
+                      className="w-full h-32 rounded-xl"
+                      alt={`${category} activity`}
+                    />
+                    <p className="text-center text-sm text-gray-600 dark:text-dark-text-tertiary mt-2 capitalize">
+                      {category}
+                    </p>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+
+            {/* Glass Morphism Examples */}
+            <div className="bg-gradient-to-br from-ludus-orange via-ludus-orange-light to-ludus-orange-dark rounded-2xl p-8 relative overflow-hidden">
+              <h3 className="text-white font-semibold mb-6">Glass Morphism Effects</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* Glass Card 1 */}
+                <motion.div
+                  className="bg-white/20 backdrop-blur-md rounded-xl p-4 border border-white/30"
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ duration: 0.2 }}
                 >
-                  {isLiked ? (
-                    <HeartSolidIcon className="w-5 h-5 text-error-red" />
-                  ) : (
-                    <HeartIcon className="w-5 h-5 text-gray-600" />
-                  )}
-                </button>
-                <div className="absolute bottom-4 left-4">
-                  <span className="px-3 py-1 bg-ludus-orange text-white text-xs font-medium rounded-full">
-                    {sampleActivity.category}
-                  </span>
-                </div>
-              </div>
-
-              <div className="p-4">
-                <div className="flex items-center gap-2 mb-2 text-xs text-gray-500">
-                  <MapPinIcon className="w-3 h-3" />
-                  {sampleActivity.location}
-                  <span className="mx-1">•</span>
-                  <CalendarIcon className="w-3 h-3" />
-                  {sampleActivity.duration}
-                </div>
-
-                <h3 className="text-lg font-semibold text-charcoal mb-2 line-clamp-2">
-                  {sampleActivity.title}
-                </h3>
-
-                <p className="text-sm text-gray-600 mb-4 line-clamp-2">
-                  {sampleActivity.description}
-                </p>
-
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1">
-                    {[...Array(5)].map((_, i) => (
-                      <StarSolidIcon 
-                        key={i} 
-                        className={`w-4 h-4 ${i < Math.floor(sampleActivity.rating) ? 'text-warning-orange' : 'text-gray-300'}`} 
-                      />
-                    ))}
-                    <span className="text-sm text-gray-600 ml-1">
-                      {sampleActivity.rating}
-                    </span>
+                  <div className="text-white">
+                    <div className="text-2xl font-bold mb-1">1,245</div>
+                    <div className="text-sm opacity-90">Active Users</div>
                   </div>
-                  <div className="text-right">
-                    <div className="text-lg font-bold text-ludus-orange">
-                      {sampleActivity.price} SAR
-                    </div>
-                    <div className="text-xs text-gray-500">
-                      {sampleActivity.participants} joining
-                    </div>
+                </motion.div>
+
+                {/* Glass Card 2 */}
+                <motion.div
+                  className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20"
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <div className="text-white">
+                    <div className="text-2xl font-bold mb-1">89%</div>
+                    <div className="text-sm opacity-90">Satisfaction</div>
                   </div>
-                </div>
+                </motion.div>
 
-                <button className="w-full mt-4 bg-ludus-orange hover:bg-ludus-orange-dark text-white font-semibold py-3 rounded-xl transition-all duration-200 active:scale-95">
-                  Join Activity
-                </button>
+                {/* Glass Card 3 */}
+                <motion.div
+                  className="bg-black/20 backdrop-blur-md rounded-xl p-4 border border-white/10"
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <div className="text-white">
+                    <div className="text-2xl font-bold mb-1">2.5k</div>
+                    <div className="text-sm opacity-90">Activities</div>
+                  </div>
+                </motion.div>
               </div>
-            </div>
 
-            {/* Stats Card */}
-            <div className="bg-gradient-to-br from-ludus-orange to-ludus-orange-dark rounded-2xl shadow-lg p-6 text-white">
-              <div className="flex items-center justify-between mb-4">
-                <div className="p-3 bg-white/20 rounded-xl">
-                  <UserIcon className="w-6 h-6" />
-                </div>
-                <ChevronRightIcon className="w-5 h-5 opacity-60" />
-              </div>
-              <div className="space-y-2">
-                <div className="text-2xl font-bold">1,245</div>
-                <div className="text-sm opacity-90">Active Members</div>
-                <div className="text-xs opacity-75">+12% from last month</div>
-              </div>
-            </div>
-
-            {/* Info Card */}
-            <div className="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-accent-blue">
-              <div className="flex items-start gap-4">
-                <div className="p-2 bg-accent-blue/10 rounded-lg">
-                  <InformationCircleIcon className="w-6 h-6 text-accent-blue" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-charcoal mb-2">Platform Update</h3>
-                  <p className="text-sm text-gray-600 mb-3">
-                    New features have been added to improve your activity discovery experience.
-                  </p>
-                  <button className="text-accent-blue text-sm font-medium hover:underline">
-                    Learn more →
-                  </button>
-                </div>
-              </div>
+              {/* Background decoration */}
+              <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
+              <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full translate-y-12 -translate-x-12"></div>
             </div>
           </div>
         </section>
@@ -678,11 +768,179 @@ const UIShowcasePage = () => {
           </div>
         </section>
 
+        {/* Advanced Animations Showcase */}
+        <section>
+          <motion.h2 
+            className="text-display-lg text-charcoal dark:text-dark-text-primary mb-6"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            Advanced Animations & Interactions
+          </motion.h2>
+
+          <div className="space-y-6">
+            {/* Stagger Animation Demo */}
+            <div className="bg-white dark:bg-dark-bg-secondary rounded-2xl p-6 shadow-lg">
+              <h3 className="text-label-md text-gray-500 dark:text-dark-text-tertiary mb-4">Stagger Animations</h3>
+              <motion.div
+                className="grid grid-cols-2 md:grid-cols-4 gap-4"
+                initial="hidden"
+                animate="visible"
+                variants={{
+                  visible: {
+                    transition: {
+                      staggerChildren: 0.1
+                    }
+                  }
+                }}
+              >
+                {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
+                  <motion.div
+                    key={item}
+                    className="h-20 bg-ludus-orange/20 dark:bg-dark-ludus-orange/20 rounded-xl flex items-center justify-center font-bold text-ludus-orange dark:text-dark-ludus-orange"
+                    variants={{
+                      hidden: { opacity: 0, y: 20 },
+                      visible: { opacity: 1, y: 0 }
+                    }}
+                    whileHover={{ scale: 1.05, backgroundColor: 'rgba(255, 102, 0, 0.3)' }}
+                  >
+                    {item}
+                  </motion.div>
+                ))}
+              </motion.div>
+            </div>
+
+            {/* Loading States */}
+            <div className="bg-white dark:bg-dark-bg-secondary rounded-2xl p-6 shadow-lg">
+              <h3 className="text-label-md text-gray-500 dark:text-dark-text-tertiary mb-4">Loading Animations</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* LUDUS Spinner */}
+                <div className="text-center p-6">
+                  <div className="relative w-12 h-12 mx-auto mb-3">
+                    <div className="absolute inset-0 rounded-full border-2 border-ludus-orange/20 dark:border-dark-ludus-orange/20"></div>
+                    <motion.div
+                      className="absolute inset-0 rounded-full border-2 border-transparent border-t-ludus-orange dark:border-t-dark-ludus-orange"
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                    />
+                  </div>
+                  <p className="text-sm text-gray-600 dark:text-dark-text-tertiary">LUDUS Spinner</p>
+                </div>
+
+                {/* Pulse Loading */}
+                <div className="text-center p-6">
+                  <motion.div
+                    className="w-12 h-12 bg-ludus-orange dark:bg-dark-ludus-orange rounded-full mx-auto mb-3"
+                    animate={{
+                      scale: [1, 1.2, 1],
+                      opacity: [1, 0.7, 1]
+                    }}
+                    transition={{
+                      duration: 1.5,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  />
+                  <p className="text-sm text-gray-600 dark:text-dark-text-tertiary">Pulse Effect</p>
+                </div>
+
+                {/* Bouncing Dots */}
+                <div className="text-center p-6">
+                  <div className="flex justify-center space-x-2 mb-3">
+                    {[0, 1, 2].map((i) => (
+                      <motion.div
+                        key={i}
+                        className="w-3 h-3 bg-ludus-orange dark:bg-dark-ludus-orange rounded-full"
+                        animate={{
+                          y: [0, -20, 0]
+                        }}
+                        transition={{
+                          duration: 0.6,
+                          repeat: Infinity,
+                          delay: i * 0.2
+                        }}
+                      />
+                    ))}
+                  </div>
+                  <p className="text-sm text-gray-600 dark:text-dark-text-tertiary">Bouncing Dots</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Interactive Elements */}
+            <div className="bg-white dark:bg-dark-bg-secondary rounded-2xl p-6 shadow-lg">
+              <h3 className="text-label-md text-gray-500 dark:text-dark-text-tertiary mb-4">Interactive Elements</h3>
+              <div className="flex flex-wrap gap-4">
+                {/* Magnetic Button */}
+                <motion.button
+                  className="px-6 py-3 bg-ludus-orange text-white rounded-xl font-semibold"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onHoverStart={() => console.log('Hover start')}
+                  onHoverEnd={() => console.log('Hover end')}
+                >
+                  Magnetic Button
+                </motion.button>
+
+                {/* Ripple Effect Button */}
+                <motion.button
+                  className="relative px-6 py-3 bg-accent-blue text-white rounded-xl font-semibold overflow-hidden"
+                  whileTap="tap"
+                  variants={{
+                    tap: {
+                      scale: 0.95
+                    }
+                  }}
+                >
+                  <motion.div
+                    className="absolute inset-0 bg-white/20 rounded-full"
+                    initial={{ scale: 0, opacity: 0 }}
+                    whileTap={{ scale: 4, opacity: [0, 1, 0] }}
+                    transition={{ duration: 0.6 }}
+                  />
+                  <span className="relative z-10">Ripple Effect</span>
+                </motion.button>
+
+                {/* Floating Button */}
+                <motion.button
+                  className="px-6 py-3 bg-success-green text-white rounded-xl font-semibold"
+                  animate={{ y: [0, -5, 0] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  whileHover={{ y: -10 }}
+                >
+                  Floating Button
+                </motion.button>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Footer */}
-        <div className="text-center text-gray-500 text-sm py-8">
-          <p>LUDUS Design System • Built with React & Tailwind CSS</p>
-        </div>
+        <motion.div 
+          className="text-center text-gray-500 dark:text-dark-text-tertiary text-sm py-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1, duration: 0.5 }}
+        >
+          <p className="mb-2">
+            <span className="font-semibold text-ludus-orange dark:text-dark-ludus-orange">LUDUS Design System</span> 
+            {' '} • Built with React, Tailwind CSS, Framer Motion & Unsplash API
+          </p>
+          <p className="text-xs opacity-75">
+            Featuring advanced animations, glass morphism, dark theme, and professional image integration
+          </p>
+        </motion.div>
       </div>
+
+      {/* Floating Action Button */}
+      <FloatingActionButton
+        icon={PlusIcon}
+        onClick={() => setNotifications(notifications + 1)}
+        notifications={notifications}
+        tooltip="Add New Activity"
+        position="bottom-right"
+      />
     </div>
   );
 };

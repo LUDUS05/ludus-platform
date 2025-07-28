@@ -3,6 +3,7 @@ module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
+  darkMode: 'class', // Enable class-based dark mode
   theme: {
     extend: {
       colors: {
@@ -40,6 +41,32 @@ module.exports = {
         'accent-blue-dark': '#0088BF',
         'success-dark': '#059669',
         'warning-dark': '#D97706',
+
+        // Dark Theme Colors
+        dark: {
+          bg: {
+            primary: '#0F0F0F',
+            secondary: '#1A1A1A',
+            tertiary: '#2B2B2B',
+            quaternary: '#404040',
+          },
+          text: {
+            primary: '#FFFFFF',
+            secondary: '#E0E0E0',
+            tertiary: '#B0B0B0',
+            disabled: '#6B7280',
+          },
+          ludus: {
+            orange: '#FF7A1A',
+            'orange-light': '#FF9933',
+            'orange-dark': '#E55A00',
+          },
+          border: {
+            primary: '#404040',
+            secondary: '#2B2B2B',
+            tertiary: '#1A1A1A',
+          }
+        },
         // Legacy colors for compatibility
         primary: {
           50: '#eff6ff',
@@ -101,6 +128,19 @@ module.exports = {
         'label-md': ['0.875rem', { lineHeight: '1.43', fontWeight: '500' }],
         'label-sm': ['0.75rem', { lineHeight: '1.5', fontWeight: '500', textTransform: 'uppercase', letterSpacing: '0.05em' }],
       },
+      backdropBlur: {
+        xs: '2px',
+        sm: '4px',
+        md: '12px',
+        lg: '16px',
+        xl: '24px',
+        '2xl': '40px',
+        '3xl': '64px',
+      },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+      },
     },
   },
   plugins: [
@@ -132,8 +172,32 @@ module.exports = {
           fontWeight: '600',
           lineHeight: '1.4',
         },
+        // Glass morphism utilities
+        '.glass': {
+          background: 'rgba(255, 255, 255, 0.1)',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+        },
+        '.glass-ludus': {
+          background: 'rgba(255, 102, 0, 0.1)',
+          backdropFilter: 'blur(12px) saturate(1.8)',
+          WebkitBackdropFilter: 'blur(12px) saturate(1.8)',
+          border: '1px solid rgba(255, 102, 0, 0.2)',
+          boxShadow: '0 8px 32px 0 rgba(255, 102, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+        },
+        // Performance optimization utilities
+        '.gpu-accelerated': {
+          transform: 'translateZ(0)',
+          backfaceVisibility: 'hidden',
+          perspective: '1000px',
+        },
+        '.optimized-animation': {
+          willChange: 'transform, opacity',
+        },
       }
-      addUtilities(newUtilities, ['responsive', 'hover'])
+      addUtilities(newUtilities, ['responsive', 'hover', 'dark'])
     }
   ],
 };
