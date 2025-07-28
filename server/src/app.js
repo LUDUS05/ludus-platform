@@ -13,7 +13,10 @@ const app = express();
 
 // Connect to MongoDB only if not in test mode or if MONGODB_URI is available
 if (process.env.NODE_ENV !== 'test' && process.env.MONGODB_URI) {
-  connectDB();
+  connectDB().catch(err => {
+    console.error('Failed to connect to database:', err.message);
+    console.log('Server will continue running without database');
+  });
 } else if (process.env.MONGODB_URI === 'memory://test') {
   // Skip connection - test database already connected
   console.log('Using test database connection');
@@ -40,7 +43,16 @@ app.use('/api', limiter);
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// Routes
+// Health check route
+app.get('/health', (req, res) => {
+  res.status(200).json({ 
+    status: 'OK', 
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development'
+  });
+});
+
+// API Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/activities', require('./routes/activities'));
@@ -49,10 +61,6 @@ app.use('/api/bookings', require('./routes/bookings'));
 app.use('/api/payments', require('./routes/payments'));
 app.use('/api/admin', require('./routes/admin'));
 
-// Health check endpoint
-app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'OK', message: 'LUDUS API is running' });
-});
 
 // Global error handler
 app.use(require('./middleware/errorHandler'));

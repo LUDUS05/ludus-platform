@@ -2,18 +2,27 @@ const mongoose = require('mongoose');
 
 const connectDB = async () => {
   try {
+    if (!process.env.MONGODB_URI) {
+      console.error('MONGODB_URI environment variable not set');
+      return false;
+    }
+
     const conn = await mongoose.connect(process.env.MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
+      socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
     });
 
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
+    console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
 
     // Create indexes for better performance
     await createIndexes();
+    return true;
   } catch (error) {
-    console.error('Database connection error:', error);
-    process.exit(1);
+    console.error('❌ Database connection error:', error.message);
+    console.log('⚠️  Server will continue without database connection');
+    return false;
   }
 };
 
