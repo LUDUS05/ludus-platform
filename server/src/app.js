@@ -26,29 +26,15 @@ if (process.env.NODE_ENV !== 'test' && process.env.MONGODB_URI) {
 
 // Security middleware
 app.use(helmet());
+// Simple CORS - allow all Vercel deployments and specific domains
 app.use(cors({
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    
-    const allowedOrigins = [
-      process.env.CLIENT_URL || 'http://localhost:3000',
-      'https://app.letsludus.com',
-      'https://ludus-platform.vercel.app',
-      'http://localhost:3000'
-    ];
-    
-    // Allow any Vercel preview deployment
-    if (origin.includes('.vercel.app')) {
-      return callback(null, true);
-    }
-    
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
-    
-    return callback(new Error('Not allowed by CORS'));
-  },
+  origin: [
+    'http://localhost:3000',
+    'https://app.letsludus.com', 
+    'https://ludus-platform.vercel.app',
+    'https://ludus-platform-git-new-main-ludus05s-projects.vercel.app',
+    /https:\/\/.*\.vercel\.app$/
+  ],
   credentials: true
 }));
 
