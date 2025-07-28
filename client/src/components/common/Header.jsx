@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '../LanguageSwitcher';
 
 const Header = () => {
   const { user, isAuthenticated, logout } = useAuth();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -34,7 +37,7 @@ const Header = () => {
               to="/activities"
               className="text-gray-600 hover:text-primary-600 font-medium transition-colors"
             >
-              Discover Activities
+              {t('navigation.activities')}
             </Link>
             <Link
               to="/how-it-works"
@@ -47,13 +50,14 @@ const Header = () => {
                 to="/dashboard"
                 className="text-gray-600 hover:text-primary-600 font-medium transition-colors"
               >
-                My Bookings
+                {t('dashboard.myBookings')}
               </Link>
             )}
           </nav>
 
           {/* User Actions */}
           <div className="hidden md:flex items-center space-x-4">
+            <LanguageSwitcher />
             {isAuthenticated ? (
               <div className="relative">
                 <button
@@ -76,14 +80,14 @@ const Header = () => {
                       className="block px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors"
                       onClick={() => setIsMenuOpen(false)}
                     >
-                      Profile
+                      {t('navigation.profile')}
                     </Link>
                     <Link
                       to="/dashboard"
                       className="block px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors"
                       onClick={() => setIsMenuOpen(false)}
                     >
-                      My Bookings
+                      {t('dashboard.myBookings')}
                     </Link>
                     {user?.role === 'admin' && (
                       <Link
@@ -91,7 +95,7 @@ const Header = () => {
                         className="block px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors"
                         onClick={() => setIsMenuOpen(false)}
                       >
-                        Admin Panel
+                        {t('navigation.admin')}
                       </Link>
                     )}
                     <hr className="my-2 border-gray-200" />
@@ -99,7 +103,7 @@ const Header = () => {
                       onClick={handleLogout}
                       className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors"
                     >
-                      Sign Out
+                      {t('common.logout')}
                     </button>
                   </div>
                 )}
@@ -110,13 +114,13 @@ const Header = () => {
                   to="/login"
                   className="text-gray-600 hover:text-primary-600 font-medium transition-colors"
                 >
-                  Sign In
+                  {t('common.login')}
                 </Link>
                 <Link
                   to="/register"
                   className="btn-primary"
                 >
-                  Get Started
+                  {t('common.register')}
                 </Link>
               </div>
             )}
@@ -142,7 +146,7 @@ const Header = () => {
                 className="text-gray-600 hover:text-primary-600 font-medium transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Discover Activities
+                {t('navigation.activities')}
               </Link>
               <Link
                 to="/how-it-works"
@@ -158,14 +162,14 @@ const Header = () => {
                     className="text-gray-600 hover:text-primary-600 font-medium transition-colors"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    My Bookings
+                    {t('dashboard.myBookings')}
                   </Link>
                   <Link
                     to="/profile"
                     className="text-gray-600 hover:text-primary-600 font-medium transition-colors"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Profile
+                    {t('navigation.profile')}
                   </Link>
                   {user?.role === 'admin' && (
                     <Link
@@ -173,14 +177,14 @@ const Header = () => {
                       className="text-gray-600 hover:text-primary-600 font-medium transition-colors"
                       onClick={() => setIsMenuOpen(false)}
                     >
-                      Admin Panel
+                      {t('navigation.admin')}
                     </Link>
                   )}
                   <button
                     onClick={handleLogout}
                     className="text-left text-gray-600 hover:text-primary-600 font-medium transition-colors"
                   >
-                    Sign Out
+                    {t('common.logout')}
                   </button>
                 </>
               ) : (
@@ -190,17 +194,20 @@ const Header = () => {
                     className="text-gray-600 hover:text-primary-600 font-medium transition-colors"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Sign In
+                    {t('common.login')}
                   </Link>
                   <Link
                     to="/register"
                     className="btn-primary text-center"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Get Started
+                    {t('common.register')}
                   </Link>
                 </div>
               )}
+              <div className="pt-4 border-t border-gray-200">
+                <LanguageSwitcher />
+              </div>
             </nav>
           </div>
         )}

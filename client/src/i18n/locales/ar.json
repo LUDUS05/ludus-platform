@@ -1,0 +1,138 @@
+{
+  "common": {
+    "loading": "جاري التحميل...",
+    "error": "خطأ",
+    "success": "نجح",
+    "cancel": "إلغاء",
+    "confirm": "تأكيد",
+    "save": "حفظ",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "view": "عرض",
+    "search": "بحث",
+    "filter": "تصفية",
+    "clear": "مسح",
+    "back": "رجوع",
+    "next": "التالي",
+    "previous": "السابق",
+    "submit": "إرسال",
+    "login": "تسجيل الدخول",
+    "logout": "تسجيل الخروج",
+    "register": "التسجيل"
+  },
+  "navigation": {
+    "home": "الرئيسية",
+    "activities": "الأنشطة",
+    "dashboard": "لوحة التحكم",
+    "profile": "الملف الشخصي",
+    "admin": "الإدارة",
+    "about": "حول",
+    "contact": "اتصل بنا"
+  },
+  "auth": {
+    "login": "تسجيل الدخول",
+    "register": "إنشاء حساب",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "firstName": "الاسم الأول",
+    "lastName": "اسم العائلة",
+    "phone": "الهاتف",
+    "forgotPassword": "نسيت كلمة المرور؟",
+    "rememberMe": "تذكرني",
+    "loginSuccess": "تم تسجيل الدخول بنجاح",
+    "registerSuccess": "تم التسجيل بنجاح",
+    "loginError": "البريد الإلكتروني أو كلمة المرور غير صحيحة",
+    "registerError": "فشل في التسجيل"
+  },
+  "activities": {
+    "title": "الأنشطة",
+    "search": "البحث في الأنشطة...",
+    "category": "الفئة",
+    "city": "المدينة",
+    "priceRange": "نطاق السعر",
+    "duration": "المدة",
+    "rating": "التقييم",
+    "bookNow": "احجز الآن",
+    "viewDetails": "عرض التفاصيل",
+    "noActivities": "لم يتم العثور على أنشطة",
+    "categories": {
+      "adventure": "مغامرة",
+      "cultural": "ثقافي",
+      "educational": "تعليمي",
+      "entertainment": "ترفيه",
+      "sports": "رياضة",
+      "wellness": "صحة ولياقة"
+    }
+  },
+  "booking": {
+    "bookActivity": "حجز النشاط",
+    "selectDate": "اختر التاريخ",
+    "selectTime": "اختر الوقت",
+    "participants": "المشاركون",
+    "totalPrice": "السعر الإجمالي",
+    "paymentMethod": "طريقة الدفع",
+    "bookingConfirmed": "تم تأكيد الحجز",
+    "bookingDetails": "تفاصيل الحجز",
+    "myBookings": "حجوزاتي",
+    "cancelBooking": "إلغاء الحجز",
+    "status": {
+      "pending": "في الانتظار",
+      "confirmed": "مؤكد",
+      "cancelled": "ملغي",
+      "completed": "مكتمل"
+    }
+  },
+  "payment": {
+    "paymentMethod": "طريقة الدفع",
+    "creditCard": "بطاقة ائتمان",
+    "mada": "مدى",
+    "applePay": "آبل باي",
+    "stcPay": "STC باي",
+    "cardNumber": "رقم البطاقة",
+    "expiryDate": "تاريخ الانتهاء",
+    "cvv": "رمز الأمان",
+    "cardholderName": "اسم حامل البطاقة",
+    "payNow": "ادفع الآن",
+    "paymentSuccessful": "تم الدفع بنجاح",
+    "paymentFailed": "فشل في الدفع"
+  },
+  "dashboard": {
+    "welcome": "مرحباً",
+    "overview": "نظرة عامة",
+    "recentBookings": "الحجوزات الحديثة",
+    "favoriteActivities": "الأنشطة المفضلة",
+    "statistics": "الإحصائيات",
+    "totalBookings": "إجمالي الحجوزات",
+    "upcomingActivities": "الأنشطة القادمة",
+    "preferences": "التفضيلات"
+  },
+  "admin": {
+    "dashboard": "لوحة تحكم الإدارة",
+    "users": "المستخدمين",
+    "vendors": "الموردين",
+    "activities": "الأنشطة",
+    "bookings": "الحجوزات",
+    "statistics": "الإحصائيات",
+    "settings": "الإعدادات",
+    "addNew": "إضافة جديد",
+    "manage": "إدارة"
+  },
+  "vendor": {
+    "profile": "ملف المورد",
+    "contact": "التواصل",
+    "businessHours": "ساعات العمل",
+    "location": "الموقع",
+    "reviews": "التقييمات",
+    "activities": "الأنشطة",
+    "about": "حول"
+  },
+  "currency": {
+    "sar": "ر.س"
+  },
+  "language": {
+    "english": "English",
+    "arabic": "العربية",
+    "switchLanguage": "تغيير اللغة"
+  }
+}

@@ -1,0 +1,138 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "search": "Search",
+    "filter": "Filter",
+    "clear": "Clear",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Register"
+  },
+  "navigation": {
+    "home": "Home",
+    "activities": "Activities",
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "admin": "Admin",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "phone": "Phone",
+    "forgotPassword": "Forgot Password?",
+    "rememberMe": "Remember Me",
+    "loginSuccess": "Login successful",
+    "registerSuccess": "Registration successful",
+    "loginError": "Invalid email or password",
+    "registerError": "Registration failed"
+  },
+  "activities": {
+    "title": "Activities",
+    "search": "Search activities...",
+    "category": "Category",
+    "city": "City",
+    "priceRange": "Price Range",
+    "duration": "Duration",
+    "rating": "Rating",
+    "bookNow": "Book Now",
+    "viewDetails": "View Details",
+    "noActivities": "No activities found",
+    "categories": {
+      "adventure": "Adventure",
+      "cultural": "Cultural",
+      "educational": "Educational",
+      "entertainment": "Entertainment",
+      "sports": "Sports",
+      "wellness": "Wellness"
+    }
+  },
+  "booking": {
+    "bookActivity": "Book Activity",
+    "selectDate": "Select Date",
+    "selectTime": "Select Time",
+    "participants": "Participants",
+    "totalPrice": "Total Price",
+    "paymentMethod": "Payment Method",
+    "bookingConfirmed": "Booking Confirmed",
+    "bookingDetails": "Booking Details",
+    "myBookings": "My Bookings",
+    "cancelBooking": "Cancel Booking",
+    "status": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "cancelled": "Cancelled",
+      "completed": "Completed"
+    }
+  },
+  "payment": {
+    "paymentMethod": "Payment Method",
+    "creditCard": "Credit Card",
+    "mada": "MADA",
+    "applePay": "Apple Pay",
+    "stcPay": "STC Pay",
+    "cardNumber": "Card Number",
+    "expiryDate": "Expiry Date",
+    "cvv": "CVV",
+    "cardholderName": "Cardholder Name",
+    "payNow": "Pay Now",
+    "paymentSuccessful": "Payment Successful",
+    "paymentFailed": "Payment Failed"
+  },
+  "dashboard": {
+    "welcome": "Welcome",
+    "overview": "Overview",
+    "recentBookings": "Recent Bookings",
+    "favoriteActivities": "Favorite Activities",
+    "statistics": "Statistics",
+    "totalBookings": "Total Bookings",
+    "upcomingActivities": "Upcoming Activities",
+    "preferences": "Preferences"
+  },
+  "admin": {
+    "dashboard": "Admin Dashboard",
+    "users": "Users",
+    "vendors": "Vendors",
+    "activities": "Activities",
+    "bookings": "Bookings",
+    "statistics": "Statistics",
+    "settings": "Settings",
+    "addNew": "Add New",
+    "manage": "Manage"
+  },
+  "vendor": {
+    "profile": "Vendor Profile",
+    "contact": "Contact",
+    "businessHours": "Business Hours",
+    "location": "Location", 
+    "reviews": "Reviews",
+    "activities": "Activities",
+    "about": "About"
+  },
+  "currency": {
+    "sar": "SAR"
+  },
+  "language": {
+    "english": "English",
+    "arabic": "العربية",
+    "switchLanguage": "Switch Language"
+  }
+}
