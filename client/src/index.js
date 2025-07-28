@@ -6,14 +6,16 @@ import App from './App';
 
 // Initialize Sentry for error tracking (only in production)
 if (process.env.NODE_ENV === 'production' && process.env.REACT_APP_SENTRY_DSN) {
-  import('@sentry/react').then(({ init, Integrations }) => {
-    init({
-      dsn: process.env.REACT_APP_SENTRY_DSN,
-      integrations: [
-        new Integrations.BrowserTracing(),
-      ],
-      tracesSampleRate: 0.1,
-      environment: process.env.NODE_ENV,
+  import('@sentry/react').then(({ init }) => {
+    import('@sentry/tracing').then(({ BrowserTracing }) => {
+      init({
+        dsn: process.env.REACT_APP_SENTRY_DSN,
+        integrations: [
+          new BrowserTracing(),
+        ],
+        tracesSampleRate: 0.1,
+        environment: process.env.NODE_ENV,
+      });
     });
   });
 }
