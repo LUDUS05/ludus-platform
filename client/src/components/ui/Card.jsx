@@ -18,8 +18,9 @@ const Card = ({
   return (
     <div
       className={cn(
-        'bg-white rounded-2xl shadow-lg overflow-hidden',
-        hover && 'hover:shadow-xl transition-shadow duration-300',
+        'bg-white dark:dark-bg-secondary rounded-2xl shadow-lg overflow-hidden',
+        'dark:border dark:border-dark-border-secondary',
+        hover && 'hover:shadow-xl dark:hover:shadow-2xl transition-all duration-300',
         paddingClasses[padding],
         className
       )}
@@ -32,7 +33,7 @@ const Card = ({
 
 const CardHeader = ({ children, className, ...props }) => (
   <div
-    className={cn('px-6 py-4 border-b border-warm', className)}
+    className={cn('px-6 py-4 border-b border-warm dark:border-dark-border-tertiary', className)}
     {...props}
   >
     {children}
@@ -50,7 +51,11 @@ const CardBody = ({ children, className, ...props }) => (
 
 const CardFooter = ({ children, className, ...props }) => (
   <div
-    className={cn('px-6 py-4 border-t border-warm bg-soft-white', className)}
+    className={cn(
+      'px-6 py-4 border-t border-warm dark:border-dark-border-tertiary', 
+      'bg-soft-white dark:dark-bg-tertiary', 
+      className
+    )}
     {...props}
   >
     {children}

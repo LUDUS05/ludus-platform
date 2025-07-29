@@ -27,7 +27,7 @@ const ProtectedRoute = ({ children }) => {
   
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-soft-white dark:bg-dark-bg-primary">
+      <div className="min-h-screen flex items-center justify-center bg-soft-white dark:dark-bg-primary">
         <div className="animate-spin rounded-full h-12 w-12 border-2 border-ludus-orange dark:border-dark-ludus-orange border-t-transparent"></div>
       </div>
     );
@@ -45,14 +45,14 @@ const HomePage = () => {
   const { t } = useTranslation();
   
   return (
-    <div className="min-h-screen bg-soft-white dark:bg-dark-bg-primary">
+    <div className="min-h-screen bg-soft-white dark:dark-bg-primary">
       {/* Hero Section */}
       <div className="max-w-7xl mx-auto container-padding py-20">
         <div className="text-center">
-          <h1 className="text-display-xl font-bold text-charcoal dark:text-dark-text-primary mb-6">
+          <h1 className="text-display-xl font-bold text-charcoal dark:dark-text-primary mb-6">
             {t('home.welcomeTitle')}
           </h1>
-          <p className="text-body-lg text-charcoal-light dark:text-dark-text-secondary mb-12 max-w-2xl mx-auto">
+          <p className="text-body-lg text-charcoal-light dark:dark-text-secondary mb-12 max-w-2xl mx-auto">
             {t('home.welcomeSubtitle')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -70,10 +70,10 @@ const HomePage = () => {
       <div className="bg-white dark:bg-dark-bg-secondary py-20">
         <div className="max-w-7xl mx-auto container-padding">
           <div className="text-center mb-16">
-            <h2 className="text-display-lg font-bold text-charcoal dark:text-dark-text-primary mb-4">
+            <h2 className="text-display-lg font-bold text-charcoal dark:dark-text-primary mb-4">
               Why Choose LUDUS?
             </h2>
-            <p className="text-body-md text-charcoal-light dark:text-dark-text-secondary max-w-2xl mx-auto">
+            <p className="text-body-md text-charcoal-light dark:dark-text-secondary max-w-2xl mx-auto">
               Discover unique experiences and connect with local activity providers across Saudi Arabia
             </p>
           </div>
@@ -84,10 +84,10 @@ const HomePage = () => {
               <div className="w-16 h-16 bg-ludus-orange/10 dark:bg-dark-ludus-orange/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
                 <span className="text-3xl">🎯</span>
               </div>
-              <h3 className="text-body-lg font-semibold text-charcoal dark:text-dark-text-primary mb-3">
+              <h3 className="text-body-lg font-semibold text-charcoal dark:dark-text-primary mb-3">
                 Curated Experiences
               </h3>
-              <p className="text-body-md text-charcoal-light dark:text-dark-text-secondary">
+              <p className="text-body-md text-charcoal-light dark:dark-text-secondary">
                 Handpicked activities from trusted local providers to ensure quality and authenticity
               </p>
             </div>
@@ -97,10 +97,10 @@ const HomePage = () => {
               <div className="w-16 h-16 bg-ludus-orange/10 dark:bg-dark-ludus-orange/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
                 <span className="text-3xl">💰</span>
               </div>
-              <h3 className="text-body-lg font-semibold text-charcoal dark:text-dark-text-primary mb-3">
+              <h3 className="text-body-lg font-semibold text-charcoal dark:dark-text-primary mb-3">
                 Transparent Pricing
               </h3>
-              <p className="text-body-md text-charcoal-light dark:text-dark-text-secondary">
+              <p className="text-body-md text-charcoal-light dark:dark-text-secondary">
                 Clear, upfront pricing in Saudi Riyals with secure payment processing through Moyasar
               </p>
             </div>
@@ -110,10 +110,10 @@ const HomePage = () => {
               <div className="w-16 h-16 bg-ludus-orange/10 dark:bg-dark-ludus-orange/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
                 <span className="text-3xl">📱</span>
               </div>
-              <h3 className="text-body-lg font-semibold text-charcoal dark:text-dark-text-primary mb-3">
+              <h3 className="text-body-lg font-semibold text-charcoal dark:dark-text-primary mb-3">
                 Easy Booking
               </h3>
-              <p className="text-body-md text-charcoal-light dark:text-dark-text-secondary">
+              <p className="text-body-md text-charcoal-light dark:dark-text-secondary">
                 Simple, mobile-friendly booking process with instant confirmation and digital receipts
               </p>
             </div>
@@ -147,7 +147,7 @@ const AdminRoute = ({ children }) => {
   
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-soft-white dark:bg-dark-bg-primary">
+      <div className="min-h-screen flex items-center justify-center bg-soft-white dark:dark-bg-primary">
         <div className="animate-spin rounded-full h-12 w-12 border-2 border-ludus-orange dark:border-dark-ludus-orange border-t-transparent"></div>
       </div>
     );
@@ -165,7 +165,7 @@ function App() {
     <ThemeProvider>
       <AuthProvider>
         <Router>
-          <div className="App min-h-screen bg-soft-white dark:bg-dark-bg-primary text-charcoal dark:text-dark-text-primary transition-colors duration-300">
+          <div className="App min-h-screen bg-soft-white dark:dark-bg-primary text-charcoal dark:dark-text-primary transition-colors duration-300">
             <Routes>
             {/* Admin Routes */}
             <Route 

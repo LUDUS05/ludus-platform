@@ -42,25 +42,32 @@ module.exports = {
         'success-dark': '#059669',
         'warning-dark': '#D97706',
 
-        // Dark Theme Colors
+        // Dark Theme Colors - Enhanced based on UX feedback
         dark: {
           bg: {
-            primary: '#0F0F0F',
-            secondary: '#1A1A1A',
-            tertiary: '#2B2B2B',
-            quaternary: '#404040',
+            primary: '#121212',    // Changed from pure black for better visual comfort
+            secondary: '#1E1E1E',  // Elevated cards/components background
+            tertiary: '#2B2B2B',   // Further elevated elements
+            quaternary: '#404040', // Highest elevation elements
           },
           text: {
-            primary: '#FFFFFF',
-            secondary: '#E0E0E0',
-            tertiary: '#B0B0B0',
-            disabled: '#6B7280',
+            primary: 'rgba(224, 224, 224, 0.87)',  // Off-white with 87% opacity for primary text
+            secondary: 'rgba(224, 224, 224, 0.60)', // Off-white with 60% opacity for secondary text
+            tertiary: 'rgba(224, 224, 224, 0.38)',  // Off-white with 38% opacity for disabled text
+            disabled: 'rgba(224, 224, 224, 0.24)',  // Off-white with 24% opacity for disabled
           },
           ludus: {
-            orange: '#FF7A1A',
-            'orange-light': '#FF9933',
-            'orange-dark': '#E55A00',
+            orange: '#E65A00',     // Desaturated orange for dark mode comfort
+            'orange-light': '#FF8533', // Slightly desaturated light variant
+            'orange-dark': '#CC4700', // Desaturated dark variant
           },
+          accent: {
+            blue: '#0099CC',       // Desaturated blue for dark mode
+            green: '#00A86B',      // Desaturated green for dark mode
+          },
+          success: '#00A86B',      // Desaturated success color
+          warning: '#E6A500',      // Desaturated warning color
+          error: '#D32F2F',       // Desaturated error color
           border: {
             primary: '#404040',
             secondary: '#2B2B2B',
@@ -195,6 +202,25 @@ module.exports = {
         },
         '.optimized-animation': {
           willChange: 'transform, opacity',
+        },
+        // Enhanced dark mode utilities
+        '.dark-bg-primary': {
+          backgroundColor: '#121212',
+        },
+        '.dark-bg-secondary': {
+          backgroundColor: '#1E1E1E',
+        },
+        '.dark-bg-tertiary': {
+          backgroundColor: '#2B2B2B',
+        },
+        '.dark-text-primary': {
+          color: 'rgba(224, 224, 224, 0.87)',
+        },
+        '.dark-text-secondary': {
+          color: 'rgba(224, 224, 224, 0.60)',
+        },
+        '.dark-text-tertiary': {
+          color: 'rgba(224, 224, 224, 0.38)',
         },
       }
       addUtilities(newUtilities, ['responsive', 'hover', 'dark'])

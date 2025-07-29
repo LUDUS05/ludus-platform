@@ -120,7 +120,7 @@ const ActivitiesPage = () => {
 
   if (loading && activities.length === 0) {
     return (
-      <div className="min-h-screen bg-soft-white dark:bg-dark-bg-primary">
+      <div className="min-h-screen bg-soft-white dark:dark-bg-primary">
         <div className="max-w-7xl mx-auto container-padding py-8">
           <div className="flex items-center justify-center h-64">
             <div className="animate-spin rounded-full h-12 w-12 border-2 border-ludus-orange dark:border-dark-ludus-orange border-t-transparent"></div>
@@ -131,14 +131,14 @@ const ActivitiesPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-soft-white dark:bg-dark-bg-primary">
+    <div className="min-h-screen bg-soft-white dark:dark-bg-primary">
       <div className="max-w-7xl mx-auto container-padding py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-display-lg font-bold text-charcoal dark:text-dark-text-primary mb-2">
+          <h1 className="text-display-lg font-bold text-charcoal dark:dark-text-primary mb-2">
             Discover Amazing Activities
           </h1>
-          <p className="text-body-md text-charcoal-light dark:text-dark-text-secondary">
+          <p className="text-body-md text-charcoal-light dark:dark-text-secondary">
             Find and book unique experiences in Saudi Arabia
           </p>
         </div>
@@ -159,7 +159,7 @@ const ActivitiesPage = () => {
 
             {/* Category */}
             <div>
-              <label className="block text-label font-medium text-charcoal dark:text-dark-text-primary mb-2">
+              <label className="block text-label font-medium text-charcoal dark:dark-text-primary mb-2">
                 Category
               </label>
               <select
@@ -178,7 +178,7 @@ const ActivitiesPage = () => {
 
             {/* City */}
             <div>
-              <label className="block text-label font-medium text-charcoal dark:text-dark-text-primary mb-2">
+              <label className="block text-label font-medium text-charcoal dark:dark-text-primary mb-2">
                 City
               </label>
               <select
@@ -208,7 +208,7 @@ const ActivitiesPage = () => {
 
             {/* Sort */}
             <div>
-              <label className="block text-label font-medium text-charcoal dark:text-dark-text-primary mb-2">
+              <label className="block text-label font-medium text-charcoal dark:dark-text-primary mb-2">
                 Sort By
               </label>
               <select
@@ -227,7 +227,7 @@ const ActivitiesPage = () => {
 
           {/* Filter Actions */}
           <div className="mt-4 flex items-center justify-between">
-            <div className="text-body-sm text-charcoal-light dark:text-dark-text-secondary">
+            <div className="text-body-sm text-charcoal-light dark:dark-text-secondary">
               {pagination.totalActivities} activities found
             </div>
             <Button
@@ -279,20 +279,20 @@ const ActivitiesPage = () => {
 
                 {/* Activity Info */}
                 <div className="p-4">
-                  <h3 className="text-body-lg font-semibold text-charcoal dark:text-dark-text-primary mb-2 line-clamp-2">
+                  <h3 className="text-body-lg font-semibold text-charcoal dark:dark-text-primary mb-2 line-clamp-2">
                     {activity.title}
                   </h3>
 
-                  <p className="text-body-sm text-charcoal-light dark:text-dark-text-secondary mb-3 line-clamp-2">
+                  <p className="text-body-sm text-charcoal-light dark:dark-text-secondary mb-3 line-clamp-2">
                     {activity.description}
                   </p>
 
                   <div className="flex items-center justify-between mb-3">
-                    <div className="text-body-sm text-charcoal-light dark:text-dark-text-secondary">
+                    <div className="text-body-sm text-charcoal-light dark:dark-text-secondary">
                       📍 {activity.location?.city}
                     </div>
                     {activity.vendor?.rating?.average > 0 && (
-                      <div className="flex items-center text-body-sm text-charcoal-light dark:text-dark-text-secondary">
+                      <div className="flex items-center text-body-sm text-charcoal-light dark:dark-text-secondary">
                         ⭐ {activity.vendor.rating.average.toFixed(1)}
                       </div>
                     )}
@@ -304,7 +304,7 @@ const ActivitiesPage = () => {
                     </div>
                     <Link
                       to={`/vendors/${activity.vendor?._id}`}
-                      className="text-body-sm text-charcoal-light dark:text-dark-text-secondary hover:text-ludus-orange dark:hover:text-dark-ludus-orange transition-colors"
+                      className="text-body-sm text-charcoal-light dark:dark-text-secondary hover:text-ludus-orange dark:hover:text-dark-ludus-orange transition-colors"
                       onClick={(e) => e.stopPropagation()}
                     >
                       by {activity.vendor?.businessName}
@@ -320,8 +320,8 @@ const ActivitiesPage = () => {
         {activities.length === 0 && !loading && (
           <div className="text-center py-12">
             <div className="text-6xl mb-4">🎯</div>
-            <h3 className="text-body-lg font-semibold text-charcoal dark:text-dark-text-primary mb-2">No activities found</h3>
-            <p className="text-body-md text-charcoal-light dark:text-dark-text-secondary mb-6">
+            <h3 className="text-body-lg font-semibold text-charcoal dark:dark-text-primary mb-2">No activities found</h3>
+            <p className="text-body-md text-charcoal-light dark:dark-text-secondary mb-6">
               Try adjusting your search filters or browse all activities
             </p>
             <Button onClick={resetFilters} variant="primary">

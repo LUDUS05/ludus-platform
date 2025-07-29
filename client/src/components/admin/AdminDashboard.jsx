@@ -137,10 +137,10 @@ const AdminDashboard = () => {
             <div className="w-16 h-16 bg-success/10 dark:bg-dark-success/10 rounded-2xl flex items-center justify-center mx-auto mb-3">
               <span className="text-2xl">📈</span>
             </div>
-            <h3 className="text-body-lg font-bold text-charcoal dark:text-dark-text-primary mb-1">
+            <h3 className="text-body-lg font-bold text-charcoal dark:dark-text-primary mb-1">
               +24%
             </h3>
-            <p className="text-body-sm text-charcoal-light dark:text-dark-text-secondary mb-2">
+            <p className="text-body-sm text-charcoal-light dark:dark-text-secondary mb-2">
               Growth this month
             </p>
             <div className="w-full bg-warm dark:bg-dark-bg-tertiary rounded-full h-2">
@@ -290,7 +290,7 @@ const AdminDashboard = () => {
         {/* Activities by Category */}
         <Card>
           <div className="px-6 py-4 border-b border-warm dark:border-dark-border-secondary">
-            <h3 className="text-body-lg font-semibold text-charcoal dark:text-dark-text-primary">Activities by Category</h3>
+            <h3 className="text-body-lg font-semibold text-charcoal dark:dark-text-primary">Activities by Category</h3>
           </div>
           <div className="p-6">
             {stats?.stats?.activitiesByCategory?.length > 0 ? (
@@ -317,12 +317,12 @@ const AdminDashboard = () => {
                         <div className="w-8 h-8 bg-ludus-orange/10 dark:bg-dark-ludus-orange/10 rounded-lg flex items-center justify-center">
                           <span className="text-sm">{getCategoryIcon(item._id)}</span>
                         </div>
-                        <span className="text-body-sm font-medium text-charcoal dark:text-dark-text-primary capitalize">
+                        <span className="text-body-sm font-medium text-charcoal dark:dark-text-primary capitalize">
                           {item._id}
                         </span>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <span className="text-body-xs text-charcoal-light dark:text-dark-text-secondary">
+                        <span className="text-body-xs text-charcoal-light dark:dark-text-secondary">
                           {percentage}%
                         </span>
                         <span className="px-2 py-1 rounded-full text-xs font-semibold bg-ludus-orange/10 text-ludus-orange dark:bg-dark-ludus-orange/10 dark:text-dark-ludus-orange">
@@ -334,7 +334,7 @@ const AdminDashboard = () => {
                 })}
               </div>
             ) : (
-              <p className="text-charcoal-light dark:text-dark-text-secondary text-center py-8">No activity data available</p>
+              <p className="text-charcoal-light dark:dark-text-secondary text-center py-8">No activity data available</p>
             )}
           </div>
         </Card>
@@ -345,7 +345,7 @@ const AdminDashboard = () => {
         {/* Monthly Revenue Trend */}
         <Card className="lg:col-span-2">
           <div className="px-6 py-4 border-b border-warm dark:border-dark-border-secondary">
-            <h3 className="text-body-lg font-semibold text-charcoal dark:text-dark-text-primary">Monthly Revenue Trend</h3>
+            <h3 className="text-body-lg font-semibold text-charcoal dark:dark-text-primary">Monthly Revenue Trend</h3>
           </div>
           <div className="p-6">
             <div className="space-y-4">
@@ -364,7 +364,7 @@ const AdminDashboard = () => {
                 
                 return (
                   <div key={item.month} className="flex items-center space-x-4">
-                    <div className="w-12 text-body-sm font-medium text-charcoal dark:text-dark-text-primary">
+                    <div className="w-12 text-body-sm font-medium text-charcoal dark:dark-text-primary">
                       {item.month}
                     </div>
                     <div className="flex-1">
@@ -397,7 +397,7 @@ const AdminDashboard = () => {
         {/* Top Performing Activities */}
         <Card>
           <div className="px-6 py-4 border-b border-warm dark:border-dark-border-secondary">
-            <h3 className="text-body-lg font-semibold text-charcoal dark:text-dark-text-primary">Top Activities</h3>
+            <h3 className="text-body-lg font-semibold text-charcoal dark:dark-text-primary">Top Activities</h3>
           </div>
           <div className="p-6">
             <div className="space-y-4">
@@ -419,10 +419,10 @@ const AdminDashboard = () => {
                       {index + 1}
                     </div>
                     <div>
-                      <p className="text-body-sm font-medium text-charcoal dark:text-dark-text-primary line-clamp-1">
+                      <p className="text-body-sm font-medium text-charcoal dark:dark-text-primary line-clamp-1">
                         {activity.name}
                       </p>
-                      <p className="text-body-xs text-charcoal-light dark:text-dark-text-secondary">
+                      <p className="text-body-xs text-charcoal-light dark:dark-text-secondary">
                         {activity.bookings} bookings
                       </p>
                     </div>
@@ -445,7 +445,7 @@ const AdminDashboard = () => {
       {/* System Status */}
       <Card>
         <div className="px-6 py-4 border-b border-warm dark:border-dark-border-secondary">
-          <h3 className="text-body-lg font-semibold text-charcoal dark:text-dark-text-primary">System Health</h3>
+          <h3 className="text-body-lg font-semibold text-charcoal dark:dark-text-primary">System Health</h3>
         </div>
         <div className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -467,7 +467,7 @@ const AdminDashboard = () => {
                     'bg-error dark:bg-dark-error'
                   }`} />
                 </div>
-                <p className="text-body-sm font-medium text-charcoal dark:text-dark-text-primary">
+                <p className="text-body-sm font-medium text-charcoal dark:dark-text-primary">
                   {item.label}
                 </p>
                 <p className={`text-body-xs font-semibold ${
