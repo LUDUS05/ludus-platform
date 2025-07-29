@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'r
 import { useTranslation } from 'react-i18next';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
 import Header from './components/common/Header';
 import LoginForm from './components/auth/LoginForm';
 import RegisterForm from './components/auth/RegisterForm';
@@ -26,8 +27,8 @@ const ProtectedRoute = ({ children }) => {
   
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+      <div className="min-h-screen flex items-center justify-center bg-soft-white dark:bg-dark-bg-primary">
+        <div className="animate-spin rounded-full h-12 w-12 border-2 border-ludus-orange dark:border-dark-ludus-orange border-t-transparent"></div>
       </div>
     );
   }
@@ -44,23 +45,94 @@ const HomePage = () => {
   const { t } = useTranslation();
   
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto container-padding py-12">
+    <div className="min-h-screen bg-soft-white dark:bg-dark-bg-primary">
+      {/* Hero Section */}
+      <div className="max-w-7xl mx-auto container-padding py-20">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-display-xl font-bold text-charcoal dark:text-dark-text-primary mb-6">
             {t('home.welcomeTitle')}
           </h1>
-          <p className="text-xl text-gray-600 mb-8">
+          <p className="text-body-lg text-charcoal-light dark:text-dark-text-secondary mb-12 max-w-2xl mx-auto">
             {t('home.welcomeSubtitle')}
           </p>
-          <div className="space-x-4">
-            <a href="/activities" className="btn-primary">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <a href="/activities" className="btn-primary btn-lg">
               {t('home.exploreActivities')}
             </a>
-            <a href="/register" className="btn-outline">
+            <a href="/register" className="btn-secondary btn-lg">
               {t('home.getStarted')}
             </a>
           </div>
+        </div>
+      </div>
+
+      {/* Features Section */}
+      <div className="bg-white dark:bg-dark-bg-secondary py-20">
+        <div className="max-w-7xl mx-auto container-padding">
+          <div className="text-center mb-16">
+            <h2 className="text-display-lg font-bold text-charcoal dark:text-dark-text-primary mb-4">
+              Why Choose LUDUS?
+            </h2>
+            <p className="text-body-md text-charcoal-light dark:text-dark-text-secondary max-w-2xl mx-auto">
+              Discover unique experiences and connect with local activity providers across Saudi Arabia
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Feature 1 */}
+            <div className="text-center p-6">
+              <div className="w-16 h-16 bg-ludus-orange/10 dark:bg-dark-ludus-orange/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <span className="text-3xl">🎯</span>
+              </div>
+              <h3 className="text-body-lg font-semibold text-charcoal dark:text-dark-text-primary mb-3">
+                Curated Experiences
+              </h3>
+              <p className="text-body-md text-charcoal-light dark:text-dark-text-secondary">
+                Handpicked activities from trusted local providers to ensure quality and authenticity
+              </p>
+            </div>
+
+            {/* Feature 2 */}
+            <div className="text-center p-6">
+              <div className="w-16 h-16 bg-ludus-orange/10 dark:bg-dark-ludus-orange/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <span className="text-3xl">💰</span>
+              </div>
+              <h3 className="text-body-lg font-semibold text-charcoal dark:text-dark-text-primary mb-3">
+                Transparent Pricing
+              </h3>
+              <p className="text-body-md text-charcoal-light dark:text-dark-text-secondary">
+                Clear, upfront pricing in Saudi Riyals with secure payment processing through Moyasar
+              </p>
+            </div>
+
+            {/* Feature 3 */}
+            <div className="text-center p-6">
+              <div className="w-16 h-16 bg-ludus-orange/10 dark:bg-dark-ludus-orange/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <span className="text-3xl">📱</span>
+              </div>
+              <h3 className="text-body-lg font-semibold text-charcoal dark:text-dark-text-primary mb-3">
+                Easy Booking
+              </h3>
+              <p className="text-body-md text-charcoal-light dark:text-dark-text-secondary">
+                Simple, mobile-friendly booking process with instant confirmation and digital receipts
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* CTA Section */}
+      <div className="bg-ludus-orange dark:bg-dark-ludus-orange py-16">
+        <div className="max-w-4xl mx-auto container-padding text-center">
+          <h2 className="text-display-md font-bold text-white mb-4">
+            Ready to Start Your Adventure?
+          </h2>
+          <p className="text-body-lg text-white/90 mb-8">
+            Join thousands of explorers discovering amazing activities across Saudi Arabia
+          </p>
+          <a href="/activities" className="btn-white btn-lg">
+            Explore Activities Now
+          </a>
         </div>
       </div>
     </div>
@@ -75,8 +147,8 @@ const AdminRoute = ({ children }) => {
   
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+      <div className="min-h-screen flex items-center justify-center bg-soft-white dark:bg-dark-bg-primary">
+        <div className="animate-spin rounded-full h-12 w-12 border-2 border-ludus-orange dark:border-dark-ludus-orange border-t-transparent"></div>
       </div>
     );
   }
@@ -90,10 +162,11 @@ const AdminRoute = ({ children }) => {
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <div className="App">
-          <Routes>
+    <ThemeProvider>
+      <AuthProvider>
+        <Router>
+          <div className="App min-h-screen bg-soft-white dark:bg-dark-bg-primary text-charcoal dark:text-dark-text-primary transition-colors duration-300">
+            <Routes>
             {/* Admin Routes */}
             <Route 
               path="/admin/*" 
@@ -234,10 +307,11 @@ function App() {
               </>
             } />
           </Routes>
-        </div>
-        <SpeedInsights />
-      </Router>
-    </AuthProvider>
+          </div>
+          <SpeedInsights />
+        </Router>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

@@ -1,0 +1,444 @@
+/**
+ * LUDUS Platform - Enhanced Global Styles
+ * Additional utilities and enhancements for the LUDUS design system
+ */
+
+/* Import this in index.css for enhanced styles */
+
+/* Smooth scrolling for the entire app */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Enhanced focus styles for accessibility */
+*:focus {
+  outline: 2px solid theme(colors.ludus.orange);
+  outline-offset: 2px;
+}
+
+.dark *:focus {
+  outline-color: theme(colors.dark.ludus.orange);
+}
+
+/* Enhanced text selection */
+::selection {
+  background-color: theme(colors.ludus.orange / 0.2);
+  color: theme(colors.charcoal.DEFAULT);
+}
+
+.dark ::selection {
+  background-color: theme(colors.dark.ludus.orange / 0.2);
+  color: theme(colors.dark.text.primary);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: theme(colors.warm.light);
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: theme(colors.dark.bg.secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: theme(colors.ludus.orange / 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: theme(colors.ludus.orange / 0.5);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: theme(colors.dark.ludus.orange / 0.3);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: theme(colors.dark.ludus.orange / 0.5);
+}
+
+/* Enhanced animations for reduced motion users */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .animate-spin {
+    animation: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .glass {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border: 2px solid currentColor !important;
+  }
+  
+  .dark .glass {
+    background: rgba(0, 0, 0, 0.95) !important;
+  }
+  
+  /* Ensure all interactive elements have strong borders */
+  button, .btn-primary, .btn-secondary {
+    border: 2px solid currentColor !important;
+  }
+}
+
+/* Enhanced print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  * {
+    color: black !important;
+    background: white !important;
+  }
+  
+  .ludus-orange {
+    color: #FF6600 !important;
+  }
+}
+
+/* Utility classes for enhanced animations */
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.2s ease-out;
+}
+
+.animate-bounce-in {
+  animation: bounceIn 0.6s ease-out;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-pulse-ludus {
+  animation: pulseLudus 2s infinite;
+}
+
+/* Shimmer effect for loading states */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(90deg, 
+    theme(colors.warm.DEFAULT) 25%, 
+    theme(colors.warm.light) 50%, 
+    theme(colors.warm.DEFAULT) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.dark .shimmer {
+  background: linear-gradient(90deg, 
+    theme(colors.dark.bg.tertiary) 25%, 
+    theme(colors.dark.bg.quaternary) 50%, 
+    theme(colors.dark.bg.tertiary) 75%
+  );
+  background-size: 200% 100%;
+}
+
+/* Enhanced glass morphism variants */
+.glass-warm {
+  background: rgba(238, 238, 238, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(238, 238, 238, 0.2);
+}
+
+.glass-charcoal {
+  background: rgba(43, 43, 43, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(43, 43, 43, 0.2);
+}
+
+/* Navigation glass effect */
+.nav-glass {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px) saturate(1.8);
+  -webkit-backdrop-filter: blur(20px) saturate(1.8);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.dark .nav-glass {
+  background: rgba(15, 15, 15, 0.8);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Enhanced button variants */
+.btn-ludus {
+  @apply relative overflow-hidden transition-all duration-200 ease-out;
+  transform: translateZ(0); /* Hardware acceleration */
+}
+
+.btn-ludus:hover {
+  @apply shadow-xl;
+  box-shadow: 0 20px 25px -5px rgba(255, 102, 0, 0.15);
+}
+
+.btn-ludus:active {
+  @apply scale-95;
+  transition-duration: 100ms;
+}
+
+/* Ripple effect for buttons */
+.btn-ludus::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btn-ludus:active::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Enhanced card styles */
+.card-ludus {
+  @apply bg-white dark:bg-dark-bg-secondary rounded-2xl shadow-lg;
+  @apply border border-transparent dark:border-dark-border-secondary;
+  @apply transition-all duration-300 ease-out;
+}
+
+.card-ludus:hover {
+  @apply shadow-2xl -translate-y-1;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.dark .card-ludus:hover {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* Interactive hover glow effects */
+.glow-ludus {
+  position: relative;
+}
+
+.glow-ludus::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(45deg, 
+    theme(colors.ludus.orange / 0.1), 
+    theme(colors.ludus.orange-light / 0.1)
+  );
+  filter: blur(20px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.glow-ludus:hover::after {
+  opacity: 1;
+}
+
+/* Text gradient utilities */
+.text-gradient-ludus {
+  background: linear-gradient(135deg, 
+    theme(colors.ludus.orange), 
+    theme(colors.ludus.orange-light)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.dark .text-gradient-ludus {
+  background: linear-gradient(135deg, 
+    theme(colors.dark.ludus.orange), 
+    theme(colors.dark.ludus.orange-light)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Enhanced input styles */
+.input-ludus {
+  @apply w-full px-4 py-3 rounded-xl border-2;
+  @apply bg-white dark:bg-dark-bg-secondary;
+  @apply text-charcoal dark:text-dark-text-primary;
+  @apply placeholder-gray-400 dark:placeholder-dark-text-tertiary;
+  @apply border-warm dark:border-dark-border-secondary;
+  @apply focus:border-ludus-orange dark:focus:border-dark-ludus-orange;
+  @apply focus:outline-none focus:ring-2 focus:ring-ludus-orange/20;
+  @apply dark:focus:ring-dark-ludus-orange/20;
+  @apply transition-all duration-200;
+}
+
+.input-ludus:focus {
+  box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.1);
+}
+
+.dark .input-ludus:focus {
+  box-shadow: 0 0 0 3px rgba(255, 122, 26, 0.1);
+}
+
+/* Loading skeleton styles */
+.skeleton {
+  @apply bg-warm dark:bg-dark-bg-tertiary rounded animate-pulse;
+}
+
+.skeleton-text {
+  @apply h-4 bg-warm dark:bg-dark-bg-tertiary rounded;
+}
+
+.skeleton-avatar {
+  @apply w-10 h-10 bg-warm dark:bg-dark-bg-tertiary rounded-full;
+}
+
+/* Enhanced dropdown styles */
+.dropdown-ludus {
+  @apply bg-white dark:bg-dark-bg-tertiary;
+  @apply border border-warm dark:border-dark-border-secondary;
+  @apply rounded-xl shadow-xl;
+  @apply backdrop-blur-sm;
+}
+
+.dropdown-item {
+  @apply px-4 py-2 text-charcoal dark:text-dark-text-primary;
+  @apply hover:bg-warm-light dark:hover:bg-dark-bg-quaternary;
+  @apply transition-colors duration-200 rounded-lg mx-2;
+}
+
+/* Status indicator styles */
+.status-online {
+  @apply bg-success-green;
+}
+
+.status-offline {
+  @apply bg-gray-400 dark:bg-gray-600;
+}
+
+.status-busy {
+  @apply bg-error-red;
+}
+
+.status-away {
+  @apply bg-warning-orange;
+}
+
+/* Enhanced badge styles */
+.badge-ludus {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  @apply bg-ludus-orange/10 dark:bg-dark-ludus-orange/10;
+  @apply text-ludus-orange dark:text-dark-ludus-orange;
+}
+
+.badge-success {
+  @apply bg-success-green/10 text-success-green;
+}
+
+.badge-warning {
+  @apply bg-warning-orange/10 text-warning-orange;
+}
+
+.badge-error {
+  @apply bg-error-red/10 text-error-red;
+}
+
+/* Keyframe animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { 
+    transform: translateY(10px); 
+    opacity: 0; 
+  }
+  to { 
+    transform: translateY(0); 
+    opacity: 1; 
+  }
+}
+
+@keyframes scaleIn {
+  from { 
+    transform: scale(0.95); 
+    opacity: 0; 
+  }
+  to { 
+    transform: scale(1); 
+    opacity: 1; 
+  }
+}
+
+@keyframes bounceIn {
+  0% { 
+    transform: scale(0.3); 
+    opacity: 0; 
+  }
+  50% { 
+    transform: scale(1.05); 
+  }
+  70% { 
+    transform: scale(0.9); 
+  }
+  100% { 
+    transform: scale(1); 
+    opacity: 1; 
+  }
+}
+
+@keyframes float {
+  0%, 100% { 
+    transform: translateY(0px); 
+  }
+  50% { 
+    transform: translateY(-10px); 
+  }
+}
+
+@keyframes pulseLudus {
+  0%, 100% { 
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 102, 0, 0.7);
+  }
+  50% { 
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(255, 102, 0, 0);
+  }
+}
+
+@keyframes shimmer {
+  0% { 
+    background-position: -200% 0; 
+  }
+  100% { 
+    background-position: 200% 0; 
+  }
+}

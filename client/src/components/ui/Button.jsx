@@ -13,9 +13,9 @@ const Button = ({
   const baseClasses = 'font-semibold rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
   
   const variantClasses = {
-    primary: 'bg-ludus-orange hover:bg-ludus-orange-dark text-white shadow-lg hover:shadow-xl active:scale-95 focus:ring-ludus-orange/20',
-    secondary: 'bg-white border-2 border-ludus-orange text-ludus-orange hover:bg-ludus-orange hover:text-white focus:ring-ludus-orange/20',
-    ghost: 'bg-transparent text-charcoal hover:bg-warm-light focus:ring-warm/20',
+    primary: 'bg-ludus-orange hover:bg-ludus-orange-dark dark:bg-dark-ludus-orange dark:hover:bg-dark-ludus-orange-dark text-white shadow-lg hover:shadow-xl active:scale-95 focus:ring-ludus-orange/20 dark:focus:ring-dark-ludus-orange/20',
+    secondary: 'bg-white dark:bg-dark-bg-secondary border-2 border-ludus-orange dark:border-dark-ludus-orange text-ludus-orange dark:text-dark-ludus-orange hover:bg-ludus-orange dark:hover:bg-dark-ludus-orange hover:text-white focus:ring-ludus-orange/20 dark:focus:ring-dark-ludus-orange/20',
+    ghost: 'bg-transparent text-charcoal dark:text-dark-text-primary hover:bg-warm-light dark:hover:bg-dark-bg-tertiary focus:ring-warm/20 dark:focus:ring-dark-bg-quaternary/20',
     success: 'bg-success-green hover:bg-success-dark text-white shadow-lg hover:shadow-xl active:scale-95 focus:ring-success-green/20',
     warning: 'bg-warning-orange hover:bg-warning-dark text-white shadow-lg hover:shadow-xl active:scale-95 focus:ring-warning-orange/20',
     error: 'bg-error-red hover:bg-error-dark text-white shadow-lg hover:shadow-xl active:scale-95 focus:ring-error-red/20',

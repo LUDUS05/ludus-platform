@@ -247,7 +247,7 @@ const ActivityDetailPage = () => {
                   </Link>
                 </div>
               </div>
-            </div>
+            </Card>
           </div>
 
           {/* Booking Sidebar */}

@@ -37,28 +37,28 @@ const AdminDashboard = () => {
       title: 'Total Users',
       value: stats?.overview?.totalUsers || 0,
       icon: '👥',
-      color: 'blue',
+      color: 'ludus-orange',
       link: '/admin/users'
     },
     {
       title: 'Total Vendors',
       value: stats?.overview?.totalVendors || 0,
       icon: '🏢',
-      color: 'green',
+      color: 'success',
       link: '/admin/vendors'
     },
     {
       title: 'Total Activities',
       value: stats?.overview?.totalActivities || 0,
       icon: '🎯',
-      color: 'purple',
+      color: 'info',
       link: '/admin/activities'
     },
     {
       title: 'Total Bookings',
       value: stats?.overview?.totalBookings || 0,
       icon: '📅',
-      color: 'orange',
+      color: 'warning',
       link: '/admin/bookings'
     },
     {
@@ -72,13 +72,12 @@ const AdminDashboard = () => {
 
   const getColorClasses = (color) => {
     const colors = {
-      blue: 'bg-blue-50 text-blue-600 border-blue-200',
-      green: 'bg-green-50 text-green-600 border-green-200',
-      purple: 'bg-purple-50 text-purple-600 border-purple-200',
-      orange: 'bg-orange-50 text-orange-600 border-orange-200',
-      indigo: 'bg-indigo-50 text-indigo-600 border-indigo-200'
+      'ludus-orange': 'bg-ludus-orange/10 text-ludus-orange dark:bg-dark-ludus-orange/10 dark:text-dark-ludus-orange',
+      'success': 'bg-success/10 text-success dark:bg-dark-success/10 dark:text-dark-success',
+      'info': 'bg-info/10 text-info dark:bg-dark-info/10 dark:text-dark-info',
+      'warning': 'bg-warning/10 text-warning dark:bg-dark-warning/10 dark:text-dark-warning'
     };
-    return colors[color] || colors.blue;
+    return colors[color] || colors['ludus-orange'];
   };
 
   if (loading) {
@@ -91,30 +90,26 @@ const AdminDashboard = () => {
 
   if (error) {
     return (
-      <div className="bg-red-50 border border-red-200 rounded-md p-4">
-        <div className="flex">
-          <div className="text-red-400 text-xl mr-3">⚠️</div>
-          <div>
-            <h3 className="text-sm font-medium text-red-800">Error</h3>
-            <p className="text-sm text-red-700 mt-1">{error}</p>
-            <button
-              onClick={fetchDashboardStats}
-              className="mt-2 text-sm text-red-600 hover:text-red-500 underline"
-            >
-              Try again
-            </button>
-          </div>
+      <Alert variant="error">
+        <div className="flex flex-col gap-2">
+          <p>{error}</p>
+          <button
+            onClick={fetchDashboardStats}
+            className="text-sm underline hover:no-underline"
+          >
+            Try again
+          </button>
         </div>
-      </div>
+      </Alert>
     );
   }
 
   return (
     <div className="space-y-6">
       {/* Welcome Message */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-6 text-white">
-        <h2 className="text-3xl font-bold mb-2">Welcome to LUDUS Admin</h2>
-        <p className="text-blue-100">
+      <div className="bg-gradient-to-r from-ludus-orange to-ludus-orange-dark dark:from-dark-ludus-orange dark:to-dark-ludus-orange-dark rounded-xl p-6 text-white">
+        <h2 className="text-display-md font-bold mb-2">Welcome to LUDUS Admin</h2>
+        <p className="text-body-md text-white/90">
           Manage vendors, activities, and bookings for the Saudi activity platform.
         </p>
       </div>

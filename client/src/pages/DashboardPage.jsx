@@ -321,10 +321,10 @@ const DashboardPage = () => {
                     </div>
                   ))}
                 </div>
-              </div>
+              </Card>
 
               {/* Quick Actions */}
-              <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
+              <Card className="p-6">
                 <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <Link
@@ -727,7 +727,7 @@ const DashboardPage = () => {
                   </button>
                 </div>
               </div>
-            </div>
+            </Card>
           )}
         </div>
       </div>
