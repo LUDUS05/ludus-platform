@@ -78,25 +78,33 @@ const AdminLayout = ({ children }) => {
             </nav>
 
             {/* User Info & Logout */}
-            <div className="border-t border-gray-200 p-4">
+            <div className="border-t border-warm dark:border-dark-border-secondary p-4">
               <div className="flex items-center mb-4">
-                <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
-                  {user?.firstName?.charAt(0)}
+                <div className="w-10 h-10 bg-ludus-orange dark:bg-dark-ludus-orange rounded-full flex items-center justify-center text-white font-bold shadow-lg">
+                  {user?.firstName?.charAt(0)}{user?.lastName?.charAt(0)}
                 </div>
-                <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-900">
+                <div className="ml-3 flex-1">
+                  <p className="text-body-sm font-semibold text-charcoal dark:text-dark-text-primary">
                     {user?.firstName} {user?.lastName}
                   </p>
-                  <p className="text-xs text-gray-500">Administrator</p>
+                  <p className="text-body-xs text-charcoal-light dark:text-dark-text-secondary">Administrator</p>
                 </div>
               </div>
-              <button
-                onClick={handleLogout}
-                className="w-full flex items-center px-4 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-100 hover:text-gray-900 transition-colors"
-              >
-                <span className="mr-3">🚪</span>
-                Logout
-              </button>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-body-xs text-charcoal-light dark:text-dark-text-secondary">Theme</span>
+                  <ThemeToggle className="scale-75" />
+                </div>
+                <Button
+                  onClick={handleLogout}
+                  variant="ghost"
+                  size="sm"
+                  className="w-full justify-start text-charcoal-light dark:text-dark-text-secondary hover:text-error dark:hover:text-dark-error"
+                >
+                  <span className="mr-3">🚪</span>
+                  Logout
+                </Button>
+              </div>
             </div>
           </div>
         </div>
