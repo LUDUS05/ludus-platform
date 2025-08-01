@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
+import Button from '../ui/Button';
+import Card from '../ui/Card';
 
 const RegisterForm = () => {
   const { t } = useTranslation();
@@ -64,7 +66,7 @@ const RegisterForm = () => {
       <div className="max-w-md w-full space-y-8">
         <div>
           <div className="flex justify-center">
-            <div className="w-12 h-12 bg-primary-600 rounded-lg flex items-center justify-center">
+            <div className="w-12 h-12 bg-ludus-orange rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-xl">L</span>
             </div>
           </div>
@@ -75,7 +77,7 @@ const RegisterForm = () => {
             {t('common.or')}{' '}
             <Link
               to="/login"
-              className="font-medium text-primary-600 hover:text-primary-500"
+              className="font-medium text-ludus-orange hover:text-ludus-orange-dark"
             >
               {t('auth.login')}
             </Link>

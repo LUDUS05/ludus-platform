@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
+import Button from '../ui/Button';
+import Card from '../ui/Card';
 
 const LoginForm = () => {
   const { t } = useTranslation();
@@ -42,7 +44,7 @@ const LoginForm = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
-          <div className="mx-auto h-12 w-12 bg-primary-600 rounded-lg flex items-center justify-center">
+          <div className="mx-auto h-12 w-12 bg-ludus-orange rounded-lg flex items-center justify-center">
             <span className="text-white font-bold text-xl">L</span>
           </div>
           <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
@@ -52,7 +54,7 @@ const LoginForm = () => {
             {t('common.or')}{' '}
             <Link
               to="/register"
-              className="font-medium text-primary-600 hover:text-primary-500"
+              className="font-medium text-ludus-orange hover:text-ludus-orange-dark"
             >
               {t('auth.createNewAccount')}
             </Link>
@@ -128,7 +130,7 @@ const LoginForm = () => {
                 id="remember-me"
                 name="remember-me"
                 type="checkbox"
-                className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                className="h-4 w-4 text-ludus-orange focus:ring-ludus-orange/20 border-gray-300 rounded"
               />
               <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
                 {t('auth.rememberMe')}
@@ -138,7 +140,7 @@ const LoginForm = () => {
             <div className="text-sm">
               <Link
                 to="/forgot-password"
-                className="font-medium text-primary-600 hover:text-primary-500"
+                className="font-medium text-ludus-orange hover:text-ludus-orange-dark"
               >
                 {t('auth.forgotPassword')}
               </Link>
@@ -149,7 +151,7 @@ const LoginForm = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-ludus-orange hover:bg-ludus-orange-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ludus-orange/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {isLoading ? (
                 <div className="flex items-center">
@@ -178,7 +180,7 @@ const LoginForm = () => {
             <div className="mt-6">
               <Link
                 to="/register"
-                className="w-full flex justify-center py-3 px-4 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors"
+                className="w-full flex justify-center py-3 px-4 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ludus-orange/20 transition-colors"
               >
                 Create your account
               </Link>
