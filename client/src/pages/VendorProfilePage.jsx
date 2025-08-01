@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { vendorService } from '../services/vendorService';
+import Button from '../components/ui/Button';
+import Card from '../components/ui/Card';
 
 const VendorProfilePage = () => {
   const { id } = useParams();
@@ -162,7 +164,7 @@ const VendorProfilePage = () => {
       <div className="min-h-screen bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="flex items-center justify-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-ludus-orange"></div>
           </div>
         </div>
       </div>
@@ -179,7 +181,7 @@ const VendorProfilePage = () => {
             <p className="text-red-700 mb-6">{error || 'The vendor you are looking for does not exist.'}</p>
             <Link
               to="/activities"
-              className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors"
+              className="bg-ludus-orange text-white px-6 py-2 rounded-md hover:bg-ludus-orange-dark transition-colors"
             >
               Browse Activities
             </Link>
@@ -230,7 +232,7 @@ const VendorProfilePage = () => {
                   {vendor.categories?.map((category, index) => (
                     <span
                       key={index}
-                      className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800"
+                      className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-ludus-orange/10 text-ludus-orange"
                     >
                       {getCategoryIcon(category)} {category.charAt(0).toUpperCase() + category.slice(1)}
                     </span>
@@ -245,7 +247,7 @@ const VendorProfilePage = () => {
             {/* Quick Stats */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-8 pt-6 border-t border-gray-200">
               <div className="text-center">
-                <div className="text-2xl font-bold text-blue-600">{vendor.statistics?.totalActivities || 0}</div>
+                <div className="text-2xl font-bold text-ludus-orange">{vendor.statistics?.totalActivities || 0}</div>
                 <div className="text-sm text-gray-600">Activities</div>
               </div>
               <div className="text-center">
@@ -276,7 +278,7 @@ const VendorProfilePage = () => {
                   onClick={() => setActiveTab(tab.id)}
                   className={`py-2 px-1 border-b-2 font-medium text-sm ${
                     activeTab === tab.id
-                      ? 'border-blue-500 text-blue-600'
+                      ? 'border-ludus-orange text-ludus-orange'
                       : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                   }`}
                 >
@@ -353,10 +355,10 @@ const VendorProfilePage = () => {
                         {activity.description}
                       </p>
                       <div className="flex items-center justify-between">
-                        <div className="text-lg font-bold text-blue-600">
+                        <div className="text-lg font-bold text-ludus-orange">
                           {formatCurrency(activity.pricing?.basePrice)}
                         </div>
-                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-ludus-orange/10 text-blue-800">
                           {activity.category}
                         </span>
                       </div>
@@ -413,7 +415,7 @@ const VendorProfilePage = () => {
                     {vendor.categories?.map((category, index) => (
                       <span
                         key={index}
-                        className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800"
+                        className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-ludus-orange/10 text-ludus-orange"
                       >
                         {getCategoryIcon(category)} {category.charAt(0).toUpperCase() + category.slice(1)}
                       </span>
@@ -432,7 +434,7 @@ const VendorProfilePage = () => {
                         ))}
                         {vendor.credentials.certifications?.map((cert, index) => (
                           <div key={index} className="flex items-center text-gray-700">
-                            <span className="text-blue-500 mr-2">🏆</span>
+                            <span className="text-ludus-orange-dark mr-2">🏆</span>
                             {cert}
                           </div>
                         ))}
@@ -476,7 +478,7 @@ const VendorProfilePage = () => {
                   {reviews.map((review, index) => (
                     <div key={index} className="bg-white rounded-lg shadow border border-gray-200 p-6">
                       <div className="flex items-start space-x-4">
-                        <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+                        <div className="w-12 h-12 bg-ludus-orange rounded-full flex items-center justify-center text-white font-bold">
                           {review.user?.firstName?.charAt(0) || 'U'}
                         </div>
                         <div className="flex-1">
@@ -495,7 +497,7 @@ const VendorProfilePage = () => {
                             {review.activity && (
                               <Link
                                 to={`/activities/${review.activity._id}`}
-                                className="text-sm text-blue-600 hover:text-blue-500"
+                                className="text-sm text-ludus-orange hover:text-ludus-orange-dark"
                               >
                                 {review.activity.title}
                               </Link>
@@ -551,12 +553,12 @@ const VendorProfilePage = () => {
                   
                   <div className="space-y-4">
                     <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                        <span className="text-blue-600">📧</span>
+                      <div className="w-8 h-8 bg-ludus-orange/10 rounded-full flex items-center justify-center">
+                        <span className="text-ludus-orange">📧</span>
                       </div>
                       <div>
                         <div className="text-sm text-gray-500">Email</div>
-                        <a href={`mailto:${vendor.contactInfo?.email}`} className="text-blue-600 hover:text-blue-500">
+                        <a href={`mailto:${vendor.contactInfo?.email}`} className="text-ludus-orange hover:text-ludus-orange-dark">
                           {vendor.contactInfo?.email}
                         </a>
                       </div>
@@ -617,7 +619,7 @@ const VendorProfilePage = () => {
                             href={vendor.contactInfo.socialMedia.facebook}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700"
+                            className="w-10 h-10 bg-ludus-orange text-white rounded-full flex items-center justify-center hover:bg-ludus-orange-dark"
                           >
                             f
                           </a>

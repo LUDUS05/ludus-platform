@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { userService } from '../services/userService';
+import Button from '../components/ui/Button';
+import Card from '../components/ui/Card';
 
 const DashboardPage = () => {
   const { user, updateUser } = useAuth();
@@ -164,7 +166,7 @@ const DashboardPage = () => {
     const colors = {
       confirmed: 'bg-green-100 text-green-800',
       pending: 'bg-yellow-100 text-yellow-800',
-      completed: 'bg-blue-100 text-blue-800',
+      completed: 'bg-ludus-orange/10 text-ludus-orange',
       cancelled: 'bg-red-100 text-red-800'
     };
     return colors[status] || 'bg-gray-100 text-gray-800';
@@ -182,7 +184,7 @@ const DashboardPage = () => {
       <div className="min-h-screen bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="flex items-center justify-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-ludus-orange"></div>
           </div>
         </div>
       </div>
@@ -212,7 +214,7 @@ const DashboardPage = () => {
                   onClick={() => setActiveTab(tab.id)}
                   className={`py-2 px-1 border-b-2 font-medium text-sm ${
                     activeTab === tab.id
-                      ? 'border-blue-500 text-blue-600'
+                      ? 'border-ludus-orange text-ludus-orange'
                       : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                   }`}
                 >
@@ -234,7 +236,7 @@ const DashboardPage = () => {
                 <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
                   <div className="flex items-center">
                     <div className="flex-shrink-0">
-                      <div className="w-8 h-8 bg-blue-500 rounded-md flex items-center justify-center">
+                      <div className="w-8 h-8 bg-ludus-orange rounded-md flex items-center justify-center">
                         <span className="text-white text-sm">📅</span>
                       </div>
                     </div>
@@ -296,7 +298,7 @@ const DashboardPage = () => {
                     <Link
                       to="#"
                       onClick={() => setActiveTab('bookings')}
-                      className="text-sm text-blue-600 hover:text-blue-500"
+                      className="text-sm text-ludus-orange hover:text-ludus-orange-dark"
                     >
                       View all
                     </Link>
@@ -376,7 +378,7 @@ const DashboardPage = () => {
                     <p className="text-gray-500 mb-6">Start exploring activities to make your first booking!</p>
                     <Link
                       to="/activities"
-                      className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors"
+                      className="bg-ludus-orange text-white px-6 py-2 rounded-md hover:bg-ludus-orange-dark transition-colors"
                     >
                       Explore Activities
                     </Link>
@@ -436,7 +438,7 @@ const DashboardPage = () => {
                         ...prev,
                         firstName: e.target.value
                       }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ludus-orange/20 focus:border-transparent"
                     />
                   </div>
                   <div>
@@ -450,7 +452,7 @@ const DashboardPage = () => {
                         ...prev,
                         lastName: e.target.value
                       }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ludus-orange/20 focus:border-transparent"
                     />
                   </div>
                 </div>
@@ -467,7 +469,7 @@ const DashboardPage = () => {
                         ...prev,
                         email: e.target.value
                       }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ludus-orange/20 focus:border-transparent"
                     />
                   </div>
                   <div>
@@ -481,7 +483,7 @@ const DashboardPage = () => {
                         ...prev,
                         phone: e.target.value
                       }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ludus-orange/20 focus:border-transparent"
                     />
                   </div>
                 </div>
@@ -497,7 +499,7 @@ const DashboardPage = () => {
                       ...prev,
                       dateOfBirth: e.target.value
                     }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ludus-orange/20 focus:border-transparent"
                   />
                 </div>
 
@@ -515,7 +517,7 @@ const DashboardPage = () => {
                           ...prev,
                           location: { ...prev.location, address: e.target.value }
                         }))}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ludus-orange/20 focus:border-transparent"
                       />
                     </div>
                     <div>
@@ -529,7 +531,7 @@ const DashboardPage = () => {
                           ...prev,
                           location: { ...prev.location, city: e.target.value }
                         }))}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ludus-orange/20 focus:border-transparent"
                       />
                     </div>
                     <div>
@@ -543,7 +545,7 @@ const DashboardPage = () => {
                           ...prev,
                           location: { ...prev.location, state: e.target.value }
                         }))}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ludus-orange/20 focus:border-transparent"
                       />
                     </div>
                   </div>
@@ -552,7 +554,7 @@ const DashboardPage = () => {
                 <div className="flex justify-end">
                   <button
                     type="submit"
-                    className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors"
+                    className="bg-ludus-orange text-white px-6 py-2 rounded-md hover:bg-ludus-orange-dark transition-colors"
                   >
                     Update Profile
                   </button>
@@ -589,7 +591,7 @@ const DashboardPage = () => {
                               }
                             }));
                           }}
-                          className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                          className="w-4 h-4 text-ludus-orange border-gray-300 rounded focus:ring-ludus-orange/20"
                         />
                         <span className="text-sm font-medium text-gray-900">
                           {getCategoryIcon(category)} {category.charAt(0).toUpperCase() + category.slice(1)}
@@ -621,7 +623,7 @@ const DashboardPage = () => {
                             }
                           }
                         }))}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ludus-orange/20 focus:border-transparent"
                       />
                     </div>
                     <div>
@@ -642,7 +644,7 @@ const DashboardPage = () => {
                             }
                           }
                         }))}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ludus-orange/20 focus:border-transparent"
                       />
                     </div>
                   </div>
@@ -670,7 +672,7 @@ const DashboardPage = () => {
                             }
                           }
                         }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                        className="w-4 h-4 text-ludus-orange border-gray-300 rounded focus:ring-ludus-orange/20"
                       />
                     </label>
                     <label className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
@@ -691,7 +693,7 @@ const DashboardPage = () => {
                             }
                           }
                         }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                        className="w-4 h-4 text-ludus-orange border-gray-300 rounded focus:ring-ludus-orange/20"
                       />
                     </label>
                     <label className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
@@ -712,7 +714,7 @@ const DashboardPage = () => {
                             }
                           }
                         }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                        className="w-4 h-4 text-ludus-orange border-gray-300 rounded focus:ring-ludus-orange/20"
                       />
                     </label>
                   </div>
@@ -721,7 +723,7 @@ const DashboardPage = () => {
                 <div className="flex justify-end">
                   <button
                     onClick={handleProfileUpdate}
-                    className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors"
+                    className="bg-ludus-orange text-white px-6 py-2 rounded-md hover:bg-ludus-orange-dark transition-colors"
                   >
                     Save Preferences
                   </button>

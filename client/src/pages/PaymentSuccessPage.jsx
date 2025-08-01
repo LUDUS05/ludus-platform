@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { paymentService } from '../services/paymentService';
+import Button from '../components/ui/Button';
+import Card from '../components/ui/Card';
 
 const PaymentSuccessPage = () => {
   const { paymentId } = useParams();
@@ -94,7 +96,7 @@ const PaymentSuccessPage = () => {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-ludus-orange mx-auto"></div>
           <p className="mt-4 text-gray-600">Confirming your payment...</p>
         </div>
       </div>
@@ -112,7 +114,7 @@ const PaymentSuccessPage = () => {
             <div className="space-x-4">
               <Link
                 to="/activities"
-                className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors"
+                className="bg-ludus-orange text-white px-6 py-2 rounded-md hover:bg-ludus-orange-dark transition-colors"
               >
                 Browse Activities
               </Link>
@@ -311,7 +313,7 @@ const PaymentSuccessPage = () => {
         <div className="mt-8 text-center space-x-4">
           <Link
             to="/dashboard"
-            className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors font-medium"
+            className="bg-ludus-orange text-white px-6 py-3 rounded-md hover:bg-ludus-orange-dark transition-colors font-medium"
           >
             View My Bookings
           </Link>
@@ -324,23 +326,23 @@ const PaymentSuccessPage = () => {
         </div>
 
         {/* Next Steps */}
-        <div className="mt-12 bg-blue-50 rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-blue-900 mb-3">What's Next?</h3>
-          <div className="space-y-2 text-blue-800">
+        <div className="mt-12 bg-ludus-orange/5 rounded-lg p-6">
+          <h3 className="text-lg font-semibold text-ludus-orange-dark mb-3">What's Next?</h3>
+          <div className="space-y-2 text-ludus-orange">
             <div className="flex items-center">
-              <span className="text-blue-500 mr-2">📧</span>
+              <span className="text-ludus-orange-dark mr-2">📧</span>
               <span>You'll receive a confirmation email shortly</span>
             </div>
             <div className="flex items-center">
-              <span className="text-blue-500 mr-2">📱</span>
+              <span className="text-ludus-orange-dark mr-2">📱</span>
               <span>We'll send you a reminder 24 hours before your activity</span>
             </div>
             <div className="flex items-center">
-              <span className="text-blue-500 mr-2">🎯</span>
+              <span className="text-ludus-orange-dark mr-2">🎯</span>
               <span>Arrive 15 minutes early to your activity location</span>
             </div>
             <div className="flex items-center">
-              <span className="text-blue-500 mr-2">💬</span>
+              <span className="text-ludus-orange-dark mr-2">💬</span>
               <span>Contact the vendor directly if you have any questions</span>
             </div>
           </div>
