@@ -6,6 +6,10 @@ import VendorManagement from '../../components/admin/VendorManagement';
 import ActivityManagement from '../../components/admin/ActivityManagement';
 import BookingManagement from '../../components/admin/BookingManagement';
 import PaymentManagement from '../../components/admin/PaymentManagement';
+import CategoryManagement from '../../components/admin/CategoryManagement';
+import ContentManagement from '../../components/admin/ContentManagement';
+import TranslationManagement from '../../components/admin/TranslationManagement';
+import SystemSettings from '../../components/admin/SystemSettings';
 
 const AdminRoutes = () => {
   return (
@@ -16,6 +20,10 @@ const AdminRoutes = () => {
         <Route path="/activities" element={<ActivityManagement />} />
         <Route path="/bookings" element={<BookingManagement />} />
         <Route path="/payments" element={<PaymentManagement />} />
+        <Route path="/categories" element={<CategoryManagement />} />
+        <Route path="/content" element={<ContentManagement />} />
+        <Route path="/translations" element={<TranslationManagement />} />
+        <Route path="/settings" element={<SystemSettings />} />
       </Routes>
     </AdminLayout>
   );

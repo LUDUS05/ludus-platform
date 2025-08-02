@@ -18,6 +18,10 @@ const AdminLayout = ({ children }) => {
     { name: 'Activities', href: '/admin/activities', icon: '🎯' },
     { name: 'Bookings', href: '/admin/bookings', icon: '📅' },
     { name: 'Payments', href: '/admin/payments', icon: '💰' },
+    { name: 'Categories', href: '/admin/categories', icon: '📂' },
+    { name: 'Content', href: '/admin/content', icon: '📝' },
+    { name: 'Translations', href: '/admin/translations', icon: '🌐' },
+    { name: 'Settings', href: '/admin/settings', icon: '⚙️' },
   ];
 
   const isActivePath = (path) => {
