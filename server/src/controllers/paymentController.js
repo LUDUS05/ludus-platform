@@ -1,7 +1,9 @@
 const moyasarService = require('../services/moyasarService');
+const emailService = require('../services/emailService');
 const Booking = require('../models/Booking');
 const User = require('../models/User');
 const Activity = require('../models/Activity');
+const Vendor = require('../models/Vendor');
 
 const createPayment = async (req, res) => {
   try {
@@ -171,6 +173,25 @@ const confirmPayment = async (req, res) => {
     if (moyasarPayment.status === 'paid') {
       booking.status = 'confirmed';
       booking.payment.paidAt = new Date();
+      
+      // Send booking confirmation email
+      try {
+        const vendor = await Vendor.findById(booking.vendor);
+        const populatedBooking = await Booking.findById(booking._id)
+          .populate('activity')
+          .populate('vendor')
+          .populate('user');
+        
+        await emailService.sendBookingConfirmationEmail(
+          populatedBooking,
+          populatedBooking.activity,
+          populatedBooking.vendor
+        );
+        console.log(`✅ Booking confirmation email sent to ${booking.user.email}`);
+      } catch (emailError) {
+        console.error('Failed to send booking confirmation email:', emailError);
+        // Don't fail the payment confirmation if email fails
+      }
     } else if (moyasarPayment.status === 'failed') {
       booking.status = 'cancelled';
     }
@@ -441,7 +462,7 @@ const handleWebhook = async (req, res) => {
 const handlePaymentSuccess = async (payment) => {
   const booking = await Booking.findOne({
     'payment.moyasarPaymentId': payment.id
-  }).populate('activity user');
+  }).populate('activity user vendor');
 
   if (booking) {
     booking.payment.status = 'paid';
@@ -449,7 +470,18 @@ const handlePaymentSuccess = async (payment) => {
     booking.status = 'confirmed';
     await booking.save();
 
-    // TODO: Send confirmation email
+    // Send booking confirmation email
+    try {
+      await emailService.sendBookingConfirmationEmail(
+        booking,
+        booking.activity,
+        booking.vendor
+      );
+      console.log(`✅ Booking confirmation email sent to ${booking.user.email}`);
+    } catch (emailError) {
+      console.error('Failed to send booking confirmation email:', emailError);
+    }
+
     console.log(`Payment successful for booking ${booking.bookingId}`);
   }
 };

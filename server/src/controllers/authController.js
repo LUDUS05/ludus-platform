@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const { generateTokens, verifyToken, generateEmailVerificationToken, generatePasswordResetToken } = require('../utils/generateTokens');
+const emailService = require('../services/emailService');
 const crypto = require('crypto');
 
 // @desc    Register user
@@ -36,8 +37,14 @@ const register = async (req, res, next) => {
     // Generate email verification token
     const emailVerificationToken = generateEmailVerificationToken(user._id, user.email);
     
-    // TODO: Send verification email
-    console.log('Email verification token:', emailVerificationToken);
+    // Send welcome email
+    try {
+      await emailService.sendWelcomeEmail(user);
+      console.log(`✅ Welcome email sent to ${user.email}`);
+    } catch (emailError) {
+      console.error('Failed to send welcome email:', emailError);
+      // Don't fail registration if email fails
+    }
 
     res.status(201).json({
       success: true,
@@ -282,8 +289,24 @@ const forgotPassword = async (req, res, next) => {
     user.passwordResetExpires = Date.now() + 60 * 60 * 1000; // 1 hour
     await user.save();
 
-    // TODO: Send password reset email
-    console.log('Password reset token:', resetToken);
+    // Send password reset email
+    const resetUrl = `${process.env.CLIENT_URL}/reset-password?token=${resetToken}`;
+    
+    try {
+      await emailService.sendPasswordResetEmail(user.email, resetToken, resetUrl);
+      console.log(`✅ Password reset email sent to ${user.email}`);
+    } catch (emailError) {
+      console.error('Failed to send password reset email:', emailError);
+      // Reset the user's token since email failed
+      user.passwordResetToken = undefined;
+      user.passwordResetExpires = undefined;
+      await user.save();
+      
+      return res.status(500).json({
+        success: false,
+        message: 'Failed to send password reset email. Please try again later.'
+      });
+    }
 
     res.json({
       success: true,
