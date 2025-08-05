@@ -63,99 +63,99 @@ const AdminLayout = ({ children }) => {
         )}
 
         {/* Sidebar */}
-        <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-200 ease-in-out ${
-          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        } lg:translate-x-0 lg:static lg:inset-0`}>
-          <div className="flex flex-col h-full">
-            {/* Logo */}
-            <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200">
-              <Link to="/admin" className="text-2xl font-bold text-ludus-orange">
-                LUDUS Admin
-              </Link>
-              <button
-                onClick={() => setSidebarOpen(false)}
-                className="lg:hidden p-1 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-
-            {/* Navigation */}
-            <nav className="flex-1 px-4 py-6 space-y-2">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  onClick={() => window.innerWidth < 1024 && setSidebarOpen(false)}
-                  className={`flex items-center px-4 py-3 text-sm font-medium rounded-md transition-colors ${
-                    isActivePath(item.href)
-                      ? 'bg-ludus-orange/10 text-ludus-orange border-r-2 border-ludus-orange'
-                      : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-                  }`}
-                >
-                  <span className="mr-3 text-lg">{item.icon}</span>
-                  {item.name}
+        {sidebarOpen && (
+          <div className="admin-sidebar fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg lg:static lg:inset-0">
+            <div className="sidebar-container flex flex-col h-full">
+              {/* Logo */}
+              <div className="sidebar-header flex items-center justify-between h-16 px-4 border-b border-gray-200">
+                <Link to="/admin" className="admin-logo text-2xl font-bold text-ludus-orange">
+                  LUDUS Admin
                 </Link>
-              ))}
-            </nav>
-
-            {/* User Info & Logout */}
-            <div className="border-t border-gray-200 p-4">
-              <div className="flex items-center mb-4">
-                <div className="w-8 h-8 bg-ludus-orange rounded-full flex items-center justify-center text-white text-sm font-medium">
-                  {user?.firstName?.charAt(0)}
-                </div>
-                <div className="ml-3 flex-1">
-                  <p className="text-sm font-medium text-gray-900">
-                    {user?.firstName} {user?.lastName}
-                  </p>
-                  <p className="text-xs text-gray-500">Administrator</p>
-                </div>
+                <button
+                  onClick={() => setSidebarOpen(false)}
+                  className="sidebar-close-btn lg:hidden p-1 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                >
+                  <svg className="close-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
               </div>
-              <button
-                onClick={handleLogout}
-                className="w-full flex items-center px-4 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-100 hover:text-gray-900 transition-colors"
-              >
-                <span className="mr-3">🚪</span>
-                Logout
-              </button>
+
+              {/* Navigation */}
+              <nav className="sidebar-nav flex-1 px-4 py-6 space-y-2">
+                {navigation.map((item) => (
+                  <Link
+                    key={item.name}
+                    to={item.href}
+                    onClick={() => window.innerWidth < 1024 && setSidebarOpen(false)}
+                    className={`nav-item flex items-center px-4 py-3 text-sm font-medium rounded-md transition-colors ${
+                      isActivePath(item.href)
+                        ? 'nav-item-active bg-ludus-orange/10 text-ludus-orange border-r-2 border-ludus-orange'
+                        : 'nav-item-inactive text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                    }`}
+                  >
+                    <span className="nav-icon mr-3 text-lg">{item.icon}</span>
+                    {item.name}
+                  </Link>
+                ))}
+              </nav>
+
+              {/* User Info & Logout */}
+              <div className="sidebar-footer border-t border-gray-200 p-4">
+                <div className="user-info flex items-center mb-4">
+                  <div className="user-avatar w-8 h-8 bg-ludus-orange rounded-full flex items-center justify-center text-white text-sm font-medium">
+                    {user?.firstName?.charAt(0)}
+                  </div>
+                  <div className="user-details ml-3 flex-1">
+                    <p className="user-name text-sm font-medium text-gray-900">
+                      {user?.firstName} {user?.lastName}
+                    </p>
+                    <p className="user-role text-xs text-gray-500">Administrator</p>
+                  </div>
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className="logout-btn w-full flex items-center px-4 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-100 hover:text-gray-900 transition-colors"
+                >
+                  <span className="logout-icon mr-3">🚪</span>
+                  Logout
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Main Content */}
-        <div className={`flex-1 transition-all duration-200 ease-in-out ${
-          sidebarOpen ? 'lg:ml-64' : 'lg:ml-0'
+        <div className={`main-content flex-1 transition-all duration-200 ease-in-out ${
+          sidebarOpen ? 'content-with-sidebar lg:ml-64' : 'content-full-width lg:ml-0'
         }`}>
           {/* Top Bar */}
-          <header className="bg-white shadow-sm border-b border-gray-200">
-            <div className="px-6 py-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
+          <header className="admin-header bg-white shadow-sm border-b border-gray-200">
+            <div className="header-container px-6 py-4">
+              <div className="header-content flex items-center justify-between">
+                <div className="header-left flex items-center">
                   <button
                     onClick={() => setSidebarOpen(!sidebarOpen)}
-                    className="p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 lg:hidden"
+                    className="mobile-menu-toggle p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 lg:hidden"
                   >
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="hamburger-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                   </button>
                   <button
                     onClick={() => setSidebarOpen(!sidebarOpen)}
-                    className="hidden lg:block p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 mr-4"
+                    className="desktop-menu-toggle hidden lg:block p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 mr-4"
                   >
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="sidebar-toggle-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                   </button>
-                  <h1 className="text-2xl font-semibold text-gray-900">
+                  <h1 className="page-title text-2xl font-semibold text-gray-900">
                     {navigation.find(item => isActivePath(item.href))?.name || 'Admin Panel'}
                   </h1>
                 </div>
-                <div className="flex items-center space-x-4">
-                  <span className="text-sm text-gray-500">
+                <div className="header-right flex items-center space-x-4">
+                  <span className="current-date text-sm text-gray-500">
                     {new Date().toLocaleDateString('en-US', {
                       weekday: 'long',
                       year: 'numeric',
@@ -169,7 +169,7 @@ const AdminLayout = ({ children }) => {
           </header>
 
           {/* Page Content */}
-          <main className="p-6">
+          <main className="page-content p-6">
             {children}
           </main>
         </div>
