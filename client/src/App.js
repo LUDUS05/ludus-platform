@@ -5,6 +5,7 @@ import { SpeedInsights } from '@vercel/speed-insights/react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import Header from './components/common/Header';
+import Footer from './components/common/Footer';
 import LoginForm from './components/auth/LoginForm';
 import RegisterForm from './components/auth/RegisterForm';
 import AdminRoutes from './pages/admin/AdminRoutes';
@@ -184,6 +185,7 @@ function App() {
                 <main>
                   <HomePage />
                 </main>
+                <Footer />
               </>
             } />
             <Route path="/login" element={
@@ -192,6 +194,7 @@ function App() {
                 <main>
                   <LoginForm />
                 </main>
+                <Footer />
               </>
             } />
             <Route path="/register" element={
@@ -200,6 +203,7 @@ function App() {
                 <main>
                   <RegisterForm />
                 </main>
+                <Footer />
               </>
             } />
             <Route path="/activities" element={
@@ -208,6 +212,7 @@ function App() {
                 <main>
                   <ActivitiesPageComponent />
                 </main>
+                <Footer />
               </>
             } />
             <Route path="/activities/:id" element={
@@ -216,6 +221,7 @@ function App() {
                 <main>
                   <ActivityDetailPage />
                 </main>
+                <Footer />
               </>
             } />
             <Route path="/vendors/:id" element={
@@ -224,6 +230,7 @@ function App() {
                 <main>
                   <VendorProfilePage />
                 </main>
+                <Footer />
               </>
             } />
             <Route path="/booking/:id" element={
@@ -234,6 +241,7 @@ function App() {
                     <BookingPage />
                   </ProtectedRoute>
                 </main>
+                <Footer />
               </>
             } />
             <Route path="/payment/success/:paymentId" element={
@@ -244,6 +252,7 @@ function App() {
                     <PaymentSuccessPage />
                   </ProtectedRoute>
                 </main>
+                <Footer />
               </>
             } />
             <Route path="/payment/callback" element={
@@ -254,6 +263,7 @@ function App() {
                     <PaymentSuccessPage />
                   </ProtectedRoute>
                 </main>
+                <Footer />
               </>
             } />
             <Route 
@@ -266,6 +276,7 @@ function App() {
                       <DashboardPage />
                     </ProtectedRoute>
                   </main>
+                  <Footer />
                 </>
               } 
             />
@@ -279,6 +290,7 @@ function App() {
                       <ProfilePage />
                     </ProtectedRoute>
                   </main>
+                  <Footer />
                 </>
               } 
             />
@@ -288,6 +300,7 @@ function App() {
                 <main>
                   <HowItWorksPage />
                 </main>
+                <Footer />
               </>
             } />
             <Route path="/forgot-password" element={
@@ -296,6 +309,7 @@ function App() {
                 <main>
                   <ForgotPasswordPage />
                 </main>
+                <Footer />
               </>
             } />
             <Route path="/ui-showcase" element={
@@ -304,6 +318,7 @@ function App() {
                 <main>
                   <UIShowcasePage />
                 </main>
+                <Footer />
               </>
             } />
           </Routes>
