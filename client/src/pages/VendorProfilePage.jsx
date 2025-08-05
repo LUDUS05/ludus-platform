@@ -208,7 +208,7 @@ const VendorProfilePage = () => {
         {/* Vendor Header */}
         <div className="bg-white rounded-lg shadow border border-gray-200 mb-8">
           {/* Banner */}
-          <div className="h-64 bg-gradient-to-r from-blue-600 to-purple-700 rounded-t-lg relative">
+          <div className="h-64 bg-gradient-to-r from-ludus-orange to-ludus-orange-dark rounded-t-lg relative">
             <div className="absolute inset-0 bg-black bg-opacity-20 rounded-t-lg"></div>
             <div className="absolute bottom-6 left-6 text-white">
               <h1 className="text-4xl font-bold mb-2">{vendor.businessName}</h1>
@@ -358,7 +358,7 @@ const VendorProfilePage = () => {
                         <div className="text-lg font-bold text-ludus-orange">
                           {formatCurrency(activity.pricing?.basePrice)}
                         </div>
-                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-ludus-orange/10 text-blue-800">
+                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-ludus-orange/10 text-ludus-orange-dark">
                           {activity.category}
                         </span>
                       </div>

@@ -519,7 +519,7 @@ const ContentManagement = () => {
                         size="sm"
                         variant="outline"
                         onClick={() => startEditing(page)}
-                        className="text-xs px-2 py-1 text-blue-600 border-blue-300"
+                        className="text-xs px-2 py-1 text-ludus-orange border-ludus-orange/30"
                       >
                         ✏️
                       </Button>

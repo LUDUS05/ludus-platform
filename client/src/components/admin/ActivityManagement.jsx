@@ -102,7 +102,7 @@ const ActivityManagement = () => {
   if (loading && activities.length === 0) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-ludus-orange"></div>
       </div>
     );
   }
@@ -117,7 +117,7 @@ const ActivityManagement = () => {
         </div>
         <Link
           to="/admin/activities/new"
-          className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors flex items-center"
+          className="bg-ludus-orange text-white px-4 py-2 rounded-md hover:bg-ludus-orange-dark transition-colors flex items-center"
         >
           <span className="mr-2">+</span>
           Add New Activity
@@ -298,7 +298,7 @@ const ActivityManagement = () => {
                     <div className="flex items-center space-x-2">
                       <Link
                         to={`/admin/activities/${activity._id}/edit`}
-                        className="text-blue-600 hover:text-blue-900"
+                        className="text-ludus-orange hover:text-ludus-orange-dark"
                       >
                         Edit
                       </Link>
@@ -335,7 +335,7 @@ const ActivityManagement = () => {
             </p>
             <Link
               to="/admin/activities/new"
-              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+              className="bg-ludus-orange text-white px-4 py-2 rounded-md hover:bg-ludus-orange-dark transition-colors"
             >
               Add New Activity
             </Link>

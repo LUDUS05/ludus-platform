@@ -41,7 +41,7 @@ const LanguageSwitcher = () => {
   return (
     <button
       onClick={toggleLanguage}
-      className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors duration-200"
+      className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-ludus-orange hover:bg-gray-50 rounded-md transition-colors duration-200"
       title={t('language.switchLanguage')}
     >
       <svg

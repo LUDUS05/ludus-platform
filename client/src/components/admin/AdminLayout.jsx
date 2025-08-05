@@ -42,7 +42,7 @@ const AdminLayout = ({ children }) => {
           <p className="text-gray-600 mb-6">You don't have permission to access the admin panel.</p>
           <Link
             to="/"
-            className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors"
+            className="bg-ludus-orange text-white px-6 py-2 rounded-md hover:bg-ludus-orange-dark transition-colors"
           >
             Go to Home
           </Link>
@@ -63,72 +63,72 @@ const AdminLayout = ({ children }) => {
         )}
 
         {/* Sidebar */}
-        {sidebarOpen && (
-          <div className="admin-sidebar fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg lg:static lg:inset-0">
-            <div className="sidebar-container flex flex-col h-full">
-              {/* Logo */}
-              <div className="sidebar-header flex items-center justify-between h-16 px-4 border-b border-gray-200">
-                <Link to="/admin" className="admin-logo text-2xl font-bold text-ludus-orange">
-                  LUDUS Admin
+        <div className={`admin-sidebar w-64 bg-white shadow-lg transform transition-transform duration-200 ease-in-out ${
+          sidebarOpen 
+            ? 'translate-x-0 lg:translate-x-0' 
+            : '-translate-x-full lg:-translate-x-full'
+        } fixed inset-y-0 left-0 z-50 lg:static lg:inset-0`}>
+          <div className="sidebar-container flex flex-col h-full">
+            {/* Logo */}
+            <div className="sidebar-header flex items-center justify-between h-16 px-4 border-b border-gray-200">
+              <Link to="/admin" className="admin-logo text-2xl font-bold text-ludus-orange">
+                LUDUS Admin
+              </Link>
+              <button
+                onClick={() => setSidebarOpen(false)}
+                className="sidebar-close-btn lg:hidden p-1 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+              >
+                <svg className="close-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Navigation */}
+            <nav className="sidebar-nav flex-1 px-4 py-6 space-y-2">
+              {navigation.map((item) => (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  onClick={() => window.innerWidth < 1024 && setSidebarOpen(false)}
+                  className={`nav-item flex items-center px-4 py-3 text-sm font-medium rounded-md transition-colors ${
+                    isActivePath(item.href)
+                      ? 'nav-item-active bg-ludus-orange/10 text-ludus-orange border-r-2 border-ludus-orange'
+                      : 'nav-item-inactive text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                  }`}
+                >
+                  <span className="nav-icon mr-3 text-lg">{item.icon}</span>
+                  {item.name}
                 </Link>
-                <button
-                  onClick={() => setSidebarOpen(false)}
-                  className="sidebar-close-btn lg:hidden p-1 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100"
-                >
-                  <svg className="close-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
+              ))}
+            </nav>
 
-              {/* Navigation */}
-              <nav className="sidebar-nav flex-1 px-4 py-6 space-y-2">
-                {navigation.map((item) => (
-                  <Link
-                    key={item.name}
-                    to={item.href}
-                    onClick={() => window.innerWidth < 1024 && setSidebarOpen(false)}
-                    className={`nav-item flex items-center px-4 py-3 text-sm font-medium rounded-md transition-colors ${
-                      isActivePath(item.href)
-                        ? 'nav-item-active bg-ludus-orange/10 text-ludus-orange border-r-2 border-ludus-orange'
-                        : 'nav-item-inactive text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-                    }`}
-                  >
-                    <span className="nav-icon mr-3 text-lg">{item.icon}</span>
-                    {item.name}
-                  </Link>
-                ))}
-              </nav>
-
-              {/* User Info & Logout */}
-              <div className="sidebar-footer border-t border-gray-200 p-4">
-                <div className="user-info flex items-center mb-4">
-                  <div className="user-avatar w-8 h-8 bg-ludus-orange rounded-full flex items-center justify-center text-white text-sm font-medium">
-                    {user?.firstName?.charAt(0)}
-                  </div>
-                  <div className="user-details ml-3 flex-1">
-                    <p className="user-name text-sm font-medium text-gray-900">
-                      {user?.firstName} {user?.lastName}
-                    </p>
-                    <p className="user-role text-xs text-gray-500">Administrator</p>
-                  </div>
+            {/* User Info & Logout */}
+            <div className="sidebar-footer border-t border-gray-200 p-4">
+              <div className="user-info flex items-center mb-4">
+                <div className="user-avatar w-8 h-8 bg-ludus-orange rounded-full flex items-center justify-center text-white text-sm font-medium">
+                  {user?.firstName?.charAt(0)}
                 </div>
-                <button
-                  onClick={handleLogout}
-                  className="logout-btn w-full flex items-center px-4 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-100 hover:text-gray-900 transition-colors"
-                >
-                  <span className="logout-icon mr-3">🚪</span>
-                  Logout
-                </button>
+                <div className="user-details ml-3 flex-1">
+                  <p className="user-name text-sm font-medium text-gray-900">
+                    {user?.firstName} {user?.lastName}
+                  </p>
+                  <p className="user-role text-xs text-gray-500">Administrator</p>
+                </div>
               </div>
+              <button
+                onClick={handleLogout}
+                className="logout-btn w-full flex items-center px-4 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-100 hover:text-gray-900 transition-colors"
+              >
+                <span className="logout-icon mr-3">🚪</span>
+                Logout
+              </button>
             </div>
           </div>
-        )}
+        </div>
 
         {/* Main Content */}
-        <div className={`main-content flex-1 transition-all duration-200 ease-in-out ${
-          sidebarOpen ? 'content-with-sidebar lg:ml-64' : 'content-full-width lg:ml-0'
-        }`}>
+        <div className="main-content flex-1 transition-all duration-200 ease-in-out">
           {/* Top Bar */}
           <header className="admin-header bg-white shadow-sm border-b border-gray-200">
             <div className="header-container px-6 py-4">

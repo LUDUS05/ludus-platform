@@ -303,7 +303,7 @@ const TranslationManagement = () => {
           <div className="text-2xl font-bold">{Object.keys(translations).length}</div>
           <div className="text-sm opacity-90">Total Keys</div>
         </Card>
-        <Card className="p-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+        <Card className="p-4 bg-gradient-to-r from-ludus-orange to-ludus-orange-dark text-white">
           <div className="text-2xl font-bold">{languages.length}</div>
           <div className="text-sm opacity-90">Languages</div>
         </Card>

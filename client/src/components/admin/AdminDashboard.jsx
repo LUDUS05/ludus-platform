@@ -86,7 +86,7 @@ const AdminDashboard = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-ludus-orange"></div>
       </div>
     );
   }
@@ -178,7 +178,7 @@ const AdminDashboard = () => {
               <h3 className="text-lg font-semibold text-gray-900">Recent Bookings</h3>
               <Link
                 to="/admin/bookings"
-                className="text-sm text-blue-600 hover:text-blue-500"
+                className="text-sm text-ludus-orange hover:text-ludus-orange-dark"
               >
                 View all →
               </Link>

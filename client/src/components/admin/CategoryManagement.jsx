@@ -434,7 +434,7 @@ const CategoryManagement = () => {
                           size="sm"
                           variant="outline"
                           onClick={() => startEditing(category)}
-                          className="text-blue-600 border-blue-300"
+                          className="text-ludus-orange border-ludus-orange/30"
                         >
                           ✏️
                         </Button>
@@ -466,7 +466,7 @@ const CategoryManagement = () => {
           <div className="text-2xl font-bold">{categories.filter(c => c.isActive === false).length}</div>
           <div className="text-sm opacity-90">Inactive Categories</div>
         </Card>
-        <Card className="p-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+        <Card className="p-4 bg-gradient-to-r from-ludus-orange to-ludus-orange-dark text-white">
           <div className="text-2xl font-bold">{categories.filter(c => c.parentId).length}</div>
           <div className="text-sm opacity-90">Subcategories</div>
         </Card>

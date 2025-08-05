@@ -82,7 +82,7 @@ const VendorManagement = () => {
   if (loading && vendors.length === 0) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-ludus-orange"></div>
       </div>
     );
   }
@@ -97,7 +97,7 @@ const VendorManagement = () => {
         </div>
         <Link
           to="/admin/vendors/new"
-          className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors flex items-center"
+          className="bg-ludus-orange text-white px-4 py-2 rounded-md hover:bg-ludus-orange-dark transition-colors flex items-center"
         >
           <span className="mr-2">+</span>
           Add New Vendor
@@ -229,7 +229,7 @@ const VendorManagement = () => {
                       {vendor.categories?.map((category) => (
                         <span
                           key={category}
-                          className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                          className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-ludus-orange/10 text-ludus-orange-dark"
                         >
                           {category}
                         </span>
@@ -252,7 +252,7 @@ const VendorManagement = () => {
                     <div className="flex items-center space-x-2">
                       <Link
                         to={`/admin/vendors/${vendor._id}/edit`}
-                        className="text-blue-600 hover:text-blue-900"
+                        className="text-ludus-orange hover:text-ludus-orange-dark"
                       >
                         Edit
                       </Link>
@@ -289,7 +289,7 @@ const VendorManagement = () => {
             </p>
             <Link
               to="/admin/vendors/new"
-              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+              className="bg-ludus-orange text-white px-4 py-2 rounded-md hover:bg-ludus-orange-dark transition-colors"
             >
               Add New Vendor
             </Link>

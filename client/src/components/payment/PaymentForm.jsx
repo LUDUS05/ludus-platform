@@ -155,7 +155,7 @@ const PaymentForm = ({
   if (!moyasarLoaded) {
     return (
       <div className="p-6 text-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-ludus-orange mx-auto"></div>
         <p className="mt-2 text-gray-600">Loading payment system...</p>
       </div>
     );
@@ -169,7 +169,7 @@ const PaymentForm = ({
       <div className="bg-gray-50 rounded-lg p-4 mb-6">
         <div className="flex justify-between items-center">
           <span className="text-gray-700">Total Amount</span>
-          <span className="text-2xl font-bold text-blue-600">
+          <span className="text-2xl font-bold text-ludus-orange">
             {paymentService.formatCurrency(amount)}
           </span>
         </div>
@@ -190,7 +190,7 @@ const PaymentForm = ({
                 onClick={() => setPaymentMethod(method.id)}
                 className={`p-3 border rounded-lg text-left transition-colors ${
                   paymentMethod === method.id
-                    ? 'border-blue-500 bg-blue-50 text-blue-700'
+                    ? 'border-ludus-orange bg-ludus-orange/10 text-ludus-orange-dark'
                     : 'border-gray-300 hover:border-gray-400'
                 }`}
               >
@@ -220,7 +220,7 @@ const PaymentForm = ({
                       value=""
                       checked={selectedSavedMethod === ''}
                       onChange={(e) => setSelectedSavedMethod(e.target.value)}
-                      className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                      className="w-4 h-4 text-ludus-orange border-gray-300 focus:ring-ludus-orange/50"
                     />
                     <span className="ml-3 font-medium text-gray-900">Use new card</span>
                   </label>
@@ -232,7 +232,7 @@ const PaymentForm = ({
                         value={method.tokenId}
                         checked={selectedSavedMethod === method.tokenId}
                         onChange={(e) => setSelectedSavedMethod(e.target.value)}
-                        className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                        className="w-4 h-4 text-ludus-orange border-gray-300 focus:ring-ludus-orange/50"
                       />
                       <div className="ml-3">
                         <div className="font-medium text-gray-900">
@@ -351,7 +351,7 @@ const PaymentForm = ({
                     id="saveCard"
                     checked={saveCard}
                     onChange={(e) => setSaveCard(e.target.checked)}
-                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    className="w-4 h-4 text-ludus-orange border-gray-300 rounded focus:ring-ludus-orange/50"
                   />
                   <label htmlFor="saveCard" className="ml-2 text-sm text-gray-700">
                     Save this card for future payments
@@ -379,7 +379,7 @@ const PaymentForm = ({
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium"
+          className="w-full bg-ludus-orange text-white py-3 px-4 rounded-md hover:bg-ludus-orange-dark disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium"
         >
           {loading ? (
             <div className="flex items-center justify-center">
