@@ -8,8 +8,6 @@
     "@sentry/tracing": "^7.120.4",
     "@tailwindcss/forms": "^0.5.10",
     "@vercel/speed-insights": "^1.2.0",
-    "ajv": "^6.12.6",
-    "ajv-keywords": "^3.5.2",
     "autoprefixer": "^10.4.21",
     "axios": "^1.11.0",
     "blurhash": "^2.0.5",
@@ -25,17 +23,16 @@
     "react-i18next": "^15.6.1",
     "react-quill": "^2.0.0",
     "react-router-dom": "^7.7.1",
-    "react-scripts": "5.0.1",
-    "schema-utils": "^3.0.0",
+    "react-scripts": "^5.0.1",
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.11"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "CI=false react-scripts build",
+    "build": "SKIP_PREFLIGHT_CHECK=true CI=false react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "build:vercel": "CI=false react-scripts build"
+    "build:vercel": "SKIP_PREFLIGHT_CHECK=true CI=false react-scripts build"
   },
   "engines": {
     "node": ">=18.0.0",
@@ -59,15 +56,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "overrides": {
-    "ajv": "^6.12.6",
-    "ajv-keywords": "^3.5.2",
-    "schema-utils": "^3.0.0"
-  },
-  "resolutions": {
-    "ajv": "^6.12.6",
-    "ajv-keywords": "^3.5.2",
-    "schema-utils": "^3.0.0"
   }
 }
