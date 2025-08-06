@@ -2,29 +2,25 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import axios from 'axios';
 
 const PartnerRegistrationPage = () => {
-  // Form data
+  // Form data with personalized responses
   const [formData, setFormData] = useState({
-    companyName: '',
     contactName: '',
+    companyName: '',
     email: '',
     phone: '',
     website: '',
     description: ''
   });
   
-  // Typewriter progression state
-  const [currentStep, setCurrentStep] = useState(0);
-  const [isTyping, setIsTyping] = useState(false);
-  const [currentValue, setCurrentValue] = useState('');
+  // Conversational flow state
+  const [currentStep, setCurrentStep] = useState(-1); // Start with welcome screen
   const [isAnimating, setIsAnimating] = useState(false);
-  const [showCursor, setShowCursor] = useState(true);
-  const [isComplete, setIsComplete] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false);
   
-  // Original form state
+  // Form state
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
   
   // Refs
   const inputRef = useRef(null);
@@ -34,104 +30,116 @@ const PartnerRegistrationPage = () => {
   const [termsContent, setTermsContent] = useState('');
   const [loadingTerms, setLoadingTerms] = useState(false);
   
-  // Form fields configuration
-  const formFields = [
+  // Conversational questions configuration
+  const conversationSteps = [
+    // Welcome screen is step -1
     {
-      key: 'companyName',
-      label: 'Company Name',
+      key: 'contactName',
+      question: "To start, what's your name?",
+      placeholder: "Enter your name",
       type: 'text',
       required: true,
-      placeholder: 'Enter your company name...'
+      buttonText: "Nice to meet you!"
     },
     {
-      key: 'contactName', 
-      label: 'Contact Person Name',
+      key: 'companyName',
+      question: (name) => `Great to meet you${name ? `, ${name}` : ''}! What's the name of your business or organization?`,
+      placeholder: "Enter your business name",
       type: 'text',
       required: true,
-      placeholder: 'Enter contact person name...'
+      buttonText: "Got it"
     },
     {
       key: 'email',
-      label: 'Email Address',
+      question: (name, company) => `Perfect! What's the best email address for you${name ? `, ${name}` : ''}?`,
+      placeholder: "Enter your email address",
       type: 'email',
       required: true,
-      placeholder: 'Enter email address...'
+      buttonText: "Continue"
     },
     {
       key: 'phone',
-      label: 'Phone Number',
-      type: 'tel', 
+      question: "And what's your phone number?",
+      placeholder: "Enter your phone number",
+      type: 'tel',
       required: true,
-      placeholder: 'Enter phone number...'
+      buttonText: "Next"
     },
     {
       key: 'website',
-      label: 'Website URL',
+      question: (name, company) => `Does ${company || 'your business'} have a website we should know about?`,
+      placeholder: "Enter website URL (optional)",
       type: 'url',
       required: false,
-      placeholder: 'Enter website URL (optional)...'
+      buttonText: "Continue"
     },
     {
       key: 'description',
-      label: 'Company Description',
+      question: (name, company) => `Tell us a bit about ${company || 'your business'}. What makes you special?`,
+      placeholder: "Describe what you do and what makes you unique...",
       type: 'textarea',
       required: true,
-      placeholder: 'Describe your company and services...'
+      buttonText: "Almost done!"
     }
+    // Terms step and success are handled separately
   ];
 
-  // Get current field
-  const getCurrentField = () => formFields[currentStep];
-  const isLastStep = () => currentStep === formFields.length;
-  const isTermsStep = () => currentStep === formFields.length;
-  
-  // Typewriter effects
-  useEffect(() => {
-    // Blinking cursor effect
-    const cursorInterval = setInterval(() => {
-      setShowCursor(prev => !prev);
-    }, 530);
+  const getCurrentQuestion = () => {
+    if (currentStep < 0 || currentStep >= conversationSteps.length) return null;
+    return conversationSteps[currentStep];
+  };
+
+  const getPersonalizedQuestion = (step) => {
+    const questionData = conversationSteps[step];
+    if (!questionData) return '';
     
-    return () => clearInterval(cursorInterval);
-  }, []);
-  
+    const { question } = questionData;
+    if (typeof question === 'function') {
+      return question(formData.contactName, formData.companyName);
+    }
+    return question;
+  };
+
+  const getCurrentValue = () => {
+    const question = getCurrentQuestion();
+    return question ? formData[question.key] : '';
+  };
+
+  const isWelcomeScreen = () => currentStep === -1;
+  const isTermsStep = () => currentStep === conversationSteps.length;
+  const getProgress = () => Math.max(0, (currentStep + 1) / (conversationSteps.length + 1) * 100);
+
   useEffect(() => {
     // Focus input when step changes
-    if (inputRef.current && !isLastStep()) {
-      inputRef.current.focus();
+    if (inputRef.current && currentStep >= 0 && currentStep < conversationSteps.length) {
+      setTimeout(() => inputRef.current?.focus(), 300);
     }
   }, [currentStep]);
-  
-  // Initialize current value from form data when step changes
-  useEffect(() => {
-    if (!isLastStep()) {
-      const field = getCurrentField();
-      setCurrentValue(formData[field.key] || '');
-    }
-  }, [currentStep, formData]);
 
   const validateCurrentField = (value) => {
-    if (!value && getCurrentField()?.required) {
-      return `${getCurrentField().label} is required`;
+    const question = getCurrentQuestion();
+    if (!question) return '';
+
+    if (!value && question.required) {
+      return `This field is required`;
     }
     
-    const field = getCurrentField();
-    switch (field?.key) {
+    switch (question.key) {
       case 'email':
         return value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) 
           ? 'Please enter a valid email address' 
           : '';
       case 'website':
         return value && !/^https?:\/\/.+\..+/.test(value) 
-          ? 'Please enter a valid URL (include http:// or https://)' 
+          ? 'Please include http:// or https://' 
           : '';
       case 'phone':
-        return value && !/^[+]?[1-9][\d]{0,15}$/.test(value.replace(/[\s\-()]/g, '')) 
+        return value && !/^[+]?[\d\s\-\(\)]{10,}$/.test(value) 
           ? 'Please enter a valid phone number' 
           : '';
       case 'description':
-        return value && value.length < 10 
-          ? 'Company description must be at least 10 characters' 
+        return value && value.length < 20 
+          ? 'Please tell us a bit more (at least 20 characters)' 
           : '';
       default:
         return '';
@@ -139,71 +147,68 @@ const PartnerRegistrationPage = () => {
   };
 
   const handleInputChange = (e) => {
-    const value = e.target.value;
-    setCurrentValue(value);
-    setIsTyping(value.length > 0);
+    const question = getCurrentQuestion();
+    if (!question) return;
     
-    // Update form data
-    if (!isLastStep()) {
-      const field = getCurrentField();
-      setFormData(prev => ({ ...prev, [field.key]: value }));
-    }
+    const value = e.target.value;
+    setFormData(prev => ({ ...prev, [question.key]: value }));
     
     // Clear errors when typing
-    const error = validateCurrentField(value);
-    if (!error && errors.current) {
+    if (errors.current) {
       setErrors(prev => ({ ...prev, current: '' }));
     }
   };
 
   const handleNext = () => {
-    if (isLastStep()) return;
-    
-    const field = getCurrentField();
-    const value = currentValue.trim();
+    if (isWelcomeScreen()) {
+      // Start the conversation
+      setIsAnimating(true);
+      setTimeout(() => {
+        setCurrentStep(0);
+        setIsAnimating(false);
+      }, 300);
+      return;
+    }
+
+    if (isTermsStep()) {
+      handleSubmit();
+      return;
+    }
+
+    const question = getCurrentQuestion();
+    if (!question) return;
+
+    const value = formData[question.key]?.trim() || '';
     const error = validateCurrentField(value);
     
     if (error) {
-      setErrors(prev => ({ ...prev, current: error }));
-      // Shake animation
-      if (inputRef.current) {
-        inputRef.current.style.animation = 'shake 0.3s ease-in-out';
-        setTimeout(() => {
-          if (inputRef.current) {
-            inputRef.current.style.animation = '';
-          }
-        }, 300);
-      }
+      setErrors({ current: error });
       return;
     }
-    
-    // Update form data
-    setFormData(prev => ({ ...prev, [field.key]: value }));
-    
-    // Animate to next step
+
+    // Move to next step
     setIsAnimating(true);
+    setErrors({});
+    
     setTimeout(() => {
-      setCurrentStep(prev => prev + 1);
-      setCurrentValue('');
-      setIsTyping(false);
+      if (currentStep >= conversationSteps.length - 1) {
+        setCurrentStep(conversationSteps.length); // Terms step
+      } else {
+        setCurrentStep(prev => prev + 1);
+      }
       setIsAnimating(false);
-      setErrors(prev => ({ ...prev, current: '' }));
     }, 300);
   };
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      if (isTermsStep()) {
-        handleSubmit();
-      } else {
-        handleNext();
-      }
+      handleNext();
     }
   };
 
   const handleBack = () => {
-    if (currentStep > 0) {
+    if (currentStep > -1) {
       setIsAnimating(true);
       setTimeout(() => {
         setCurrentStep(prev => prev - 1);
@@ -216,12 +221,10 @@ const PartnerRegistrationPage = () => {
   const fetchTermsContent = useCallback(async () => {
     try {
       setLoadingTerms(true);
-      // Try to fetch terms from a dedicated page or fallback to default
       const response = await axios.get('/api/pages/by-url/partner-terms-and-conditions');
       setTermsContent(response.data.content || getDefaultTermsContent());
     } catch (error) {
       console.error('Failed to fetch terms:', error);
-      // Use default terms if API fails
       setTermsContent(getDefaultTermsContent());
     } finally {
       setLoadingTerms(false);
@@ -264,24 +267,22 @@ const PartnerRegistrationPage = () => {
 
   const handleSubmit = async () => {
     if (!acceptTerms) {
-      setErrors({ current: 'You must accept the Terms and Conditions to proceed.' });
+      setErrors({ current: 'Please accept our Terms and Conditions to continue.' });
       return;
     }
 
     setIsSubmitting(true);
-    setIsComplete(true);
 
     try {
       // Simulate API call - replace with actual API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await new Promise(resolve => setTimeout(resolve, 2000));
       
       // Show success message
       setShowSuccess(true);
 
     } catch (error) {
       console.error('Submission error:', error);
-      setErrors({ current: 'Failed to submit registration. Please try again.' });
-      setIsComplete(false);
+      setErrors({ current: 'Something went wrong. Please try again.' });
     } finally {
       setIsSubmitting(false);
     }
@@ -290,25 +291,14 @@ const PartnerRegistrationPage = () => {
   // Success screen
   if (showSuccess) {
     return (
-      <div className="typewriter-container">
+      <div className="ludus-form-container">
         <style>
           {`
-            @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@300;400;500;600&display=swap');
             
-            .typewriter-container {
-              font-family: 'IBM Plex Mono', 'Courier New', monospace;
-              background: #f9f9f7;
-              background-image: 
-                repeating-linear-gradient(
-                  0deg,
-                  transparent,
-                  transparent 24px,
-                  rgba(0,0,0,0.03) 25px,
-                  rgba(0,0,0,0.03) 26px
-                ),
-                radial-gradient(circle at 2px 2px, rgba(0,0,0,0.02) 1px, transparent 0);
-              background-size: 100% 26px, 20px 20px;
-              color: #2a2a2a;
+            .ludus-form-container {
+              font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+              background: linear-gradient(135deg, #FAFAFA 0%, #F5F5F5 100%);
               min-height: 100vh;
               display: flex;
               align-items: center;
@@ -316,470 +306,614 @@ const PartnerRegistrationPage = () => {
               padding: 20px;
             }
             
-            .success-content {
+            .success-screen {
               text-align: center;
               max-width: 600px;
-              line-height: 1.8;
+              background: white;
+              border-radius: 20px;
+              padding: 60px 40px;
+              box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            }
+            
+            .success-icon {
+              width: 80px;
+              height: 80px;
+              background: #FF6600;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              margin: 0 auto 30px;
+              animation: successPulse 2s ease-in-out infinite;
+            }
+            
+            @keyframes successPulse {
+              0%, 100% { transform: scale(1); }
+              50% { transform: scale(1.05); }
+            }
+            
+            .success-checkmark {
+              color: white;
+              font-size: 36px;
+              font-weight: bold;
             }
             
             .success-title {
-              font-size: 24px;
-              font-weight: 400;
+              font-size: 32px;
+              font-weight: 600;
+              color: #2B2B2B;
               margin-bottom: 20px;
-              letter-spacing: 2px;
+              font-family: 'Manrope', sans-serif;
             }
             
             .success-message {
-              font-size: 16px;
-              font-weight: 300;
+              font-size: 18px;
               color: #666;
-              margin-bottom: 30px;
+              line-height: 1.6;
+              margin-bottom: 40px;
             }
             
-            .typing-animation {
-              border-right: 2px solid #2a2a2a;
-              animation: blink 1s infinite;
+            .success-details {
+              background: #F8F9FA;
+              border-radius: 12px;
+              padding: 24px;
+              text-align: left;
             }
             
-            @keyframes blink {
-              0%, 50% { border-color: #2a2a2a; }
-              51%, 100% { border-color: transparent; }
+            .success-details h4 {
+              color: #2B2B2B;
+              font-weight: 500;
+              margin-bottom: 12px;
+              font-size: 16px;
+            }
+            
+            .success-details ul {
+              color: #666;
+              font-size: 15px;
+              line-height: 1.5;
+              margin: 0;
+              padding-left: 20px;
+            }
+            
+            .success-details li {
+              margin-bottom: 8px;
             }
           `}
         </style>
-        <div className="success-content">
-          <h1 className="success-title typing-animation">Registration Submitted</h1>
+        
+        <div className="success-screen">
+          <div className="success-icon">
+            <span className="success-checkmark">✓</span>
+          </div>
+          
+          <h1 className="success-title">Welcome to LUDUS!</h1>
+          
           <p className="success-message">
-            Thank you for your interest in partnering with LUDUS.<br/>
-            We'll review your application and be in touch soon.
+            Thanks {formData.contactName}! We've received your application and are excited to potentially partner with {formData.companyName}.
           </p>
+          
+          <div className="success-details">
+            <h4>What happens next?</h4>
+            <ul>
+              <li>We'll review your application within 24 hours</li>
+              <li>Our team will reach out to {formData.email} with next steps</li>
+              <li>We'll schedule a brief call to verify your account and discuss the partnership</li>
+              <li>Once approved, you'll get access to your partner dashboard</li>
+            </ul>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="typewriter-container">
+    <div className="ludus-form-container">
       <style>
         {`
-          @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&display=swap');
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@300;400;500;600&display=swap');
           
-          .typewriter-container {
-            font-family: 'IBM Plex Mono', 'Courier New', monospace;
-            background: #f9f9f7;
-            background-image: 
-              repeating-linear-gradient(
-                0deg,
-                transparent,
-                transparent 24px,
-                rgba(0,0,0,0.03) 25px,
-                rgba(0,0,0,0.03) 26px
-              ),
-              radial-gradient(circle at 2px 2px, rgba(0,0,0,0.02) 1px, transparent 0);
-            background-size: 100% 26px, 20px 20px;
-            color: #2a2a2a;
+          .ludus-form-container {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #FAFAFA 0%, #F5F5F5 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+          }
+          
+          .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: #FF6600;
+            transition: width 0.6s ease;
+            z-index: 1000;
+          }
+          
+          .form-screen {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
-          }
-          
-          .typewriter-form {
-            max-width: 800px;
-            width: 100%;
-            position: relative;
-          }
-          
-          .progress-indicator {
-            position: absolute;
-            top: -60px;
-            right: 0;
-            font-size: 14px;
-            color: #666;
-            font-weight: 300;
-            letter-spacing: 1px;
-          }
-          
-          .form-title {
-            font-size: 18px;
-            font-weight: 300;
-            margin-bottom: 40px;
-            letter-spacing: 2px;
-            color: #444;
-            text-transform: uppercase;
-          }
-          
-          .field-container {
-            position: relative;
-            min-height: 100px;
-            display: flex;
-            align-items: center;
+            opacity: 1;
+            transform: translateY(0);
             transition: all 0.3s ease;
           }
           
-          .field-container.animating {
-            transform: translateX(-50px);
-            opacity: 0.7;
+          .form-screen.animating {
+            opacity: 0;
+            transform: translateY(20px);
           }
           
-          .field-label {
-            font-size: 16px;
-            color: #666;
-            margin-bottom: 8px;
-            font-weight: 300;
-            letter-spacing: 0.5px;
-          }
-          
-          .field-input-container {
-            position: relative;
-            width: 100%;
-          }
-          
-          .field-input {
-            font-family: inherit;
-            font-size: 24px;
-            font-weight: 400;
-            background: transparent;
-            border: none;
-            border-bottom: 3px solid #ddd;
-            padding: 8px 0;
-            width: 100%;
-            outline: none;
-            color: #2a2a2a;
-            caret-color: #2a2a2a;
-            caret-width: 2px;
-            transition: border-color 0.3s ease;
-            letter-spacing: 1px;
-          }
-          
-          .field-input:focus {
-            border-bottom-color: #2a2a2a;
-          }
-          
-          .field-input.error {
-            border-bottom-color: #d73a49;
-            animation: shake 0.3s ease-in-out;
-          }
-          
-          @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-          }
-          
-          .field-textarea {
-            font-family: inherit;
-            font-size: 20px;
-            font-weight: 400;
-            background: transparent;
-            border: none;
-            border-bottom: 3px solid #ddd;
-            padding: 8px 0;
-            width: 100%;
-            outline: none;
-            color: #2a2a2a;
-            caret-color: #2a2a2a;
-            resize: none;
-            min-height: 60px;
-            transition: border-color 0.3s ease;
-            letter-spacing: 0.5px;
-            line-height: 1.4;
-          }
-          
-          .field-textarea:focus {
-            border-bottom-color: #2a2a2a;
-          }
-          
-          .cursor {
-            display: inline-block;
-            width: 2px;
-            height: 24px;
-            background: #2a2a2a;
-            margin-left: 2px;
-            animation: blink 1s infinite;
-            vertical-align: bottom;
-          }
-          
-          @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
-          }
-          
-          .error-message {
-            position: absolute;
-            bottom: -25px;
-            left: 0;
-            font-size: 14px;
-            color: #d73a49;
-            font-weight: 300;
-            animation: fadeIn 0.3s ease;
-          }
-          
-          @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-5px); }
-            to { opacity: 1; transform: translateY(0); }
-          }
-          
-          .navigation {
-            margin-top: 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-          }
-          
-          .nav-button {
-            font-family: inherit;
-            font-size: 16px;
-            font-weight: 400;
-            background: transparent;
-            border: none;
-            color: #2a2a2a;
-            cursor: pointer;
-            padding: 8px 16px;
-            transition: all 0.3s ease;
-            letter-spacing: 1px;
-          }
-          
-          .nav-button:hover {
-            color: #666;
-          }
-          
-          .nav-button:disabled {
-            color: #ccc;
-            cursor: not-allowed;
-          }
-          
-          .next-button::before {
-            content: '[';
-            margin-right: 2px;
-          }
-          
-          .next-button::after {
-            content: ']';
-            margin-left: 2px;
-          }
-          
-          .back-button::before {
-            content: '< ';
-          }
-          
-          .terms-step {
+          .welcome-screen {
             text-align: center;
-            padding: 40px 0;
+            max-width: 700px;
           }
           
-          .terms-checkbox {
-            margin: 30px 0;
+          .ludus-logo {
+            width: 120px;
+            height: 40px;
+            background: #FF6600;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            margin: 0 auto 40px;
+            color: white;
+            font-weight: 600;
+            font-size: 18px;
+            letter-spacing: 2px;
           }
           
-          .checkbox-input {
-            width: 18px;
-            height: 18px;
-            accent-color: #2a2a2a;
+          .welcome-title {
+            font-size: 48px;
+            font-weight: 600;
+            color: #2B2B2B;
+            margin-bottom: 20px;
+            font-family: 'Manrope', sans-serif;
+            line-height: 1.2;
           }
           
-          .checkbox-label {
-            font-size: 16px;
-            font-weight: 300;
-            color: #666;
-            cursor: pointer;
-          }
-          
-          .terms-link {
-            color: #2a2a2a;
-            text-decoration: underline;
-            cursor: pointer;
-            transition: color 0.3s ease;
-          }
-          
-          .terms-link:hover {
-            color: #666;
-          }
-          
-          .submit-button {
-            font-family: inherit;
+          .welcome-subtitle {
             font-size: 20px;
+            color: #666;
+            margin-bottom: 50px;
+            line-height: 1.4;
+          }
+          
+          .start-button {
+            background: #FF6600;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 16px 40px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+          }
+          
+          .start-button:hover {
+            background: #E55A00;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 102, 0, 0.3);
+          }
+          
+          .question-screen {
+            max-width: 600px;
+            width: 100%;
+          }
+          
+          .question-container {
+            background: white;
+            border-radius: 20px;
+            padding: 50px 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            text-align: center;
+          }
+          
+          .question-text {
+            font-size: 28px;
+            font-weight: 500;
+            color: #2B2B2B;
+            margin-bottom: 40px;
+            line-height: 1.3;
+            font-family: 'Manrope', sans-serif;
+          }
+          
+          .input-container {
+            margin-bottom: 30px;
+            position: relative;
+          }
+          
+          .form-input {
+            width: 100%;
+            border: none;
+            border-bottom: 3px solid #E5E5E5;
+            background: transparent;
+            padding: 16px 0;
+            font-size: 20px;
+            color: #2B2B2B;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.3s ease;
+            font-family: inherit;
+          }
+          
+          .form-input:focus {
+            border-bottom-color: #FF6600;
+          }
+          
+          .form-input::placeholder {
+            color: #999;
+            font-weight: 300;
+          }
+          
+          .form-textarea {
+            width: 100%;
+            border: 3px solid #E5E5E5;
+            border-radius: 12px;
+            background: transparent;
+            padding: 20px;
+            font-size: 18px;
+            color: #2B2B2B;
+            outline: none;
+            resize: vertical;
+            min-height: 120px;
+            transition: border-color 0.3s ease;
+            font-family: inherit;
+            line-height: 1.5;
+          }
+          
+          .form-textarea:focus {
+            border-color: #FF6600;
+          }
+          
+          .form-textarea::placeholder {
+            color: #999;
+            font-weight: 300;
+          }
+          
+          .error-message {
+            color: #FF4444;
+            font-size: 16px;
+            margin-top: 15px;
             font-weight: 400;
+          }
+          
+          .button-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+          }
+          
+          .back-button {
             background: transparent;
             border: none;
-            color: #2a2a2a;
+            color: #999;
+            font-size: 16px;
             cursor: pointer;
-            padding: 12px 24px;
-            transition: all 0.3s ease;
-            letter-spacing: 2px;
-            margin-top: 20px;
+            padding: 12px 20px;
+            transition: color 0.3s ease;
+            font-family: inherit;
           }
           
-          .submit-button::before {
-            content: '[';
-            margin-right: 4px;
-          }
-          
-          .submit-button::after {
-            content: ']';
-            margin-left: 4px;
-          }
-          
-          .submit-button:hover {
+          .back-button:hover {
             color: #666;
-            transform: scale(1.05);
           }
           
-          .submit-button:disabled {
-            color: #ccc;
+          .back-button:disabled {
+            color: #CCC;
+            cursor: not-allowed;
+          }
+          
+          .next-button {
+            background: #FF6600;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 14px 32px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            min-width: 120px;
+          }
+          
+          .next-button:hover {
+            background: #E55A00;
+            transform: translateY(-1px);
+          }
+          
+          .next-button:disabled {
+            background: #CCC;
             cursor: not-allowed;
             transform: none;
           }
           
+          .terms-screen {
+            max-width: 600px;
+            width: 100%;
+          }
+          
+          .terms-container {
+            background: white;
+            border-radius: 20px;
+            padding: 50px 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            text-align: center;
+          }
+          
+          .terms-title {
+            font-size: 28px;
+            font-weight: 500;
+            color: #2B2B2B;
+            margin-bottom: 30px;
+            font-family: 'Manrope', sans-serif;
+          }
+          
+          .checkbox-container {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            text-align: left;
+          }
+          
+          .checkbox-input {
+            width: 20px;
+            height: 20px;
+            accent-color: #FF6600;
+            margin-top: 2px;
+            flex-shrink: 0;
+          }
+          
+          .checkbox-label {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.5;
+            cursor: pointer;
+            flex: 1;
+          }
+          
+          .terms-link {
+            color: #FF6600;
+            text-decoration: underline;
+            cursor: pointer;
+            font-weight: 500;
+          }
+          
+          .terms-link:hover {
+            color: #E55A00;
+          }
+          
+          .submit-button {
+            background: #FF6600;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 16px 40px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            margin-top: 20px;
+          }
+          
+          .submit-button:hover {
+            background: #E55A00;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 102, 0, 0.3);
+          }
+          
+          .submit-button:disabled {
+            background: #CCC;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+          }
+          
           @media (max-width: 768px) {
-            .field-input {
-              font-size: 20px;
+            .welcome-title {
+              font-size: 36px;
             }
             
-            .field-textarea {
+            .welcome-subtitle {
               font-size: 18px;
             }
             
-            .typewriter-container {
+            .question-text {
+              font-size: 24px;
+            }
+            
+            .question-container,
+            .terms-container {
+              padding: 40px 30px;
+            }
+            
+            .form-input {
+              font-size: 18px;
+            }
+            
+            .form-textarea {
+              font-size: 16px;
+            }
+          }
+          
+          @media (max-width: 480px) {
+            .ludus-form-container {
               padding: 15px;
             }
             
-            .progress-indicator {
-              top: -40px;
-              font-size: 12px;
+            .question-container,
+            .terms-container {
+              padding: 30px 25px;
+            }
+            
+            .welcome-title {
+              font-size: 28px;
+            }
+            
+            .question-text {
+              font-size: 22px;
+            }
+            
+            .button-container {
+              flex-direction: column;
+              gap: 20px;
+            }
+            
+            .next-button,
+            .submit-button {
+              width: 100%;
+              padding: 16px;
             }
           }
         `}
       </style>
       
-      <div className="typewriter-form">
-        {!isTermsStep() && (
-          <div className="progress-indicator">
-            Step {currentStep + 1} of {formFields.length + 1}
+      {/* Progress Bar */}
+      {!isWelcomeScreen() && (
+        <div className="progress-bar" style={{ width: `${getProgress()}%` }}></div>
+      )}
+      
+      <div className={`form-screen ${isAnimating ? 'animating' : ''}`}>
+        {/* Welcome Screen */}
+        {isWelcomeScreen() && (
+          <div className="welcome-screen">
+            <div className="ludus-logo">LUDUS</div>
+            <h1 className="welcome-title">Let's get you set up to host on LUDUS</h1>
+            <p className="welcome-subtitle">
+              Join our community of amazing partners and start connecting with people who love unique experiences.
+            </p>
+            <button className="start-button" onClick={handleNext}>
+              Get Started
+            </button>
           </div>
         )}
         
-        <h1 className="form-title">Partner Registration</h1>
+        {/* Question Screens */}
+        {currentStep >= 0 && currentStep < conversationSteps.length && (
+          <div className="question-screen">
+            <div className="question-container">
+              <h2 className="question-text">
+                {getPersonalizedQuestion(currentStep)}
+              </h2>
+              
+              <div className="input-container">
+                {getCurrentQuestion()?.type === 'textarea' ? (
+                  <textarea
+                    ref={inputRef}
+                    className="form-textarea"
+                    value={getCurrentValue()}
+                    onChange={handleInputChange}
+                    onKeyPress={handleKeyPress}
+                    placeholder={getCurrentQuestion()?.placeholder}
+                    rows={4}
+                  />
+                ) : (
+                  <input
+                    ref={inputRef}
+                    type={getCurrentQuestion()?.type || 'text'}
+                    className="form-input"
+                    value={getCurrentValue()}
+                    onChange={handleInputChange}
+                    onKeyPress={handleKeyPress}
+                    placeholder={getCurrentQuestion()?.placeholder}
+                  />
+                )}
+                
+                {errors.current && (
+                  <div className="error-message">{errors.current}</div>
+                )}
+              </div>
+              
+              <div className="button-container">
+                <button
+                  className="back-button"
+                  onClick={handleBack}
+                  disabled={currentStep === 0}
+                >
+                  ← Back
+                </button>
+                
+                <button
+                  className="next-button"
+                  onClick={handleNext}
+                >
+                  {getCurrentQuestion()?.buttonText || 'Continue'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
         
-        {!isTermsStep() && !isComplete && (
-          <div className={`field-container ${isAnimating ? 'animating' : ''}`}>
-            <div className="field-input-container">
-              <div className="field-label">{getCurrentField()?.label}</div>
+        {/* Terms Screen */}
+        {isTermsStep() && (
+          <div className="terms-screen">
+            <div className="terms-container">
+              <h2 className="terms-title">
+                One last thing, {formData.contactName}
+              </h2>
               
-              {getCurrentField()?.type === 'textarea' ? (
-                <textarea
-                  ref={inputRef}
-                  className={`field-textarea ${errors.current ? 'error' : ''}`}
-                  value={currentValue}
-                  onChange={handleInputChange}
-                  onKeyPress={handleKeyPress}
-                  placeholder={getCurrentField()?.placeholder}
-                  rows={3}
-                />
-              ) : (
+              <div className="checkbox-container">
                 <input
-                  ref={inputRef}
-                  type={getCurrentField()?.type || 'text'}
-                  className={`field-input ${errors.current ? 'error' : ''}`}
-                  value={currentValue}
-                  onChange={handleInputChange}
-                  onKeyPress={handleKeyPress}
-                  placeholder={getCurrentField()?.placeholder}
+                  type="checkbox"
+                  id="acceptTerms"
+                  className="checkbox-input"
+                  checked={acceptTerms}
+                  onChange={(e) => {
+                    setAcceptTerms(e.target.checked);
+                    if (errors.current) {
+                      setErrors({});
+                    }
+                  }}
                 />
-              )}
-              
-              {!isTyping && showCursor && <span className="cursor"></span>}
+                <label htmlFor="acceptTerms" className="checkbox-label">
+                  I agree to LUDUS's{' '}
+                  <span
+                    className="terms-link"
+                    onClick={() => setShowTermsModal(true)}
+                  >
+                    Terms and Conditions
+                  </span>
+                  {' '}and understand that my application will be reviewed before approval.
+                </label>
+              </div>
               
               {errors.current && (
                 <div className="error-message">{errors.current}</div>
               )}
-            </div>
-          </div>
-        )}
-        
-        {isTermsStep() && !isComplete && (
-          <div className="terms-step">
-            <h2>Terms and Conditions</h2>
-            <div className="terms-checkbox">
-              <input
-                type="checkbox"
-                id="acceptTerms"
-                className="checkbox-input"
-                checked={acceptTerms}
-                onChange={(e) => {
-                  setAcceptTerms(e.target.checked);
-                  if (errors.current) {
-                    setErrors(prev => ({ ...prev, current: '' }));
-                  }
-                }}
-              />
-              <label htmlFor="acceptTerms" className="checkbox-label">
-                I agree to the{' '}
-                <span
-                  className="terms-link"
-                  onClick={() => setShowTermsModal(true)}
+              
+              <button
+                className="submit-button"
+                onClick={handleNext}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Submitting...' : 'Submit Application'}
+              </button>
+              
+              <div className="button-container" style={{ marginTop: '20px', justifyContent: 'center' }}>
+                <button
+                  className="back-button"
+                  onClick={handleBack}
+                  disabled={isSubmitting}
                 >
-                  Terms and Conditions
-                </span>
-                {' '}for LUDUS partners
-              </label>
-            </div>
-            
-            {errors.current && (
-              <div className="error-message" style={{ textAlign: 'center', position: 'relative', bottom: 'auto' }}>
-                {errors.current}
+                  ← Back
+                </button>
               </div>
-            )}
-            
-            <button
-              className="submit-button"
-              onClick={handleSubmit}
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? 'Submitting...' : 'Submit Registration'}
-            </button>
-          </div>
-        )}
-        
-        {isComplete && !showSuccess && (
-          <div className="terms-step">
-            <h2>Processing Registration...</h2>
-            <div style={{ margin: '40px 0', textAlign: 'center' }}>
-              <span className="cursor"></span>
             </div>
-          </div>
-        )}
-        
-        {!isTermsStep() && !isComplete && (
-          <div className="navigation">
-            <button
-              className="nav-button back-button"
-              onClick={handleBack}
-              disabled={currentStep === 0}
-            >
-              Back
-            </button>
-            
-            <div style={{ fontSize: '14px', color: '#999' }}>
-              Press Enter to continue
-            </div>
-            
-            <button
-              className="nav-button next-button"
-              onClick={handleNext}
-            >
-              {currentStep === formFields.length - 1 ? 'Review' : 'Next'}
-            </button>
           </div>
         )}
       </div>
 
-      {/* Terms and Conditions Modal */}
+      {/* Terms Modal */}
       {showTermsModal && (
         <div className="fixed inset-0 z-50 overflow-y-auto" style={{
           background: 'rgba(0, 0, 0, 0.5)'
@@ -789,40 +923,27 @@ const PartnerRegistrationPage = () => {
             
             <span className="inline-block h-screen align-middle" aria-hidden="true">&#8203;</span>
             
-            <div className="inline-block w-full max-w-4xl p-8 my-8 text-left align-middle transition-all transform shadow-xl rounded-lg"
-                 style={{
-                   background: '#f9f9f7',
-                   fontFamily: 'IBM Plex Mono, Courier New, monospace',
-                   color: '#2a2a2a'
-                 }}>
+            <div className="inline-block w-full max-w-4xl p-8 my-8 text-left align-middle transition-all transform bg-white shadow-xl rounded-lg">
               <div className="flex justify-between items-start mb-6">
-                <h3 className="text-lg font-normal tracking-wide">
+                <h3 className="text-xl font-semibold text-gray-900">
                   Terms and Conditions
                 </h3>
                 <button
                   onClick={() => setShowTermsModal(false)}
-                  className="text-gray-500 hover:text-gray-700 text-xl font-light"
+                  className="text-gray-400 hover:text-gray-600 text-2xl"
                 >
                   ×
                 </button>
               </div>
               
-              <div className="max-h-96 overflow-y-auto pr-2" style={{
-                scrollbarWidth: 'thin',
-                scrollbarColor: '#2a2a2a #e0e0e0'
-              }}>
+              <div className="max-h-96 overflow-y-auto">
                 {loadingTerms ? (
                   <div className="text-center py-8">
-                    <div className="text-sm text-gray-600">Loading terms...</div>
+                    <div className="text-gray-600">Loading terms...</div>
                   </div>
                 ) : (
                   <div 
-                    className="prose prose-sm max-w-none"
-                    style={{
-                      fontSize: '14px',
-                      lineHeight: '1.6',
-                      color: '#2a2a2a'
-                    }}
+                    className="prose max-w-none"
                     dangerouslySetInnerHTML={{ __html: termsContent }}
                   />
                 )}
@@ -831,7 +952,7 @@ const PartnerRegistrationPage = () => {
               <div className="flex justify-end space-x-4 mt-8 pt-6 border-t border-gray-200">
                 <button
                   onClick={() => setShowTermsModal(false)}
-                  className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors font-light"
+                  className="px-6 py-2 text-gray-600 hover:text-gray-800 transition-colors"
                 >
                   Close
                 </button>
@@ -839,13 +960,11 @@ const PartnerRegistrationPage = () => {
                   onClick={() => {
                     setAcceptTerms(true);
                     setShowTermsModal(false);
-                    if (errors.current) {
-                      setErrors(prev => ({ ...prev, current: '' }));
-                    }
+                    setErrors({});
                   }}
-                  className="px-4 py-2 text-gray-900 hover:text-gray-700 transition-colors font-normal"
+                  className="px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
                 >
-                  [Accept Terms]
+                  Accept Terms
                 </button>
               </div>
             </div>
