@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import axios from 'axios';
 
 const PartnerRegistrationPage = () => {
+  // Form data
   const [formData, setFormData] = useState({
     companyName: '',
     contactName: '',
@@ -10,16 +11,112 @@ const PartnerRegistrationPage = () => {
     website: '',
     description: ''
   });
+  
+  // Typewriter progression state
+  const [currentStep, setCurrentStep] = useState(0);
+  const [isTyping, setIsTyping] = useState(false);
+  const [currentValue, setCurrentValue] = useState('');
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [showCursor, setShowCursor] = useState(true);
+  const [isComplete, setIsComplete] = useState(false);
+  const [acceptTerms, setAcceptTerms] = useState(false);
+  
+  // Original form state
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [acceptTerms, setAcceptTerms] = useState(false);
+  
+  // Refs
+  const inputRef = useRef(null);
+  
+  // Terms modal state
   const [showTermsModal, setShowTermsModal] = useState(false);
   const [termsContent, setTermsContent] = useState('');
   const [loadingTerms, setLoadingTerms] = useState(false);
+  
+  // Form fields configuration
+  const formFields = [
+    {
+      key: 'companyName',
+      label: 'Company Name',
+      type: 'text',
+      required: true,
+      placeholder: 'Enter your company name...'
+    },
+    {
+      key: 'contactName', 
+      label: 'Contact Person Name',
+      type: 'text',
+      required: true,
+      placeholder: 'Enter contact person name...'
+    },
+    {
+      key: 'email',
+      label: 'Email Address',
+      type: 'email',
+      required: true,
+      placeholder: 'Enter email address...'
+    },
+    {
+      key: 'phone',
+      label: 'Phone Number',
+      type: 'tel', 
+      required: true,
+      placeholder: 'Enter phone number...'
+    },
+    {
+      key: 'website',
+      label: 'Website URL',
+      type: 'url',
+      required: false,
+      placeholder: 'Enter website URL (optional)...'
+    },
+    {
+      key: 'description',
+      label: 'Company Description',
+      type: 'textarea',
+      required: true,
+      placeholder: 'Describe your company and services...'
+    }
+  ];
 
-  const validateField = (name, value) => {
-    switch (name) {
+  // Get current field
+  const getCurrentField = () => formFields[currentStep];
+  const isLastStep = () => currentStep === formFields.length;
+  const isTermsStep = () => currentStep === formFields.length;
+  
+  // Typewriter effects
+  useEffect(() => {
+    // Blinking cursor effect
+    const cursorInterval = setInterval(() => {
+      setShowCursor(prev => !prev);
+    }, 530);
+    
+    return () => clearInterval(cursorInterval);
+  }, []);
+  
+  useEffect(() => {
+    // Focus input when step changes
+    if (inputRef.current && !isLastStep()) {
+      inputRef.current.focus();
+    }
+  }, [currentStep]);
+  
+  // Initialize current value from form data when step changes
+  useEffect(() => {
+    if (!isLastStep()) {
+      const field = getCurrentField();
+      setCurrentValue(formData[field.key] || '');
+    }
+  }, [currentStep, formData]);
+
+  const validateCurrentField = (value) => {
+    if (!value && getCurrentField()?.required) {
+      return `${getCurrentField().label} is required`;
+    }
+    
+    const field = getCurrentField();
+    switch (field?.key) {
       case 'email':
         return value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) 
           ? 'Please enter a valid email address' 
@@ -42,58 +139,77 @@ const PartnerRegistrationPage = () => {
   };
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    const value = e.target.value;
+    setCurrentValue(value);
+    setIsTyping(value.length > 0);
     
-    // Clear error when user starts typing
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
+    // Update form data
+    if (!isLastStep()) {
+      const field = getCurrentField();
+      setFormData(prev => ({ ...prev, [field.key]: value }));
+    }
+    
+    // Clear errors when typing
+    const error = validateCurrentField(value);
+    if (!error && errors.current) {
+      setErrors(prev => ({ ...prev, current: '' }));
     }
   };
 
-  const handleInputBlur = (e) => {
-    const { name, value } = e.target;
-    const error = validateField(name, value);
+  const handleNext = () => {
+    if (isLastStep()) return;
+    
+    const field = getCurrentField();
+    const value = currentValue.trim();
+    const error = validateCurrentField(value);
+    
     if (error) {
-      setErrors(prev => ({ ...prev, [name]: error }));
+      setErrors(prev => ({ ...prev, current: error }));
+      // Shake animation
+      if (inputRef.current) {
+        inputRef.current.style.animation = 'shake 0.3s ease-in-out';
+        setTimeout(() => {
+          if (inputRef.current) {
+            inputRef.current.style.animation = '';
+          }
+        }, 300);
+      }
+      return;
+    }
+    
+    // Update form data
+    setFormData(prev => ({ ...prev, [field.key]: value }));
+    
+    // Animate to next step
+    setIsAnimating(true);
+    setTimeout(() => {
+      setCurrentStep(prev => prev + 1);
+      setCurrentValue('');
+      setIsTyping(false);
+      setIsAnimating(false);
+      setErrors(prev => ({ ...prev, current: '' }));
+    }, 300);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      if (isTermsStep()) {
+        handleSubmit();
+      } else {
+        handleNext();
+      }
     }
   };
 
-  const validateForm = () => {
-    const newErrors = {};
-    
-    // Required fields
-    const requiredFields = ['companyName', 'contactName', 'email', 'phone', 'description'];
-    requiredFields.forEach(field => {
-      if (!formData[field].trim()) {
-        newErrors[field] = `${getFieldLabel(field)} is required`;
-      }
-    });
-
-    // Field-specific validations
-    Object.keys(formData).forEach(field => {
-      if (formData[field]) {
-        const error = validateField(field, formData[field]);
-        if (error) {
-          newErrors[field] = error;
-        }
-      }
-    });
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const getFieldLabel = (fieldName) => {
-    const labels = {
-      companyName: 'Company Name',
-      contactName: 'Contact Person Name',
-      email: 'Email Address',
-      phone: 'Phone Number',
-      website: 'Website URL',
-      description: 'Company Description'
-    };
-    return labels[fieldName] || fieldName;
+  const handleBack = () => {
+    if (currentStep > 0) {
+      setIsAnimating(true);
+      setTimeout(() => {
+        setCurrentStep(prev => prev - 1);
+        setIsAnimating(false);
+      }, 300);
+    }
   };
 
   // Fetch Terms and Conditions content
@@ -146,19 +262,14 @@ const PartnerRegistrationPage = () => {
     fetchTermsContent();
   }, [fetchTermsContent]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    if (!validateForm()) {
-      return;
-    }
-
+  const handleSubmit = async () => {
     if (!acceptTerms) {
-      setErrors({ terms: 'You must accept the Terms and Conditions to proceed.' });
+      setErrors({ current: 'You must accept the Terms and Conditions to proceed.' });
       return;
     }
 
     setIsSubmitting(true);
+    setIsComplete(true);
 
     try {
       // Simulate API call - replace with actual API call
@@ -166,542 +277,581 @@ const PartnerRegistrationPage = () => {
       
       // Show success message
       setShowSuccess(true);
-      
-      // Reset form after delay
-      setTimeout(() => {
-        setFormData({
-          companyName: '',
-          contactName: '',
-          email: '',
-          phone: '',
-          website: '',
-          description: ''
-        });
-        setShowSuccess(false);
-      }, 3000);
 
     } catch (error) {
       console.error('Submission error:', error);
-      setErrors({ submit: 'Failed to submit registration. Please try again.' });
+      setErrors({ current: 'Failed to submit registration. Please try again.' });
+      setIsComplete(false);
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  // Success screen
   if (showSuccess) {
     return (
-      <div 
-        className="partner-registration-container"
-        style={{
-          fontFamily: "'IBM Plex Mono', 'Courier New', monospace",
-          background: '#fefefe',
-          backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(0,0,0,0.02) 1px, transparent 0)',
-          backgroundSize: '20px 20px',
-          color: '#2a2a2a',
-          lineHeight: '1.6',
-          minHeight: '100vh'
-        }}
-      >
+      <div className="typewriter-container">
         <style>
           {`
             @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&display=swap');
-            .partner-registration-container * {
-              font-family: 'IBM Plex Mono', 'Courier New', monospace !important;
+            
+            .typewriter-container {
+              font-family: 'IBM Plex Mono', 'Courier New', monospace;
+              background: #f9f9f7;
+              background-image: 
+                repeating-linear-gradient(
+                  0deg,
+                  transparent,
+                  transparent 24px,
+                  rgba(0,0,0,0.03) 25px,
+                  rgba(0,0,0,0.03) 26px
+                ),
+                radial-gradient(circle at 2px 2px, rgba(0,0,0,0.02) 1px, transparent 0);
+              background-size: 100% 26px, 20px 20px;
+              color: #2a2a2a;
+              min-height: 100vh;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              padding: 20px;
+            }
+            
+            .success-content {
+              text-align: center;
+              max-width: 600px;
+              line-height: 1.8;
+            }
+            
+            .success-title {
+              font-size: 24px;
+              font-weight: 400;
+              margin-bottom: 20px;
+              letter-spacing: 2px;
+            }
+            
+            .success-message {
+              font-size: 16px;
+              font-weight: 300;
+              color: #666;
+              margin-bottom: 30px;
+            }
+            
+            .typing-animation {
+              border-right: 2px solid #2a2a2a;
+              animation: blink 1s infinite;
+            }
+            
+            @keyframes blink {
+              0%, 50% { border-color: #2a2a2a; }
+              51%, 100% { border-color: transparent; }
             }
           `}
         </style>
-        <div className="max-w-[700px] mx-auto px-10 py-16">
-          <div className="text-center py-10">
-            <h2 className="text-lg font-normal mb-2.5 tracking-wide">
-              Registration Submitted
-            </h2>
-            <p className="text-sm text-gray-600 font-light">
-              Thank you for your interest. We'll be in touch soon.
-            </p>
-          </div>
+        <div className="success-content">
+          <h1 className="success-title typing-animation">Registration Submitted</h1>
+          <p className="success-message">
+            Thank you for your interest in partnering with LUDUS.<br/>
+            We'll review your application and be in touch soon.
+          </p>
         </div>
       </div>
     );
   }
 
   return (
-    <div 
-      className="partner-registration-container"
-      style={{
-        fontFamily: "'IBM Plex Mono', 'Courier New', monospace",
-        background: '#fefefe',
-        backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(0,0,0,0.02) 1px, transparent 0)',
-        backgroundSize: '20px 20px',
-        color: '#2a2a2a',
-        lineHeight: '1.6',
-        minHeight: '100vh'
-      }}
-    >
+    <div className="typewriter-container">
       <style>
         {`
           @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&display=swap');
           
-          .partner-registration-container,
-          .partner-registration-container *,
-          .partner-registration-container input,
-          .partner-registration-container textarea,
-          .partner-registration-container label,
-          .partner-registration-container button,
-          .partner-registration-container h1,
-          .partner-registration-container h2,
-          .partner-registration-container h3,
-          .partner-registration-container p,
-          .partner-registration-container span,
-          .partner-registration-container div {
-            font-family: 'IBM Plex Mono', 'Courier New', monospace !important;
+          .typewriter-container {
+            font-family: 'IBM Plex Mono', 'Courier New', monospace;
+            background: #f9f9f7;
+            background-image: 
+              repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 24px,
+                rgba(0,0,0,0.03) 25px,
+                rgba(0,0,0,0.03) 26px
+              ),
+              radial-gradient(circle at 2px 2px, rgba(0,0,0,0.02) 1px, transparent 0);
+            background-size: 100% 26px, 20px 20px;
+            color: #2a2a2a;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
           }
           
-          .partner-registration-container .form-input, 
-          .partner-registration-container .form-textarea {
-            font-family: 'IBM Plex Mono', 'Courier New', monospace !important;
-            font-size: 16px !important;
-            font-weight: 400 !important;
-            background: transparent !important;
-            border: none !important;
-            border-bottom: 2px solid #e0e0e0 !important;
-            padding: 12px 0 8px 0 !important;
-            outline: none !important;
-            color: #2a2a2a !important;
-            transition: border-color 0.3s ease !important;
-            caret-color: #2a2a2a !important;
-            width: 100% !important;
+          .typewriter-form {
+            max-width: 800px;
+            width: 100%;
+            position: relative;
           }
           
-          .partner-registration-container .form-input:focus, 
-          .partner-registration-container .form-textarea:focus {
-            border-bottom-color: #2a2a2a;
-            animation: underline-glow 0.3s ease;
-          }
-          
-          @keyframes underline-glow {
-            0% { border-bottom-color: #e0e0e0; }
-            50% { border-bottom-color: #666; }
-            100% { border-bottom-color: #2a2a2a; }
-          }
-          
-          .partner-registration-container .form-input::placeholder, 
-          .partner-registration-container .form-textarea::placeholder {
-            color: transparent;
-          }
-          
-          .partner-registration-container .form-label {
+          .progress-indicator {
             position: absolute;
-            left: 0;
-            top: 12px;
-            font-size: 16px;
-            color: #999;
-            transition: all 0.3s ease;
-            pointer-events: none;
-            font-weight: 300;
-            font-family: 'IBM Plex Mono', 'Courier New', monospace !important;
-          }
-          
-          .partner-registration-container .form-input:focus + .form-label,
-          .partner-registration-container .form-input.has-value + .form-label,
-          .partner-registration-container .form-textarea:focus + .form-label,
-          .partner-registration-container .form-textarea.has-value + .form-label {
-            top: -8px;
-            font-size: 12px;
+            top: -60px;
+            right: 0;
+            font-size: 14px;
             color: #666;
-            transform: translateY(-4px);
-          }
-          
-          .partner-registration-container .form-textarea {
-            resize: vertical;
-            min-height: 80px;
-          }
-          
-          .partner-registration-container .error-message {
-            font-size: 12px;
-            color: #d73a49;
-            margin-top: 5px;
             font-weight: 300;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            font-family: 'IBM Plex Mono', 'Courier New', monospace !important;
+            letter-spacing: 1px;
           }
           
-          .partner-registration-container .form-input.error, 
-          .partner-registration-container .form-textarea.error {
+          .form-title {
+            font-size: 18px;
+            font-weight: 300;
+            margin-bottom: 40px;
+            letter-spacing: 2px;
+            color: #444;
+            text-transform: uppercase;
+          }
+          
+          .field-container {
+            position: relative;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+          }
+          
+          .field-container.animating {
+            transform: translateX(-50px);
+            opacity: 0.7;
+          }
+          
+          .field-label {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 8px;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+          }
+          
+          .field-input-container {
+            position: relative;
+            width: 100%;
+          }
+          
+          .field-input {
+            font-family: inherit;
+            font-size: 24px;
+            font-weight: 400;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid #ddd;
+            padding: 8px 0;
+            width: 100%;
+            outline: none;
+            color: #2a2a2a;
+            caret-color: #2a2a2a;
+            caret-width: 2px;
+            transition: border-color 0.3s ease;
+            letter-spacing: 1px;
+          }
+          
+          .field-input:focus {
+            border-bottom-color: #2a2a2a;
+          }
+          
+          .field-input.error {
             border-bottom-color: #d73a49;
-            animation: error-shake 0.3s ease;
+            animation: shake 0.3s ease-in-out;
           }
           
-          .partner-registration-container .form-input.error + .form-label,
-          .partner-registration-container .form-textarea.error + .form-label {
-            color: #d73a49;
-          }
-          
-          .partner-registration-container .form-group.error .error-message {
-            opacity: 1;
-          }
-          
-          @keyframes error-shake {
+          @keyframes shake {
             0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-2px); }
-            75% { transform: translateX(2px); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
           }
           
-          .partner-registration-container .submit-btn {
-            font-family: 'IBM Plex Mono', 'Courier New', monospace !important;
+          .field-textarea {
+            font-family: inherit;
+            font-size: 20px;
+            font-weight: 400;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid #ddd;
+            padding: 8px 0;
+            width: 100%;
+            outline: none;
+            color: #2a2a2a;
+            caret-color: #2a2a2a;
+            resize: none;
+            min-height: 60px;
+            transition: border-color 0.3s ease;
+            letter-spacing: 0.5px;
+            line-height: 1.4;
+          }
+          
+          .field-textarea:focus {
+            border-bottom-color: #2a2a2a;
+          }
+          
+          .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 24px;
+            background: #2a2a2a;
+            margin-left: 2px;
+            animation: blink 1s infinite;
+            vertical-align: bottom;
+          }
+          
+          @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+          }
+          
+          .error-message {
+            position: absolute;
+            bottom: -25px;
+            left: 0;
+            font-size: 14px;
+            color: #d73a49;
+            font-weight: 300;
+            animation: fadeIn 0.3s ease;
+          }
+          
+          @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          
+          .navigation {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          }
+          
+          .nav-button {
+            font-family: inherit;
             font-size: 16px;
             font-weight: 400;
             background: transparent;
             border: none;
             color: #2a2a2a;
             cursor: pointer;
-            text-decoration: none;
-            position: relative;
-            padding: 0;
+            padding: 8px 16px;
             transition: all 0.3s ease;
+            letter-spacing: 1px;
           }
           
-          .partner-registration-container .submit-btn::before {
-            content: '[';
-            margin-right: 2px;
-          }
-          
-          .partner-registration-container .submit-btn::after {
-            content: ']';
-            margin-left: 2px;
-          }
-          
-          .partner-registration-container .submit-btn:hover {
+          .nav-button:hover {
             color: #666;
           }
           
-          .partner-registration-container .submit-btn:hover::before,
-          .partner-registration-container .submit-btn:hover::after {
-            animation: bracket-blink 0.5s ease;
-          }
-          
-          @keyframes bracket-blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-          }
-          
-          .partner-registration-container .submit-btn:active {
-            transform: translateY(1px);
-          }
-          
-          .partner-registration-container .submit-btn:disabled {
+          .nav-button:disabled {
             color: #ccc;
             cursor: not-allowed;
           }
           
-          .partner-registration-container .terms-modal {
-            background: #fefefe;
-            background-image: radial-gradient(circle at 1px 1px, rgba(0,0,0,0.02) 1px, transparent 0);
-            background-size: 20px 20px;
-            color: #2a2a2a;
-            font-family: 'IBM Plex Mono', 'Courier New', monospace !important;
+          .next-button::before {
+            content: '[';
+            margin-right: 2px;
           }
           
-          .partner-registration-container .terms-modal * {
-            font-family: 'IBM Plex Mono', 'Courier New', monospace !important;
+          .next-button::after {
+            content: ']';
+            margin-left: 2px;
+          }
+          
+          .back-button::before {
+            content: '< ';
+          }
+          
+          .terms-step {
+            text-align: center;
+            padding: 40px 0;
+          }
+          
+          .terms-checkbox {
+            margin: 30px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+          }
+          
+          .checkbox-input {
+            width: 18px;
+            height: 18px;
+            accent-color: #2a2a2a;
+          }
+          
+          .checkbox-label {
+            font-size: 16px;
+            font-weight: 300;
+            color: #666;
+            cursor: pointer;
+          }
+          
+          .terms-link {
+            color: #2a2a2a;
+            text-decoration: underline;
+            cursor: pointer;
+            transition: color 0.3s ease;
+          }
+          
+          .terms-link:hover {
+            color: #666;
+          }
+          
+          .submit-button {
+            font-family: inherit;
+            font-size: 20px;
+            font-weight: 400;
+            background: transparent;
+            border: none;
+            color: #2a2a2a;
+            cursor: pointer;
+            padding: 12px 24px;
+            transition: all 0.3s ease;
+            letter-spacing: 2px;
+            margin-top: 20px;
+          }
+          
+          .submit-button::before {
+            content: '[';
+            margin-right: 4px;
+          }
+          
+          .submit-button::after {
+            content: ']';
+            margin-left: 4px;
+          }
+          
+          .submit-button:hover {
+            color: #666;
+            transform: scale(1.05);
+          }
+          
+          .submit-button:disabled {
+            color: #ccc;
+            cursor: not-allowed;
+            transform: none;
           }
           
           @media (max-width: 768px) {
-            .partner-registration-container .form-input,
-            .partner-registration-container .form-textarea,
-            .partner-registration-container .form-label {
-              font-size: 14px;
+            .field-input {
+              font-size: 20px;
             }
             
-            .partner-registration-container .form-input:focus + .form-label,
-            .partner-registration-container .form-input.has-value + .form-label,
-            .partner-registration-container .form-textarea:focus + .form-label,
-            .partner-registration-container .form-textarea.has-value + .form-label {
-              font-size: 11px;
+            .field-textarea {
+              font-size: 18px;
             }
-          }
-          
-          @media (max-width: 480px) {
-            .partner-registration-container {
-              padding: 30px 15px;
+            
+            .typewriter-container {
+              padding: 15px;
+            }
+            
+            .progress-indicator {
+              top: -40px;
+              font-size: 12px;
             }
           }
         `}
       </style>
-      <div className="partner-registration-container">
-        <div className="max-w-[700px] mx-auto px-10 py-16">
-        {/* Header */}
-        <div className="mb-12">
-          <h1 className="text-2xl font-normal mb-2.5 tracking-wide">
-            Partner Registration
-          </h1>
-          <p className="text-sm text-gray-600 font-light">
-            Join the LUDUS network and connect with our community
-          </p>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-10">
-          {/* Company Name */}
-          <div className={`form-group relative ${errors.companyName ? 'error' : ''}`}>
-            <div className="relative w-full">
-              <input
-                type="text"
-                id="companyName"
-                name="companyName"
-                className={`form-input ${formData.companyName ? 'has-value' : ''} ${errors.companyName ? 'error' : ''}`}
-                placeholder=" "
-                value={formData.companyName}
-                onChange={handleInputChange}
-                onBlur={handleInputBlur}
-                required
-                autoComplete="organization"
-                aria-label="Company Name"
-                aria-describedby="companyNameError"
-              />
-              <label htmlFor="companyName" className="form-label">Company Name</label>
-            </div>
-            <div id="companyNameError" className="error-message">
-              {errors.companyName}
-            </div>
+      
+      <div className="typewriter-form">
+        {!isTermsStep() && (
+          <div className="progress-indicator">
+            Step {currentStep + 1} of {formFields.length + 1}
           </div>
-
-          {/* Contact Name */}
-          <div className={`form-group relative ${errors.contactName ? 'error' : ''}`}>
-            <div className="relative w-full">
-              <input
-                type="text"
-                id="contactName"
-                name="contactName"
-                className={`form-input ${formData.contactName ? 'has-value' : ''} ${errors.contactName ? 'error' : ''}`}
-                placeholder=" "
-                value={formData.contactName}
-                onChange={handleInputChange}
-                onBlur={handleInputBlur}
-                required
-                autoComplete="name"
-                aria-label="Contact Person Name"
-                aria-describedby="contactNameError"
-              />
-              <label htmlFor="contactName" className="form-label">Contact Person Name</label>
-            </div>
-            <div id="contactNameError" className="error-message">
-              {errors.contactName}
-            </div>
-          </div>
-
-          {/* Email */}
-          <div className={`form-group relative ${errors.email ? 'error' : ''}`}>
-            <div className="relative w-full">
-              <input
-                type="email"
-                id="email"
-                name="email"
-                className={`form-input ${formData.email ? 'has-value' : ''} ${errors.email ? 'error' : ''}`}
-                placeholder=" "
-                value={formData.email}
-                onChange={handleInputChange}
-                onBlur={handleInputBlur}
-                required
-                autoComplete="email"
-                aria-label="Email Address"
-                aria-describedby="emailError"
-              />
-              <label htmlFor="email" className="form-label">Email Address</label>
-            </div>
-            <div id="emailError" className="error-message">
-              {errors.email}
-            </div>
-          </div>
-
-          {/* Phone */}
-          <div className={`form-group relative ${errors.phone ? 'error' : ''}`}>
-            <div className="relative w-full">
-              <input
-                type="tel"
-                id="phone"
-                name="phone"
-                className={`form-input ${formData.phone ? 'has-value' : ''} ${errors.phone ? 'error' : ''}`}
-                placeholder=" "
-                value={formData.phone}
-                onChange={handleInputChange}
-                onBlur={handleInputBlur}
-                required
-                autoComplete="tel"
-                aria-label="Phone Number"
-                aria-describedby="phoneError"
-              />
-              <label htmlFor="phone" className="form-label">Phone Number</label>
-            </div>
-            <div id="phoneError" className="error-message">
-              {errors.phone}
-            </div>
-          </div>
-
-          {/* Website */}
-          <div className={`form-group relative ${errors.website ? 'error' : ''}`}>
-            <div className="relative w-full">
-              <input
-                type="url"
-                id="website"
-                name="website"
-                className={`form-input ${formData.website ? 'has-value' : ''} ${errors.website ? 'error' : ''}`}
-                placeholder=" "
-                value={formData.website}
-                onChange={handleInputChange}
-                onBlur={handleInputBlur}
-                autoComplete="url"
-                aria-label="Website URL (Optional)"
-                aria-describedby="websiteError"
-              />
-              <label htmlFor="website" className="form-label">Website URL (Optional)</label>
-            </div>
-            <div id="websiteError" className="error-message">
-              {errors.website}
-            </div>
-          </div>
-
-          {/* Description */}
-          <div className={`form-group relative ${errors.description ? 'error' : ''}`}>
-            <div className="relative w-full">
-              <textarea
-                id="description"
-                name="description"
-                className={`form-textarea ${formData.description ? 'has-value' : ''} ${errors.description ? 'error' : ''}`}
-                placeholder=" "
-                rows={4}
-                value={formData.description}
-                onChange={handleInputChange}
-                onBlur={handleInputBlur}
-                required
-                aria-label="Company Description"
-                aria-describedby="descriptionError"
-              />
-              <label htmlFor="description" className="form-label">Company Description</label>
-            </div>
-            <div id="descriptionError" className="error-message">
-              {errors.description}
-            </div>
-          </div>
-
-          {/* Terms and Conditions */}
-          <div className={`form-group relative ${errors.terms ? 'error' : ''}`}>
-            <div className="flex items-start space-x-3">
-              <input
-                type="checkbox"
-                id="acceptTerms"
-                checked={acceptTerms}
-                onChange={(e) => {
-                  setAcceptTerms(e.target.checked);
-                  if (errors.terms) {
-                    setErrors(prev => ({ ...prev, terms: '' }));
-                  }
-                }}
-                className="mt-1 h-4 w-4 text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
-                style={{
-                  accentColor: '#2a2a2a',
-                  borderColor: errors.terms ? '#d73a49' : '#e0e0e0'
-                }}
-              />
-              <label htmlFor="acceptTerms" className="text-sm font-light text-gray-700 leading-relaxed">
-                I agree to the{' '}
-                <button
-                  type="button"
-                  onClick={() => setShowTermsModal(true)}
-                  className="text-gray-900 underline hover:text-gray-600 transition-colors font-normal"
-                  style={{ fontFamily: 'inherit' }}
-                >
-                  Terms and Conditions
-                </button>
-                {' '}for LUDUS partners
-              </label>
-            </div>
-            <div className="error-message ml-7">
-              {errors.terms}
-            </div>
-          </div>
-
-          {/* Submit Button */}
-          <div className="pt-16">
-            <button
-              type="submit"
-              className="submit-btn"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? 'Submitting...' : 'Submit'}
-            </button>
-          </div>
-        </form>
-
-        {/* Terms and Conditions Modal */}
-        {showTermsModal && (
-          <div className="fixed inset-0 z-50 overflow-y-auto" style={{
-            background: 'rgba(0, 0, 0, 0.5)'
-          }}>
-            <div className="min-h-screen px-4 text-center">
-              <div className="fixed inset-0" onClick={() => setShowTermsModal(false)}></div>
+        )}
+        
+        <h1 className="form-title">Partner Registration</h1>
+        
+        {!isTermsStep() && !isComplete && (
+          <div className={`field-container ${isAnimating ? 'animating' : ''}`}>
+            <div className="field-input-container">
+              <div className="field-label">{getCurrentField()?.label}</div>
               
-              <span className="inline-block h-screen align-middle" aria-hidden="true">&#8203;</span>
+              {getCurrentField()?.type === 'textarea' ? (
+                <textarea
+                  ref={inputRef}
+                  className={`field-textarea ${errors.current ? 'error' : ''}`}
+                  value={currentValue}
+                  onChange={handleInputChange}
+                  onKeyPress={handleKeyPress}
+                  placeholder={getCurrentField()?.placeholder}
+                  rows={3}
+                />
+              ) : (
+                <input
+                  ref={inputRef}
+                  type={getCurrentField()?.type || 'text'}
+                  className={`field-input ${errors.current ? 'error' : ''}`}
+                  value={currentValue}
+                  onChange={handleInputChange}
+                  onKeyPress={handleKeyPress}
+                  placeholder={getCurrentField()?.placeholder}
+                />
+              )}
               
-              <div className="terms-modal inline-block w-full max-w-4xl p-8 my-8 text-left align-middle transition-all transform shadow-xl rounded-lg">
-                <div className="flex justify-between items-start mb-6">
-                  <h3 className="text-lg font-normal tracking-wide">
-                    Terms and Conditions
-                  </h3>
-                  <button
-                    onClick={() => setShowTermsModal(false)}
-                    className="text-gray-500 hover:text-gray-700 text-xl font-light"
-                  >
-                    ×
-                  </button>
-                </div>
-                
-                <div className="max-h-96 overflow-y-auto pr-2" style={{
-                  scrollbarWidth: 'thin',
-                  scrollbarColor: '#2a2a2a #e0e0e0'
-                }}>
-                  {loadingTerms ? (
-                    <div className="text-center py-8">
-                      <div className="text-sm text-gray-600">Loading terms...</div>
-                    </div>
-                  ) : (
-                    <div 
-                      className="prose prose-sm max-w-none"
-                      style={{
-                        fontSize: '14px',
-                        lineHeight: '1.6',
-                        color: '#2a2a2a'
-                      }}
-                      dangerouslySetInnerHTML={{ __html: termsContent }}
-                    />
-                  )}
-                </div>
-                
-                <div className="flex justify-end space-x-4 mt-8 pt-6 border-t border-gray-200">
-                  <button
-                    onClick={() => setShowTermsModal(false)}
-                    className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors font-light"
-                  >
-                    Close
-                  </button>
-                  <button
-                    onClick={() => {
-                      setAcceptTerms(true);
-                      setShowTermsModal(false);
-                      if (errors.terms) {
-                        setErrors(prev => ({ ...prev, terms: '' }));
-                      }
-                    }}
-                    className="submit-btn"
-                  >
-                    Accept Terms
-                  </button>
-                </div>
-              </div>
+              {!isTyping && showCursor && <span className="cursor"></span>}
+              
+              {errors.current && (
+                <div className="error-message">{errors.current}</div>
+              )}
             </div>
           </div>
         )}
-        </div>
+        
+        {isTermsStep() && !isComplete && (
+          <div className="terms-step">
+            <h2>Terms and Conditions</h2>
+            <div className="terms-checkbox">
+              <input
+                type="checkbox"
+                id="acceptTerms"
+                className="checkbox-input"
+                checked={acceptTerms}
+                onChange={(e) => {
+                  setAcceptTerms(e.target.checked);
+                  if (errors.current) {
+                    setErrors(prev => ({ ...prev, current: '' }));
+                  }
+                }}
+              />
+              <label htmlFor="acceptTerms" className="checkbox-label">
+                I agree to the{' '}
+                <span
+                  className="terms-link"
+                  onClick={() => setShowTermsModal(true)}
+                >
+                  Terms and Conditions
+                </span>
+                {' '}for LUDUS partners
+              </label>
+            </div>
+            
+            {errors.current && (
+              <div className="error-message" style={{ textAlign: 'center', position: 'relative', bottom: 'auto' }}>
+                {errors.current}
+              </div>
+            )}
+            
+            <button
+              className="submit-button"
+              onClick={handleSubmit}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Submitting...' : 'Submit Registration'}
+            </button>
+          </div>
+        )}
+        
+        {isComplete && !showSuccess && (
+          <div className="terms-step">
+            <h2>Processing Registration...</h2>
+            <div style={{ margin: '40px 0', textAlign: 'center' }}>
+              <span className="cursor"></span>
+            </div>
+          </div>
+        )}
+        
+        {!isTermsStep() && !isComplete && (
+          <div className="navigation">
+            <button
+              className="nav-button back-button"
+              onClick={handleBack}
+              disabled={currentStep === 0}
+            >
+              Back
+            </button>
+            
+            <div style={{ fontSize: '14px', color: '#999' }}>
+              Press Enter to continue
+            </div>
+            
+            <button
+              className="nav-button next-button"
+              onClick={handleNext}
+            >
+              {currentStep === formFields.length - 1 ? 'Review' : 'Next'}
+            </button>
+          </div>
+        )}
       </div>
+
+      {/* Terms and Conditions Modal */}
+      {showTermsModal && (
+        <div className="fixed inset-0 z-50 overflow-y-auto" style={{
+          background: 'rgba(0, 0, 0, 0.5)'
+        }}>
+          <div className="min-h-screen px-4 text-center">
+            <div className="fixed inset-0" onClick={() => setShowTermsModal(false)}></div>
+            
+            <span className="inline-block h-screen align-middle" aria-hidden="true">&#8203;</span>
+            
+            <div className="inline-block w-full max-w-4xl p-8 my-8 text-left align-middle transition-all transform shadow-xl rounded-lg"
+                 style={{
+                   background: '#f9f9f7',
+                   fontFamily: 'IBM Plex Mono, Courier New, monospace',
+                   color: '#2a2a2a'
+                 }}>
+              <div className="flex justify-between items-start mb-6">
+                <h3 className="text-lg font-normal tracking-wide">
+                  Terms and Conditions
+                </h3>
+                <button
+                  onClick={() => setShowTermsModal(false)}
+                  className="text-gray-500 hover:text-gray-700 text-xl font-light"
+                >
+                  ×
+                </button>
+              </div>
+              
+              <div className="max-h-96 overflow-y-auto pr-2" style={{
+                scrollbarWidth: 'thin',
+                scrollbarColor: '#2a2a2a #e0e0e0'
+              }}>
+                {loadingTerms ? (
+                  <div className="text-center py-8">
+                    <div className="text-sm text-gray-600">Loading terms...</div>
+                  </div>
+                ) : (
+                  <div 
+                    className="prose prose-sm max-w-none"
+                    style={{
+                      fontSize: '14px',
+                      lineHeight: '1.6',
+                      color: '#2a2a2a'
+                    }}
+                    dangerouslySetInnerHTML={{ __html: termsContent }}
+                  />
+                )}
+              </div>
+              
+              <div className="flex justify-end space-x-4 mt-8 pt-6 border-t border-gray-200">
+                <button
+                  onClick={() => setShowTermsModal(false)}
+                  className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors font-light"
+                >
+                  Close
+                </button>
+                <button
+                  onClick={() => {
+                    setAcceptTerms(true);
+                    setShowTermsModal(false);
+                    if (errors.current) {
+                      setErrors(prev => ({ ...prev, current: '' }));
+                    }
+                  }}
+                  className="px-4 py-2 text-gray-900 hover:text-gray-700 transition-colors font-normal"
+                >
+                  [Accept Terms]
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
