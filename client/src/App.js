@@ -19,6 +19,7 @@ import ProfilePage from './pages/ProfilePage';
 import HowItWorksPage from './pages/HowItWorksPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import UIShowcasePage from './pages/UIShowcasePage';
+import DynamicPage from './components/pages/DynamicPage';
 import './index.css';
 
 // Protected Route Component
@@ -317,6 +318,17 @@ function App() {
                 <Header />
                 <main>
                   <UIShowcasePage />
+                </main>
+                <Footer />
+              </>
+            } />
+            
+            {/* Dynamic Pages - Catch all route for custom pages */}
+            <Route path="/:slug" element={
+              <>
+                <Header />
+                <main>
+                  <DynamicPage />
                 </main>
                 <Footer />
               </>

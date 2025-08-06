@@ -291,7 +291,7 @@ const PageManagement = () => {
               </tr>
             </thead>
             <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-              {pages.map((page) => (
+              {pages && pages.length > 0 ? pages.map((page) => (
                 <tr key={page._id}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
@@ -344,7 +344,13 @@ const PageManagement = () => {
                     )}
                   </td>
                 </tr>
-              ))}
+              )) : (
+                <tr>
+                  <td colSpan="6" className="px-6 py-4 text-center text-gray-500 dark:text-gray-300">
+                    {loading ? 'Loading pages...' : 'No pages found'}
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
