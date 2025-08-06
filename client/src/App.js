@@ -19,6 +19,7 @@ import ProfilePage from './pages/ProfilePage';
 import HowItWorksPage from './pages/HowItWorksPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import UIShowcasePage from './pages/UIShowcasePage';
+import PartnerRegistrationPage from './pages/PartnerRegistrationPage';
 import DynamicPage from './components/pages/DynamicPage';
 import './index.css';
 
@@ -318,6 +319,15 @@ function App() {
                 <Header />
                 <main>
                   <UIShowcasePage />
+                </main>
+                <Footer />
+              </>
+            } />
+            <Route path="/partner-registration" element={
+              <>
+                <Header />
+                <main>
+                  <PartnerRegistrationPage />
                 </main>
                 <Footer />
               </>
