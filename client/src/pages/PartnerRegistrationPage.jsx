@@ -191,25 +191,234 @@ const PartnerRegistrationPage = () => {
 
   if (showSuccess) {
     return (
-      <div className="partner-registration-page">
-        <div className="max-w-[700px] mx-auto px-10 py-16">
-          <div className="text-center py-10">
-            <h2 className="text-lg font-normal mb-2.5 tracking-wide">
-              Registration Submitted
-            </h2>
-            <p className="text-sm text-gray-600 font-light">
-              Thank you for your interest. We'll be in touch soon.
-            </p>
+      <>
+        <style>
+          {`
+            @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&display=swap');
+            .partner-registration-container {
+              font-family: 'IBM Plex Mono', 'Courier New', monospace !important;
+              background: #fefefe;
+              background-image: radial-gradient(circle at 1px 1px, rgba(0,0,0,0.02) 1px, transparent 0);
+              background-size: 20px 20px;
+              color: #2a2a2a;
+              line-height: 1.6;
+              min-height: 100vh;
+            }
+            .partner-registration-container * {
+              font-family: 'IBM Plex Mono', 'Courier New', monospace !important;
+            }
+          `}
+        </style>
+        <div className="partner-registration-container">
+          <div className="max-w-[700px] mx-auto px-10 py-16">
+            <div className="text-center py-10">
+              <h2 className="text-lg font-normal mb-2.5 tracking-wide">
+                Registration Submitted
+              </h2>
+              <p className="text-sm text-gray-600 font-light">
+                Thank you for your interest. We'll be in touch soon.
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 
   return (
-    <div className="partner-registration-page">
-      
-      <div className="max-w-[700px] mx-auto px-10 py-16">
+    <>
+      <style>
+        {`
+          @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&display=swap');
+          
+          .partner-registration-container {
+            font-family: 'IBM Plex Mono', 'Courier New', monospace !important;
+            background: #fefefe;
+            background-image: radial-gradient(circle at 1px 1px, rgba(0,0,0,0.02) 1px, transparent 0);
+            background-size: 20px 20px;
+            color: #2a2a2a;
+            line-height: 1.6;
+            min-height: 100vh;
+          }
+          
+          .partner-registration-container * {
+            font-family: 'IBM Plex Mono', 'Courier New', monospace !important;
+          }
+          
+          .partner-registration-container .form-input, 
+          .partner-registration-container .form-textarea {
+            font-family: 'IBM Plex Mono', 'Courier New', monospace !important;
+            font-size: 16px;
+            font-weight: 400;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid #e0e0e0;
+            padding: 12px 0 8px 0;
+            outline: none;
+            color: #2a2a2a;
+            transition: border-color 0.3s ease;
+            caret-color: #2a2a2a;
+            width: 100%;
+          }
+          
+          .partner-registration-container .form-input:focus, 
+          .partner-registration-container .form-textarea:focus {
+            border-bottom-color: #2a2a2a;
+            animation: underline-glow 0.3s ease;
+          }
+          
+          @keyframes underline-glow {
+            0% { border-bottom-color: #e0e0e0; }
+            50% { border-bottom-color: #666; }
+            100% { border-bottom-color: #2a2a2a; }
+          }
+          
+          .partner-registration-container .form-input::placeholder, 
+          .partner-registration-container .form-textarea::placeholder {
+            color: transparent;
+          }
+          
+          .partner-registration-container .form-label {
+            position: absolute;
+            left: 0;
+            top: 12px;
+            font-size: 16px;
+            color: #999;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            font-weight: 300;
+            font-family: 'IBM Plex Mono', 'Courier New', monospace !important;
+          }
+          
+          .partner-registration-container .form-input:focus + .form-label,
+          .partner-registration-container .form-input.has-value + .form-label,
+          .partner-registration-container .form-textarea:focus + .form-label,
+          .partner-registration-container .form-textarea.has-value + .form-label {
+            top: -8px;
+            font-size: 12px;
+            color: #666;
+            transform: translateY(-4px);
+          }
+          
+          .partner-registration-container .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+          }
+          
+          .partner-registration-container .error-message {
+            font-size: 12px;
+            color: #d73a49;
+            margin-top: 5px;
+            font-weight: 300;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            font-family: 'IBM Plex Mono', 'Courier New', monospace !important;
+          }
+          
+          .partner-registration-container .form-input.error, 
+          .partner-registration-container .form-textarea.error {
+            border-bottom-color: #d73a49;
+            animation: error-shake 0.3s ease;
+          }
+          
+          .partner-registration-container .form-input.error + .form-label,
+          .partner-registration-container .form-textarea.error + .form-label {
+            color: #d73a49;
+          }
+          
+          .partner-registration-container .form-group.error .error-message {
+            opacity: 1;
+          }
+          
+          @keyframes error-shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            75% { transform: translateX(2px); }
+          }
+          
+          .partner-registration-container .submit-btn {
+            font-family: 'IBM Plex Mono', 'Courier New', monospace !important;
+            font-size: 16px;
+            font-weight: 400;
+            background: transparent;
+            border: none;
+            color: #2a2a2a;
+            cursor: pointer;
+            text-decoration: none;
+            position: relative;
+            padding: 0;
+            transition: all 0.3s ease;
+          }
+          
+          .partner-registration-container .submit-btn::before {
+            content: '[';
+            margin-right: 2px;
+          }
+          
+          .partner-registration-container .submit-btn::after {
+            content: ']';
+            margin-left: 2px;
+          }
+          
+          .partner-registration-container .submit-btn:hover {
+            color: #666;
+          }
+          
+          .partner-registration-container .submit-btn:hover::before,
+          .partner-registration-container .submit-btn:hover::after {
+            animation: bracket-blink 0.5s ease;
+          }
+          
+          @keyframes bracket-blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+          }
+          
+          .partner-registration-container .submit-btn:active {
+            transform: translateY(1px);
+          }
+          
+          .partner-registration-container .submit-btn:disabled {
+            color: #ccc;
+            cursor: not-allowed;
+          }
+          
+          .partner-registration-container .terms-modal {
+            background: #fefefe;
+            background-image: radial-gradient(circle at 1px 1px, rgba(0,0,0,0.02) 1px, transparent 0);
+            background-size: 20px 20px;
+            color: #2a2a2a;
+            font-family: 'IBM Plex Mono', 'Courier New', monospace !important;
+          }
+          
+          .partner-registration-container .terms-modal * {
+            font-family: 'IBM Plex Mono', 'Courier New', monospace !important;
+          }
+          
+          @media (max-width: 768px) {
+            .partner-registration-container .form-input,
+            .partner-registration-container .form-textarea,
+            .partner-registration-container .form-label {
+              font-size: 14px;
+            }
+            
+            .partner-registration-container .form-input:focus + .form-label,
+            .partner-registration-container .form-input.has-value + .form-label,
+            .partner-registration-container .form-textarea:focus + .form-label,
+            .partner-registration-container .form-textarea.has-value + .form-label {
+              font-size: 11px;
+            }
+          }
+          
+          @media (max-width: 480px) {
+            .partner-registration-container {
+              padding: 30px 15px;
+            }
+          }
+        `}
+      </style>
+      <div className="partner-registration-container">
+        <div className="max-w-[700px] mx-auto px-10 py-16">
         {/* Header */}
         <div className="mb-12">
           <h1 className="text-2xl font-normal mb-2.5 tracking-wide">
@@ -226,6 +435,7 @@ const PartnerRegistrationPage = () => {
             <div className="relative w-full">
               <input
                 type="text"
+                id="companyName"
                 name="companyName"
                 className={`form-input ${formData.companyName ? 'has-value' : ''} ${errors.companyName ? 'error' : ''}`}
                 placeholder=" "
@@ -234,10 +444,12 @@ const PartnerRegistrationPage = () => {
                 onBlur={handleInputBlur}
                 required
                 autoComplete="organization"
+                aria-label="Company Name"
+                aria-describedby="companyNameError"
               />
-              <label className="form-label">Company Name</label>
+              <label htmlFor="companyName" className="form-label">Company Name</label>
             </div>
-            <div className="error-message">
+            <div id="companyNameError" className="error-message">
               {errors.companyName}
             </div>
           </div>
@@ -247,6 +459,7 @@ const PartnerRegistrationPage = () => {
             <div className="relative w-full">
               <input
                 type="text"
+                id="contactName"
                 name="contactName"
                 className={`form-input ${formData.contactName ? 'has-value' : ''} ${errors.contactName ? 'error' : ''}`}
                 placeholder=" "
@@ -255,10 +468,12 @@ const PartnerRegistrationPage = () => {
                 onBlur={handleInputBlur}
                 required
                 autoComplete="name"
+                aria-label="Contact Person Name"
+                aria-describedby="contactNameError"
               />
-              <label className="form-label">Contact Person Name</label>
+              <label htmlFor="contactName" className="form-label">Contact Person Name</label>
             </div>
-            <div className="error-message">
+            <div id="contactNameError" className="error-message">
               {errors.contactName}
             </div>
           </div>
@@ -268,6 +483,7 @@ const PartnerRegistrationPage = () => {
             <div className="relative w-full">
               <input
                 type="email"
+                id="email"
                 name="email"
                 className={`form-input ${formData.email ? 'has-value' : ''} ${errors.email ? 'error' : ''}`}
                 placeholder=" "
@@ -276,10 +492,12 @@ const PartnerRegistrationPage = () => {
                 onBlur={handleInputBlur}
                 required
                 autoComplete="email"
+                aria-label="Email Address"
+                aria-describedby="emailError"
               />
-              <label className="form-label">Email Address</label>
+              <label htmlFor="email" className="form-label">Email Address</label>
             </div>
-            <div className="error-message">
+            <div id="emailError" className="error-message">
               {errors.email}
             </div>
           </div>
@@ -289,6 +507,7 @@ const PartnerRegistrationPage = () => {
             <div className="relative w-full">
               <input
                 type="tel"
+                id="phone"
                 name="phone"
                 className={`form-input ${formData.phone ? 'has-value' : ''} ${errors.phone ? 'error' : ''}`}
                 placeholder=" "
@@ -297,10 +516,12 @@ const PartnerRegistrationPage = () => {
                 onBlur={handleInputBlur}
                 required
                 autoComplete="tel"
+                aria-label="Phone Number"
+                aria-describedby="phoneError"
               />
-              <label className="form-label">Phone Number</label>
+              <label htmlFor="phone" className="form-label">Phone Number</label>
             </div>
-            <div className="error-message">
+            <div id="phoneError" className="error-message">
               {errors.phone}
             </div>
           </div>
@@ -310,6 +531,7 @@ const PartnerRegistrationPage = () => {
             <div className="relative w-full">
               <input
                 type="url"
+                id="website"
                 name="website"
                 className={`form-input ${formData.website ? 'has-value' : ''} ${errors.website ? 'error' : ''}`}
                 placeholder=" "
@@ -317,10 +539,12 @@ const PartnerRegistrationPage = () => {
                 onChange={handleInputChange}
                 onBlur={handleInputBlur}
                 autoComplete="url"
+                aria-label="Website URL (Optional)"
+                aria-describedby="websiteError"
               />
-              <label className="form-label">Website URL (Optional)</label>
+              <label htmlFor="website" className="form-label">Website URL (Optional)</label>
             </div>
-            <div className="error-message">
+            <div id="websiteError" className="error-message">
               {errors.website}
             </div>
           </div>
@@ -329,6 +553,7 @@ const PartnerRegistrationPage = () => {
           <div className={`form-group relative ${errors.description ? 'error' : ''}`}>
             <div className="relative w-full">
               <textarea
+                id="description"
                 name="description"
                 className={`form-textarea ${formData.description ? 'has-value' : ''} ${errors.description ? 'error' : ''}`}
                 placeholder=" "
@@ -337,10 +562,12 @@ const PartnerRegistrationPage = () => {
                 onChange={handleInputChange}
                 onBlur={handleInputBlur}
                 required
+                aria-label="Company Description"
+                aria-describedby="descriptionError"
               />
-              <label className="form-label">Company Description</label>
+              <label htmlFor="description" className="form-label">Company Description</label>
             </div>
-            <div className="error-message">
+            <div id="descriptionError" className="error-message">
               {errors.description}
             </div>
           </div>
@@ -462,8 +689,9 @@ const PartnerRegistrationPage = () => {
             </div>
           </div>
         )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
