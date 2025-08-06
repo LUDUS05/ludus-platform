@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import '../styles/partner-registration.css';
 
 const PartnerRegistrationPage = () => {
   const [formData, setFormData] = useState({
@@ -145,61 +144,6 @@ const PartnerRegistrationPage = () => {
 
   useEffect(() => {
     fetchTermsContent();
-    
-    // Force typewriter styles after component mounts
-    const applyTypewriterStyles = () => {
-      const container = document.querySelector('.partner-registration-container');
-      if (container) {
-        container.style.fontFamily = "'IBM Plex Mono', 'Courier New', monospace";
-        container.style.background = '#fefefe';
-        container.style.backgroundImage = 'radial-gradient(circle at 1px 1px, rgba(0,0,0,0.02) 1px, transparent 0)';
-        container.style.backgroundSize = '20px 20px';
-        container.style.color = '#2a2a2a';
-        container.style.minHeight = '100vh';
-        
-        // Force font on all child elements
-        const allElements = container.querySelectorAll('*');
-        allElements.forEach(element => {
-          element.style.fontFamily = "'IBM Plex Mono', 'Courier New', monospace";
-        });
-        
-        // Force form input styles
-        const inputs = container.querySelectorAll('.form-input, .form-textarea');
-        inputs.forEach(input => {
-          input.style.fontFamily = "'IBM Plex Mono', 'Courier New', monospace";
-          input.style.fontSize = '16px';
-          input.style.fontWeight = '400';
-          input.style.background = 'transparent';
-          input.style.border = 'none';
-          input.style.borderBottom = '2px solid #e0e0e0';
-          input.style.padding = '12px 0 8px 0';
-          input.style.outline = 'none';
-          input.style.color = '#2a2a2a';
-          input.style.caretColor = '#2a2a2a';
-          input.style.width = '100%';
-        });
-        
-        // Force label styles
-        const labels = container.querySelectorAll('.form-label');
-        labels.forEach(label => {
-          label.style.fontFamily = "'IBM Plex Mono', 'Courier New', monospace";
-          label.style.position = 'absolute';
-          label.style.left = '0';
-          label.style.top = '12px';
-          label.style.fontSize = '16px';
-          label.style.color = '#999';
-          label.style.fontWeight = '300';
-          label.style.pointerEvents = 'none';
-          label.style.transition = 'all 0.3s ease';
-        });
-      }
-    };
-    
-    // Apply styles immediately and after a delay
-    applyTypewriterStyles();
-    setTimeout(applyTypewriterStyles, 100);
-    setTimeout(applyTypewriterStyles, 500);
-    
   }, [fetchTermsContent]);
 
   const handleSubmit = async (e) => {
@@ -246,66 +190,74 @@ const PartnerRegistrationPage = () => {
 
   if (showSuccess) {
     return (
-      <>
+      <div 
+        className="partner-registration-container"
+        style={{
+          fontFamily: "'IBM Plex Mono', 'Courier New', monospace",
+          background: '#fefefe',
+          backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(0,0,0,0.02) 1px, transparent 0)',
+          backgroundSize: '20px 20px',
+          color: '#2a2a2a',
+          lineHeight: '1.6',
+          minHeight: '100vh'
+        }}
+      >
         <style>
           {`
             @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&display=swap');
-            body .partner-registration-container {
-              font-family: 'IBM Plex Mono', 'Courier New', monospace !important;
-              background: #fefefe !important;
-              background-image: radial-gradient(circle at 1px 1px, rgba(0,0,0,0.02) 1px, transparent 0) !important;
-              background-size: 20px 20px !important;
-              color: #2a2a2a !important;
-              line-height: 1.6 !important;
-              min-height: 100vh !important;
-            }
-            body .partner-registration-container * {
+            .partner-registration-container * {
               font-family: 'IBM Plex Mono', 'Courier New', monospace !important;
             }
           `}
         </style>
-        <div className="partner-registration-container">
-          <div className="max-w-[700px] mx-auto px-10 py-16">
-            <div className="text-center py-10">
-              <h2 className="text-lg font-normal mb-2.5 tracking-wide">
-                Registration Submitted
-              </h2>
-              <p className="text-sm text-gray-600 font-light">
-                Thank you for your interest. We'll be in touch soon.
-              </p>
-            </div>
+        <div className="max-w-[700px] mx-auto px-10 py-16">
+          <div className="text-center py-10">
+            <h2 className="text-lg font-normal mb-2.5 tracking-wide">
+              Registration Submitted
+            </h2>
+            <p className="text-sm text-gray-600 font-light">
+              Thank you for your interest. We'll be in touch soon.
+            </p>
           </div>
         </div>
-      </>
+      </div>
     );
   }
 
   return (
-    <>
+    <div 
+      className="partner-registration-container"
+      style={{
+        fontFamily: "'IBM Plex Mono', 'Courier New', monospace",
+        background: '#fefefe',
+        backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(0,0,0,0.02) 1px, transparent 0)',
+        backgroundSize: '20px 20px',
+        color: '#2a2a2a',
+        lineHeight: '1.6',
+        minHeight: '100vh'
+      }}
+    >
       <style>
         {`
           @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&display=swap');
           
-          body .partner-registration-container {
-            font-family: 'IBM Plex Mono', 'Courier New', monospace !important;
-            background: #fefefe !important;
-            background-image: radial-gradient(circle at 1px 1px, rgba(0,0,0,0.02) 1px, transparent 0) !important;
-            background-size: 20px 20px !important;
-            color: #2a2a2a !important;
-            line-height: 1.6 !important;
-            min-height: 100vh !important;
-          }
-          
-          body .partner-registration-container *,
-          body .partner-registration-container input,
-          body .partner-registration-container textarea,
-          body .partner-registration-container label,
-          body .partner-registration-container button {
+          .partner-registration-container,
+          .partner-registration-container *,
+          .partner-registration-container input,
+          .partner-registration-container textarea,
+          .partner-registration-container label,
+          .partner-registration-container button,
+          .partner-registration-container h1,
+          .partner-registration-container h2,
+          .partner-registration-container h3,
+          .partner-registration-container p,
+          .partner-registration-container span,
+          .partner-registration-container div {
             font-family: 'IBM Plex Mono', 'Courier New', monospace !important;
           }
           
-          body .partner-registration-container .form-input, 
-          body .partner-registration-container .form-textarea {
+          .partner-registration-container .form-input, 
+          .partner-registration-container .form-textarea {
             font-family: 'IBM Plex Mono', 'Courier New', monospace !important;
             font-size: 16px !important;
             font-weight: 400 !important;
@@ -750,7 +702,7 @@ const PartnerRegistrationPage = () => {
         )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
