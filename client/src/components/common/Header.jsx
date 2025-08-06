@@ -4,6 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../LanguageSwitcher';
 import ThemeToggle from '../ui/ThemeToggle';
+import Logo from './Logo';
 
 const Header = () => {
   const { user, isAuthenticated, logout } = useAuth();
@@ -25,11 +26,8 @@ const Header = () => {
       <div className="max-w-7xl mx-auto container-padding">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2 group">
-            <div className="w-8 h-8 bg-ludus-orange dark:bg-dark-ludus-orange rounded-lg flex items-center justify-center transition-all duration-200 group-hover:scale-110 shadow-lg">
-              <span className="text-white font-bold text-lg">L</span>
-            </div>
-            <span className="text-xl font-bold text-charcoal dark:text-dark-text-primary transition-colors duration-200">LUDUS</span>
+          <Link to="/" className="flex items-center">
+            <Logo className="h-8 w-auto" />
           </Link>
 
           {/* Desktop Navigation */}

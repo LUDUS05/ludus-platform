@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import Logo from '../common/Logo';
 
 const AdminLayout = ({ children }) => {
   const { user, logout } = useAuth();
@@ -71,8 +72,9 @@ const AdminLayout = ({ children }) => {
           <div className="sidebar-container flex flex-col h-full">
             {/* Logo */}
             <div className="sidebar-header flex items-center justify-between h-16 px-4 border-b border-gray-200">
-              <Link to="/admin" className="admin-logo text-2xl font-bold text-ludus-orange">
-                LUDUS Admin
+              <Link to="/admin" className="flex flex-col items-center">
+                <Logo className="h-6 w-auto mb-1" />
+                <span className="text-xs font-medium text-gray-500">Admin</span>
               </Link>
               <button
                 onClick={() => setSidebarOpen(false)}
