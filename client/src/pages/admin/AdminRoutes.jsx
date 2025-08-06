@@ -6,6 +6,7 @@ import VendorManagement from '../../components/admin/VendorManagement';
 import VendorForm from '../../components/admin/VendorForm';
 import ActivityManagement from '../../components/admin/ActivityManagement';
 import ActivityForm from '../../components/admin/ActivityForm';
+import PageManagement from '../../components/admin/PageManagement';
 import BookingManagement from '../../components/admin/BookingManagement';
 import PaymentManagement from '../../components/admin/PaymentManagement';
 import CategoryManagement from '../../components/admin/CategoryManagement';
@@ -27,7 +28,7 @@ const AdminRoutes = () => {
         <Route path="/bookings" element={<BookingManagement />} />
         <Route path="/payments" element={<PaymentManagement />} />
         <Route path="/categories" element={<CategoryManagement />} />
-        <Route path="/content" element={<ContentManagement />} />
+        <Route path="/content" element={<PageManagement />} />
         <Route path="/translations" element={<TranslationManagement />} />
         <Route path="/settings" element={<SystemSettings />} />
       </Routes>

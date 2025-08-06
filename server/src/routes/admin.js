@@ -14,6 +14,13 @@ const {
   getBookings,
   updateBookingStatus
 } = require('../controllers/adminController');
+const {
+  getPages,
+  getPage,
+  createPage,
+  updatePage,
+  deletePage
+} = require('../controllers/pageController');
 const { 
   validateVendorCreation,
   validateActivityCreation,
@@ -42,5 +49,12 @@ router.delete('/activities/:id', validateObjectId('id'), deleteActivity);
 // Booking management routes
 router.get('/bookings', getBookings);
 router.put('/bookings/:id/status', validateObjectId('id'), updateBookingStatus);
+
+// Page management routes
+router.get('/pages', getPages);
+router.post('/pages', createPage);
+router.get('/pages/:id', validateObjectId('id'), getPage);
+router.put('/pages/:id', validateObjectId('id'), updatePage);
+router.delete('/pages/:id', validateObjectId('id'), deletePage);
 
 module.exports = router;
