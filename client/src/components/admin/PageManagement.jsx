@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 import axios from 'axios';
 
 const PageManagement = () => {
@@ -29,25 +27,6 @@ const PageManagement = () => {
     totalCount: 0
   });
 
-  // Rich text editor configuration
-  const quillModules = {
-    toolbar: [
-      [{ 'header': '1'}, {'header': '2'}, { 'font': [] }],
-      [{size: []}],
-      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-      [{'list': 'ordered'}, {'list': 'bullet'}, 
-       {'indent': '-1'}, {'indent': '+1'}],
-      ['link', 'image', 'video'],
-      ['clean']
-    ],
-  };
-
-  const quillFormats = [
-    'header', 'font', 'size',
-    'bold', 'italic', 'underline', 'strike', 'blockquote',
-    'list', 'bullet', 'indent',
-    'link', 'image', 'video'
-  ];
 
   useEffect(() => {
     fetchPages();
@@ -490,17 +469,17 @@ const PageManagement = () => {
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Page Content *
                   </label>
-                  <div className="h-80 mb-12">
-                    <ReactQuill
-                      theme="snow"
-                      value={formData.content}
-                      onChange={(content) => setFormData({ ...formData, content })}
-                      modules={quillModules}
-                      formats={quillFormats}
-                      style={{ height: '280px' }}
-                      placeholder="Write your page content here..."
-                    />
-                  </div>
+                  <textarea
+                    value={formData.content}
+                    onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                    placeholder="Write your page content here... (HTML and Markdown supported)"
+                    required
+                    rows={12}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white font-mono text-sm resize-vertical"
+                  />
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    You can use HTML tags and basic formatting in this field.
+                  </p>
                 </div>
 
                 {/* SEO Settings */}

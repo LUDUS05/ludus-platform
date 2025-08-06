@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import Button from '../components/ui/Button';
-import Input from '../components/ui/Input';
-import Alert from '../components/ui/Alert';
 
 const PartnerRegistrationPage = () => {
   const { t } = useTranslation();
@@ -107,7 +104,7 @@ const PartnerRegistrationPage = () => {
 
     try {
       // Simulate API call - replace with actual API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise(resolve => setTimeout(resolve, 1500));
       
       // Show success message
       setShowSuccess(true);
@@ -135,17 +132,20 @@ const PartnerRegistrationPage = () => {
 
   if (showSuccess) {
     return (
-      <div className="min-h-screen bg-soft-white dark:dark-bg-primary py-20">
-        <div className="max-w-2xl mx-auto container-padding">
-          <div className="text-center">
-            <div className="w-16 h-16 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center mx-auto mb-6">
-              <span className="text-3xl">✅</span>
-            </div>
-            <h2 className="text-display-sm font-bold text-charcoal dark:dark-text-primary mb-4">
+      <div className="min-h-screen" style={{
+        fontFamily: "'IBM Plex Mono', 'Courier New', monospace",
+        background: '#fefefe',
+        backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(0,0,0,0.02) 1px, transparent 0)',
+        backgroundSize: '20px 20px',
+        color: '#2a2a2a'
+      }}>
+        <div className="max-w-[700px] mx-auto px-10 py-16">
+          <div className="text-center py-10">
+            <h2 className="text-lg font-normal mb-2.5 tracking-wide">
               Registration Submitted
             </h2>
-            <p className="text-body-md text-charcoal-light dark:dark-text-secondary">
-              Thank you for your interest in becoming a LUDUS partner. We'll review your application and get back to you soon.
+            <p className="text-sm text-gray-600 font-light">
+              Thank you for your interest. We'll be in touch soon.
             </p>
           </div>
         </div>
@@ -154,167 +154,342 @@ const PartnerRegistrationPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-soft-white dark:dark-bg-primary py-20">
-      <div className="max-w-2xl mx-auto container-padding">
+    <div className="min-h-screen" style={{
+      fontFamily: "'IBM Plex Mono', 'Courier New', monospace",
+      background: '#fefefe',
+      backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(0,0,0,0.02) 1px, transparent 0)',
+      backgroundSize: '20px 20px',
+      color: '#2a2a2a',
+      lineHeight: 1.6
+    }}>
+      <style>
+        {`
+          @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&display=swap');
+          
+          .form-input, .form-textarea {
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 400;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid #e0e0e0;
+            padding: 12px 0 8px 0;
+            outline: none;
+            color: #2a2a2a;
+            transition: border-color 0.3s ease;
+            caret-color: #2a2a2a;
+            caret-width: 2px;
+            width: 100%;
+          }
+          
+          .form-input:focus, .form-textarea:focus {
+            border-bottom-color: #2a2a2a;
+            animation: underline-glow 0.3s ease;
+          }
+          
+          @keyframes underline-glow {
+            0% { border-bottom-color: #e0e0e0; }
+            50% { border-bottom-color: #666; }
+            100% { border-bottom-color: #2a2a2a; }
+          }
+          
+          .form-input::placeholder, .form-textarea::placeholder {
+            color: transparent;
+          }
+          
+          .form-label {
+            position: absolute;
+            left: 0;
+            top: 12px;
+            font-size: 16px;
+            color: #999;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            font-weight: 300;
+          }
+          
+          .form-input:focus + .form-label,
+          .form-input.has-value + .form-label,
+          .form-textarea:focus + .form-label,
+          .form-textarea.has-value + .form-label {
+            top: -8px;
+            font-size: 12px;
+            color: #666;
+            transform: translateY(-4px);
+          }
+          
+          .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+          }
+          
+          .error-message {
+            font-size: 12px;
+            color: #d73a49;
+            margin-top: 5px;
+            font-weight: 300;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+          }
+          
+          .form-input.error, .form-textarea.error {
+            border-bottom-color: #d73a49;
+            animation: error-shake 0.3s ease;
+          }
+          
+          .form-input.error + .form-label,
+          .form-textarea.error + .form-label {
+            color: #d73a49;
+          }
+          
+          .form-group.error .error-message {
+            opacity: 1;
+          }
+          
+          @keyframes error-shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            75% { transform: translateX(2px); }
+          }
+          
+          .submit-btn {
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 400;
+            background: transparent;
+            border: none;
+            color: #2a2a2a;
+            cursor: pointer;
+            text-decoration: none;
+            position: relative;
+            padding: 0;
+            transition: all 0.3s ease;
+          }
+          
+          .submit-btn::before {
+            content: '[';
+            margin-right: 2px;
+          }
+          
+          .submit-btn::after {
+            content: ']';
+            margin-left: 2px;
+          }
+          
+          .submit-btn:hover {
+            color: #666;
+          }
+          
+          .submit-btn:hover::before,
+          .submit-btn:hover::after {
+            animation: bracket-blink 0.5s ease;
+          }
+          
+          @keyframes bracket-blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+          }
+          
+          .submit-btn:active {
+            transform: translateY(1px);
+          }
+          
+          .submit-btn:disabled {
+            color: #ccc;
+            cursor: not-allowed;
+          }
+          
+          @media (max-width: 768px) {
+            .container {
+              padding: 40px 20px;
+              max-width: 100%;
+            }
+            
+            .form-header h1 {
+              font-size: 20px;
+            }
+            
+            .form-input,
+            .form-textarea,
+            .form-label {
+              font-size: 14px;
+            }
+            
+            .form-input:focus + .form-label,
+            .form-input.has-value + .form-label,
+            .form-textarea:focus + .form-label,
+            .form-textarea.has-value + .form-label {
+              font-size: 11px;
+            }
+            
+            .form-group {
+              margin-bottom: 35px;
+            }
+          }
+          
+          @media (max-width: 480px) {
+            .container {
+              padding: 30px 15px;
+            }
+            
+            .form-header {
+              margin-bottom: 40px;
+            }
+            
+            .form-group {
+              margin-bottom: 30px;
+            }
+          }
+        `}
+      </style>
+      
+      <div className="max-w-[700px] mx-auto px-10 py-16">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-display-lg font-bold text-charcoal dark:dark-text-primary mb-4">
+        <div className="mb-12">
+          <h1 className="text-2xl font-normal mb-2.5 tracking-wide">
             Partner Registration
           </h1>
-          <p className="text-body-lg text-charcoal-light dark:dark-text-secondary">
-            Join the LUDUS network and connect with our community of explorers
+          <p className="text-sm text-gray-600 font-light">
+            Join the LUDUS network and connect with our community
           </p>
         </div>
 
-        {/* Form */}
-        <div className="bg-white dark:bg-dark-bg-secondary rounded-2xl shadow-lg p-8">
-          {errors.submit && (
-            <Alert
-              type="error"
-              message={errors.submit}
-              onClose={() => setErrors(prev => ({ ...prev, submit: '' }))}
-              className="mb-6"
-            />
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Company Name */}
-            <div>
-              <label className="block text-label-sm font-medium text-charcoal dark:dark-text-primary mb-2">
-                Company Name *
-              </label>
-              <Input
+        <form onSubmit={handleSubmit} className="space-y-10">
+          {/* Company Name */}
+          <div className={`form-group relative ${errors.companyName ? 'error' : ''}`}>
+            <div className="relative w-full">
+              <input
+                type="text"
                 name="companyName"
+                className={`form-input ${formData.companyName ? 'has-value' : ''} ${errors.companyName ? 'error' : ''}`}
+                placeholder=" "
                 value={formData.companyName}
                 onChange={handleInputChange}
                 onBlur={handleInputBlur}
-                placeholder="Enter your company name"
-                error={errors.companyName}
                 required
+                autoComplete="organization"
               />
+              <label className="form-label">Company Name</label>
             </div>
+            <div className="error-message">
+              {errors.companyName}
+            </div>
+          </div>
 
-            {/* Contact Name */}
-            <div>
-              <label className="block text-label-sm font-medium text-charcoal dark:dark-text-primary mb-2">
-                Contact Person Name *
-              </label>
-              <Input
+          {/* Contact Name */}
+          <div className={`form-group relative ${errors.contactName ? 'error' : ''}`}>
+            <div className="relative w-full">
+              <input
+                type="text"
                 name="contactName"
+                className={`form-input ${formData.contactName ? 'has-value' : ''} ${errors.contactName ? 'error' : ''}`}
+                placeholder=" "
                 value={formData.contactName}
                 onChange={handleInputChange}
                 onBlur={handleInputBlur}
-                placeholder="Enter contact person's full name"
-                error={errors.contactName}
                 required
+                autoComplete="name"
               />
+              <label className="form-label">Contact Person Name</label>
             </div>
+            <div className="error-message">
+              {errors.contactName}
+            </div>
+          </div>
 
-            {/* Email */}
-            <div>
-              <label className="block text-label-sm font-medium text-charcoal dark:dark-text-primary mb-2">
-                Email Address *
-              </label>
-              <Input
+          {/* Email */}
+          <div className={`form-group relative ${errors.email ? 'error' : ''}`}>
+            <div className="relative w-full">
+              <input
                 type="email"
                 name="email"
+                className={`form-input ${formData.email ? 'has-value' : ''} ${errors.email ? 'error' : ''}`}
+                placeholder=" "
                 value={formData.email}
                 onChange={handleInputChange}
                 onBlur={handleInputBlur}
-                placeholder="Enter your business email"
-                error={errors.email}
                 required
+                autoComplete="email"
               />
+              <label className="form-label">Email Address</label>
             </div>
+            <div className="error-message">
+              {errors.email}
+            </div>
+          </div>
 
-            {/* Phone */}
-            <div>
-              <label className="block text-label-sm font-medium text-charcoal dark:dark-text-primary mb-2">
-                Phone Number *
-              </label>
-              <Input
+          {/* Phone */}
+          <div className={`form-group relative ${errors.phone ? 'error' : ''}`}>
+            <div className="relative w-full">
+              <input
                 type="tel"
                 name="phone"
+                className={`form-input ${formData.phone ? 'has-value' : ''} ${errors.phone ? 'error' : ''}`}
+                placeholder=" "
                 value={formData.phone}
                 onChange={handleInputChange}
                 onBlur={handleInputBlur}
-                placeholder="Enter your phone number"
-                error={errors.phone}
                 required
+                autoComplete="tel"
               />
+              <label className="form-label">Phone Number</label>
             </div>
+            <div className="error-message">
+              {errors.phone}
+            </div>
+          </div>
 
-            {/* Website */}
-            <div>
-              <label className="block text-label-sm font-medium text-charcoal dark:dark-text-primary mb-2">
-                Website URL
-              </label>
-              <Input
+          {/* Website */}
+          <div className={`form-group relative ${errors.website ? 'error' : ''}`}>
+            <div className="relative w-full">
+              <input
                 type="url"
                 name="website"
+                className={`form-input ${formData.website ? 'has-value' : ''} ${errors.website ? 'error' : ''}`}
+                placeholder=" "
                 value={formData.website}
                 onChange={handleInputChange}
                 onBlur={handleInputBlur}
-                placeholder="https://your-website.com (optional)"
-                error={errors.website}
+                autoComplete="url"
               />
+              <label className="form-label">Website URL (Optional)</label>
             </div>
+            <div className="error-message">
+              {errors.website}
+            </div>
+          </div>
 
-            {/* Description */}
-            <div>
-              <label className="block text-label-sm font-medium text-charcoal dark:dark-text-primary mb-2">
-                Company Description *
-              </label>
+          {/* Description */}
+          <div className={`form-group relative ${errors.description ? 'error' : ''}`}>
+            <div className="relative w-full">
               <textarea
                 name="description"
+                className={`form-textarea ${formData.description ? 'has-value' : ''} ${errors.description ? 'error' : ''}`}
+                placeholder=" "
+                rows={4}
                 value={formData.description}
                 onChange={handleInputChange}
                 onBlur={handleInputBlur}
-                placeholder="Tell us about your company and the services you offer"
-                rows={4}
-                className={`w-full px-4 py-3 border-2 rounded-xl transition-colors duration-200 
-                  ${errors.description 
-                    ? 'border-red-300 focus:border-red-500' 
-                    : 'border-pearl dark:border-dark-pearl focus:border-ludus-orange dark:focus:border-dark-ludus-orange'
-                  } 
-                  bg-white dark:bg-dark-bg-primary text-charcoal dark:dark-text-primary 
-                  placeholder-charcoal-light/60 dark:placeholder-dark-text-secondary/60 
-                  focus:outline-none focus:ring-0 resize-vertical min-h-[120px]`}
                 required
               />
-              {errors.description && (
-                <p className="mt-2 text-label-xs text-red-600 dark:text-red-400">
-                  {errors.description}
-                </p>
-              )}
+              <label className="form-label">Company Description</label>
             </div>
-
-            {/* Submit Button */}
-            <div className="pt-6">
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-ludus-orange hover:bg-ludus-orange/90 text-white font-medium py-4 text-body-md"
-              >
-                {isSubmitting ? (
-                  <span className="flex items-center justify-center">
-                    <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent mr-2"></div>
-                    Submitting...
-                  </span>
-                ) : (
-                  'Submit Registration'
-                )}
-              </Button>
+            <div className="error-message">
+              {errors.description}
             </div>
-          </form>
-        </div>
+          </div>
 
-        {/* Additional Info */}
-        <div className="mt-8 text-center">
-          <p className="text-body-sm text-charcoal-light dark:dark-text-secondary">
-            Our team will review your application and contact you within 2-3 business days.
-          </p>
-        </div>
+          {/* Submit Button */}
+          <div className="pt-16">
+            <button
+              type="submit"
+              className="submit-btn"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Submitting...' : 'Submit'}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
