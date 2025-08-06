@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../LanguageSwitcher';
+import Logo from './Logo';
 
 const Header = () => {
   const { user, isAuthenticated, logout } = useAuth();
@@ -24,11 +25,8 @@ const Header = () => {
       <div className="max-w-7xl mx-auto container-padding">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">L</span>
-            </div>
-            <span className="text-xl font-bold text-gray-900">LUDUS</span>
+          <Link to="/" className="flex items-center">
+            <Logo />
           </Link>
 
           {/* Desktop Navigation */}

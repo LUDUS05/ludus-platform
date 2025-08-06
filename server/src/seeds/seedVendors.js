@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Vendor = require('../models/Vendor');
 const User = require('../models/User');
-require('dotenv').config({ path: '../../../.env' });
+require('dotenv').config({ path: '../.env' });
 
 const vendorData = [
   {

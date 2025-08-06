@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import Logo from '../common/Logo';
 
 const AdminLayout = ({ children }) => {
   const { user, logout } = useAuth();
@@ -16,6 +17,7 @@ const AdminLayout = ({ children }) => {
     { name: 'Dashboard', href: '/admin', icon: '📊' },
     { name: 'Vendors', href: '/admin/vendors', icon: '🏢' },
     { name: 'Activities', href: '/admin/activities', icon: '🎯' },
+    { name: 'Pages', href: '/admin/pages', icon: '📄' },
     { name: 'Bookings', href: '/admin/bookings', icon: '📅' },
     { name: 'Payments', href: '/admin/payments', icon: '💰' },
   ];
@@ -54,8 +56,9 @@ const AdminLayout = ({ children }) => {
           <div className="flex flex-col h-full">
             {/* Logo */}
             <div className="flex items-center justify-center h-16 px-4 border-b border-gray-200">
-              <Link to="/admin" className="text-2xl font-bold text-blue-600">
-                LUDUS Admin
+              <Link to="/admin" className="flex flex-col items-center">
+                <Logo className="h-6 w-auto mb-1" />
+                <span className="text-xs font-medium text-gray-500">Admin</span>
               </Link>
             </div>
 
