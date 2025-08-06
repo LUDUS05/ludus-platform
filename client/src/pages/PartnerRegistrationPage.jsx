@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { useState, useEffect, useCallback } from 'react';
+import axios from 'axios';
+import '../styles/partner-registration.css';
 
 const PartnerRegistrationPage = () => {
-  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     companyName: '',
     contactName: '',
@@ -14,6 +14,10 @@ const PartnerRegistrationPage = () => {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [acceptTerms, setAcceptTerms] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
+  const [termsContent, setTermsContent] = useState('');
+  const [loadingTerms, setLoadingTerms] = useState(false);
 
   const validateField = (name, value) => {
     switch (name) {
@@ -26,7 +30,7 @@ const PartnerRegistrationPage = () => {
           ? 'Please enter a valid URL (include http:// or https://)' 
           : '';
       case 'phone':
-        return value && !/^[\+]?[1-9][\d]{0,15}$/.test(value.replace(/[\s\-\(\)]/g, '')) 
+        return value && !/^[+]?[1-9][\d]{0,15}$/.test(value.replace(/[\s\-()]/g, '')) 
           ? 'Please enter a valid phone number' 
           : '';
       case 'description':
@@ -93,10 +97,65 @@ const PartnerRegistrationPage = () => {
     return labels[fieldName] || fieldName;
   };
 
+  // Fetch Terms and Conditions content
+  const fetchTermsContent = useCallback(async () => {
+    try {
+      setLoadingTerms(true);
+      // Try to fetch terms from a dedicated page or fallback to default
+      const response = await axios.get('/api/pages/by-url/partner-terms-and-conditions');
+      setTermsContent(response.data.content || getDefaultTermsContent());
+    } catch (error) {
+      console.error('Failed to fetch terms:', error);
+      // Use default terms if API fails
+      setTermsContent(getDefaultTermsContent());
+    } finally {
+      setLoadingTerms(false);
+    }
+  }, []);
+
+  const getDefaultTermsContent = () => {
+    return `
+      <h3>Partner Terms and Conditions</h3>
+      <p><strong>Last updated: ${new Date().toLocaleDateString()}</strong></p>
+      
+      <h4>1. Agreement to Terms</h4>
+      <p>By applying to become a LUDUS partner, you agree to be bound by these Terms and Conditions.</p>
+      
+      <h4>2. Eligibility</h4>
+      <p>You must be a legitimate business entity authorized to provide services in Saudi Arabia.</p>
+      
+      <h4>3. Application Review</h4>
+      <p>LUDUS reserves the right to approve or reject any partnership application at our discretion.</p>
+      
+      <h4>4. Service Standards</h4>
+      <p>Partners must maintain high service standards and comply with all applicable laws and regulations.</p>
+      
+      <h4>5. Commission Structure</h4>
+      <p>Commission rates and payment terms will be discussed and agreed upon during the approval process.</p>
+      
+      <h4>6. Data Protection</h4>
+      <p>All customer data must be handled in accordance with Saudi data protection laws and LUDUS privacy policies.</p>
+      
+      <h4>7. Termination</h4>
+      <p>Either party may terminate this agreement with 30 days written notice.</p>
+      
+      <p>For questions about these terms, contact us at <a href="mailto:partners@letsludus.com">partners@letsludus.com</a></p>
+    `;
+  };
+
+  useEffect(() => {
+    fetchTermsContent();
+  }, [fetchTermsContent]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (!validateForm()) {
+      return;
+    }
+
+    if (!acceptTerms) {
+      setErrors({ terms: 'You must accept the Terms and Conditions to proceed.' });
       return;
     }
 
@@ -132,13 +191,7 @@ const PartnerRegistrationPage = () => {
 
   if (showSuccess) {
     return (
-      <div className="min-h-screen" style={{
-        fontFamily: "'IBM Plex Mono', 'Courier New', monospace",
-        background: '#fefefe',
-        backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(0,0,0,0.02) 1px, transparent 0)',
-        backgroundSize: '20px 20px',
-        color: '#2a2a2a'
-      }}>
+      <div className="partner-registration-page">
         <div className="max-w-[700px] mx-auto px-10 py-16">
           <div className="text-center py-10">
             <h2 className="text-lg font-normal mb-2.5 tracking-wide">
@@ -154,194 +207,7 @@ const PartnerRegistrationPage = () => {
   }
 
   return (
-    <div className="min-h-screen" style={{
-      fontFamily: "'IBM Plex Mono', 'Courier New', monospace",
-      background: '#fefefe',
-      backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(0,0,0,0.02) 1px, transparent 0)',
-      backgroundSize: '20px 20px',
-      color: '#2a2a2a',
-      lineHeight: 1.6
-    }}>
-      <style>
-        {`
-          @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&display=swap');
-          
-          .form-input, .form-textarea {
-            font-family: inherit;
-            font-size: 16px;
-            font-weight: 400;
-            background: transparent;
-            border: none;
-            border-bottom: 2px solid #e0e0e0;
-            padding: 12px 0 8px 0;
-            outline: none;
-            color: #2a2a2a;
-            transition: border-color 0.3s ease;
-            caret-color: #2a2a2a;
-            caret-width: 2px;
-            width: 100%;
-          }
-          
-          .form-input:focus, .form-textarea:focus {
-            border-bottom-color: #2a2a2a;
-            animation: underline-glow 0.3s ease;
-          }
-          
-          @keyframes underline-glow {
-            0% { border-bottom-color: #e0e0e0; }
-            50% { border-bottom-color: #666; }
-            100% { border-bottom-color: #2a2a2a; }
-          }
-          
-          .form-input::placeholder, .form-textarea::placeholder {
-            color: transparent;
-          }
-          
-          .form-label {
-            position: absolute;
-            left: 0;
-            top: 12px;
-            font-size: 16px;
-            color: #999;
-            transition: all 0.3s ease;
-            pointer-events: none;
-            font-weight: 300;
-          }
-          
-          .form-input:focus + .form-label,
-          .form-input.has-value + .form-label,
-          .form-textarea:focus + .form-label,
-          .form-textarea.has-value + .form-label {
-            top: -8px;
-            font-size: 12px;
-            color: #666;
-            transform: translateY(-4px);
-          }
-          
-          .form-textarea {
-            resize: vertical;
-            min-height: 80px;
-          }
-          
-          .error-message {
-            font-size: 12px;
-            color: #d73a49;
-            margin-top: 5px;
-            font-weight: 300;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-          }
-          
-          .form-input.error, .form-textarea.error {
-            border-bottom-color: #d73a49;
-            animation: error-shake 0.3s ease;
-          }
-          
-          .form-input.error + .form-label,
-          .form-textarea.error + .form-label {
-            color: #d73a49;
-          }
-          
-          .form-group.error .error-message {
-            opacity: 1;
-          }
-          
-          @keyframes error-shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-2px); }
-            75% { transform: translateX(2px); }
-          }
-          
-          .submit-btn {
-            font-family: inherit;
-            font-size: 16px;
-            font-weight: 400;
-            background: transparent;
-            border: none;
-            color: #2a2a2a;
-            cursor: pointer;
-            text-decoration: none;
-            position: relative;
-            padding: 0;
-            transition: all 0.3s ease;
-          }
-          
-          .submit-btn::before {
-            content: '[';
-            margin-right: 2px;
-          }
-          
-          .submit-btn::after {
-            content: ']';
-            margin-left: 2px;
-          }
-          
-          .submit-btn:hover {
-            color: #666;
-          }
-          
-          .submit-btn:hover::before,
-          .submit-btn:hover::after {
-            animation: bracket-blink 0.5s ease;
-          }
-          
-          @keyframes bracket-blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-          }
-          
-          .submit-btn:active {
-            transform: translateY(1px);
-          }
-          
-          .submit-btn:disabled {
-            color: #ccc;
-            cursor: not-allowed;
-          }
-          
-          @media (max-width: 768px) {
-            .container {
-              padding: 40px 20px;
-              max-width: 100%;
-            }
-            
-            .form-header h1 {
-              font-size: 20px;
-            }
-            
-            .form-input,
-            .form-textarea,
-            .form-label {
-              font-size: 14px;
-            }
-            
-            .form-input:focus + .form-label,
-            .form-input.has-value + .form-label,
-            .form-textarea:focus + .form-label,
-            .form-textarea.has-value + .form-label {
-              font-size: 11px;
-            }
-            
-            .form-group {
-              margin-bottom: 35px;
-            }
-          }
-          
-          @media (max-width: 480px) {
-            .container {
-              padding: 30px 15px;
-            }
-            
-            .form-header {
-              margin-bottom: 40px;
-            }
-            
-            .form-group {
-              margin-bottom: 30px;
-            }
-          }
-        `}
-      </style>
+    <div className="partner-registration-page">
       
       <div className="max-w-[700px] mx-auto px-10 py-16">
         {/* Header */}
@@ -479,6 +345,43 @@ const PartnerRegistrationPage = () => {
             </div>
           </div>
 
+          {/* Terms and Conditions */}
+          <div className={`form-group relative ${errors.terms ? 'error' : ''}`}>
+            <div className="flex items-start space-x-3">
+              <input
+                type="checkbox"
+                id="acceptTerms"
+                checked={acceptTerms}
+                onChange={(e) => {
+                  setAcceptTerms(e.target.checked);
+                  if (errors.terms) {
+                    setErrors(prev => ({ ...prev, terms: '' }));
+                  }
+                }}
+                className="mt-1 h-4 w-4 text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
+                style={{
+                  accentColor: '#2a2a2a',
+                  borderColor: errors.terms ? '#d73a49' : '#e0e0e0'
+                }}
+              />
+              <label htmlFor="acceptTerms" className="text-sm font-light text-gray-700 leading-relaxed">
+                I agree to the{' '}
+                <button
+                  type="button"
+                  onClick={() => setShowTermsModal(true)}
+                  className="text-gray-900 underline hover:text-gray-600 transition-colors font-normal"
+                  style={{ fontFamily: 'inherit' }}
+                >
+                  Terms and Conditions
+                </button>
+                {' '}for LUDUS partners
+              </label>
+            </div>
+            <div className="error-message ml-7">
+              {errors.terms}
+            </div>
+          </div>
+
           {/* Submit Button */}
           <div className="pt-16">
             <button
@@ -490,6 +393,75 @@ const PartnerRegistrationPage = () => {
             </button>
           </div>
         </form>
+
+        {/* Terms and Conditions Modal */}
+        {showTermsModal && (
+          <div className="fixed inset-0 z-50 overflow-y-auto" style={{
+            background: 'rgba(0, 0, 0, 0.5)'
+          }}>
+            <div className="min-h-screen px-4 text-center">
+              <div className="fixed inset-0" onClick={() => setShowTermsModal(false)}></div>
+              
+              <span className="inline-block h-screen align-middle" aria-hidden="true">&#8203;</span>
+              
+              <div className="terms-modal inline-block w-full max-w-4xl p-8 my-8 text-left align-middle transition-all transform shadow-xl rounded-lg">
+                <div className="flex justify-between items-start mb-6">
+                  <h3 className="text-lg font-normal tracking-wide">
+                    Terms and Conditions
+                  </h3>
+                  <button
+                    onClick={() => setShowTermsModal(false)}
+                    className="text-gray-500 hover:text-gray-700 text-xl font-light"
+                  >
+                    ×
+                  </button>
+                </div>
+                
+                <div className="max-h-96 overflow-y-auto pr-2" style={{
+                  scrollbarWidth: 'thin',
+                  scrollbarColor: '#2a2a2a #e0e0e0'
+                }}>
+                  {loadingTerms ? (
+                    <div className="text-center py-8">
+                      <div className="text-sm text-gray-600">Loading terms...</div>
+                    </div>
+                  ) : (
+                    <div 
+                      className="prose prose-sm max-w-none"
+                      style={{
+                        fontSize: '14px',
+                        lineHeight: '1.6',
+                        color: '#2a2a2a'
+                      }}
+                      dangerouslySetInnerHTML={{ __html: termsContent }}
+                    />
+                  )}
+                </div>
+                
+                <div className="flex justify-end space-x-4 mt-8 pt-6 border-t border-gray-200">
+                  <button
+                    onClick={() => setShowTermsModal(false)}
+                    className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors font-light"
+                  >
+                    Close
+                  </button>
+                  <button
+                    onClick={() => {
+                      setAcceptTerms(true);
+                      setShowTermsModal(false);
+                      if (errors.terms) {
+                        setErrors(prev => ({ ...prev, terms: '' }));
+                      }
+                    }}
+                    className="submit-btn"
+                  >
+                    Accept Terms
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

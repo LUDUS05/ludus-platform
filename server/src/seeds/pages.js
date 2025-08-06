@@ -752,6 +752,101 @@ Friday - Saturday: Closed</p>
         metaDescription: 'Partner with LUDUS and join our network of amazing local experience providers. Register your business today.',
         metaKeywords: 'partner registration, business partnership, LUDUS network, vendor registration',
         createdBy: adminUser._id
+      },
+      {
+        title: 'Partner Terms and Conditions',
+        slug: 'partner-terms-and-conditions',
+        url: '/partner-terms-and-conditions',
+        content: `<h1>Partner Terms and Conditions</h1>
+<p><strong>Last updated: ${new Date().toDateString()}</strong></p>
+
+<h2>1. Agreement to Terms</h2>
+<p>By applying to become a LUDUS partner, you agree to be bound by these Terms and Conditions. These terms govern the partnership relationship between your business and LUDUS Platform.</p>
+
+<h2>2. Eligibility Requirements</h2>
+<ul>
+<li>You must be a legitimate business entity authorized to provide services in Saudi Arabia</li>
+<li>Your business must be properly licensed and registered with relevant Saudi authorities</li>
+<li>You must maintain valid business insurance and any required professional certifications</li>
+<li>Your services must comply with all applicable Saudi laws and regulations</li>
+</ul>
+
+<h2>3. Application and Approval Process</h2>
+<p>LUDUS reserves the right to approve or reject any partnership application at our sole discretion. Factors considered include:</p>
+<ul>
+<li>Quality and uniqueness of services offered</li>
+<li>Business reputation and customer reviews</li>
+<li>Compliance with safety standards</li>
+<li>Alignment with LUDUS brand values</li>
+</ul>
+
+<h2>4. Service Standards and Quality</h2>
+<p>As a LUDUS partner, you agree to:</p>
+<ul>
+<li>Maintain high service standards and professionalism</li>
+<li>Provide accurate descriptions and pricing information</li>
+<li>Honor all bookings confirmed through the platform</li>
+<li>Respond promptly to customer inquiries and concerns</li>
+<li>Maintain appropriate facilities, equipment, and staff</li>
+</ul>
+
+<h2>5. Commission Structure and Payments</h2>
+<p>Commission rates and payment terms will be discussed and agreed upon during the approval process. Standard terms include:</p>
+<ul>
+<li>Commission percentages based on service category and volume</li>
+<li>Monthly payment cycles</li>
+<li>Transparent fee structure with no hidden charges</li>
+<li>Direct bank transfers to your registered business account</li>
+</ul>
+
+<h2>6. Customer Data and Privacy</h2>
+<p>You agree to handle all customer data in accordance with:</p>
+<ul>
+<li>Saudi Personal Data Protection Law (PDPL)</li>
+<li>LUDUS privacy policies and data protection standards</li>
+<li>Industry best practices for data security</li>
+<li>Customer consent requirements for marketing communications</li>
+</ul>
+
+<h2>7. Cancellation and Refund Policies</h2>
+<p>Partners must clearly communicate their cancellation policies and work with LUDUS to ensure fair refund processes that protect both customers and partners.</p>
+
+<h2>8. Marketing and Branding</h2>
+<p>LUDUS may use your business information, photos, and customer reviews for marketing purposes. You grant LUDUS permission to feature your services across our platform and promotional materials.</p>
+
+<h2>9. Liability and Insurance</h2>
+<p>Partners are responsible for maintaining appropriate insurance coverage and assume liability for their services. LUDUS acts as a platform facilitator and is not liable for partner services.</p>
+
+<h2>10. Termination</h2>
+<p>Either party may terminate this partnership agreement with 30 days written notice. LUDUS reserves the right to immediately suspend partners who violate these terms or engage in harmful conduct.</p>
+
+<h2>11. Support and Communication</h2>
+<p>LUDUS provides dedicated partner support including:</p>
+<ul>
+<li>Onboarding assistance and training</li>
+<li>Marketing and promotional support</li>
+<li>Technical support for platform usage</li>
+<li>Regular performance feedback and optimization suggestions</li>
+</ul>
+
+<h2>12. Modifications to Terms</h2>
+<p>LUDUS may modify these terms with reasonable notice to partners. Continued use of the platform constitutes acceptance of updated terms.</p>
+
+<h2>Contact Information</h2>
+<p>For questions about these Partner Terms and Conditions, contact us at:</p>
+<ul>
+<li>Email: <a href="mailto:partners@letsludus.com">partners@letsludus.com</a></li>
+<li>General Support: <a href="mailto:hi@letsludus.com">hi@letsludus.com</a></li>
+</ul>
+
+<p><em>These terms are designed to ensure a successful partnership that benefits our partners, customers, and the LUDUS platform. Thank you for your interest in joining the LUDUS network!</em></p>`,
+        placement: 'none',
+        status: 'published',
+        isSystem: true,
+        order: 0,
+        metaDescription: 'Terms and conditions for LUDUS platform partners and service providers.',
+        metaKeywords: 'partner terms, conditions, LUDUS partners, vendor agreement',
+        createdBy: adminUser._id
       }
     ];
 
