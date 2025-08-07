@@ -6,8 +6,10 @@ import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
 import Alert from '../components/ui/Alert';
 import ProgressiveImage from '../components/ui/ProgressiveImage';
+import useTranslationWithFallback from '../hooks/useTranslationWithFallback';
 
 const ActivitiesPage = () => {
+  const { t, formatCurrency, getDirection } = useTranslationWithFallback('activities');
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -67,7 +69,7 @@ const ActivitiesPage = () => {
       }));
     } catch (error) {
       console.error('Failed to fetch activities:', error);
-      setError('Failed to load activities');
+      setError(t('common.error', { defaultValue: 'Failed to load activities' }));
     } finally {
       setLoading(false);
     }
@@ -90,13 +92,7 @@ const ActivitiesPage = () => {
     setPagination(prev => ({ ...prev, page: 1 }));
   };
 
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('ar-SA', {
-      style: 'currency',
-      currency: 'SAR',
-      minimumFractionDigits: 0
-    }).format(amount);
-  };
+  // Currency formatting now handled by the translation hook
 
   const getCategoryIcon = (category) => {
     const icons = {
@@ -136,10 +132,10 @@ const ActivitiesPage = () => {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-display-lg font-bold text-charcoal dark:dark-text-primary mb-2">
-            Discover Amazing Activities
+            {t('title', { defaultValue: 'Discover Amazing Activities' })}
           </h1>
           <p className="text-body-md text-charcoal-light dark:dark-text-secondary">
-            Find and book unique experiences in Saudi Arabia
+            {t('subtitle', { defaultValue: 'Find and book unique experiences in Saudi Arabia' })}
           </p>
         </div>
 
@@ -149,9 +145,9 @@ const ActivitiesPage = () => {
             {/* Search */}
             <div className="md:col-span-2">
               <Input
-                label="Search"
+                label={t('search', { defaultValue: 'Search' })}
                 type="text"
-                placeholder="Search activities..."
+                placeholder={t('search', { defaultValue: 'Search activities...' })}
                 value={filters.search}
                 onChange={(e) => handleFilterChange('search', e.target.value)}
               />
@@ -160,17 +156,17 @@ const ActivitiesPage = () => {
             {/* Category */}
             <div>
               <label className="block text-label font-medium text-charcoal dark:dark-text-primary mb-2">
-                Category
+                {t('category', { defaultValue: 'Category' })}
               </label>
               <select
                 value={filters.category}
                 onChange={(e) => handleFilterChange('category', e.target.value)}
                 className="input-field"
               >
-                <option value="">All Categories</option>
+                <option value="">{t('allCategories', { defaultValue: 'All Categories' })}</option>
                 {filterOptions.categories.map(category => (
                   <option key={category} value={category}>
-                    {getCategoryIcon(category)} {category.charAt(0).toUpperCase() + category.slice(1)}
+                    {getCategoryIcon(category)} {t(`categories.${category}`, { defaultValue: category.charAt(0).toUpperCase() + category.slice(1) })}
                   </option>
                 ))}
               </select>
@@ -179,14 +175,14 @@ const ActivitiesPage = () => {
             {/* City */}
             <div>
               <label className="block text-label font-medium text-charcoal dark:dark-text-primary mb-2">
-                City
+                {t('city', { defaultValue: 'City' })}
               </label>
               <select
                 value={filters.city}
                 onChange={(e) => handleFilterChange('city', e.target.value)}
                 className="input-field"
               >
-                <option value="">All Cities</option>
+                <option value="">{t('allCities', { defaultValue: 'All Cities' })}</option>
                 {filterOptions.cities.map(city => (
                   <option key={city} value={city}>
                     {city}

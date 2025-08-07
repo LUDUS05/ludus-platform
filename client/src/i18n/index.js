@@ -27,6 +27,25 @@ i18n
 
     interpolation: {
       escapeValue: false
+    },
+
+    // Arabic pluralization rules
+    pluralSeparator: '_',
+    contextSeparator: '_',
+    
+    // Custom plural rule for Arabic
+    lng: 'ar',
+    pluralRules: {
+      ar: {
+        plurals: function(n) {
+          if (n === 0) return 0; // zero
+          if (n === 1) return 1; // one
+          if (n === 2) return 2; // two
+          if (n % 100 >= 3 && n % 100 <= 10) return 3; // few
+          if (n % 100 >= 11) return 4; // many
+          return 5; // other
+        }
+      }
     }
   });
 

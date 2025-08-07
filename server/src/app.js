@@ -70,6 +70,7 @@ app.use('/api/payments', require('./routes/payments'));
 app.use('/api/pages', require('./routes/pages'));
 app.use('/api/admin', require('./routes/admin'));
 app.use('/api/admin', require('./routes/adminEnhanced'));
+app.use('/api', require('./routes/translations'));
 
 
 // Global error handler

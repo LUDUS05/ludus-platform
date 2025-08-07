@@ -4,8 +4,10 @@ import { useAuth } from '../context/AuthContext';
 import { userService } from '../services/userService';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
+import useTranslationWithFallback from '../hooks/useTranslationWithFallback';
 
 const DashboardPage = () => {
+  const { t, formatCurrency, formatDate } = useTranslationWithFallback('dashboard');
   const { user, updateUser } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
   const [bookings, setBookings] = useState([]);
