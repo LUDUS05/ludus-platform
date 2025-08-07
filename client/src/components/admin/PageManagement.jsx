@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../services/api';
 
 const PageManagement = () => {
   const [pages, setPages] = useState([]);
@@ -42,9 +42,7 @@ const PageManagement = () => {
         ...filters
       });
       
-      const response = await axios.get(`/api/admin/pages?${params}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await api.get(`/admin/pages?${params}`);
       
       setPages(response.data.pages);
       setPagination(prev => ({
@@ -65,8 +63,6 @@ const PageManagement = () => {
     setLoading(true);
     
     try {
-      const token = localStorage.getItem('token');
-      
       // Ensure URL starts with / if not empty
       let processedUrl = formData.url.trim();
       if (processedUrl && !processedUrl.startsWith('/')) {
@@ -79,14 +75,10 @@ const PageManagement = () => {
       };
       
       if (editingPage) {
-        await axios.put(`/api/admin/pages/${editingPage._id}`, pageData, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        await api.put(`/admin/pages/${editingPage._id}`, pageData);
         alert('Page updated successfully!');
       } else {
-        await axios.post('/api/admin/pages', pageData, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        await api.post('/admin/pages', pageData);
         alert('Page created successfully!');
       }
       
@@ -124,10 +116,7 @@ const PageManagement = () => {
     if (!window.confirm('Are you sure you want to delete this page?')) return;
     
     try {
-      const token = localStorage.getItem('token');
-      await axios.delete(`/api/admin/pages/${pageId}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await api.delete(`/admin/pages/${pageId}`);
       alert('Page deleted successfully!');
       fetchPages();
     } catch (error) {

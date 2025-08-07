@@ -23,14 +23,9 @@ class EmailService {
         }
       });
 
-      // Verify connection configuration
-      this.transporter.verify((error, success) => {
-        if (error) {
-          console.error('Email transporter verification failed:', error);
-        } else {
-          console.log('✅ Email service ready to send messages');
-        }
-      });
+      // Skip verification during startup to prevent blocking server
+      // Verification will happen when first email is sent
+      console.log('📧 Email service configured (verification skipped during startup)');
     } catch (error) {
       console.error('Failed to initialize email transporter:', error);
     }

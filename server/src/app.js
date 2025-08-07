@@ -70,9 +70,9 @@ app.use('/api/activities', require('./routes/activities'));
 app.use('/api/vendors', require('./routes/vendors'));
 app.use('/api/bookings', require('./routes/bookings'));
 app.use('/api/payments', require('./routes/payments'));
-app.use('/api/pages', require('./routes/pages'));
 app.use('/api/admin', require('./routes/admin'));
 app.use('/api/admin', require('./routes/adminEnhanced'));
+app.use('/api/pages', require('./routes/pages'));
 app.use('/api', require('./routes/translations'));
 app.use('/api/uploads', require('./routes/uploads'));
 
