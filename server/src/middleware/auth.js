@@ -72,8 +72,17 @@ const optionalAuth = async (req, res, next) => {
   }
 };
 
+// Alias for backward compatibility
+const auth = authenticate;
+
+const requireRole = (role) => {
+  return [authenticate, authorize(role)];
+};
+
 module.exports = {
   authenticate,
+  auth,
   authorize,
-  optionalAuth
+  optionalAuth,
+  requireRole
 };

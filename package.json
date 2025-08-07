@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "eslint-plugin-jsx-a11y": "^6.10.2",
     "mongodb-memory-server": "^10.1.4"
   }
 }
