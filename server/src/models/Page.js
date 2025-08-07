@@ -73,12 +73,24 @@ pageSchema.pre('save', function(next) {
 
 // Generate slug from title if not provided
 pageSchema.pre('save', function(next) {
-  if (!this.slug && this.title) {
-    this.slug = this.title
-      .toLowerCase()
-      .replace(/[^a-z0-9 -]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-');
+  // Always generate slug if not explicitly provided
+  if (!this.slug) {
+    if (this.title) {
+      this.slug = this.title
+        .toLowerCase()
+        .replace(/[^a-z0-9 -]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-+|-+$/g, ''); // Remove leading/trailing dashes
+      
+      // Ensure slug is not empty after cleaning
+      if (!this.slug) {
+        this.slug = 'page-' + Date.now();
+      }
+    } else {
+      // Fallback if no title
+      this.slug = 'page-' + Date.now();
+    }
   }
   next();
 });
