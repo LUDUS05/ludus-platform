@@ -144,13 +144,7 @@ const DashboardPage = () => {
     }
   };
 
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('ar-SA', {
-      style: 'currency',
-      currency: 'SAR',
-      minimumFractionDigits: 0
-    }).format(amount);
-  };
+  // formatCurrency now provided by useTranslationWithFallback hook
 
   const getCategoryIcon = (category) => {
     const icons = {

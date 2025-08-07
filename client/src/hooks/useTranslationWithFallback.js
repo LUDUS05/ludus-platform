@@ -12,6 +12,7 @@ const missingTranslations = new Set();
  */
 const useTranslationWithFallback = (namespace = 'common', options = {}) => {
   const { t, i18n } = useTranslation(namespace);
+  const fallbackTranslation = useTranslation(options.fallbackNamespace || 'common');
   const usageLogRef = useRef(new Map());
   
   const {
@@ -50,8 +51,7 @@ const useTranslationWithFallback = (namespace = 'common', options = {}) => {
 
     // If translation not found and we have a fallback namespace
     if (!translationFound && fallbackNamespace && fallbackNamespace !== namespace) {
-      const fallbackT = useTranslation(fallbackNamespace).t;
-      translation = fallbackT(key, contextOptions);
+      translation = fallbackTranslation.t(key, contextOptions);
       translationFound = translation !== key;
       usedNamespace = fallbackNamespace;
       usedFallback = true;
@@ -100,7 +100,7 @@ const useTranslationWithFallback = (namespace = 'common', options = {}) => {
     }
 
     return translation;
-  }, [t, namespace, fallbackNamespace, enableLogging, enableAnalytics, enableWarnings]);
+  }, [t, fallbackTranslation, namespace, fallbackNamespace, enableLogging, enableAnalytics, enableWarnings]);
 
   /**
    * Batch translate multiple keys
