@@ -96,6 +96,12 @@ const createPage = async (req, res) => {
     if (error.code === 11000) {
       return res.status(400).json({ message: 'Page with this URL or slug already exists' });
     }
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({ message: 'Validation error', errors: error.errors });
+    }
+    if (error.name === 'MongooseError' || error.message.includes('connect')) {
+      return res.status(503).json({ message: 'Database connection error', error: error.message });
+    }
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
