@@ -138,6 +138,109 @@ const vendorSchema = new mongoose.Schema({
       default: 'pending'
     }
   },
+  // Enhanced Bank Information
+  bankInfo: {
+    bankName: {
+      type: String,
+      required: false
+    },
+    accountHolderName: {
+      type: String,
+      required: false
+    },
+    iban: {
+      type: String,
+      required: false,
+      validate: {
+        validator: function(v) {
+          return !v || /^SA[0-9]{22}$/.test(v);
+        },
+        message: 'IBAN must be in format SA followed by 22 digits'
+      }
+    },
+    accountNumber: {
+      type: String,
+      required: false
+    },
+    swiftCode: {
+      type: String,
+      required: false
+    }
+  },
+  // Document Management System
+  documents: {
+    commercialRegistration: {
+      fileName: String,
+      fileUrl: String,
+      uploadDate: Date,
+      status: {
+        type: String,
+        enum: ['pending', 'approved', 'rejected'],
+        default: 'pending'
+      }
+    },
+    nationalId: {
+      fileName: String,
+      fileUrl: String,
+      uploadDate: Date,
+      status: {
+        type: String,
+        enum: ['pending', 'approved', 'rejected'],
+        default: 'pending'
+      }
+    },
+    bankCertificate: {
+      fileName: String,
+      fileUrl: String,
+      uploadDate: Date,
+      status: {
+        type: String,
+        enum: ['pending', 'approved', 'rejected'],
+        default: 'pending'
+      }
+    },
+    businessLicense: {
+      fileName: String,
+      fileUrl: String,
+      uploadDate: Date,
+      status: {
+        type: String,
+        enum: ['pending', 'approved', 'rejected'],
+        default: 'pending'
+      }
+    },
+    other: [{
+      fileName: String,
+      fileUrl: String,
+      uploadDate: Date,
+      documentType: String,
+      status: {
+        type: String,
+        enum: ['pending', 'approved', 'rejected'],
+        default: 'pending'
+      }
+    }]
+  },
+  // Status History Logging
+  statusHistory: [{
+    status: {
+      type: String,
+      enum: ['active', 'inactive'],
+      required: true
+    },
+    note: {
+      type: String,
+      maxlength: 500
+    },
+    timestamp: {
+      type: Date,
+      default: Date.now
+    },
+    admin: {
+      type: String,
+      required: true
+    }
+  }],
   statistics: {
     totalBookings: { type: Number, default: 0 },
     totalRevenue: { type: Number, default: 0 },

@@ -4,6 +4,7 @@ import AdminLayout from '../../components/admin/AdminLayout';
 import AdminDashboard from '../../components/admin/AdminDashboard';
 import VendorManagement from '../../components/admin/VendorManagement';
 import VendorForm from '../../components/admin/VendorForm';
+import EnhancedVendorForm from '../../components/admin/EnhancedVendorForm';
 import ActivityManagement from '../../components/admin/ActivityManagement';
 import ActivityForm from '../../components/admin/ActivityForm';
 import PageManagement from '../../components/admin/PageManagement';
@@ -20,8 +21,9 @@ const AdminRoutes = () => {
       <Routes>
         <Route path="/" element={<AdminDashboard />} />
         <Route path="/vendors" element={<VendorManagement />} />
-        <Route path="/vendors/new" element={<VendorForm />} />
-        <Route path="/vendors/edit/:id" element={<VendorForm />} />
+        <Route path="/vendors/new" element={<EnhancedVendorForm />} />
+        <Route path="/vendors/edit/:id" element={<EnhancedVendorForm />} />
+        <Route path="/vendors/view/:id" element={<EnhancedVendorForm />} />
         <Route path="/activities" element={<ActivityManagement />} />
         <Route path="/activities/new" element={<ActivityForm />} />
         <Route path="/activities/edit/:id" element={<ActivityForm />} />

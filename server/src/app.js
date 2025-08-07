@@ -50,6 +50,9 @@ app.use('/api', limiter);
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
+// Static file serving for uploads
+app.use('/uploads', express.static('uploads'));
+
 // Health check route
 app.get('/health', (req, res) => {
   res.status(200).json({ 
@@ -71,6 +74,7 @@ app.use('/api/pages', require('./routes/pages'));
 app.use('/api/admin', require('./routes/admin'));
 app.use('/api/admin', require('./routes/adminEnhanced'));
 app.use('/api', require('./routes/translations'));
+app.use('/api/uploads', require('./routes/uploads'));
 
 
 // Global error handler

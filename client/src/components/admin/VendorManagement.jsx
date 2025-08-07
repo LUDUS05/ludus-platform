@@ -66,9 +66,20 @@ const VendorManagement = () => {
   };
 
   const toggleVendorStatus = async (vendorId, currentStatus) => {
+    const note = prompt('Add a note for this status change (optional):');
+    if (note === null) return; // User cancelled
+    
     try {
+      const statusEntry = {
+        status: !currentStatus ? 'active' : 'inactive',
+        note: note || 'Status changed from vendor management',
+        timestamp: new Date().toISOString(),
+        admin: 'Current Admin'
+      };
+
       await api.put(`/admin/vendors/${vendorId}`, {
-        isActive: !currentStatus
+        isActive: !currentStatus,
+        $push: { statusHistory: statusEntry }
       });
       fetchVendors();
     } catch (error) {
@@ -251,13 +262,13 @@ const VendorManagement = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <div className="flex items-center space-x-2">
                       <Link
-                        to={`/admin/vendors/${vendor._id}/edit`}
+                        to={`/admin/vendors/edit/${vendor._id}`}
                         className="text-ludus-orange hover:text-ludus-orange-dark"
                       >
                         Edit
                       </Link>
                       <Link
-                        to={`/admin/vendors/${vendor._id}`}
+                        to={`/admin/vendors/view/${vendor._id}`}
                         className="text-green-600 hover:text-green-900"
                       >
                         View
