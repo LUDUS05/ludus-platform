@@ -8,5 +8,15 @@
     "jsx-a11y"
   ],
   "rules": {
+    "jsx-a11y/label-has-associated-control": ["warn", {
+      "labelComponents": ["label"],
+      "labelAttributes": ["htmlFor"],
+      "controlComponents": ["input", "select", "textarea"],
+      "assert": "either",
+      "depth": 25
+    }],
+    "jsx-a11y/label-has-for": "off",
+    "jsx-a11y/click-events-have-key-events": "warn",
+    "jsx-a11y/no-static-element-interactions": "warn"
   }
 }
