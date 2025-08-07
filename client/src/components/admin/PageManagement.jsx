@@ -52,7 +52,17 @@ const PageManagement = () => {
       }));
     } catch (error) {
       console.error('Error fetching pages:', error);
-      alert('Error fetching pages: ' + (error.response?.data?.message || error.message));
+      console.error('Fetch error details:', error.response?.data || error);
+      console.error('Fetch error status:', error.response?.status);
+      
+      let errorMessage = 'Unknown error occurred';
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      alert('Error fetching pages: ' + errorMessage);
     } finally {
       setLoading(false);
     }
@@ -86,7 +96,20 @@ const PageManagement = () => {
       fetchPages();
     } catch (error) {
       console.error('Error saving page:', error);
-      alert('Error saving page: ' + (error.response?.data?.message || error.message));
+      console.error('Error details:', error.response?.data || error);
+      console.error('Error status:', error.response?.status);
+      console.error('Error config:', error.config);
+      
+      let errorMessage = 'Unknown error occurred';
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.response?.data?.errors) {
+        errorMessage = `Validation error: ${JSON.stringify(error.response.data.errors)}`;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      alert('Error saving page: ' + errorMessage);
     } finally {
       setLoading(false);
     }
@@ -121,7 +144,17 @@ const PageManagement = () => {
       fetchPages();
     } catch (error) {
       console.error('Error deleting page:', error);
-      alert('Error deleting page: ' + (error.response?.data?.message || error.message));
+      console.error('Delete error details:', error.response?.data || error);
+      console.error('Delete error status:', error.response?.status);
+      
+      let errorMessage = 'Unknown error occurred';
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      alert('Error deleting page: ' + errorMessage);
     }
   };
 
