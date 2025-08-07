@@ -1,6 +1,7 @@
 const seedAdmin = require('./seedAdmin');
 const seedVendors = require('./seedVendors');
 const seedActivities = require('./seedActivities');
+const seedPages = require('./pages');
 
 const runAllSeeds = async () => {
   try {
@@ -19,11 +20,16 @@ const runAllSeeds = async () => {
     await seedActivities();
     console.log('✅ Activity seeding completed\n');
     
+    console.log('4️⃣  Seeding pages...');
+    await seedPages();
+    console.log('✅ Page seeding completed\n');
+    
     console.log('🎉 All seeding completed successfully!');
     console.log('\n📊 Database Summary:');
     console.log('   👤 Admin user created');
     console.log('   🏢 5 vendors created');
     console.log('   🎯 10+ activities created with SAR pricing');
+    console.log('   📄 6 default pages created (About, Contact, Privacy, Terms, Partner)');
     console.log('   💰 All activities priced in Saudi Riyals (SAR)');
     console.log('   📍 All locations in Riyadh area');
     

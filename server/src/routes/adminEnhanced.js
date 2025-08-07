@@ -14,12 +14,6 @@ const {
   reorderCategories,
   updateCategoryStatus,
   
-  // Content Management
-  getPages,
-  createPage,
-  updatePage,
-  deletePage,
-  
   // System Settings
   getSystemSettings,
   updateSystemSettings
@@ -41,11 +35,7 @@ router.delete('/categories/:id', deleteCategory);
 router.put('/categories/reorder', reorderCategories);
 router.patch('/categories/:id/status', updateCategoryStatus);
 
-// Content Management Routes
-router.get('/pages', getPages);
-router.post('/pages', createPage);
-router.put('/pages/:id', updatePage);
-router.delete('/pages/:id', deletePage);
+// Content Management Routes - Removed from here, handled in admin.js
 
 // System Settings Routes
 router.get('/settings', getSystemSettings);
