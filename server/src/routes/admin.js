@@ -19,13 +19,21 @@ const {
   getPage,
   createPage,
   updatePage,
-  deletePage
+  deletePage,
+  duplicatePage,
+  getPageAnalytics
 } = require('../controllers/pageController');
 const { 
   validateVendorCreation,
   validateActivityCreation,
   validateObjectId
 } = require('../middleware/validation');
+const {
+  validateCreatePage,
+  validateUpdatePage,
+  validateDuplicatePage,
+  validatePageId
+} = require('../middleware/pageValidation');
 
 // All admin routes require authentication and admin role
 router.use(authenticate);
@@ -52,9 +60,11 @@ router.put('/bookings/:id/status', validateObjectId('id'), updateBookingStatus);
 
 // Page management routes
 router.get('/pages', getPages);
-router.post('/pages', createPage);
-router.get('/pages/:id', validateObjectId('id'), getPage);
-router.put('/pages/:id', validateObjectId('id'), updatePage);
-router.delete('/pages/:id', validateObjectId('id'), deletePage);
+router.post('/pages', validateCreatePage, createPage);
+router.get('/pages/analytics', getPageAnalytics);
+router.get('/pages/:id', validatePageId, getPage);
+router.put('/pages/:id', validatePageId, validateUpdatePage, updatePage);
+router.delete('/pages/:id', validatePageId, deletePage);
+router.post('/pages/:id/duplicate', validatePageId, validateDuplicatePage, duplicatePage);
 
 module.exports = router;
