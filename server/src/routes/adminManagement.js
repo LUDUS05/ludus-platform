@@ -10,10 +10,10 @@ const {
   initializeAdminRoles
 } = require('../controllers/adminManagementController');
 const { requireAdminRole, requirePermission } = require('../middleware/rbac');
-const authMiddleware = require('../middleware/auth');
+const { authenticate } = require('../middleware/auth');
 
 // Apply auth middleware to all routes
-router.use(authMiddleware);
+router.use(authenticate);
 
 // Admin role management routes
 router.get('/roles', requireAdminRole(['SA']), getAdminRoles);
