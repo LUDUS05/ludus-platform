@@ -163,6 +163,26 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('user', JSON.stringify(userData));
   };
 
+  // Social login action
+  const loginWithSocial = async (provider, token) => {
+    try {
+      dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: true });
+      dispatch({ type: AUTH_ACTIONS.CLEAR_ERROR });
+
+      const response = await authService.socialLogin(provider, token);
+      dispatch({
+        type: AUTH_ACTIONS.LOGIN_SUCCESS,
+        payload: { user: response.data.user },
+      });
+
+      return response;
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || `${provider} login failed`;
+      dispatch({ type: AUTH_ACTIONS.SET_ERROR, payload: errorMessage });
+      throw error;
+    }
+  };
+
   // Clear error action
   const clearError = () => {
     dispatch({ type: AUTH_ACTIONS.CLEAR_ERROR });
@@ -175,6 +195,7 @@ export const AuthProvider = ({ children }) => {
     logout,
     updateUser,
     clearError,
+    loginWithSocial,
   };
 
   return (

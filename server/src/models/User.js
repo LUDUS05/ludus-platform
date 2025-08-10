@@ -24,13 +24,41 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
+    required: function() {
+      // Password not required for social logins
+      return !this.social || !(this.social.google || this.social.facebook || this.social.apple);
+    },
     minlength: 8
   },
   role: {
     type: String,
     enum: ['user', 'admin'],
     default: 'user'
+  },
+  // Enhanced admin role system for LDS Team Management
+  adminRole: {
+    type: String,
+    enum: ['SA', 'PLATFORM_MANAGER', 'MODERATOR', 'ADMIN_PARTNERSHIPS', 'PSM', 'PSA'],
+    default: null
+  },
+  // Partner assignments for PSMs and PSAs
+  assignedPartners: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Vendor'
+  }],
+  // Admin metadata
+  adminMetadata: {
+    assignedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    },
+    assignedAt: Date,
+    lastActiveAt: Date,
+    permissions: {
+      type: Map,
+      of: Boolean,
+      default: {}
+    }
   },
   isEmailVerified: {
     type: Boolean,
@@ -66,6 +94,25 @@ const userSchema = new mongoose.Schema({
       type: Number,
       default: 25 // miles
     },
+    // OpGrapes new preferences
+    language: {
+      type: String,
+      enum: ['en', 'ar'],
+      default: 'en'
+    },
+    participantGenderMix: {
+      type: String,
+      enum: ['mixed', 'same-gender', 'no-preference'],
+      default: 'no-preference'
+    },
+    preferredTimes: [{
+      type: String,
+      enum: ['weekday-morning', 'weekday-afternoon', 'weekday-evening', 'weekend-morning', 'weekend-afternoon', 'weekend-evening']
+    }],
+    activityTypes: [{
+      type: String,
+      enum: ['indoor', 'outdoor', 'physical', 'mental', 'social', 'solo', 'group']
+    }],
     notifications: {
       email: { type: Boolean, default: true },
       sms: { type: Boolean, default: false },
@@ -74,6 +121,45 @@ const userSchema = new mongoose.Schema({
   },
   profileImage: {
     type: String // Cloudinary URL
+  },
+  // Community rating system
+  communityRating: {
+    averageRating: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 5
+    },
+    totalRatings: {
+      type: Number,
+      default: 0
+    },
+    ratingDistribution: {
+      1: { type: Number, default: 0 },
+      2: { type: Number, default: 0 },
+      3: { type: Number, default: 0 },
+      4: { type: Number, default: 0 },
+      5: { type: Number, default: 0 }
+    },
+    lastUpdated: {
+      type: Date,
+      default: Date.now
+    }
+  },
+  // Social authentication fields
+  social: {
+    google: {
+      id: String,
+      email: String
+    },
+    facebook: {
+      id: String,
+      email: String
+    },
+    apple: {
+      id: String,
+      email: String
+    }
   },
   paymentMethods: [{
     moyasarTokenId: {

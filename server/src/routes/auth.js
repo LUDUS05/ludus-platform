@@ -9,7 +9,8 @@ const {
   verifyEmail,
   forgotPassword,
   resetPassword,
-  changePassword
+  changePassword,
+  socialLogin
 } = require('../controllers/authController');
 const { authenticate } = require('../middleware/auth');
 const {
@@ -20,6 +21,7 @@ const {
 // Public routes
 router.post('/register', validateUserRegistration, register);
 router.post('/login', validateUserLogin, login);
+router.post('/social-login', socialLogin);
 router.post('/refresh', refreshToken);
 router.post('/verify-email', verifyEmail);
 router.post('/forgot-password', forgotPassword);

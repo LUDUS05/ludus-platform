@@ -7,14 +7,24 @@ const PageManagement = () => {
   const [showForm, setShowForm] = useState(false);
   const [editingPage, setEditingPage] = useState(null);
   const [formData, setFormData] = useState({
-    title: '',
-    content: '',
-    url: '',
+    title: {
+      en: '',
+      ar: ''
+    },
+    content: [{
+      id: Date.now().toString(),
+      type: 'paragraph',
+      content: { en: '', ar: '' },
+      order: 0
+    }],
+    slug: '',
     placement: 'none',
     status: 'draft',
-    metaDescription: '',
-    metaKeywords: '',
-    order: 0
+    seo: {
+      description: { en: '', ar: '' },
+      keywords: { en: '', ar: '' }
+    },
+    navigationOrder: 0
   });
   const [filters, setFilters] = useState({
     status: 'all',
@@ -73,15 +83,8 @@ const PageManagement = () => {
     setLoading(true);
     
     try {
-      // Ensure URL starts with / if not empty
-      let processedUrl = formData.url.trim();
-      if (processedUrl && !processedUrl.startsWith('/')) {
-        processedUrl = '/' + processedUrl;
-      }
-      
       const pageData = {
-        ...formData,
-        url: processedUrl
+        ...formData
       };
       
       if (editingPage) {
@@ -118,14 +121,23 @@ const PageManagement = () => {
   const handleEdit = (page) => {
     setEditingPage(page);
     setFormData({
-      title: page.title,
-      content: page.content,
-      url: page.url,
-      placement: page.placement,
-      status: page.status,
-      metaDescription: page.metaDescription || '',
-      metaKeywords: page.metaKeywords || '',
-      order: page.order || 0
+      title: page.title || { en: '', ar: '' },
+      content: Array.isArray(page.content) && page.content.length > 0 
+        ? page.content 
+        : [{
+            id: Date.now().toString(),
+            type: 'paragraph',
+            content: { en: '', ar: '' },
+            order: 0
+          }],
+      slug: page.slug || '',
+      placement: page.placement || 'none',
+      status: page.status || 'draft',
+      seo: {
+        description: page.seo?.description || { en: '', ar: '' },
+        keywords: page.seo?.keywords || { en: '', ar: '' }
+      },
+      navigationOrder: page.navigationOrder || 0
     });
     setShowForm(true);
   };
@@ -160,14 +172,24 @@ const PageManagement = () => {
 
   const resetForm = () => {
     setFormData({
-      title: '',
-      content: '',
-      url: '',
+      title: {
+        en: '',
+        ar: ''
+      },
+      content: [{
+        id: Date.now().toString(),
+        type: 'paragraph',
+        content: { en: '', ar: '' },
+        order: 0
+      }],
+      slug: '',
       placement: 'none',
       status: 'draft',
-      metaDescription: '',
-      metaKeywords: '',
-      order: 0
+      seo: {
+        description: { en: '', ar: '' },
+        keywords: { en: '', ar: '' }
+      },
+      navigationOrder: 0
     });
     setEditingPage(null);
     setShowForm(false);
@@ -178,7 +200,7 @@ const PageManagement = () => {
     setPagination(prev => ({ ...prev, currentPage: 1 }));
   };
 
-  const generateUrlFromTitle = (title) => {
+  const generateSlugFromTitle = (title) => {
     return title
       .toLowerCase()
       .replace(/[^a-z0-9 -]/g, '')
@@ -187,12 +209,48 @@ const PageManagement = () => {
       .trim();
   };
 
-  const handleTitleChange = (title) => {
+  const handleTitleChange = (lang, title) => {
     setFormData(prev => ({
       ...prev,
-      title,
-      // Auto-generate URL if it's empty or if we're creating a new page
-      url: !editingPage && !prev.url ? generateUrlFromTitle(title) : prev.url
+      title: {
+        ...prev.title,
+        [lang]: title
+      },
+      // Auto-generate slug from English title if it's empty or if we're creating a new page
+      slug: !editingPage && !prev.slug && lang === 'en' && title ? generateSlugFromTitle(title) : prev.slug
+    }));
+  };
+
+  const addContentBlock = () => {
+    const newBlock = {
+      id: Date.now().toString(),
+      type: 'paragraph',
+      content: { en: '', ar: '' },
+      order: formData.content.length
+    };
+    setFormData(prev => ({
+      ...prev,
+      content: [...prev.content, newBlock]
+    }));
+  };
+
+  const updateContentBlock = (index, field, value) => {
+    setFormData(prev => ({
+      ...prev,
+      content: prev.content.map((block, i) => 
+        i === index ? { ...block, [field]: value } : block
+      )
+    }));
+  };
+
+  const removeContentBlock = (index) => {
+    if (formData.content.length <= 1) return; // Keep at least one block
+    setFormData(prev => ({
+      ...prev,
+      content: prev.content.filter((_, i) => i !== index).map((block, i) => ({
+        ...block,
+        order: i
+      }))
     }));
   };
 
@@ -399,43 +457,62 @@ const PageManagement = () => {
               </div>
               
               <div className="p-6 space-y-6">
-                {/* Basic Information */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Page Title *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.title}
-                      onChange={(e) => handleTitleChange(e.target.value)}
-                      placeholder="e.g., About Us, Contact, Privacy Policy"
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      URL Path *
-                    </label>
-                    <div className="flex">
-                      <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-500 text-sm">
-                        app.letsludus.com
-                      </span>
+                {/* Page Titles */}
+                <div className="space-y-4">
+                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Page Titles</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        English Title *
+                      </label>
                       <input
                         type="text"
                         required
-                        value={formData.url}
-                        onChange={(e) => setFormData({ ...formData, url: e.target.value })}
-                        placeholder="e.g., /about, /contact, /custom-page"
-                        className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-r-md dark:bg-gray-700 dark:text-white"
+                        value={formData.title.en}
+                        onChange={(e) => handleTitleChange('en', e.target.value)}
+                        placeholder="e.g., About Us, Contact, Privacy Policy"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white"
                       />
                     </div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                      Can be any URL path. Will be accessible directly after the domain.
-                    </p>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Arabic Title *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        dir="rtl"
+                        value={formData.title.ar}
+                        onChange={(e) => handleTitleChange('ar', e.target.value)}
+                        placeholder="مثلا: حول الشركة، اتصل بنا، سياسة الخصوصية"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white"
+                      />
+                    </div>
                   </div>
+                </div>
+
+                {/* Slug */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    URL Slug *
+                  </label>
+                  <div className="flex">
+                    <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-500 text-sm">
+                      app.letsludus.com/pages/
+                    </span>
+                    <input
+                      type="text"
+                      required
+                      value={formData.slug}
+                      onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                      placeholder="e.g., about-us, contact, privacy-policy"
+                      className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-r-md dark:bg-gray-700 dark:text-white"
+                    />
+                  </div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    Only lowercase letters, numbers, and dashes allowed. Auto-generated from English title.
+                  </p>
                 </div>
 
                 {/* Settings */}

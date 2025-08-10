@@ -20,6 +20,8 @@ import HowItWorksPage from './pages/HowItWorksPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import UIShowcasePage from './pages/UIShowcasePage';
 import PartnerRegistrationPage from './pages/PartnerRegistrationPage';
+import MapPage from './pages/MapPage';
+import WalletPage from './pages/WalletPage';
 import DynamicPage from './components/pages/DynamicPage';
 import './index.css';
 
@@ -328,6 +330,26 @@ function App() {
                 <Header />
                 <main>
                   <PartnerRegistrationPage />
+                </main>
+                <Footer />
+              </>
+            } />
+            <Route path="/map" element={
+              <>
+                <Header />
+                <main>
+                  <MapPage />
+                </main>
+                <Footer />
+              </>
+            } />
+            <Route path="/wallet" element={
+              <>
+                <Header />
+                <main>
+                  <ProtectedRoute>
+                    <WalletPage />
+                  </ProtectedRoute>
                 </main>
                 <Footer />
               </>

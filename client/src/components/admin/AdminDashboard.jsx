@@ -1,17 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import api from '../../services/api';
+import { adminService } from '../../services/adminService';
 import Card from '../ui/Card';
 import Alert from '../ui/Alert';
 import NotificationCenter from './NotificationCenter';
+import { Shield, Users, Building, Settings, FileText, BarChart3, UserCheck } from 'lucide-react';
 
 const AdminDashboard = () => {
+  const { user } = useAuth();
   const [stats, setStats] = useState(null);
+  const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchDashboardStats();
+    loadDashboardOverview();
   }, []);
 
   const fetchDashboardStats = async () => {
@@ -24,6 +30,15 @@ const AdminDashboard = () => {
       setError('Failed to load dashboard statistics');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadDashboardOverview = async () => {
+    try {
+      const response = await adminService.getDashboardOverview();
+      setDashboardData(response.data);
+    } catch (error) {
+      console.error('Failed to load dashboard overview:', error);
     }
   };
 
@@ -114,9 +129,21 @@ const AdminDashboard = () => {
         <div className="lg:col-span-3 bg-gradient-to-r from-ludus-orange to-ludus-orange-dark dark:from-dark-ludus-orange dark:to-dark-ludus-orange-dark rounded-xl p-6 text-white">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-display-md font-bold mb-2">Welcome to LUDUS Admin</h2>
+              <div className="flex items-center space-x-3 mb-3">
+                <h2 className="text-display-md font-bold">Welcome back, {user?.firstName}!</h2>
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-white/20 text-white">
+                  <Shield className="w-4 h-4 mr-2" />
+                  {dashboardData?.userRole || 'Admin'}
+                </span>
+              </div>
               <p className="text-body-md text-white/90">
-                Manage vendors, activities, and bookings for the Saudi activity platform.
+                {dashboardData?.userRole === 'SA' && 'Full platform administration and team management.'}
+                {dashboardData?.userRole === 'PLATFORM_MANAGER' && 'Manage platform content and announcements.'}
+                {dashboardData?.userRole === 'MODERATOR' && 'Ensure community health and review content.'}
+                {dashboardData?.userRole === 'ADMIN_PARTNERSHIPS' && 'Oversee all partnership operations.'}
+                {dashboardData?.userRole === 'PSM' && 'Manage assigned partner relationships.'}
+                {dashboardData?.userRole === 'PSA' && 'Support partner success operations.'}
+                {!dashboardData?.userRole && 'Manage vendors, activities, and bookings for the Saudi activity platform.'}
               </p>
             </div>
             <div className="text-right">
@@ -218,43 +245,108 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* Quick Actions */}
+        {/* Quick Actions - Role Based */}
         <div className="bg-white rounded-lg shadow border border-gray-200">
           <div className="px-6 py-4 border-b border-gray-200">
             <h3 className="text-lg font-semibold text-gray-900">Quick Actions</h3>
           </div>
           <div className="p-6">
             <div className="space-y-3">
-              <Link
-                to="/admin/vendors/new"
-                className="flex items-center p-3 rounded-md border border-gray-200 hover:bg-gray-50 transition-colors"
-              >
-                <span className="text-xl mr-3">🏢</span>
-                <div>
-                  <p className="text-sm font-medium text-gray-900">Add New Vendor</p>
-                  <p className="text-xs text-gray-500">Register a new business partner</p>
-                </div>
-              </Link>
-              <Link
-                to="/admin/activities/new"
-                className="flex items-center p-3 rounded-md border border-gray-200 hover:bg-gray-50 transition-colors"
-              >
-                <span className="text-xl mr-3">🎯</span>
-                <div>
-                  <p className="text-sm font-medium text-gray-900">Create Activity</p>
-                  <p className="text-xs text-gray-500">Add a new activity offering</p>
-                </div>
-              </Link>
-              <Link
-                to="/admin/bookings"
-                className="flex items-center p-3 rounded-md border border-gray-200 hover:bg-gray-50 transition-colors"
-              >
-                <span className="text-xl mr-3">📅</span>
-                <div>
-                  <p className="text-sm font-medium text-gray-900">Manage Bookings</p>
-                  <p className="text-xs text-gray-500">Review and update booking status</p>
-                </div>
-              </Link>
+              {/* Super Admin Actions */}
+              {dashboardData?.userRole === 'SA' && (
+                <Link
+                  to="/admin/team"
+                  className="flex items-center p-3 rounded-md border border-gray-200 hover:bg-gray-50 transition-colors"
+                >
+                  <Shield className="w-5 h-5 mr-3 text-red-500" />
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">Team Management</p>
+                    <p className="text-xs text-gray-500">Manage admin roles and permissions</p>
+                  </div>
+                </Link>
+              )}
+              
+              {/* Platform Manager Actions */}
+              {['SA', 'PLATFORM_MANAGER'].includes(dashboardData?.userRole) && (
+                <Link
+                  to="/admin/content"
+                  className="flex items-center p-3 rounded-md border border-gray-200 hover:bg-gray-50 transition-colors"
+                >
+                  <FileText className="w-5 h-5 mr-3 text-blue-500" />
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">Content Management</p>
+                    <p className="text-xs text-gray-500">Manage platform content and pages</p>
+                  </div>
+                </Link>
+              )}
+
+              {/* Moderator Actions */}
+              {['SA', 'MODERATOR'].includes(dashboardData?.userRole) && (
+                <Link
+                  to="/admin/moderation"
+                  className="flex items-center p-3 rounded-md border border-gray-200 hover:bg-gray-50 transition-colors"
+                >
+                  <Users className="w-5 h-5 mr-3 text-yellow-500" />
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">User Moderation</p>
+                    <p className="text-xs text-gray-500">Review flagged content and users</p>
+                  </div>
+                </Link>
+              )}
+
+              {/* Partnership Management Actions */}
+              {['SA', 'ADMIN_PARTNERSHIPS', 'PSM', 'PSA'].includes(dashboardData?.userRole) && (
+                <>
+                  <Link
+                    to="/admin/vendors/new"
+                    className="flex items-center p-3 rounded-md border border-gray-200 hover:bg-gray-50 transition-colors"
+                  >
+                    <Building className="w-5 h-5 mr-3 text-green-500" />
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">Add New Partner</p>
+                      <p className="text-xs text-gray-500">Register a new business partner</p>
+                    </div>
+                  </Link>
+                  <Link
+                    to="/admin/activities/new"
+                    className="flex items-center p-3 rounded-md border border-gray-200 hover:bg-gray-50 transition-colors"
+                  >
+                    <span className="text-xl mr-3">🎯</span>
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">Create Activity</p>
+                      <p className="text-xs text-gray-500">Add a new activity offering</p>
+                    </div>
+                  </Link>
+                </>
+              )}
+
+              {/* Analytics Access */}
+              {adminService.canAccessResource(dashboardData?.userRole, 'analytics') && (
+                <Link
+                  to="/admin/analytics"
+                  className="flex items-center p-3 rounded-md border border-gray-200 hover:bg-gray-50 transition-colors"
+                >
+                  <BarChart3 className="w-5 h-5 mr-3 text-purple-500" />
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">Analytics</p>
+                    <p className="text-xs text-gray-500">View platform performance metrics</p>
+                  </div>
+                </Link>
+              )}
+
+              {/* Bookings - Available to most roles */}
+              {['SA', 'ADMIN_PARTNERSHIPS', 'PSM', 'PSA'].includes(dashboardData?.userRole) && (
+                <Link
+                  to="/admin/bookings"
+                  className="flex items-center p-3 rounded-md border border-gray-200 hover:bg-gray-50 transition-colors"
+                >
+                  <span className="text-xl mr-3">📅</span>
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">Manage Bookings</p>
+                    <p className="text-xs text-gray-500">Review and update booking status</p>
+                  </div>
+                </Link>
+              )}
             </div>
           </div>
         </div>
@@ -441,6 +533,34 @@ const AdminDashboard = () => {
         {/* Notifications */}
         <NotificationCenter />
       </div>
+
+      {/* Admin Permissions Summary */}
+      {dashboardData?.permissions && (
+        <Card>
+          <div className="px-6 py-4 border-b border-warm dark:border-dark-border-secondary">
+            <h3 className="text-body-lg font-semibold text-charcoal dark:dark-text-primary">Your Permissions</h3>
+          </div>
+          <div className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {dashboardData.permissions.map((permission, index) => (
+                <div key={index} className="flex items-center space-x-2">
+                  <div className="flex-shrink-0 w-2 h-2 bg-success dark:bg-dark-success rounded-full"></div>
+                  <span className="text-body-sm text-charcoal dark:dark-text-primary capitalize">
+                    {permission.actions.includes('manage') ? 'Manage' : permission.actions.join(', ')} {permission.resource}
+                  </span>
+                </div>
+              ))}
+            </div>
+            {dashboardData.userRole === 'PSM' || dashboardData.userRole === 'PSA' ? (
+              <div className="mt-4 p-4 bg-info/10 dark:bg-dark-info/10 rounded-lg">
+                <p className="text-body-sm text-info dark:text-dark-info">
+                  <strong>Assigned Partners:</strong> You have access to {dashboardData.assignedPartners || 0} partner accounts.
+                </p>
+              </div>
+            ) : null}
+          </div>
+        </Card>
+      )}
 
       {/* System Status */}
       <Card>

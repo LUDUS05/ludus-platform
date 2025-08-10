@@ -86,6 +86,22 @@ export const authService = {
     return response.data;
   },
 
+  // Social login
+  socialLogin: async (provider, token) => {
+    const response = await api.post('/auth/social-login', {
+      provider,
+      token,
+    });
+    const { user, accessToken, refreshToken } = response.data.data;
+    
+    // Store tokens and user data
+    localStorage.setItem('accessToken', accessToken);
+    localStorage.setItem('refreshToken', refreshToken);
+    localStorage.setItem('user', JSON.stringify(user));
+    
+    return response.data;
+  },
+
   // Check if user is authenticated
   isAuthenticated: () => {
     const token = localStorage.getItem('accessToken');

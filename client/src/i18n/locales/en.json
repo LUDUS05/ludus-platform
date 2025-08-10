@@ -31,7 +31,8 @@
     "forgotPasswordLink": "Forgot your password?",
     "noAccount": "Don't have an account?",
     "haveAccount": "Already have an account?",
-    "signInHere": "Sign in here"
+    "signInHere": "Sign in here",
+    "share": "Share"
   },
   "navigation": {
     "home": "Home",
@@ -48,6 +49,10 @@
     "updateFailed": "Failed to update profile"
   },
   "auth": {
+    "continueWith": "Or continue with",
+    "continueWithGoogle": "Continue with Google",
+    "continueWithFacebook": "Continue with Facebook",
+    "continueWithApple": "Continue with Apple",
     "login": "Login",
     "register": "Register",
     "email": "Email",
@@ -241,5 +246,12 @@
     "resetFailed": "Failed to send password reset email. Please try again.",
     "backToLogin": "Back to Login",
     "enterEmailAddress": "Enter your email address"
+  },
+  "social": {
+    "shareActivity": "Share this Activity",
+    "shareVia": "Share via...",
+    "copyLink": "Copy Link",
+    "linkCopied": "Link Copied!",
+    "shareOn": "Share on {{platform}}"
   }
 }

@@ -31,7 +31,8 @@
     "forgotPasswordLink": "نسيت كلمة المرور؟",
     "noAccount": "ليس لديك حساب؟",
     "haveAccount": "لديك حساب بالفعل؟",
-    "signInHere": "سجل الدخول هنا"
+    "signInHere": "سجل الدخول هنا",
+    "share": "مشاركة"
   },
   "navigation": {
     "home": "الرئيسية",
@@ -48,6 +49,10 @@
     "updateFailed": "فشل في تحديث الملف الشخصي"
   },
   "auth": {
+    "continueWith": "أو المتابعة مع",
+    "continueWithGoogle": "المتابعة مع جوجل",
+    "continueWithFacebook": "المتابعة مع فيسبوك",
+    "continueWithApple": "المتابعة مع أبل",
     "login": "تسجيل الدخول",
     "register": "إنشاء حساب",
     "email": "البريد الإلكتروني",
@@ -281,5 +286,12 @@
     "resetFailed": "فشل في إرسال بريد إعادة تعيين كلمة المرور. الرجاء المحاولة مرة أخرى.",
     "backToLogin": "العودة إلى تسجيل الدخول",
     "enterEmailAddress": "أدخل عنوان بريدك الإلكتروني"
+  },
+  "social": {
+    "shareActivity": "شارك هذا النشاط",
+    "shareVia": "شارك عبر...",
+    "copyLink": "نسخ الرابط",
+    "linkCopied": "تم نسخ الرابط!",
+    "shareOn": "شارك على {{platform}}"
   }
 }

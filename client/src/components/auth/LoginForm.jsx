@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import Button from '../ui/Button';
 import Card from '../ui/Card';
+import SocialLogin from './SocialLogin';
 
 const LoginForm = () => {
   const { t } = useTranslation();
@@ -38,6 +39,14 @@ const LoginForm = () => {
       // Error is handled by the auth context
       console.error('Login error:', error);
     }
+  };
+
+  const handleSocialSuccess = (result) => {
+    navigate(from, { replace: true });
+  };
+
+  const handleSocialError = (error) => {
+    console.error('Social login error:', error);
   };
 
   return (
@@ -165,6 +174,14 @@ const LoginForm = () => {
                 t('auth.login')
               )}
             </button>
+          </div>
+
+          {/* Social Login */}
+          <div className="mt-6">
+            <SocialLogin 
+              onSuccess={handleSocialSuccess}
+              onError={handleSocialError}
+            />
           </div>
 
           <div className="mt-6">

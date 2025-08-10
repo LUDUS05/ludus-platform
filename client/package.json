@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@googlemaps/js-api-loader": "^1.16.10",
     "@heroicons/react": "^2.2.0",
     "@sentry/react": "^10.1.0",
     "@sentry/tracing": "^7.120.4",
@@ -20,6 +21,7 @@
     "react": "^19.1.1",
     "react-blurhash": "^0.3.0",
     "react-dom": "^19.1.1",
+    "react-facebook-login": "^4.1.1",
     "react-i18next": "^15.6.1",
     "react-quill": "^2.0.0",
     "react-router-dom": "^7.7.1",

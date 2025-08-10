@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const { requireAdminRole } = require('../middleware/rbac');
 
 // @desc    Get user profile
 // @route   GET /api/users/profile
@@ -107,6 +108,65 @@ const updateUserProfile = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Failed to update user profile'
+    });
+  }
+};
+
+// @desc    Update user preferences
+// @route   PUT /api/users/preferences
+// @access  Private
+const updateUserPreferences = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { preferences } = req.body;
+
+    if (!preferences) {
+      return res.status(400).json({
+        success: false,
+        message: 'Preferences data is required'
+      });
+    }
+
+    // Update user preferences
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { preferences },
+      { 
+        new: true, 
+        runValidators: true,
+        select: '-password'
+      }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Preferences updated successfully',
+      data: updatedUser
+    });
+
+  } catch (error) {
+    console.error('Update user preferences error:', error);
+    
+    // Handle validation errors
+    if (error.name === 'ValidationError') {
+      const errors = Object.values(error.errors).map(err => err.message);
+      return res.status(400).json({
+        success: false,
+        message: 'Validation error',
+        errors
+      });
+    }
+
+    res.status(500).json({
+      success: false,
+      message: 'Failed to update user preferences'
     });
   }
 };
@@ -249,12 +309,65 @@ const getDashboardStats = async (req, res) => {
   }
 };
 
+// @desc    Search users (Admin only)
+// @route   GET /api/users/search
+// @access  Private (Admin)
+const searchUsers = async (req, res) => {
+  try {
+    const { q, role = 'user', limit = 20 } = req.query;
+
+    if (!q || q.trim().length < 2) {
+      return res.status(400).json({
+        success: false,
+        message: 'Search query must be at least 2 characters long'
+      });
+    }
+
+    // Build search query
+    const searchRegex = new RegExp(q.trim(), 'i');
+    const filter = {
+      $or: [
+        { firstName: { $regex: searchRegex } },
+        { lastName: { $regex: searchRegex } },
+        { email: { $regex: searchRegex } }
+      ]
+    };
+
+    // Filter by role if specified
+    if (role) {
+      filter.role = role;
+    }
+
+    const users = await User.find(filter)
+      .select('firstName lastName email role adminRole createdAt')
+      .limit(parseInt(limit))
+      .sort({ firstName: 1, lastName: 1 });
+
+    res.status(200).json({
+      success: true,
+      data: { 
+        users,
+        count: users.length
+      }
+    });
+
+  } catch (error) {
+    console.error('Search users error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to search users'
+    });
+  }
+};
+
 module.exports = {
   getUserProfile,
   updateUserProfile,
+  updateUserPreferences,
   getUserBookings,
   getUserFavorites,
   addToFavorites,
   removeFromFavorites,
-  getDashboardStats
+  getDashboardStats,
+  searchUsers
 };

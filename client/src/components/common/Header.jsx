@@ -39,18 +39,32 @@ const Header = () => {
               {t('navigation.activities')}
             </Link>
             <Link
+              to="/map"
+              className="text-charcoal dark:text-dark-text-secondary hover:text-ludus-orange dark:hover:text-dark-ludus-orange font-medium transition-colors duration-200"
+            >
+              Map
+            </Link>
+            <Link
               to="/how-it-works"
               className="text-charcoal dark:text-dark-text-secondary hover:text-ludus-orange dark:hover:text-dark-ludus-orange font-medium transition-colors duration-200"
             >
               How It Works
             </Link>
             {isAuthenticated && (
-              <Link
-                to="/dashboard"
-                className="text-charcoal dark:text-dark-text-secondary hover:text-ludus-orange dark:hover:text-dark-ludus-orange font-medium transition-colors duration-200"
-              >
-                {t('dashboard.myBookings')}
-              </Link>
+              <>
+                <Link
+                  to="/dashboard"
+                  className="text-charcoal dark:text-dark-text-secondary hover:text-ludus-orange dark:hover:text-dark-ludus-orange font-medium transition-colors duration-200"
+                >
+                  {t('dashboard.myBookings')}
+                </Link>
+                <Link
+                  to="/wallet"
+                  className="text-charcoal dark:text-dark-text-secondary hover:text-ludus-orange dark:hover:text-dark-ludus-orange font-medium transition-colors duration-200"
+                >
+                  Wallet
+                </Link>
+              </>
             )}
           </nav>
 

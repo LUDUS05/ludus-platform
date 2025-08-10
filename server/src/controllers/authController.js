@@ -401,6 +401,161 @@ const changePassword = async (req, res, next) => {
   }
 };
 
+// @desc    Social login (Google, Facebook, Apple)
+// @route   POST /api/auth/social-login
+// @access  Public
+const socialLogin = async (req, res, next) => {
+  try {
+    const { provider, token } = req.body;
+
+    if (!provider || !token) {
+      return res.status(400).json({
+        success: false,
+        message: 'Provider and token are required'
+      });
+    }
+
+    let userInfo;
+
+    // Verify token based on provider
+    switch (provider.toLowerCase()) {
+      case 'google':
+        userInfo = await verifyGoogleToken(token);
+        break;
+      case 'facebook':
+        userInfo = await verifyFacebookToken(token);
+        break;
+      case 'apple':
+        // Apple Sign In would need custom implementation
+        return res.status(501).json({
+          success: false,
+          message: 'Apple Sign In not yet implemented'
+        });
+      default:
+        return res.status(400).json({
+          success: false,
+          message: 'Unsupported social provider'
+        });
+    }
+
+    if (!userInfo) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid social token'
+      });
+    }
+
+    // Check if user exists with social ID
+    let user = await User.findOne({
+      $or: [
+        { [`social.${provider}.id`]: userInfo.id },
+        { email: userInfo.email }
+      ]
+    });
+
+    if (user) {
+      // Update social info if not already linked
+      if (!user.social[provider]) {
+        user.social[provider] = {
+          id: userInfo.id,
+          email: userInfo.email
+        };
+        await user.save();
+      }
+    } else {
+      // Create new user with social info
+      // Split name into first and last name
+      const nameParts = userInfo.name.split(' ');
+      const firstName = nameParts[0] || 'User';
+      const lastName = nameParts.slice(1).join(' ') || '';
+
+      user = await User.create({
+        firstName,
+        lastName,
+        email: userInfo.email,
+        profileImage: userInfo.picture || userInfo.avatar,
+        isEmailVerified: true, // Social accounts are pre-verified
+        social: {
+          [provider]: {
+            id: userInfo.id,
+            email: userInfo.email
+          }
+        }
+      });
+    }
+
+    // Generate tokens
+    const accessToken = generateAccessToken(user._id);
+    const refreshToken = generateRefreshToken(user._id);
+
+    // Save refresh token
+    user.refreshToken = refreshToken;
+    await user.save();
+
+    // Remove sensitive data
+    user.password = undefined;
+    user.refreshToken = undefined;
+
+    res.json({
+      success: true,
+      data: {
+        user,
+        accessToken,
+        refreshToken
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Verify Google OAuth token
+const verifyGoogleToken = async (token) => {
+  try {
+    const { OAuth2Client } = require('google-auth-library');
+    const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+    
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+    
+    const payload = ticket.getPayload();
+    return {
+      id: payload.sub,
+      email: payload.email,
+      name: payload.name,
+      picture: payload.picture
+    };
+  } catch (error) {
+    console.error('Google token verification failed:', error);
+    return null;
+  }
+};
+
+// Verify Facebook access token
+const verifyFacebookToken = async (accessToken) => {
+  try {
+    const response = await fetch(`https://graph.facebook.com/me?fields=id,name,email,picture&access_token=${accessToken}`);
+    const data = await response.json();
+    
+    if (data.error) {
+      console.error('Facebook token verification failed:', data.error);
+      return null;
+    }
+    
+    return {
+      id: data.id,
+      email: data.email,
+      name: data.name,
+      avatar: data.picture?.data?.url
+    };
+  } catch (error) {
+    console.error('Facebook token verification failed:', error);
+    return null;
+  }
+};
+
 module.exports = {
   register,
   login,
@@ -410,5 +565,6 @@ module.exports = {
   verifyEmail,
   forgotPassword,
   resetPassword,
-  changePassword
+  changePassword,
+  socialLogin
 };

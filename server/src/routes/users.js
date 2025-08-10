@@ -4,12 +4,15 @@ const { authenticate } = require('../middleware/auth');
 const {
   getUserProfile,
   updateUserProfile,
+  updateUserPreferences,
   getUserBookings,
   getUserFavorites,
   addToFavorites,
   removeFromFavorites,
-  getDashboardStats
+  getDashboardStats,
+  searchUsers
 } = require('../controllers/userController');
+const { requireAdminRole } = require('../middleware/rbac');
 
 // @desc    Get user profile
 // @route   GET /api/users/profile
@@ -20,6 +23,11 @@ router.get('/profile', authenticate, getUserProfile);
 // @route   PUT /api/users/profile
 // @access  Private
 router.put('/profile', authenticate, updateUserProfile);
+
+// @desc    Update user preferences
+// @route   PUT /api/users/preferences
+// @access  Private
+router.put('/preferences', authenticate, updateUserPreferences);
 
 // @desc    Get user bookings
 // @route   GET /api/users/bookings
@@ -45,5 +53,10 @@ router.delete('/favorites/:activityId', authenticate, removeFromFavorites);
 // @route   GET /api/users/dashboard-stats
 // @access  Private
 router.get('/dashboard-stats', authenticate, getDashboardStats);
+
+// @desc    Search users (Admin only)
+// @route   GET /api/users/search
+// @access  Private (Admin)
+router.get('/search', authenticate, requireAdminRole(), searchUsers);
 
 module.exports = router;
