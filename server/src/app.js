@@ -38,6 +38,7 @@ app.use(cors({
     'https://app.letsludus.com', 
     'https://ludus-platform.vercel.app',
     'https://ludus-platform-git-new-main-ludus05s-projects.vercel.app',
+    'https://ludus-platform-md55yra7v-ludus05s-projects.vercel.app',
     /https:\/\/.*\.vercel\.app$/
   ],
   credentials: true
