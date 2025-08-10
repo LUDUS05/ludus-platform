@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import InteractiveMap from '../components/maps/InteractiveMap';
 import ActivityCard from '../components/ui/ActivityCard';
-import { api } from '../services/api';
+import api from '../services/api';
 
 const MapPage = () => {
   const { t } = useTranslation();
