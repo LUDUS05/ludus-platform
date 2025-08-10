@@ -24,6 +24,11 @@ if (process.env.NODE_ENV !== 'test' && process.env.MONGODB_URI) {
   console.log('Skipping database connection (test mode or no MONGODB_URI)');
 }
 
+// Trust proxy for production deployment (Railway/Render)
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
+
 // Security middleware
 app.use(helmet());
 // Simple CORS - allow all Vercel deployments and specific domains
