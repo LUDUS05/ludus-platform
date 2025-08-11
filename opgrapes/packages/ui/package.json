@@ -1,0 +1,111 @@
+{
+  "name": "ui",
+  "version": "1.0.0",
+  "description": "Shared UI component library for OPGrapes project",
+  "main": "dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./Button": {
+      "import": "./dist/components/Button/index.js",
+      "types": "./dist/components/Button/index.d.ts"
+    },
+    "./Card": {
+      "import": "./dist/components/Card/index.js",
+      "types": "./dist/components/Card/index.d.ts"
+    },
+    "./Text": {
+      "import": "./dist/components/Text/index.js",
+      "types": "./dist/components/Text/index.d.ts"
+    },
+    "./Badge": {
+      "import": "./dist/components/Badge/index.js",
+      "types": "./dist/components/Badge/index.d.ts"
+    },
+    "./Tabs": {
+      "import": "./dist/components/Tabs/index.js",
+      "types": "./dist/components/Tabs/index.d.ts"
+    },
+    "./Input": {
+      "import": "./dist/components/Input/index.js",
+      "types": "./dist/components/Input/index.d.ts"
+    },
+    "./Select": {
+      "import": "./dist/components/Select/index.js",
+      "types": "./dist/components/Select/index.d.ts"
+    },
+    "./Stack": {
+      "import": "./dist/components/Stack/index.js",
+      "types": "./dist/components/Stack/index.d.ts"
+    },
+    "./Avatar": {
+      "import": "./dist/components/Avatar/index.js",
+      "types": "./dist/components/Avatar/index.d.ts"
+    },
+    "./Checkbox": {
+      "import": "./dist/components/Checkbox/index.js",
+      "types": "./dist/components/Checkbox/index.d.ts"
+    },
+    "./Modal": {
+      "import": "./dist/components/Modal/index.js",
+      "types": "./dist/components/Modal/index.d.ts"
+    },
+    "./Form": {
+      "import": "./dist/components/Form/index.js",
+      "types": "./dist/components/Form/index.d.ts"
+    },
+    "./FormField": {
+      "import": "./dist/components/FormField/index.js",
+      "types": "./dist/components/FormField/index.d.ts"
+    },
+    "./Container": {
+      "import": "./dist/components/Container/index.js",
+      "types": "./dist/components/Container/index.d.ts"
+    },
+    "./Divider": {
+      "import": "./dist/components/Divider/index.js",
+      "types": "./dist/components/Divider/index.d.ts"
+    },
+    "./Link": {
+      "import": "./dist/components/Link/index.js",
+      "types": "./dist/components/Link/index.d.ts"
+    },
+    "./Spinner": {
+      "import": "./dist/components/Spinner/index.js",
+      "types": "./dist/components/Spinner/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "ui",
+    "components",
+    "react",
+    "tailwind"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.6.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitest/coverage-v8": "^3.2.4",
+    "tsx": "^4.20.3",
+    "vitest": "^3.2.4"
+  }
+}
