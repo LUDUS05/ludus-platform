@@ -24,7 +24,8 @@
 ### 📋 **Core Documentation**
 | Document | Purpose | Last Updated | Status |
 |----------|---------|--------------|---------|
-| [README.md](README.md) | Project overview & setup | 2025-01 | ✅ Current |
+| [README.md](README.md) | Project overview & hub | 2025-01 | ✅ Current |
+| [DEVELOPMENT_GUIDE.md](DEVELOPMENT_GUIDE.md) | Developer setup guide | 2025-01 | ✅ Current |
 | [CLAUDE.md](CLAUDE.md) | Development tracker | 2025-07 | ⚠️ Needs Update |
 | [DEPLOYMENT.md](DEPLOYMENT.md) | Production deployment guide | 2025-01 | ✅ Current |
 
@@ -167,7 +168,8 @@ lds-app/
 │   └── 📁 src/services/       # Business logic services
 ├── 📁 Guide/                  # 📚 Legacy development guides
 ├── 📋 DEPLOYMENT.md           # Production deployment instructions
-├── 📋 README.md               # Project setup and overview
+├── 📋 README.md               # Project hub and overview
+├── 📋 DEVELOPMENT_GUIDE.md     # Developer setup guide
 └── 📋 CLAUDE.md               # Development progress tracker
 ```
 

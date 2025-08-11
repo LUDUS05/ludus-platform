@@ -27,7 +27,8 @@
 |----------|---------|--------------|----------|---------|
 | [**LUDUS_UNIFIED_DASHBOARD.md**](LUDUS_UNIFIED_DASHBOARD.md) | Master project dashboard and overview | Jan 2025 | 🔥 Critical | ✅ Active |
 | [**LUDUS_TASK_TRACKER.md**](LUDUS_TASK_TRACKER.md) | Comprehensive task and progress tracking | Jan 2025 | 🔥 Critical | ✅ Active |
-| [**README.md**](README.md) | Project setup and quick start guide | Jan 2025 | 🔥 Critical | ✅ Active |
+| [**README.md**](README.md) | Main project entry point and documentation hub | Jan 2025 | 🔥 Critical | ✅ Active |
+| [**DEVELOPMENT_GUIDE.md**](DEVELOPMENT_GUIDE.md) | Developer setup and quick start guide | Jan 2025 | 🔥 Critical | ✅ Active |
 | [**CLAUDE.md**](CLAUDE.md) | Historical development tracker | Jul 2025 | 🔶 Medium | ⚠️ Archive |
 
 #### 📋 **Planning & Tracking Documents**
@@ -154,9 +155,10 @@ All documentation must meet these standards:
 ### 📊 **Find Information By Topic**
 
 #### **Getting Started**
-- Setup: [README.md](README.md)
+- Overview: [README.md](README.md)
+- Setup: [DEVELOPMENT_GUIDE.md](DEVELOPMENT_GUIDE.md)
 - Deployment: [DEPLOYMENT.md](DEPLOYMENT.md)
-- Overview: [LUDUS_UNIFIED_DASHBOARD.md](LUDUS_UNIFIED_DASHBOARD.md)
+- Project Status: [LUDUS_UNIFIED_DASHBOARD.md](LUDUS_UNIFIED_DASHBOARD.md)
 
 #### **Development**
 - Task Tracking: [LUDUS_TASK_TRACKER.md](LUDUS_TASK_TRACKER.md)
