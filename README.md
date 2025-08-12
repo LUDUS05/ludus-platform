@@ -212,6 +212,14 @@ The application is ready for deployment using:
 **🚀 Production Ready:**
 The LUDUS platform MVP is complete and ready for launch with all core features implemented and tested.
 
+## 🤖 AI Development Support
+
+**For AI Tools & Assistants**: See [`agents.md`](./agents.md) for comprehensive integration guide including:
+- Complete platform architecture and tech stack
+- API endpoints and authentication system  
+- Development workflow and security guidelines
+- AI agent best practices and common pitfalls
+
 ## 🤝 Contributing
 
 This is an MVP implementation following the curated approach outlined in the implementation guide. Focus areas:
