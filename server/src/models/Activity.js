@@ -227,7 +227,7 @@ const activitySchema = new mongoose.Schema({
 });
 
 // Generate slug from title
-activitySchema.pre('save', function(next) {
+activitySchema.pre('validate', function(next) {
   if (this.isModified('title')) {
     this.slug = this.title
       .toLowerCase()

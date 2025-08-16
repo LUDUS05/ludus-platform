@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Activity = require('../models/Activity');
 const Vendor = require('../models/Vendor');
 const User = require('../models/User');
-require('dotenv').config({ path: '../../../.env' });
+require('dotenv').config({ path: '../.env' });
 
 const activitiesData = [
   // Fitness Activities
@@ -230,10 +230,6 @@ const activitiesData = [
 const seedActivities = async () => {
   try {
     console.log('🌱 Starting activities seeding...');
-    
-    // Connect to MongoDB
-    await mongoose.connect(process.env.MONGODB_URI);
-    console.log('✅ Connected to MongoDB');
 
     // Find admin user to associate activities with
     const adminUser = await User.findOne({ role: 'admin' });
@@ -302,24 +298,28 @@ const seedActivities = async () => {
   } catch (error) {
     console.error('❌ Error seeding activities:', error.message);
     throw error;
-  } finally {
-    // Close database connection
-    await mongoose.connection.close();
-    console.log('🔌 MongoDB connection closed');
   }
 };
 
 // Run seeding if called directly
 if (require.main === module) {
-  seedActivities()
-    .then(() => {
+  (async () => {
+    try {
+      await mongoose.connect(process.env.MONGODB_URI);
+      console.log('✅ Connected to MongoDB');
+      
+      await seedActivities();
+      
       console.log('🎉 Activities seeding completed successfully');
       process.exit(0);
-    })
-    .catch((error) => {
+    } catch (error) {
       console.error('💥 Activities seeding failed:', error);
       process.exit(1);
-    });
+    } finally {
+      await mongoose.connection.close();
+      console.log('🔌 MongoDB connection closed');
+    }
+  })();
 }
 
 module.exports = seedActivities;

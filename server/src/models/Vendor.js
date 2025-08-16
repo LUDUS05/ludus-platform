@@ -256,7 +256,7 @@ const vendorSchema = new mongoose.Schema({
 });
 
 // Generate slug from business name
-vendorSchema.pre('save', function(next) {
+vendorSchema.pre('validate', function(next) {
   if (this.isModified('businessName')) {
     this.slug = this.businessName
       .toLowerCase()

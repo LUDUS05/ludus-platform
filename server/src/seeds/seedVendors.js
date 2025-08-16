@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Vendor = require('../models/Vendor');
 const User = require('../models/User');
-require('dotenv').config({ path: '../../../.env' });
+require('dotenv').config({ path: '../.env' });
 
 const vendorData = [
   {
@@ -171,10 +171,6 @@ const vendorData = [
 const seedVendors = async () => {
   try {
     console.log('🌱 Starting vendor seeding...');
-    
-    // Connect to MongoDB
-    await mongoose.connect(process.env.MONGODB_URI);
-    console.log('✅ Connected to MongoDB');
 
     // Find admin user to associate vendors with
     const adminUser = await User.findOne({ role: 'admin' });
@@ -208,24 +204,28 @@ const seedVendors = async () => {
   } catch (error) {
     console.error('❌ Error seeding vendors:', error.message);
     throw error;
-  } finally {
-    // Close database connection
-    await mongoose.connection.close();
-    console.log('🔌 MongoDB connection closed');
   }
 };
 
 // Run seeding if called directly
 if (require.main === module) {
-  seedVendors()
-    .then(() => {
+  (async () => {
+    try {
+      await mongoose.connect(process.env.MONGODB_URI);
+      console.log('✅ Connected to MongoDB');
+      
+      await seedVendors();
+      
       console.log('🎉 Vendor seeding completed successfully');
       process.exit(0);
-    })
-    .catch((error) => {
+    } catch (error) {
       console.error('💥 Vendor seeding failed:', error);
       process.exit(1);
-    });
+    } finally {
+      await mongoose.connection.close();
+      console.log('🔌 MongoDB connection closed');
+    }
+  })();
 }
 
 module.exports = seedVendors;

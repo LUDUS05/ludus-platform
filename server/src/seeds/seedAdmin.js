@@ -1,14 +1,10 @@
 const mongoose = require('mongoose');
 const User = require('../models/User');
-require('dotenv').config({ path: '../../../.env' });
+require('dotenv').config({ path: '../.env' });
 
 const seedAdmin = async () => {
   try {
     console.log('🌱 Starting admin user seeding...');
-    
-    // Connect to MongoDB
-    await mongoose.connect(process.env.MONGODB_URI);
-    console.log('✅ Connected to MongoDB');
 
     // Check if admin user already exists
     const existingAdmin = await User.findOne({ 
@@ -55,24 +51,28 @@ const seedAdmin = async () => {
   } catch (error) {
     console.error('❌ Error seeding admin user:', error.message);
     throw error;
-  } finally {
-    // Close database connection
-    await mongoose.connection.close();
-    console.log('🔌 MongoDB connection closed');
   }
 };
 
 // Run seeding if called directly
 if (require.main === module) {
-  seedAdmin()
-    .then(() => {
+  (async () => {
+    try {
+      await mongoose.connect(process.env.MONGODB_URI);
+      console.log('✅ Connected to MongoDB');
+      
+      await seedAdmin();
+      
       console.log('🎉 Admin seeding completed successfully');
       process.exit(0);
-    })
-    .catch((error) => {
+    } catch (error) {
       console.error('💥 Admin seeding failed:', error);
       process.exit(1);
-    });
+    } finally {
+      await mongoose.connection.close();
+      console.log('🔌 MongoDB connection closed');
+    }
+  })();
 }
 
 module.exports = seedAdmin;
