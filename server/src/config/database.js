@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const { MongoMemoryServer } = require('mongodb-memory-server');
 
 let mongoServer;
 
@@ -9,6 +8,8 @@ const connectDB = async () => {
 
     if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development') {
       console.log('Starting in-memory MongoDB for development/testing...');
+      // Only import mongodb-memory-server when needed to avoid production dependency issues
+      const { MongoMemoryServer } = require('mongodb-memory-server');
       mongoServer = await MongoMemoryServer.create();
       mongoUri = mongoServer.getUri();
     } else if (process.env.MONGODB_URI) {
