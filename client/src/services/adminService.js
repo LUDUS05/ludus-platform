@@ -4,13 +4,14 @@ const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api
 
 // Create axios instance with auth token
 const createAuthAxios = () => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('accessToken'); // Fixed: use correct token key
   return axios.create({
     baseURL: `${API_BASE_URL}/admin`,
     headers: {
       'Authorization': token ? `Bearer ${token}` : '',
       'Content-Type': 'application/json'
-    }
+    },
+    withCredentials: true // Include cookies for HttpOnly refresh tokens
   });
 };
 
