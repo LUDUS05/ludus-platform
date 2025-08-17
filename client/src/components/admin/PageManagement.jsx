@@ -220,6 +220,19 @@ const PageManagement = () => {
     }));
   };
 
+  const handleSeoChange = (lang, field, value) => {
+    setFormData(prev => ({
+      ...prev,
+      seo: {
+        ...prev.seo,
+        [field]: {
+          ...prev.seo[field],
+          [lang]: value
+        }
+      }
+    }));
+  };
+
   const addContentBlock = () => {
     const newBlock = {
       id: Date.now().toString(),
@@ -552,8 +565,8 @@ const PageManagement = () => {
                     </label>
                     <input
                       type="number"
-                      value={formData.order}
-                      onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) || 0 })}
+                      value={formData.navigationOrder}
+                      onChange={(e) => setFormData({ ...formData, navigationOrder: parseInt(e.target.value) || 0 })}
                       className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white"
                     />
                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -565,18 +578,17 @@ const PageManagement = () => {
                 {/* Content Editor */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Page Content *
+                    Page Content (Read-only)
                   </label>
                   <textarea
-                    value={formData.content}
-                    onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                    placeholder="Write your page content here... (HTML and Markdown supported)"
-                    required
+                    value={JSON.stringify(formData.content, null, 2)}
+                    readOnly
+                    placeholder="Content is managed via content blocks. This is a read-only view."
                     rows={12}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white font-mono text-sm resize-vertical"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white font-mono text-sm resize-vertical opacity-75 cursor-not-allowed"
                   />
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    You can use HTML tags and basic formatting in this field.
+                    Content is structured data. A full editor for content blocks is pending implementation.
                   </p>
                 </div>
 
@@ -584,34 +596,68 @@ const PageManagement = () => {
                 <div className="space-y-4">
                   <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">SEO Settings</h4>
                   
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Meta Description
-                    </label>
-                    <textarea
-                      value={formData.metaDescription}
-                      onChange={(e) => setFormData({ ...formData, metaDescription: e.target.value })}
-                      placeholder="Brief description for search engines (recommended: 120-160 characters)"
-                      maxLength="160"
-                      rows="3"
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white"
-                    />
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                      {formData.metaDescription.length}/160 characters
-                    </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Meta Description (English)
+                      </label>
+                      <textarea
+                        value={formData.seo.description.en}
+                        onChange={(e) => handleSeoChange('en', 'description', e.target.value)}
+                        placeholder="Brief description for search engines (120-160 characters)"
+                        maxLength="160"
+                        rows="3"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white"
+                      />
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        {formData.seo.description.en.length}/160 characters
+                      </p>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Meta Description (Arabic)
+                      </label>
+                      <textarea
+                        dir="rtl"
+                        value={formData.seo.description.ar}
+                        onChange={(e) => handleSeoChange('ar', 'description', e.target.value)}
+                        placeholder="وصف مختصر لمحركات البحث (120-160 حرفًا)"
+                        maxLength="160"
+                        rows="3"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white"
+                      />
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        {formData.seo.description.ar.length}/160 characters
+                      </p>
+                    </div>
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Meta Keywords
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.metaKeywords}
-                      onChange={(e) => setFormData({ ...formData, metaKeywords: e.target.value })}
-                      placeholder="keyword1, keyword2, keyword3"
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white"
-                    />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Meta Keywords (English)
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.seo.keywords.en}
+                        onChange={(e) => handleSeoChange('en', 'keywords', e.target.value)}
+                        placeholder="keyword1, keyword2, keyword3"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Meta Keywords (Arabic)
+                      </label>
+                      <input
+                        type="text"
+                        dir="rtl"
+                        value={formData.seo.keywords.ar}
+                        onChange={(e) => handleSeoChange('ar', 'keywords', e.target.value)}
+                        placeholder="كلمة مفتاحية ١، كلمة مفتاحية ٢"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
