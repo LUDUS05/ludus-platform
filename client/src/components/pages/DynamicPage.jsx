@@ -89,7 +89,7 @@ const DynamicPage = () => {
           {/* Page Header */}
           <div className="px-6 py-8 border-b border-gray-200 dark:border-gray-700">
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-              {page.title}
+              {page.title?.en || page.title?.ar || page.title || 'Untitled'}
             </h1>
             
             {/* Meta Information */}
