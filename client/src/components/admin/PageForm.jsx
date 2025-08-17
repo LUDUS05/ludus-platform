@@ -53,7 +53,10 @@ const PageForm = () => {
       });
     } catch (error) {
       console.error('Failed to fetch page:', error);
-      setMessage({ type: 'error', text: 'Failed to load page' });
+      const errorMessage = error.response?.status === 404 
+        ? 'Page not found. It may have been deleted.' 
+        : error.response?.data?.message || 'Failed to load page';
+      setMessage({ type: 'error', text: errorMessage });
     } finally {
       setLoading(false);
     }
