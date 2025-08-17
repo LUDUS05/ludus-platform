@@ -121,20 +121,18 @@ function ActivityModerationContent() {
   if (error) {
     return (
       <Container size="lg" className="py-8">
-        <Card>
-          <Card.Body>
-            <div className="text-center py-8">
-              <Text size="xl" weight="bold" color="red">Error</Text>
-              <Text size="lg" color="gray" className="mt-2">{error}</Text>
-              <Button 
-                variant="primary" 
-                className="mt-4"
-                onClick={() => fetchActivities()}
-              >
-                Try Again
-              </Button>
-            </div>
-          </Card.Body>
+        <Card className="p-6">
+          <div className="text-center py-8">
+            <Text size="xl" weight="bold" className="text-red-600">Error</Text>
+            <Text size="lg" className="text-gray-600 mt-2">{error}</Text>
+            <Button 
+              variant="primary" 
+              className="mt-4"
+              onClick={() => fetchActivities()}
+            >
+              Try Again
+            </Button>
+          </div>
         </Card>
       </Container>
     );
@@ -142,20 +140,17 @@ function ActivityModerationContent() {
 
   return (
     <Container size="lg" className="py-8">
-      <Stack gap="8">
-        <Card>
-          <Card.Body>
-            <div className="flex items-center justify-between">
-              <div>
-                <Text as="div" size="xl" weight="bold">Activity Moderation 🎯</Text>
-                <Text size="lg" color="gray">Review and approve or reject activities</Text>
-              </div>
+      <Stack spacing="lg">
+        <Card className="p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <Text as="div" size="xl" weight="bold">Activity Moderation 🎯</Text>
+              <Text size="lg" className="text-gray-600">Review and approve or reject activities</Text>
             </div>
-          </Card.Body>
+          </div>
         </Card>
 
-        <Card>
-          <Card.Body>
+        <Card className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               <div>
                 <Text size="sm" weight="medium" className="mb-2 block">Search</Text>
@@ -165,18 +160,19 @@ function ActivityModerationContent() {
                   onChange={(e) => handleFilterChange('search', e.target.value)} 
                 />
               </div>
-              <div>
-                <Text size="sm" weight="medium" className="mb-2 block">Status</Text>
-                <Select 
-                  value={filters.status} 
-                  onChange={(e) => handleFilterChange('status', e.target.value)}
-                >
-                  <option value="">All Statuses</option>
-                  <option value="pending">Pending</option>
-                  <option value="approved">Approved</option>
-                  <option value="rejected">Rejected</option>
-                </Select>
-              </div>
+                             <div>
+                 <Text size="sm" weight="medium" className="mb-2 block">Status</Text>
+                 <Select 
+                   value={filters.status} 
+                   onChange={(e) => handleFilterChange('status', e.target.value)}
+                   options={[
+                     { value: '', label: 'All Statuses' },
+                     { value: 'pending', label: 'Pending' },
+                     { value: 'approved', label: 'Approved' },
+                     { value: 'rejected', label: 'Rejected' }
+                   ]}
+                 />
+               </div>
               <div className="flex items-end">
                 <Button 
                   variant="primary" 
@@ -194,7 +190,7 @@ function ActivityModerationContent() {
                   <Text size="lg" color="gray">No activities found</Text>
                 </div>
               ) : (
-                <Stack gap="4">
+                <Stack spacing="md">
                   {activities.map((activity) => (
                     <div key={activity._id} className="border rounded-lg p-4">
                       <div className="flex items-start justify-between">
@@ -312,7 +308,6 @@ function ActivityModerationContent() {
                 </Stack>
               )}
             </div>
-          </Card.Body>
         </Card>
 
         {/* Pagination */}

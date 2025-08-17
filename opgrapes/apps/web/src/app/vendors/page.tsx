@@ -1,11 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { VendorGrid } from '@/components/vendors/VendorGrid';
+import { VendorCard } from '@/components/vendors/VendorCard';
 import { VendorFilters, VendorFilters as VendorFiltersType } from '@/components/vendors/VendorFilters';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
-import { Text } from '@opgrapes/ui/Text';
-import { Building2, Star, MapPin, Users } from 'lucide-react';
 
 // Mock data for development - replace with API calls
 const mockVendors = [
@@ -126,7 +124,7 @@ const mockVendors = [
 ];
 
 export default function VendorsPage() {
-  const [vendors, setVendors] = useState(mockVendors);
+  const [vendors] = useState(mockVendors);
   const [filteredVendors, setFilteredVendors] = useState(mockVendors);
   const [loading, setLoading] = useState(false);
 
