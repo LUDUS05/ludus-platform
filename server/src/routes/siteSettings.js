@@ -1,7 +1,7 @@
 const express = require('express');
 const { body } = require('express-validator');
 const auth = require('../middleware/auth');
-const rbac = require('../middleware/rbac');
+const { requireAdminRole } = require('../middleware/rbac');
 const {
   getSettings,
   updateSettings,
@@ -26,12 +26,12 @@ const settingsValidation = [
 router.get('/', getSettings);
 
 // Update site settings (Admin only)
-router.put('/', auth, rbac(['admin']), settingsValidation, updateSettings);
+router.put('/', auth, requireAdminRole(['admin']), settingsValidation, updateSettings);
 
 // Toggle coming soon mode (Admin only)
-router.post('/toggle-coming-soon', auth, rbac(['admin']), toggleComingSoon);
+router.post('/toggle-coming-soon', auth, requireAdminRole(['admin']), toggleComingSoon);
 
 // Toggle maintenance mode (Admin only)
-router.post('/toggle-maintenance', auth, rbac(['admin']), toggleMaintenance);
+router.post('/toggle-maintenance', auth, requireAdminRole(['admin']), toggleMaintenance);
 
 module.exports = router;
