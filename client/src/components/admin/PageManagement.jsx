@@ -78,8 +78,19 @@ const PageManagement = () => {
     setLoading(true);
     
     try {
+      // Convert string content to the expected array format for the backend
       const pageData = {
-        ...formData
+        ...formData,
+        content: typeof formData.content === 'string' 
+          ? [
+              {
+                id: Date.now().toString(),
+                type: 'paragraph',
+                content: { en: formData.content, ar: '' },
+                order: 0
+              }
+            ]
+          : formData.content
       };
       
       if (editingPage) {
@@ -99,7 +110,11 @@ const PageManagement = () => {
       console.error('Error config:', error.config);
       
       let errorMessage = 'Unknown error occurred';
-      if (error.response?.data?.message) {
+      if (error.response?.status === 400 && error.response?.data?.message?.includes('url already exists')) {
+        const currentSlug = formData.slug;
+        const timestamp = Date.now();
+        errorMessage = `A page with the URL "${currentSlug}" already exists. Please use a different URL slug (e.g., "${currentSlug}-${timestamp}" or "${currentSlug}-new").`;
+      } else if (error.response?.data?.message) {
         errorMessage = error.response.data.message;
       } else if (error.response?.data?.errors) {
         errorMessage = `Validation error: ${JSON.stringify(error.response.data.errors)}`;
@@ -117,7 +132,9 @@ const PageManagement = () => {
     setEditingPage(page);
     setFormData({
       title: page.title || { en: '', ar: '' },
-      content: page.content || '',
+      content: Array.isArray(page.content) && page.content.length > 0 
+        ? page.content[0]?.content?.en || ''
+        : page.content || '',
       slug: page.slug || '',
       placement: page.placement || 'none',
       status: page.status || 'draft',
