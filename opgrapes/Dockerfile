@@ -2,11 +2,18 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy the entire API directory
-COPY apps/api/ ./
+# Debug: List what's available in the build context
+RUN ls -la
+
+# Copy package files first
+COPY apps/api/package*.json ./
 
 # Install dependencies
 RUN npm install --only=production
+
+# Copy source code
+COPY apps/api/src ./src
+COPY apps/api/tsconfig.json ./
 
 # Build the application
 RUN npm run build
