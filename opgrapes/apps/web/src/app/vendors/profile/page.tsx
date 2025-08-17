@@ -5,24 +5,16 @@ import { Card } from '@opgrapes/ui/Card';
 import { Button } from '@opgrapes/ui/Button';
 import { Input } from '@opgrapes/ui/Input';
 import { Textarea } from '@opgrapes/ui/Textarea';
-import { Select } from '@opgrapes/ui/Select';
 import { Checkbox } from '@opgrapes/ui/Checkbox';
 import { Text } from '@opgrapes/ui/Text';
 import { Stack } from '@opgrapes/ui/Stack';
 import { Badge } from '@opgrapes/ui/Badge';
-import { Tabs } from '@opgrapes/ui/Tabs';
+import { Tabs, TabList, Tab, TabPanel } from '@opgrapes/ui/Tabs';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { 
   Building2, 
-  MapPin, 
-  Phone, 
-  Mail, 
-  Globe, 
-  Clock, 
   Upload, 
   Save, 
-  X,
-  CheckCircle,
   AlertCircle
 } from 'lucide-react';
 
@@ -43,7 +35,7 @@ const mockVendor = {
   contact: {
     phone: '+1 (555) 123-4567',
     email: 'info@adventureco.com',
-    website: 'adventureco.com',
+    website: 'adventureco.com'
   },
   featured: true,
   about: 'Adventure Co. was founded with a simple mission: to make outdoor adventure accessible to everyone.',
@@ -54,7 +46,7 @@ const mockVendor = {
     thursday: { open: '09:00', close: '17:00', closed: false },
     friday: { open: '09:00', close: '17:00', closed: false },
     saturday: { open: '10:00', close: '16:00', closed: false },
-    sunday: { open: '10:00', close: '16:00', closed: false },
+    sunday: { open: '10:00', close: '16:00', closed: false }
   },
   policies: {
     cancellation: 'Free cancellation up to 48 hours before activity',
@@ -74,7 +66,7 @@ const categoryOptions = [
   { value: 'art-craft', label: 'Art & Craft', icon: '🎨' },
   { value: 'entertainment', label: 'Entertainment', icon: '🎪' },
   { value: 'technology', label: 'Technology', icon: '💻' },
-  { value: 'fitness', label: 'Fitness & Sports', icon: '🏃' },
+  { value: 'fitness', label: 'Fitness & Sports', icon: '🏃' }
 ];
 
 const daysOfWeek = [
@@ -84,16 +76,14 @@ const daysOfWeek = [
   { key: 'thursday', label: 'Thursday' },
   { key: 'friday', label: 'Friday' },
   { key: 'saturday', label: 'Saturday' },
-  { key: 'sunday', label: 'Sunday' },
+  { key: 'sunday', label: 'Sunday' }
 ];
 
 export default function VendorProfilePage() {
-  const [vendor, setVendor] = useState(mockVendor);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState('basic');
   const [formData, setFormData] = useState(mockVendor);
-
   const [logoPreview, setLogoPreview] = useState(mockVendor.logo);
   const [bannerPreview, setBannerPreview] = useState(mockVendor.banner);
 
@@ -147,7 +137,6 @@ export default function VendorProfilePage() {
   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setLogoFile(file);
       const reader = new FileReader();
       reader.onload = () => {
         setLogoPreview(reader.result as string);
@@ -159,7 +148,6 @@ export default function VendorProfilePage() {
   const handleBannerUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setBannerFile(file);
       const reader = new FileReader();
       reader.onload = () => {
         setBannerPreview(reader.result as string);
@@ -172,7 +160,6 @@ export default function VendorProfilePage() {
     setSaving(true);
     // In production, send formData to API
     setTimeout(() => {
-      setVendor(formData);
       setSaving(false);
       // Show success message
     }, 2000);
@@ -229,384 +216,288 @@ export default function VendorProfilePage() {
         </div>
 
         {/* Profile Tabs */}
-        <Tabs value={activeTab} onChange={setActiveTab}>
-          <Tabs.List className="mb-6">
-            <Tabs.Tab value="basic">Basic Information</Tabs.Tab>
-            <Tabs.Tab value="media">Media & Branding</Tabs.Tab>
-            <Tabs.Tab value="hours">Business Hours</Tabs.Tab>
-            <Tabs.Tab value="policies">Policies & Info</Tabs.Tab>
-            <Tabs.Tab value="categories">Categories & Services</Tabs.Tab>
-          </Tabs.List>
+        <Tabs defaultTab={activeTab}>
+          <TabList>
+            <Tab id="basic">Basic Information</Tab>
+            <Tab id="contact">Contact & Hours</Tab>
+            <Tab id="policies">Policies & Settings</Tab>
+          </TabList>
 
           {/* Basic Information Tab */}
-          <Tabs.Panel value="basic">
-            <Stack gap="6">
-              <Card>
-                <div className="px-6 py-4 border-b border-gray-200">
-                  <Text as="h3" size="lg" weight="semibold">
-                    Business Information
-                  </Text>
-                </div>
-                <div className="p-6">
-                  <Stack gap="4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <Text size="sm" weight="medium" className="mb-2">
-                          Business Name *
-                        </Text>
-                        <Input
-                          value={formData.name}
-                          onChange={(e) => handleInputChange('name', e.target.value)}
-                          placeholder="Enter business name"
-                        />
-                      </div>
-                      <div>
-                        <Text size="sm" weight="medium" className="mb-2">
-                          Established Year
-                        </Text>
-                        <Input
-                          value={formData.established}
-                          onChange={(e) => handleInputChange('established', e.target.value)}
-                          placeholder="e.g., 2014"
-                        />
-                      </div>
-                    </div>
-                    
+          <TabPanel id="basic">
+            <Card className="p-6">
+              <Stack spacing="lg">
+                <div>
+                  <Text size="lg" weight="semibold" className="mb-4">Basic Information</Text>
+                  
+                  {/* Logo and Banner */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     <div>
-                      <Text size="sm" weight="medium" className="mb-2">
-                        Description *
-                      </Text>
-                      <Textarea
-                        value={formData.description}
-                        onChange={(e) => handleInputChange('description', e.target.value)}
-                        placeholder="Describe your business and what makes you unique"
-                        rows={4}
-                      />
+                      <Text size="sm" weight="medium" className="mb-2">Company Logo</Text>
+                      <div className="flex items-center gap-4">
+                        <img 
+                          src={logoPreview} 
+                          alt="Company Logo" 
+                          className="w-20 h-20 rounded-lg object-cover border-2 border-gray-200"
+                        />
+                        <div>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleLogoUpload}
+                            className="hidden"
+                            id="logo-upload"
+                          />
+                          <label htmlFor="logo-upload">
+                            <Button variant="outline" size="sm">
+                              <Upload size={14} className="mr-2" />
+                              Upload Logo
+                            </Button>
+                          </label>
+                        </div>
+                      </div>
                     </div>
 
                     <div>
-                      <Text size="sm" weight="medium" className="mb-2">
-                        About Us
-                      </Text>
-                      <Textarea
-                        value={formData.about}
-                        onChange={(e) => handleInputChange('about', e.target.value)}
-                        placeholder="Tell your story and mission"
-                        rows={6}
-                      />
+                      <Text size="sm" weight="medium" className="mb-2">Banner Image</Text>
+                      <div className="flex items-center gap-4">
+                        <img 
+                          src={bannerPreview} 
+                          alt="Banner" 
+                          className="w-32 h-20 rounded-lg object-cover border-2 border-gray-200"
+                        />
+                        <div>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleBannerUpload}
+                            className="hidden"
+                            id="banner-upload"
+                          />
+                          <label htmlFor="banner-upload">
+                            <Button variant="outline" size="sm">
+                              <Upload size={14} className="mr-2" />
+                              Upload Banner
+                            </Button>
+                          </label>
+                        </div>
+                      </div>
                     </div>
-                  </Stack>
-                </div>
-              </Card>
+                  </div>
 
-              <Card>
-                <div className="px-6 py-4 border-b border-gray-200">
-                  <Text as="h3" size="lg" weight="semibold">
-                    Contact Information
-                  </Text>
-                </div>
-                <div className="p-6">
-                  <Stack gap="4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <Text size="sm" weight="medium" className="mb-2">
-                          Phone Number
-                        </Text>
-                        <Input
-                          value={formData.contact.phone}
-                          onChange={(e) => handleContactChange('phone', e.target.value)}
-                          placeholder="+1 (555) 123-4567"
-                        />
-                      </div>
-                      <div>
-                        <Text size="sm" weight="medium" className="mb-2">
-                          Email Address
-                        </Text>
-                        <Input
-                          value={formData.contact.email}
-                          onChange={(e) => handleContactChange('email', e.target.value)}
-                          placeholder="info@yourbusiness.com"
-                          type="email"
-                        />
-                      </div>
-                    </div>
-                    
+                  {/* Company Details */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <Text size="sm" weight="medium" className="mb-2">
-                        Website
-                      </Text>
+                      <Text size="sm" weight="medium" className="mb-2">Company Name</Text>
                       <Input
-                        value={formData.contact.website}
-                        onChange={(e) => handleContactChange('website', e.target.value)}
-                        placeholder="yourbusiness.com"
+                        value={formData.name}
+                        onChange={(e) => handleInputChange('name', e.target.value)}
+                        placeholder="Enter company name"
                       />
                     </div>
-
                     <div>
-                      <Text size="sm" weight="medium" className="mb-2">
-                        Location
-                      </Text>
+                      <Text size="sm" weight="medium" className="mb-2">Location</Text>
                       <Input
                         value={formData.location}
                         onChange={(e) => handleInputChange('location', e.target.value)}
-                        placeholder="City, State"
+                        placeholder="Enter location"
                       />
                     </div>
-                  </Stack>
-                </div>
-              </Card>
-            </Stack>
-          </Tabs.Panel>
-
-          {/* Media & Branding Tab */}
-          <Tabs.Panel value="media">
-            <Stack gap="6">
-              <Card>
-                <div className="px-6 py-4 border-b border-gray-200">
-                  <Text as="h3" size="lg" weight="semibold">
-                    Logo & Branding
-                  </Text>
-                </div>
-                <div className="p-6">
-                  <Stack gap="6">
-                    {/* Logo Upload */}
                     <div>
-                      <Text size="sm" weight="medium" className="mb-3">
-                        Business Logo
-                      </Text>
-                      <div className="flex items-center gap-4">
-                        <div className="w-24 h-24 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
-                          {logoPreview ? (
-                            <img 
-                              src={logoPreview} 
-                              alt="Logo preview" 
-                              className="w-full h-full object-cover"
-                            />
-                          ) : (
-                            <Building2 size={32} className="text-gray-400" />
-                          )}
-                        </div>
-                        <div className="flex-1">
-                          <label className="cursor-pointer">
-                            <input
-                              type="file"
-                              accept="image/*"
-                              onChange={handleLogoUpload}
-                              className="hidden"
-                            />
-                            <div className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50">
-                              <Upload size={16} />
-                              <span>Upload Logo</span>
-                            </div>
-                          </label>
-                          <Text size="xs" color="gray" className="mt-1">
-                            Recommended: 200x200px, PNG or JPG
-                          </Text>
-                        </div>
-                      </div>
+                      <Text size="sm" weight="medium" className="mb-2">Established Year</Text>
+                      <Input
+                        value={formData.established}
+                        onChange={(e) => handleInputChange('established', e.target.value)}
+                        placeholder="Enter year"
+                      />
                     </div>
-
-                    {/* Banner Upload */}
                     <div>
-                      <Text size="sm" weight="medium" className="mb-3">
-                        Banner Image
-                      </Text>
-                      <div className="flex items-center gap-4">
-                        <div className="w-48 h-24 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
-                          {bannerPreview ? (
-                            <img 
-                              src={bannerPreview} 
-                              alt="Banner preview" 
-                              className="w-full h-full object-cover"
-                            />
-                          ) : (
-                            <Building2 size={32} className="text-gray-400" />
-                          )}
-                        </div>
-                        <div className="flex-1">
-                          <label className="cursor-pointer">
-                            <input
-                              type="file"
-                              accept="image/*"
-                              onChange={handleBannerUpload}
-                              className="hidden"
-                            />
-                            <div className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50">
-                              <Upload size={16} />
-                              <span>Upload Banner</span>
-                            </div>
-                          </label>
-                          <Text size="xs" color="gray" className="mt-1">
-                            Recommended: 1200x400px, PNG or JPG
-                          </Text>
-                        </div>
-                      </div>
+                      <Text size="sm" weight="medium" className="mb-2">Activity Count</Text>
+                      <Input
+                        type="number"
+                        value={formData.activityCount}
+                        onChange={(e) => handleInputChange('activityCount', parseInt(e.target.value))}
+                        placeholder="Enter count"
+                      />
                     </div>
-                  </Stack>
-                </div>
-              </Card>
-            </Stack>
-          </Tabs.Panel>
+                  </div>
 
-          {/* Business Hours Tab */}
-          <Tabs.Panel value="hours">
-            <Card>
-              <div className="px-6 py-4 border-b border-gray-200">
-                <Text as="h3" size="lg" weight="semibold">
-                  Business Hours
-                </Text>
-              </div>
-              <div className="p-6">
-                <Stack gap="4">
-                  {daysOfWeek.map((day) => (
-                    <div key={day.key} className="flex items-center gap-4 p-4 border border-gray-200 rounded-lg">
-                      <div className="w-24">
-                        <Text weight="medium">{day.label}</Text>
-                      </div>
-                      
-                      <div className="flex items-center gap-2">
+                  <div className="mt-4">
+                    <Text size="sm" weight="medium" className="mb-2">Description</Text>
+                    <Textarea
+                      value={formData.description}
+                      onChange={(e) => handleInputChange('description', e.target.value)}
+                      placeholder="Describe your company and services"
+                      rows={4}
+                    />
+                  </div>
+
+                  <div className="mt-4">
+                    <Text size="sm" weight="medium" className="mb-2">About</Text>
+                    <Textarea
+                      value={formData.about}
+                      onChange={(e) => handleInputChange('about', e.target.value)}
+                      placeholder="Tell your story"
+                      rows={4}
+                    />
+                  </div>
+
+                  {/* Categories */}
+                  <div className="mt-6">
+                    <Text size="sm" weight="medium" className="mb-3">Activity Categories</Text>
+                    <div className="flex flex-wrap gap-2">
+                      {categoryOptions.map((category) => (
                         <Checkbox
-                          checked={!formData.businessHours[day.key as keyof typeof formData.businessHours].closed}
-                          onChange={(e) => handleBusinessHoursChange(day.key, 'closed', !e.target.checked)}
+                          key={category.value}
+                          checked={formData.categories.includes(category.value)}
+                          onChange={() => handleCategoryToggle(category.value)}
+                          label={`${category.icon} ${category.label}`}
                         />
-                        <Text size="sm">Open</Text>
-                      </div>
-                      
-                      {!formData.businessHours[day.key as keyof typeof formData.businessHours].closed && (
-                        <>
-                          <div className="flex items-center gap-2">
-                            <Text size="sm">Open:</Text>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </Stack>
+            </Card>
+          </TabPanel>
+
+          {/* Contact & Hours Tab */}
+          <TabPanel id="contact">
+            <Card className="p-6">
+              <Stack spacing="lg">
+                <div>
+                  <Text size="lg" weight="semibold" className="mb-4">Contact Information</Text>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div>
+                      <Text size="sm" weight="medium" className="mb-2">Phone</Text>
+                      <Input
+                        value={formData.contact.phone}
+                        onChange={(e) => handleContactChange('phone', e.target.value)}
+                        placeholder="Enter phone number"
+                      />
+                    </div>
+                    <div>
+                      <Text size="sm" weight="medium" className="mb-2">Email</Text>
+                      <Input
+                        value={formData.contact.email}
+                        onChange={(e) => handleContactChange('email', e.target.value)}
+                        placeholder="Enter email address"
+                      />
+                    </div>
+                    <div>
+                      <Text size="sm" weight="medium" className="mb-2">Website</Text>
+                      <Input
+                        value={formData.contact.website}
+                        onChange={(e) => handleContactChange('website', e.target.value)}
+                        placeholder="Enter website URL"
+                      />
+                    </div>
+                  </div>
+
+                  <Text size="lg" weight="semibold" className="mb-4">Business Hours</Text>
+                  <div className="space-y-3">
+                    {daysOfWeek.map((day) => (
+                      <div key={day.key} className="flex items-center gap-4">
+                        <div className="w-24">
+                          <Text size="sm">{day.label}</Text>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Checkbox
+                            checked={!formData.businessHours[day.key as keyof typeof formData.businessHours].closed}
+                            onChange={(checked) => handleBusinessHoursChange(day.key, 'closed', !checked)}
+                            label="Open"
+                          />
+                        </div>
+                        {!formData.businessHours[day.key as keyof typeof formData.businessHours].closed && (
+                          <>
                             <Input
                               type="time"
                               value={formData.businessHours[day.key as keyof typeof formData.businessHours].open}
                               onChange={(e) => handleBusinessHoursChange(day.key, 'open', e.target.value)}
                               className="w-24"
                             />
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <Text size="sm">Close:</Text>
+                            <Text size="sm">to</Text>
                             <Input
                               type="time"
                               value={formData.businessHours[day.key as keyof typeof formData.businessHours].close}
                               onChange={(e) => handleBusinessHoursChange(day.key, 'close', e.target.value)}
                               className="w-24"
                             />
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  ))}
-                </Stack>
-              </div>
+                          </>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </Stack>
             </Card>
-          </Tabs.Panel>
+          </TabPanel>
 
           {/* Policies Tab */}
-          <Tabs.Panel value="policies">
-            <Card>
-              <div className="px-6 py-4 border-b border-gray-200">
-                <Text as="h3" size="lg" weight="semibold">
-                  Business Policies
-                </Text>
-              </div>
-              <div className="p-6">
-                <Stack gap="4">
-                  <div>
-                    <Text size="sm" weight="medium" className="mb-2">
-                      Cancellation Policy
-                    </Text>
-                    <Textarea
-                      value={formData.policies.cancellation}
-                      onChange={(e) => setFormData(prev => ({
-                        ...prev,
-                        policies: { ...prev.policies, cancellation: e.target.value }
-                      }))}
-                      placeholder="Describe your cancellation policy"
-                      rows={3}
-                    />
-                  </div>
+          <TabPanel id="policies">
+            <Card className="p-6">
+              <Stack spacing="lg">
+                <div>
+                  <Text size="lg" weight="semibold" className="mb-4">Policies & Settings</Text>
                   
-                  <div>
-                    <Text size="sm" weight="medium" className="mb-2">
-                      Insurance Information
-                    </Text>
-                    <Textarea
-                      value={formData.policies.insurance}
-                      onChange={(e) => setFormData(prev => ({
-                        ...prev,
-                        policies: { ...prev.policies, insurance: e.target.value }
-                      }))}
-                      placeholder="Describe your insurance coverage"
-                      rows={3}
-                    />
-                  </div>
-                  
-                  <div>
-                    <Text size="sm" weight="medium" className="mb-2">
-                      Equipment Policy
-                    </Text>
-                    <Textarea
-                      value={formData.policies.equipment}
-                      onChange={(e) => setFormData(prev => ({
-                        ...prev,
-                        policies: { ...prev.policies, equipment: e.target.value }
-                      }))}
-                      placeholder="Describe your equipment policy"
-                      rows={3}
-                    />
-                  </div>
-                  
-                  <div>
-                    <Text size="sm" weight="medium" className="mb-2">
-                      Group Size Policy
-                    </Text>
-                    <Textarea
-                      value={formData.policies.groupSize}
-                      onChange={(e) => setFormData(prev => ({
-                        ...prev,
-                        policies: { ...prev.policies, groupSize: e.target.value }
-                      }))}
-                      placeholder="Describe your group size policy"
-                      rows={3}
-                    />
-                  </div>
-                </Stack>
-              </div>
-            </Card>
-          </Tabs.Panel>
-
-          {/* Categories Tab */}
-          <Tabs.Panel value="categories">
-            <Card>
-              <div className="px-6 py-4 border-b border-gray-200">
-                <Text as="h3" size="lg" weight="semibold">
-                  Service Categories
-                </Text>
-                <Text size="sm" color="gray">
-                  Select the categories that best describe your services
-                </Text>
-              </div>
-              <div className="p-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {categoryOptions.map((category) => (
-                    <label
-                      key={category.value}
-                      className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50"
-                    >
-                      <Checkbox
-                        checked={formData.categories.includes(category.value)}
-                        onChange={() => handleCategoryToggle(category.value)}
+                  <div className="space-y-4">
+                    <div>
+                      <Text size="sm" weight="medium" className="mb-2">Cancellation Policy</Text>
+                      <Textarea
+                        value={formData.policies.cancellation}
+                        onChange={(e) => setFormData(prev => ({
+                          ...prev,
+                          policies: { ...prev.policies, cancellation: e.target.value }
+                        }))}
+                        placeholder="Describe your cancellation policy"
+                        rows={3}
                       />
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg">{category.icon}</span>
-                        <Text size="sm">{category.label}</Text>
-                      </div>
-                    </label>
-                  ))}
+                    </div>
+                    
+                    <div>
+                      <Text size="sm" weight="medium" className="mb-2">Insurance Coverage</Text>
+                      <Textarea
+                        value={formData.policies.insurance}
+                        onChange={(e) => setFormData(prev => ({
+                          ...prev,
+                          policies: { ...prev.policies, insurance: e.target.value }
+                        }))}
+                        placeholder="Describe your insurance coverage"
+                        rows={3}
+                      />
+                    </div>
+                    
+                    <div>
+                      <Text size="sm" weight="medium" className="mb-2">Equipment Policy</Text>
+                      <Textarea
+                        value={formData.policies.equipment}
+                        onChange={(e) => setFormData(prev => ({
+                          ...prev,
+                          policies: { ...prev.policies, equipment: e.target.value }
+                        }))}
+                        placeholder="Describe your equipment policy"
+                        rows={3}
+                      />
+                    </div>
+                    
+                    <div>
+                      <Text size="sm" weight="medium" className="mb-2">Group Size Policy</Text>
+                      <Textarea
+                        value={formData.policies.groupSize}
+                        onChange={(e) => setFormData(prev => ({
+                          ...prev,
+                          policies: { ...prev.policies, groupSize: e.target.value }
+                        }))}
+                        placeholder="Describe your group size policy"
+                        rows={3}
+                      />
+                    </div>
+                  </div>
                 </div>
-              </div>
+              </Stack>
             </Card>
-          </Tabs.Panel>
+          </TabPanel>
         </Tabs>
       </div>
     </div>

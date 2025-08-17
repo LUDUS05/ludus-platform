@@ -7,7 +7,7 @@ import { Button } from '@opgrapes/ui/Button';
 import { Text } from '@opgrapes/ui/Text';
 import { Badge } from '@opgrapes/ui/Badge';
 import { Stack } from '@opgrapes/ui/Stack';
-import { Tabs } from '@opgrapes/ui/Tabs';
+import { Tabs, TabList, Tab, TabPanel } from '@opgrapes/ui/Tabs';
 import { ActivityCard } from '@/components/activities/ActivityCard';
 import { ActivityBookingModal } from '@/components/activities/ActivityBookingModal';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
@@ -25,6 +25,28 @@ import {
 } from 'lucide-react';
 import { bookingService, type CreateBookingRequest } from '@/services/bookingService';
 import { useToast } from '@/contexts/ToastContext';
+
+// Type definitions
+interface Review {
+  id: string;
+  user: string;
+  rating: number;
+  comment: string;
+  date: string;
+}
+
+interface Activity {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  price: number;
+  location: string;
+  duration: string;
+  rating: number;
+  reviewCount: number;
+  imageUrl: string;
+}
 
 // Mock data - replace with API calls
 const mockActivity = {
@@ -270,17 +292,17 @@ function ReviewCard({ review }: { review: Review }) {
         </div>
         <div className="flex-1">
           <div className="flex items-center space-x-2 mb-2">
-            <Text variant="subtitle" className="font-semibold">
+            <Text size="sm" weight="semibold">
               {review.user}
             </Text>
             <div className="flex items-center space-x-1">
               {renderStars(review.rating)}
             </div>
-            <Text variant="caption" className="text-gray-500">
+            <Text size="xs" className="text-gray-500">
               {new Date(review.date).toLocaleDateString()}
             </Text>
           </div>
-          <Text variant="body">{review.comment}</Text>
+          <Text size="sm">{review.comment}</Text>
         </div>
       </div>
     </Card>
@@ -291,7 +313,7 @@ function ReviewCard({ review }: { review: Review }) {
 function RelatedActivities({ activities }: { activities: Activity[] }) {
   return (
     <div className="space-y-4">
-      <Text variant="h3" className="text-xl font-semibold">
+      <Text size="lg" weight="semibold" className="text-xl">
         Related Activities
       </Text>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -424,7 +446,7 @@ export default function ActivityDetailPage() {
             <Card className="p-6">
               <div className="flex items-start justify-between mb-4">
                 <div>
-                  <Text variant="h1" className="text-3xl font-bold mb-2">
+                  <Text size="xl" weight="bold" className="text-3xl mb-2">
                     {mockActivity.title}
                   </Text>
                   <div className="flex items-center space-x-4 text-gray-600">
@@ -478,11 +500,11 @@ export default function ActivityDetailPage() {
                     {mockActivity.rating} ({mockActivity.reviewCount} reviews)
                   </span>
                 </div>
-                <Badge variant="outline">{mockActivity.category}</Badge>
-                <Badge variant="outline">{mockActivity.difficulty}</Badge>
+                <Badge variant="default">{mockActivity.category}</Badge>
+                <Badge variant="default">{mockActivity.difficulty}</Badge>
               </div>
 
-              <Text variant="body" className="text-gray-700 mb-6">
+              <Text size="base" className="text-gray-700 mb-6">
                 {mockActivity.longDescription}
               </Text>
 
@@ -507,50 +529,47 @@ export default function ActivityDetailPage() {
 
             {/* Tabs */}
             <Card className="p-6">
-              <Tabs
-                tabs={[
-                  {
-                    label: 'What\'s Included',
-                    content: (
-                      <div className="space-y-3">
-                        {mockActivity.included.map((item, index) => (
-                          <div key={index} className="flex items-center space-x-2">
-                            <Award className="w-5 h-5 text-green-600" />
-                            <span>{item}</span>
-                          </div>
-                        ))}
+              <Tabs defaultTab="included">
+                <TabList>
+                  <Tab id="included">What's Included</Tab>
+                  <Tab id="requirements">Requirements</Tab>
+                  <Tab id="cancellation">Cancellation Policy</Tab>
+                </TabList>
+                
+                <TabPanel id="included">
+                  <div className="space-y-3">
+                    {mockActivity.included.map((item, index) => (
+                      <div key={index} className="flex items-center space-x-2">
+                        <Award className="w-5 h-5 text-green-600" />
+                        <span>{item}</span>
                       </div>
-                    )
-                  },
-                  {
-                    label: 'Requirements',
-                    content: (
-                      <div className="space-y-3">
-                        {mockActivity.requirements.map((item, index) => (
-                          <div key={index} className="flex items-center space-x-2">
-                            <Award className="w-5 h-5 text-blue-600" />
-                            <span>{item}</span>
-                          </div>
-                        ))}
+                    ))}
+                  </div>
+                </TabPanel>
+                
+                <TabPanel id="requirements">
+                  <div className="space-y-3">
+                    {mockActivity.requirements.map((item, index) => (
+                      <div key={index} className="flex items-center space-x-2">
+                        <Award className="w-5 h-5 text-blue-600" />
+                        <span>{item}</span>
                       </div>
-                    )
-                  },
-                  {
-                    label: 'Cancellation Policy',
-                    content: (
-                      <div className="p-4 bg-blue-50 rounded-lg">
-                        <Text variant="body">{mockActivity.cancellation}</Text>
-                      </div>
-                    )
-                  }
-                ]}
-              />
+                    ))}
+                  </div>
+                </TabPanel>
+                
+                <TabPanel id="cancellation">
+                  <div className="p-4 bg-blue-50 rounded-lg">
+                    <Text size="base">{mockActivity.cancellation}</Text>
+                  </div>
+                </TabPanel>
+              </Tabs>
             </Card>
 
             {/* Reviews */}
             <Card className="p-6">
               <div className="flex items-center justify-between mb-6">
-                <Text variant="h3" className="text-xl font-semibold">
+                <Text size="lg" weight="semibold" className="text-xl">
                   Reviews ({mockActivity.reviewCount})
                 </Text>
                 <Button variant="outline" size="sm">
@@ -572,7 +591,7 @@ export default function ActivityDetailPage() {
           <div className="space-y-6">
             {/* Vendor Info */}
             <Card className="p-6">
-              <Text variant="h3" className="text-lg font-semibold mb-4">
+              <Text size="lg" weight="semibold" className="text-lg mb-4">
                 About the Vendor
               </Text>
               <div className="space-y-3">
@@ -583,7 +602,7 @@ export default function ActivityDetailPage() {
                     </span>
                   </div>
                   <div>
-                    <Text variant="subtitle" className="font-semibold">
+                    <Text size="sm" weight="semibold">
                       {mockActivity.vendor.name}
                     </Text>
                     <div className="flex items-center space-x-1">
@@ -603,7 +622,7 @@ export default function ActivityDetailPage() {
                     </div>
                   </div>
                 </div>
-                <Text variant="body" className="text-gray-600">
+                <Text size="base" className="text-gray-600">
                   {mockActivity.vendor.description}
                 </Text>
                 <div className="pt-3 border-t">
@@ -623,7 +642,7 @@ export default function ActivityDetailPage() {
 
             {/* Quick Info */}
             <Card className="p-6">
-              <Text variant="h3" className="text-lg font-semibold mb-4">
+              <Text size="lg" weight="semibold" className="text-lg mb-4">
                 Quick Info
               </Text>
               <div className="space-y-3">

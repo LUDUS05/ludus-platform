@@ -3,9 +3,9 @@ services:
     name: opgrapes-api
     env: node
     plan: free
-    rootDirectory: opgrapes
-    buildCommand: npm install --include=dev && npm run build
-    startCommand: npm run start
+    rootDirectory: .
+    buildCommand: npm install && npm run build
+    startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
@@ -29,4 +29,4 @@ services:
         value: info
     healthCheckPath: /health
     autoDeploy: true
-    branch: opgrapes-project
+    branch: main
