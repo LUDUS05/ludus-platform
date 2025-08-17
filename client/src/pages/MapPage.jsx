@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import InteractiveMap from '../components/maps/InteractiveMap';
+import GoogleMap from '../components/maps/GoogleMap';
+import LocationSearch from '../components/maps/LocationSearch';
 import ActivityCard from '../components/ui/ActivityCard';
 import api from '../services/api';
 
 const MapPage = () => {
   const { t } = useTranslation();
   
-  const [events, setEvents] = useState([]);
+  const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [selectedActivity, setSelectedActivity] = useState(null);
+  const [mapCenter, setMapCenter] = useState({ lat: 24.7136, lng: 46.6753 });
+  const [mapZoom, setMapZoom] = useState(7);
   const [filters, setFilters] = useState({
     category: '',
     city: '',
@@ -42,10 +45,10 @@ const MapPage = () => {
   ];
 
   useEffect(() => {
-    fetchEvents();
+    fetchActivities();
   }, [filters]);
 
-  const fetchEvents = async () => {
+  const fetchActivities = async () => {
     try {
       setLoading(true);
       const queryParams = new URLSearchParams();
@@ -60,15 +63,15 @@ const MapPage = () => {
 
       const response = await api.get(`/activities?${queryParams.toString()}`);
       
-      // Filter only events that have location coordinates
-      const eventsWithLocation = response.data.data.activities.filter(
-        activity => activity.location?.coordinates
+      // Filter only activities that have location coordinates (from activity or vendor)
+      const activitiesWithLocation = response.data.data.activities.filter(
+        activity => activity.location?.coordinates || activity.vendor?.location?.coordinates
       );
       
-      setEvents(eventsWithLocation);
+      setActivities(activitiesWithLocation);
     } catch (error) {
-      console.error('Error fetching events:', error);
-      setEvents([]);
+      console.error('Error fetching activities:', error);
+      setActivities([]);
     } finally {
       setLoading(false);
     }
@@ -78,8 +81,13 @@ const MapPage = () => {
     setFilters(prev => ({ ...prev, [key]: value }));
   };
 
-  const handleEventSelect = (event) => {
-    setSelectedEvent(event);
+  const handleActivitySelect = (activity) => {
+    setSelectedActivity(activity);
+  };
+
+  const handleLocationSelect = (location) => {
+    setMapCenter({ lat: location.lat, lng: location.lng });
+    setMapZoom(13);
   };
 
   const handleClearFilters = () => {
@@ -91,16 +99,18 @@ const MapPage = () => {
       date: '',
       search: ''
     });
-    setSelectedEvent(null);
+    setSelectedActivity(null);
+    setMapCenter({ lat: 24.7136, lng: 46.6753 });
+    setMapZoom(7);
   };
 
   const getMapCenter = () => {
     const selectedCity = saudiCities.find(city => city.value === filters.city);
-    return selectedCity ? selectedCity.coordinates : { lat: 24.7136, lng: 46.6753 };
+    return selectedCity ? selectedCity.coordinates : mapCenter;
   };
 
   const getMapZoom = () => {
-    return filters.city ? 12 : 7; // Closer zoom for specific cities
+    return filters.city ? 12 : mapZoom;
   };
 
   return (
@@ -118,7 +128,7 @@ const MapPage = () => {
               </p>
             </div>
             <div className="text-sm text-gray-500">
-              {loading ? 'Loading...' : `${events.length} events found`}
+              {loading ? 'Loading...' : `${activities.length} activities found`}
             </div>
           </div>
         </div>
@@ -142,6 +152,18 @@ const MapPage = () => {
               </div>
 
               <div className="space-y-4">
+                {/* Location Search */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Search Location
+                  </label>
+                  <LocationSearch
+                    onPlaceSelect={handleLocationSelect}
+                    placeholder="Search for a location..."
+                    className="w-full"
+                  />
+                </div>
+
                 {/* Search */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -229,14 +251,14 @@ const MapPage = () => {
                 </div>
               </div>
 
-              {/* Selected Event Details */}
-              {selectedEvent && (
+              {/* Selected Activity Details */}
+              {selectedActivity && (
                 <div className="mt-6 pt-6 border-t border-gray-200">
                   <h3 className="text-lg font-semibold text-gray-900 mb-3">
-                    Selected Event
+                    Selected Activity
                   </h3>
                   <ActivityCard
-                    activity={selectedEvent}
+                    activity={selectedActivity}
                     className="w-full"
                     compact
                   />
@@ -248,12 +270,12 @@ const MapPage = () => {
           {/* Map */}
           <div className="lg:col-span-3">
             <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-              <InteractiveMap
-                events={events}
+              <GoogleMap
+                activities={activities}
                 center={getMapCenter()}
                 zoom={getMapZoom()}
-                onEventSelect={handleEventSelect}
-                selectedEventId={selectedEvent?._id}
+                onActivitySelect={handleActivitySelect}
+                selectedActivityId={selectedActivity?._id}
                 height="600px"
                 className="w-full"
               />

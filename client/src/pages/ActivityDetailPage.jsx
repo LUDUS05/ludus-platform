@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
+import GoogleMap from '../components/maps/GoogleMap';
 
 const ActivityDetailPage = () => {
   const { id } = useParams();
@@ -334,6 +335,46 @@ const ActivityDetailPage = () => {
             </div>
           </div>
         </div>
+
+        {/* Location Map */}
+        {(activity.location?.coordinates || activity.vendor?.location?.coordinates) && (
+          <div className="mt-12">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Activity Location</h2>
+            <div className="bg-white rounded-lg shadow border border-gray-200 overflow-hidden">
+              <GoogleMap
+                activities={[activity]}
+                center={
+                  activity.location?.coordinates 
+                    ? { 
+                        lat: activity.location.coordinates[1], 
+                        lng: activity.location.coordinates[0] 
+                      }
+                    : activity.vendor?.location?.coordinates
+                    ? {
+                        lat: activity.vendor.location.coordinates[1],
+                        lng: activity.vendor.location.coordinates[0]
+                      }
+                    : { lat: 24.7136, lng: 46.6753 }
+                }
+                zoom={15}
+                height="400px"
+                className="w-full"
+              />
+              <div className="p-4 bg-gray-50">
+                <div className="flex items-center space-x-2 text-sm text-gray-600">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  <span>
+                    {activity.vendor?.address?.street && `${activity.vendor.address.street}, `}
+                    {activity.vendor?.address?.city}, {activity.vendor?.address?.governorate}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Related Activities */}
         {relatedActivities.length > 0 && (

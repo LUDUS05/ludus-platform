@@ -428,7 +428,7 @@ Follow us for the latest activities and updates!
       html,
       text
     });
-  },
+  }
 
   // Send contact form notification to admin
   async sendContactFormNotification(contactData) {
@@ -500,7 +500,7 @@ ${contactData.message}
       console.error('Send contact form notification error:', error);
       throw error;
     }
-  },
+  }
 
   // Send contact confirmation to user
   async sendContactConfirmation(email, name, subject) {
