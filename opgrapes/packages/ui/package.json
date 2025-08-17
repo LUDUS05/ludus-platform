@@ -1,5 +1,5 @@
 {
-  "name": "ui",
+  "name": "@opgrapes/ui",
   "version": "1.0.0",
   "description": "Shared UI component library for OPGrapes project",
   "main": "dist/index.js",
