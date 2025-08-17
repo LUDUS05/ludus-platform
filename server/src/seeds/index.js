@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 require('dotenv').config({ path: '../.env' });
 
+const { connectDB } = require('../config/database');
 const seedAdmin = require('./seedAdmin');
 const seedVendors = require('./seedVendors');
 const seedActivities = require('./seedActivities');
@@ -10,8 +11,11 @@ const runAllSeeds = async () => {
   try {
     console.log('🚀 Starting complete database seeding...\n');
     
-    // Connect to MongoDB once for all seeders
-    await mongoose.connect(process.env.MONGODB_URI);
+    // Connect to MongoDB using the shared connection logic
+    const isConnected = await connectDB();
+    if (!isConnected) {
+      throw new Error('Could not connect to database. Aborting seeding.');
+    }
     console.log('✅ Connected to MongoDB\n');
     
     // Run seeds in order

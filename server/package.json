@@ -5,9 +5,9 @@
   "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js",
-    "dev": "nodemon src/app.js",
+    "dev": "NODE_ENV=development nodemon src/app.js",
     "test": "jest",
-    "seed": "node src/seeds/index.js",
+    "seed": "NODE_ENV=development node src/seeds/index.js",
     "test-api": "node test-api.js",
     "setup": "npm run seed && echo '✅ Setup complete! Run npm run dev to start the server.'",
     "build": "npm ci --production",
@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "jest": "^29.7.0",
-    "mongodb-memory-server": "^10.1.4",
+    "mongodb-memory-server": "^10.2.0",
     "nodemon": "^3.1.4",
     "supertest": "^6.3.3"
   }

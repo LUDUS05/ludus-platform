@@ -1,13 +1,24 @@
 const mongoose = require('mongoose');
+const { MongoMemoryServer } = require('mongodb-memory-server');
+
+let mongoServer;
 
 const connectDB = async () => {
   try {
-    if (!process.env.MONGODB_URI) {
-      console.error('MONGODB_URI environment variable not set');
+    let mongoUri;
+
+    if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development') {
+      console.log('Starting in-memory MongoDB for development/testing...');
+      mongoServer = await MongoMemoryServer.create();
+      mongoUri = mongoServer.getUri();
+    } else if (process.env.MONGODB_URI) {
+      mongoUri = process.env.MONGODB_URI;
+    } else {
+      console.error('MONGODB_URI environment variable not set for production');
       return false;
     }
 
-    const conn = await mongoose.connect(process.env.MONGODB_URI, {
+    const conn = await mongoose.connect(mongoUri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
@@ -60,4 +71,18 @@ const createIndexes = async () => {
   }
 };
 
-module.exports = connectDB;
+// Cleanup function for graceful shutdown
+const disconnectDB = async () => {
+  try {
+    if (mongoServer) {
+      await mongoServer.stop();
+      console.log('✅ In-memory MongoDB stopped');
+    }
+    await mongoose.connection.close();
+    console.log('✅ MongoDB connection closed');
+  } catch (error) {
+    console.error('Error during database cleanup:', error);
+  }
+};
+
+module.exports = { connectDB, disconnectDB };
