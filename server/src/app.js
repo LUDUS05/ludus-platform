@@ -56,6 +56,9 @@ app.use('/api', limiter);
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
+// Cookie parsing middleware for HttpOnly refresh tokens
+app.use(require('cookie-parser')());
+
 // Static file serving for uploads
 app.use('/uploads', express.static('uploads'));
 
@@ -78,28 +81,23 @@ app.use('/api/bookings', require('./routes/bookings'));
 app.use('/api/payments', require('./routes/payments'));
 app.use('/api/wallet', require('./routes/wallet'));
 app.use('/api/ratings', require('./routes/ratings'));
-app.use('/api/admin', require('./routes/admin'));
-app.use('/api/admin', require('./routes/adminEnhanced'));
-app.use('/api/admin', require('./routes/adminManagement'));
+app.use('/api/admin', require('./routes/adminConsolidated'));
 app.use('/api/pages', require('./routes/pages'));
 app.use('/api', require('./routes/translations'));
 app.use('/api/uploads', require('./routes/uploads'));
 app.use('/api/site-settings', require('./routes/siteSettings'));
 
 
-// Global error handler
-app.use(require('./middleware/errorHandler'));
-
-// 404 handler
+// 404 handler for unknown routes
 app.use('*', (req, res) => {
-  res.status(404).json({ message: 'Route not found' });
+  res.status(404).json({ 
+    success: false,
+    message: 'Route not found' 
+  });
 });
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: 'Something went wrong!' });
-});
+// Global error handler (must be last middleware)
+app.use(require('./middleware/errorHandler'));
 
 // Start server only if this file is run directly
 if (require.main === module) {

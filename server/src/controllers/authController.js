@@ -1,5 +1,7 @@
 const User = require('../models/User');
 const { generateTokens, verifyToken, generateEmailVerificationToken, generatePasswordResetToken } = require('../utils/generateTokens');
+const { setRefreshTokenCookie, clearRefreshTokenCookie, getRefreshTokenFromCookie } = require('../utils/cookieHelpers');
+const { verifySocialToken } = require('../services/socialAuthService');
 const emailService = require('../services/emailService');
 const crypto = require('crypto');
 
@@ -28,11 +30,14 @@ const register = async (req, res, next) => {
     });
 
     // Generate tokens
-    const { accessToken, refreshToken } = generateTokens(user._id);
+    const { accessToken, refreshToken } = generateTokens(user._id, user.role);
 
     // Save refresh token to user
     user.refreshToken = refreshToken;
     await user.save();
+
+    // Set refresh token as HttpOnly cookie
+    setRefreshTokenCookie(res, refreshToken);
 
     // Generate email verification token
     const emailVerificationToken = generateEmailVerificationToken(user._id, user.email);
@@ -58,8 +63,8 @@ const register = async (req, res, next) => {
           role: user.role,
           isEmailVerified: user.isEmailVerified
         },
-        accessToken,
-        refreshToken
+        accessToken
+        // refreshToken no longer sent in response body for security
       }
     });
   } catch (error) {
@@ -93,11 +98,14 @@ const login = async (req, res, next) => {
     }
 
     // Generate tokens
-    const { accessToken, refreshToken } = generateTokens(user._id);
+    const { accessToken, refreshToken } = generateTokens(user._id, user.role);
 
     // Save refresh token to user
     user.refreshToken = refreshToken;
     await user.save();
+
+    // Set refresh token as HttpOnly cookie
+    setRefreshTokenCookie(res, refreshToken);
 
     res.json({
       success: true,
@@ -111,8 +119,8 @@ const login = async (req, res, next) => {
           role: user.role,
           isEmailVerified: user.isEmailVerified
         },
-        accessToken,
-        refreshToken
+        accessToken
+        // refreshToken no longer sent in response body for security
       }
     });
   } catch (error) {
@@ -125,7 +133,8 @@ const login = async (req, res, next) => {
 // @access  Public
 const refreshToken = async (req, res, next) => {
   try {
-    const { refreshToken: token } = req.body;
+    // Get refresh token from HttpOnly cookie
+    const token = getRefreshTokenFromCookie(req);
 
     if (!token) {
       return res.status(401).json({
@@ -140,27 +149,32 @@ const refreshToken = async (req, res, next) => {
     // Find user and check if refresh token matches
     const user = await User.findById(decoded.userId);
     if (!user || user.refreshToken !== token) {
+      clearRefreshTokenCookie(res); // Clear invalid cookie
       return res.status(401).json({
         success: false,
         message: 'Invalid refresh token'
       });
     }
 
-    // Generate new tokens
-    const { accessToken, refreshToken: newRefreshToken } = generateTokens(user._id);
+    // Generate new tokens (includes role to avoid DB lookup in middleware)
+    const { accessToken, refreshToken: newRefreshToken } = generateTokens(user._id, user.role);
 
     // Update refresh token in database
     user.refreshToken = newRefreshToken;
     await user.save();
 
+    // Set new refresh token cookie
+    setRefreshTokenCookie(res, newRefreshToken);
+
     res.json({
       success: true,
       data: {
-        accessToken,
-        refreshToken: newRefreshToken
+        accessToken
+        // refreshToken no longer sent in response body for security
       }
     });
   } catch (error) {
+    clearRefreshTokenCookie(res); // Clear invalid cookie
     res.status(401).json({
       success: false,
       message: 'Invalid refresh token'
@@ -174,9 +188,12 @@ const refreshToken = async (req, res, next) => {
 const logout = async (req, res, next) => {
   try {
     // Clear refresh token from database
-    await User.findByIdAndUpdate(req.user._id, { 
+    await User.findByIdAndUpdate(req.user.id || req.user._id, { 
       $unset: { refreshToken: 1 } 
     });
+
+    // Clear refresh token cookie
+    clearRefreshTokenCookie(res);
 
     res.json({
       success: true,
@@ -192,12 +209,12 @@ const logout = async (req, res, next) => {
 // @access  Private
 const getMe = async (req, res, next) => {
   try {
-    const user = await User.findById(req.user._id);
-    
+    // Use req.user from middleware instead of additional DB query
+    // If full user object is needed, middleware already provides it
     res.json({
       success: true,
       data: {
-        user
+        user: req.user
       }
     });
   } catch (error) {
@@ -415,28 +432,8 @@ const socialLogin = async (req, res, next) => {
       });
     }
 
-    let userInfo;
-
-    // Verify token based on provider
-    switch (provider.toLowerCase()) {
-      case 'google':
-        userInfo = await verifyGoogleToken(token);
-        break;
-      case 'facebook':
-        userInfo = await verifyFacebookToken(token);
-        break;
-      case 'apple':
-        // Apple Sign In would need custom implementation
-        return res.status(501).json({
-          success: false,
-          message: 'Apple Sign In not yet implemented'
-        });
-      default:
-        return res.status(400).json({
-          success: false,
-          message: 'Unsupported social provider'
-        });
-    }
+    // Verify token using social auth service
+    const userInfo = await verifySocialToken(provider, token);
 
     if (!userInfo) {
       return res.status(401).json({
@@ -485,12 +482,14 @@ const socialLogin = async (req, res, next) => {
     }
 
     // Generate tokens
-    const accessToken = generateAccessToken(user._id);
-    const refreshToken = generateRefreshToken(user._id);
+    const { accessToken, refreshToken } = generateTokens(user._id, user.role);
 
     // Save refresh token
     user.refreshToken = refreshToken;
     await user.save();
+
+    // Set refresh token as HttpOnly cookie
+    setRefreshTokenCookie(res, refreshToken);
 
     // Remove sensitive data
     user.password = undefined;
@@ -498,10 +497,18 @@ const socialLogin = async (req, res, next) => {
 
     res.json({
       success: true,
+      message: 'Social login successful',
       data: {
-        user,
-        accessToken,
-        refreshToken
+        user: {
+          id: user._id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          role: user.role,
+          isEmailVerified: user.isEmailVerified
+        },
+        accessToken
+        // refreshToken no longer sent in response body for security
       }
     });
   } catch (error) {
@@ -509,52 +516,6 @@ const socialLogin = async (req, res, next) => {
   }
 };
 
-// Verify Google OAuth token
-const verifyGoogleToken = async (token) => {
-  try {
-    const { OAuth2Client } = require('google-auth-library');
-    const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-    
-    const ticket = await client.verifyIdToken({
-      idToken: token,
-      audience: process.env.GOOGLE_CLIENT_ID,
-    });
-    
-    const payload = ticket.getPayload();
-    return {
-      id: payload.sub,
-      email: payload.email,
-      name: payload.name,
-      picture: payload.picture
-    };
-  } catch (error) {
-    console.error('Google token verification failed:', error);
-    return null;
-  }
-};
-
-// Verify Facebook access token
-const verifyFacebookToken = async (accessToken) => {
-  try {
-    const response = await fetch(`https://graph.facebook.com/me?fields=id,name,email,picture&access_token=${accessToken}`);
-    const data = await response.json();
-    
-    if (data.error) {
-      console.error('Facebook token verification failed:', data.error);
-      return null;
-    }
-    
-    return {
-      id: data.id,
-      email: data.email,
-      name: data.name,
-      avatar: data.picture?.data?.url
-    };
-  } catch (error) {
-    console.error('Facebook token verification failed:', error);
-    return null;
-  }
-};
 
 module.exports = {
   register,

@@ -1,16 +1,17 @@
 const jwt = require('jsonwebtoken');
 
-const generateTokens = (userId) => {
-  const payload = { userId };
+const generateTokens = (userId, userRole = 'user') => {
+  // Include user role in payload to avoid DB lookups in middleware
+  const payload = { userId, role: userRole };
   
   const accessToken = jwt.sign(
     payload,
     process.env.JWT_SECRET,
-    { expiresIn: process.env.JWT_EXPIRE || '7d' }
+    { expiresIn: process.env.JWT_EXPIRE || '15m' } // Shorter access token lifetime
   );
   
   const refreshToken = jwt.sign(
-    payload,
+    { userId }, // Refresh token only needs userId
     process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET,
     { expiresIn: process.env.JWT_REFRESH_EXPIRE || '30d' }
   );

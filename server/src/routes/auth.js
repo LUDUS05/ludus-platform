@@ -12,7 +12,7 @@ const {
   changePassword,
   socialLogin
 } = require('../controllers/authController');
-const { authenticate } = require('../middleware/auth');
+const { authenticate, authenticateWithFullUser } = require('../middleware/auth');
 const {
   validateUserRegistration,
   validateUserLogin
@@ -29,7 +29,7 @@ router.post('/reset-password', resetPassword);
 
 // Protected routes
 router.post('/logout', authenticate, logout);
-router.get('/me', authenticate, getMe);
-router.put('/change-password', authenticate, changePassword);
+router.get('/me', authenticateWithFullUser, getMe); // Needs full user object
+router.put('/change-password', authenticateWithFullUser, changePassword); // Needs full user object
 
 module.exports = router;

@@ -34,14 +34,9 @@ const errorHandler = (err, req, res, next) => {
     error = { message, statusCode: 401 };
   }
 
-  // Stripe errors
-  if (err.type === 'StripeCardError') {
+  // Moyasar payment errors
+  if (err.type === 'MoyasarError' || err.response?.status === 400) {
     const message = err.message || 'Payment failed';
-    error = { message, statusCode: 400 };
-  }
-
-  if (err.type === 'StripeInvalidRequestError') {
-    const message = 'Invalid payment request';
     error = { message, statusCode: 400 };
   }
 
