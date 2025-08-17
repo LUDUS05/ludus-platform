@@ -34,6 +34,72 @@
     "signInHere": "Sign in here",
     "share": "Share"
   },
+  "user": {
+    "registration": {
+      "title": "Join LUDUS",
+      "subtitle": "Discover amazing activities and experiences in your city",
+      "alreadyHaveAccount": "Already have an account?",
+      "getStarted": "Get Started",
+      "questions": {
+        "firstName": {
+          "question": "What's your first name?",
+          "placeholder": "Enter your first name",
+          "buttonText": "Continue"
+        },
+        "lastName": {
+          "question": "And your last name{{name}}?",
+          "placeholder": "Enter your last name",
+          "buttonText": "Continue"
+        },
+        "email": {
+          "question": "What's your email address{{name}}?",
+          "placeholder": "Enter your email",
+          "buttonText": "Continue"
+        },
+        "password": {
+          "question": "Create a secure password",
+          "placeholder": "Enter your password",
+          "buttonText": "Continue"
+        },
+        "confirmPassword": {
+          "question": "Confirm your password",
+          "placeholder": "Re-enter your password",
+          "buttonText": "Continue"
+        },
+        "phone": {
+          "question": "Phone number (optional)",
+          "placeholder": "Enter your phone number",
+          "buttonText": "Continue"
+        },
+        "dateOfBirth": {
+          "question": "Date of birth (optional)",
+          "placeholder": "Select your date of birth",
+          "buttonText": "Continue"
+        }
+      },
+      "validation": {
+        "required": "This field is required",
+        "invalidEmail": "Please enter a valid email address",
+        "passwordTooShort": "Password must be at least 8 characters",
+        "passwordMismatch": "Passwords do not match",
+        "invalidPhone": "Please enter a valid phone number",
+        "nameTooShort": "Name must be at least 2 characters",
+        "termsRequired": "You must accept the terms and conditions",
+        "submissionError": "Something went wrong. Please try again."
+      },
+      "terms": {
+        "title": "Almost there, {{name}}!",
+        "checkbox": "I agree to the Terms and Conditions and Privacy Policy",
+        "submitting": "Creating Account...",
+        "submit": "Create Account"
+      },
+      "success": {
+        "title": "Welcome to LUDUS!",
+        "message": "Your account has been created successfully, {{name}}. Get ready to discover amazing activities!",
+        "redirecting": "Redirecting you to your dashboard..."
+      }
+    }
+  },
   "navigation": {
     "home": "Home",
     "activities": "Activities",
@@ -253,5 +319,108 @@
     "copyLink": "Copy Link",
     "linkCopied": "Link Copied!",
     "shareOn": "Share on {{platform}}"
+  },
+  "partner": {
+    "registration": {
+      "title": "Let's get you set up to host on LUDUS",
+      "subtitle": "Join our community of amazing partners and start connecting with people who love unique experiences.",
+      "getStarted": "Get Started",
+      "questions": {
+        "contactName": {
+          "question": "To start, what's your name?",
+          "placeholder": "Enter your name",
+          "buttonText": "Nice to meet you!"
+        },
+        "companyName": {
+          "question": "Great to meet you{{name}}! What's the name of your business or organization?",
+          "placeholder": "Enter your business name",
+          "buttonText": "Got it"
+        },
+        "email": {
+          "question": "Perfect! What's the best email address for you{{name}}?",
+          "placeholder": "Enter your email address",
+          "buttonText": "Continue"
+        },
+        "phone": {
+          "question": "And what's your phone number?",
+          "placeholder": "Enter your phone number",
+          "buttonText": "Next"
+        },
+        "website": {
+          "question": "Does {{company}} have a website we should know about?",
+          "placeholder": "Enter website URL (optional)",
+          "buttonText": "Continue"
+        },
+        "description": {
+          "question": "Tell us a bit about {{company}}. What makes you special?",
+          "placeholder": "Describe what you do and what makes you unique...",
+          "buttonText": "Almost done!"
+        }
+      },
+      "terms": {
+        "title": "One last thing, {{name}}",
+        "checkbox": "I agree to LUDUS's Terms and Conditions and understand that my application will be reviewed before approval.",
+        "link": "Terms and Conditions",
+        "submit": "Submit Application",
+        "submitting": "Submitting...",
+        "modalTitle": "Terms and Conditions",
+        "close": "Close",
+        "accept": "Accept Terms",
+        "loading": "Loading terms..."
+      },
+      "validation": {
+        "required": "This field is required",
+        "invalidEmail": "Please enter a valid email address",
+        "invalidWebsite": "Please include http:// or https://",
+        "invalidPhone": "Please enter a valid phone number",
+        "descriptionTooShort": "Please tell us a bit more (at least 20 characters)",
+        "termsRequired": "Please accept our Terms and Conditions to continue.",
+        "submissionError": "Something went wrong. Please try again."
+      },
+      "success": {
+        "title": "Welcome to LUDUS!",
+        "message": "Thanks {{name}}! We've received your application and are excited to potentially partner with {{company}}.",
+        "nextSteps": {
+          "title": "What happens next?",
+          "step1": "We'll review your application within 24 hours",
+          "step2": "Our team will reach out to {{email}} with next steps",
+          "step3": "We'll schedule a brief call to verify your account and discuss the partnership",
+          "step4": "Once approved, you'll get access to your partner dashboard"
+        }
+      },
+      "defaultTerms": {
+        "title": "Partner Terms and Conditions",
+        "lastUpdated": "Last updated: {{date}}",
+        "section1": {
+          "title": "1. Agreement to Terms",
+          "content": "By applying to become a LUDUS partner, you agree to be bound by these Terms and Conditions."
+        },
+        "section2": {
+          "title": "2. Eligibility",
+          "content": "You must be a legitimate business entity authorized to provide services in Saudi Arabia."
+        },
+        "section3": {
+          "title": "3. Application Review",
+          "content": "LUDUS reserves the right to approve or reject any partnership application at our discretion."
+        },
+        "section4": {
+          "title": "4. Service Standards",
+          "content": "Partners must maintain high service standards and comply with all applicable laws and regulations."
+        },
+        "section5": {
+          "title": "5. Commission Structure",
+          "content": "Commission rates and payment terms will be discussed and agreed upon during the approval process."
+        },
+        "section6": {
+          "title": "6. Data Protection",
+          "content": "All customer data must be handled in accordance with Saudi data protection laws and LUDUS privacy policies."
+        },
+        "section7": {
+          "title": "7. Termination",
+          "content": "Either party may terminate this agreement with 30 days written notice."
+        },
+        "contact": "For questions about these terms, contact us at partners@letsludus.com"
+      }
+    }
   }
 }

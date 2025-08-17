@@ -1,17 +1,22 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
+import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
-const PartnerRegistrationPage = () => {
+const UserRegistrationPage = () => {
   const { t } = useTranslation();
-  // Form data with personalized responses
+  const navigate = useNavigate();
+  const { register } = useAuth();
+  
+  // Form data
   const [formData, setFormData] = useState({
-    contactName: '',
-    companyName: '',
+    firstName: '',
+    lastName: '',
     email: '',
+    password: '',
+    confirmPassword: '',
     phone: '',
-    website: '',
-    description: ''
+    dateOfBirth: ''
   });
   
   // Conversational flow state
@@ -27,63 +32,64 @@ const PartnerRegistrationPage = () => {
   // Refs
   const inputRef = useRef(null);
   
-  // Terms modal state
-  const [showTermsModal, setShowTermsModal] = useState(false);
-  const [termsContent, setTermsContent] = useState('');
-  const [loadingTerms, setLoadingTerms] = useState(false);
-  
   // Conversational questions configuration
   const conversationSteps = [
-    // Welcome screen is step -1
     {
-      key: 'contactName',
-      question: t('partner.registration.questions.contactName.question'),
-      placeholder: t('partner.registration.questions.contactName.placeholder'),
+      key: 'firstName',
+      question: t('user.registration.questions.firstName.question'),
+      placeholder: t('user.registration.questions.firstName.placeholder'),
       type: 'text',
       required: true,
-      buttonText: t('partner.registration.questions.contactName.buttonText')
+      buttonText: t('user.registration.questions.firstName.buttonText')
     },
     {
-      key: 'companyName',
-      question: (name) => t('partner.registration.questions.companyName.question', { name: name ? `, ${name}` : '' }),
-      placeholder: t('partner.registration.questions.companyName.placeholder'),
+      key: 'lastName',
+      question: (firstName) => t('user.registration.questions.lastName.question', { name: firstName || '' }),
+      placeholder: t('user.registration.questions.lastName.placeholder'),
       type: 'text',
       required: true,
-      buttonText: t('partner.registration.questions.companyName.buttonText')
+      buttonText: t('user.registration.questions.lastName.buttonText')
     },
     {
       key: 'email',
-      question: (name, company) => t('partner.registration.questions.email.question', { name: name ? `, ${name}` : '' }),
-      placeholder: t('partner.registration.questions.email.placeholder'),
+      question: (firstName) => t('user.registration.questions.email.question', { name: firstName || '' }),
+      placeholder: t('user.registration.questions.email.placeholder'),
       type: 'email',
       required: true,
-      buttonText: t('partner.registration.questions.email.buttonText')
+      buttonText: t('user.registration.questions.email.buttonText')
+    },
+    {
+      key: 'password',
+      question: t('user.registration.questions.password.question'),
+      placeholder: t('user.registration.questions.password.placeholder'),
+      type: 'password',
+      required: true,
+      buttonText: t('user.registration.questions.password.buttonText')
+    },
+    {
+      key: 'confirmPassword',
+      question: t('user.registration.questions.confirmPassword.question'),
+      placeholder: t('user.registration.questions.confirmPassword.placeholder'),
+      type: 'password',
+      required: true,
+      buttonText: t('user.registration.questions.confirmPassword.buttonText')
     },
     {
       key: 'phone',
-      question: t('partner.registration.questions.phone.question'),
-      placeholder: t('partner.registration.questions.phone.placeholder'),
+      question: t('user.registration.questions.phone.question'),
+      placeholder: t('user.registration.questions.phone.placeholder'),
       type: 'tel',
-      required: true,
-      buttonText: t('partner.registration.questions.phone.buttonText')
-    },
-    {
-      key: 'website',
-      question: (name, company) => t('partner.registration.questions.website.question', { company: company || t('common.business', 'your business') }),
-      placeholder: t('partner.registration.questions.website.placeholder'),
-      type: 'url',
       required: false,
-      buttonText: t('partner.registration.questions.website.buttonText')
+      buttonText: t('user.registration.questions.phone.buttonText')
     },
     {
-      key: 'description',
-      question: (name, company) => t('partner.registration.questions.description.question', { company: company || t('common.business', 'your business') }),
-      placeholder: t('partner.registration.questions.description.placeholder'),
-      type: 'textarea',
-      required: true,
-      buttonText: t('partner.registration.questions.description.buttonText')
+      key: 'dateOfBirth',
+      question: t('user.registration.questions.dateOfBirth.question'),
+      placeholder: t('user.registration.questions.dateOfBirth.placeholder'),
+      type: 'date',
+      required: false,
+      buttonText: t('user.registration.questions.dateOfBirth.buttonText')
     }
-    // Terms step and success are handled separately
   ];
 
   const getCurrentQuestion = () => {
@@ -97,7 +103,7 @@ const PartnerRegistrationPage = () => {
     
     const { question } = questionData;
     if (typeof question === 'function') {
-      return question(formData.contactName, formData.companyName);
+      return question(formData.firstName);
     }
     return question;
   };
@@ -123,25 +129,30 @@ const PartnerRegistrationPage = () => {
     if (!question) return '';
 
     if (!value && question.required) {
-      return t('partner.registration.validation.required');
+      return t('user.registration.validation.required');
     }
     
     switch (question.key) {
       case 'email':
         return value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) 
-          ? t('partner.registration.validation.invalidEmail') 
+          ? t('user.registration.validation.invalidEmail') 
           : '';
-      case 'website':
-        return value && !/^https?:\/\/.+\..+/.test(value) 
-          ? t('partner.registration.validation.invalidWebsite') 
+      case 'password':
+        return value && value.length < 8 
+          ? t('user.registration.validation.passwordTooShort') 
+          : '';
+      case 'confirmPassword':
+        return value && value !== formData.password
+          ? t('user.registration.validation.passwordMismatch')
           : '';
       case 'phone':
         return value && !/^[+]?[\d\s\-\(\)]{10,}$/.test(value) 
-          ? t('partner.registration.validation.invalidPhone') 
+          ? t('user.registration.validation.invalidPhone') 
           : '';
-      case 'description':
-        return value && value.length < 20 
-          ? t('partner.registration.validation.descriptionTooShort') 
+      case 'firstName':
+      case 'lastName':
+        return value && value.length < 2
+          ? t('user.registration.validation.nameTooShort')
           : '';
       default:
         return '';
@@ -202,7 +213,7 @@ const PartnerRegistrationPage = () => {
     }, 300);
   };
 
-  const handleKeyPress = (e) => {
+  const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleNext();
@@ -219,72 +230,24 @@ const PartnerRegistrationPage = () => {
     }
   };
 
-  // Fetch Terms and Conditions content
-  const fetchTermsContent = useCallback(async () => {
-    try {
-      setLoadingTerms(true);
-      const response = await axios.get('/api/pages/by-url/partner-terms-and-conditions');
-      setTermsContent(response.data.content || getDefaultTermsContent());
-    } catch (error) {
-      console.error('Failed to fetch terms:', error);
-      setTermsContent(getDefaultTermsContent());
-    } finally {
-      setLoadingTerms(false);
-    }
-  }, []);
-
-  const getDefaultTermsContent = () => {
-    return `
-      <h3>${t('partner.registration.defaultTerms.title')}</h3>
-      <p><strong>${t('partner.registration.defaultTerms.lastUpdated', { date: new Date().toLocaleDateString() })}</strong></p>
-      
-      <h4>${t('partner.registration.defaultTerms.section1.title')}</h4>
-      <p>${t('partner.registration.defaultTerms.section1.content')}</p>
-      
-      <h4>${t('partner.registration.defaultTerms.section2.title')}</h4>
-      <p>${t('partner.registration.defaultTerms.section2.content')}</p>
-      
-      <h4>${t('partner.registration.defaultTerms.section3.title')}</h4>
-      <p>${t('partner.registration.defaultTerms.section3.content')}</p>
-      
-      <h4>${t('partner.registration.defaultTerms.section4.title')}</h4>
-      <p>${t('partner.registration.defaultTerms.section4.content')}</p>
-      
-      <h4>${t('partner.registration.defaultTerms.section5.title')}</h4>
-      <p>${t('partner.registration.defaultTerms.section5.content')}</p>
-      
-      <h4>${t('partner.registration.defaultTerms.section6.title')}</h4>
-      <p>${t('partner.registration.defaultTerms.section6.content')}</p>
-      
-      <h4>${t('partner.registration.defaultTerms.section7.title')}</h4>
-      <p>${t('partner.registration.defaultTerms.section7.content')}</p>
-      
-      <p>${t('partner.registration.defaultTerms.contact')}</p>
-    `;
-  };
-
-  useEffect(() => {
-    fetchTermsContent();
-  }, [fetchTermsContent]);
-
   const handleSubmit = async () => {
     if (!acceptTerms) {
-      setErrors({ current: t('partner.registration.validation.termsRequired') });
+      setErrors({ current: t('user.registration.validation.termsRequired') });
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      // Simulate API call - replace with actual API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Show success message
+      const { confirmPassword, ...registrationData } = formData;
+      await register(registrationData);
       setShowSuccess(true);
-
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 3000);
     } catch (error) {
-      console.error('Submission error:', error);
-      setErrors({ current: t('partner.registration.validation.submissionError') });
+      console.error('Registration error:', error);
+      setErrors({ current: error.response?.data?.message || t('user.registration.validation.submissionError') });
     } finally {
       setIsSubmitting(false);
     }
@@ -355,30 +318,12 @@ const PartnerRegistrationPage = () => {
               margin-bottom: 40px;
             }
             
-            .success-details {
+            .redirect-info {
               background: #F8F9FA;
               border-radius: 12px;
               padding: 24px;
-              text-align: left;
-            }
-            
-            .success-details h4 {
-              color: #2B2B2B;
-              font-weight: 500;
-              margin-bottom: 12px;
-              font-size: 16px;
-            }
-            
-            .success-details ul {
               color: #666;
               font-size: 15px;
-              line-height: 1.5;
-              margin: 0;
-              padding-left: 20px;
-            }
-            
-            .success-details li {
-              margin-bottom: 8px;
             }
           `}
         </style>
@@ -388,20 +333,14 @@ const PartnerRegistrationPage = () => {
             <span className="success-checkmark">✓</span>
           </div>
           
-          <h1 className="success-title">{t('partner.registration.success.title')}</h1>
+          <h1 className="success-title">{t('user.registration.success.title')}</h1>
           
           <p className="success-message">
-            {t('partner.registration.success.message', { name: formData.contactName, company: formData.companyName })}
+            {t('user.registration.success.message', { name: formData.firstName })}
           </p>
           
-          <div className="success-details">
-            <h4>{t('partner.registration.success.nextSteps.title')}</h4>
-            <ul>
-              <li>{t('partner.registration.success.nextSteps.step1')}</li>
-              <li>{t('partner.registration.success.nextSteps.step2', { email: formData.email })}</li>
-              <li>{t('partner.registration.success.nextSteps.step3')}</li>
-              <li>{t('partner.registration.success.nextSteps.step4')}</li>
-            </ul>
+          <div className="redirect-info">
+            {t('user.registration.success.redirecting')}
           </div>
         </div>
       </div>
@@ -480,8 +419,24 @@ const PartnerRegistrationPage = () => {
           .welcome-subtitle {
             font-size: 20px;
             color: #666;
-            margin-bottom: 50px;
+            margin-bottom: 30px;
             line-height: 1.4;
+          }
+          
+          .login-link {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+          }
+          
+          .login-link a {
+            color: #FF6600;
+            text-decoration: none;
+            font-weight: 500;
+          }
+          
+          .login-link a:hover {
+            text-decoration: underline;
           }
           
           .start-button {
@@ -549,31 +504,6 @@ const PartnerRegistrationPage = () => {
           }
           
           .form-input::placeholder {
-            color: #999;
-            font-weight: 300;
-          }
-          
-          .form-textarea {
-            width: 100%;
-            border: 3px solid #E5E5E5;
-            border-radius: 12px;
-            background: transparent;
-            padding: 20px;
-            font-size: 18px;
-            color: #2B2B2B;
-            outline: none;
-            resize: vertical;
-            min-height: 120px;
-            transition: border-color 0.3s ease;
-            font-family: inherit;
-            line-height: 1.5;
-          }
-          
-          .form-textarea:focus {
-            border-color: #FF6600;
-          }
-          
-          .form-textarea::placeholder {
             color: #999;
             font-weight: 300;
           }
@@ -742,10 +672,6 @@ const PartnerRegistrationPage = () => {
             .form-input {
               font-size: 18px;
             }
-            
-            .form-textarea {
-              font-size: 16px;
-            }
           }
           
           @media (max-width: 480px) {
@@ -792,12 +718,15 @@ const PartnerRegistrationPage = () => {
             <div className="ludus-logo">
               <img src="/logos/ludus-logo-dark.png" alt="LUDUS" />
             </div>
-            <h1 className="welcome-title">{t('partner.registration.title')}</h1>
+            <h1 className="welcome-title">{t('user.registration.title')}</h1>
             <p className="welcome-subtitle">
-              {t('partner.registration.subtitle')}
+              {t('user.registration.subtitle')}
+            </p>
+            <p className="login-link">
+              {t('user.registration.alreadyHaveAccount')} <Link to="/login">{t('common.login')}</Link>
             </p>
             <button className="start-button" onClick={handleNext}>
-              {t('partner.registration.getStarted')}
+              {t('user.registration.getStarted')}
             </button>
           </div>
         )}
@@ -811,27 +740,15 @@ const PartnerRegistrationPage = () => {
               </h2>
               
               <div className="input-container">
-                {getCurrentQuestion()?.type === 'textarea' ? (
-                  <textarea
-                    ref={inputRef}
-                    className="form-textarea"
-                    value={getCurrentValue()}
-                    onChange={handleInputChange}
-                    onKeyPress={handleKeyPress}
-                    placeholder={getCurrentQuestion()?.placeholder}
-                    rows={4}
-                  />
-                ) : (
-                  <input
-                    ref={inputRef}
-                    type={getCurrentQuestion()?.type || 'text'}
-                    className="form-input"
-                    value={getCurrentValue()}
-                    onChange={handleInputChange}
-                    onKeyPress={handleKeyPress}
-                    placeholder={getCurrentQuestion()?.placeholder}
-                  />
-                )}
+                <input
+                  ref={inputRef}
+                  type={getCurrentQuestion()?.type || 'text'}
+                  className="form-input"
+                  value={getCurrentValue()}
+                  onChange={handleInputChange}
+                  onKeyDown={handleKeyDown}
+                  placeholder={getCurrentQuestion()?.placeholder}
+                />
                 
                 {errors.current && (
                   <div className="error-message">{errors.current}</div>
@@ -863,7 +780,7 @@ const PartnerRegistrationPage = () => {
           <div className="terms-screen">
             <div className="terms-container">
               <h2 className="terms-title">
-                {t('partner.registration.terms.title', { name: formData.contactName })}
+                {t('user.registration.terms.title', { name: formData.firstName })}
               </h2>
               
               <div className="checkbox-container">
@@ -880,20 +797,7 @@ const PartnerRegistrationPage = () => {
                   }}
                 />
                 <label htmlFor="acceptTerms" className="checkbox-label">
-                  {t('partner.registration.terms.checkbox').split('Terms and Conditions').map((part, index) => {
-                    if (index === 0) return part;
-                    return (
-                      <React.Fragment key={index}>
-                        <span
-                          className="terms-link"
-                          onClick={() => setShowTermsModal(true)}
-                        >
-                          {t('partner.registration.terms.link')}
-                        </span>
-                        {part}
-                      </React.Fragment>
-                    );
-                  })}
+                  {t('user.registration.terms.checkbox')}
                 </label>
               </div>
               
@@ -906,7 +810,7 @@ const PartnerRegistrationPage = () => {
                 onClick={handleNext}
                 disabled={isSubmitting}
               >
-                {isSubmitting ? t('partner.registration.terms.submitting') : t('partner.registration.terms.submit')}
+                {isSubmitting ? t('user.registration.terms.submitting') : t('user.registration.terms.submit')}
               </button>
               
               <div className="button-container" style={{ marginTop: '20px', justifyContent: 'center' }}>
@@ -922,67 +826,8 @@ const PartnerRegistrationPage = () => {
           </div>
         )}
       </div>
-
-      {/* Terms Modal */}
-      {showTermsModal && (
-        <div className="fixed inset-0 z-50 overflow-y-auto" style={{
-          background: 'rgba(0, 0, 0, 0.5)'
-        }}>
-          <div className="min-h-screen px-4 text-center">
-            <div className="fixed inset-0" onClick={() => setShowTermsModal(false)}></div>
-            
-            <span className="inline-block h-screen align-middle" aria-hidden="true">&#8203;</span>
-            
-            <div className="inline-block w-full max-w-4xl p-8 my-8 text-left align-middle transition-all transform bg-white shadow-xl rounded-lg">
-              <div className="flex justify-between items-start mb-6">
-                <h3 className="text-xl font-semibold text-gray-900">
-                  {t('partner.registration.terms.modalTitle')}
-                </h3>
-                <button
-                  onClick={() => setShowTermsModal(false)}
-                  className="text-gray-400 hover:text-gray-600 text-2xl"
-                >
-                  ×
-                </button>
-              </div>
-              
-              <div className="max-h-96 overflow-y-auto">
-                {loadingTerms ? (
-                  <div className="text-center py-8">
-                    <div className="text-gray-600">{t('partner.registration.terms.loading')}</div>
-                  </div>
-                ) : (
-                  <div 
-                    className="prose max-w-none"
-                    dangerouslySetInnerHTML={{ __html: termsContent }}
-                  />
-                )}
-              </div>
-              
-              <div className="flex justify-end space-x-4 mt-8 pt-6 border-t border-gray-200">
-                <button
-                  onClick={() => setShowTermsModal(false)}
-                  className="px-6 py-2 text-gray-600 hover:text-gray-800 transition-colors"
-                >
-                  {t('partner.registration.terms.close')}
-                </button>
-                <button
-                  onClick={() => {
-                    setAcceptTerms(true);
-                    setShowTermsModal(false);
-                    setErrors({});
-                  }}
-                  className="px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
-                >
-                  {t('partner.registration.terms.accept')}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
 
-export default PartnerRegistrationPage;
+export default UserRegistrationPage;

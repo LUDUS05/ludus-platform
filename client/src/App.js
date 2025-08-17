@@ -20,6 +20,7 @@ import HowItWorksPage from './pages/HowItWorksPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import UIShowcasePage from './pages/UIShowcasePage';
 import PartnerRegistrationPage from './pages/PartnerRegistrationPage';
+import UserRegistrationPage from './pages/UserRegistrationPage';
 import MapPage from './pages/MapPage';
 import WalletPage from './pages/WalletPage';
 import DynamicPage from './components/pages/DynamicPage';
@@ -202,13 +203,7 @@ function App() {
               </>
             } />
             <Route path="/register" element={
-              <>
-                <Header />
-                <main>
-                  <RegisterForm />
-                </main>
-                <Footer />
-              </>
+              <UserRegistrationPage />
             } />
             <Route path="/activities" element={
               <>
