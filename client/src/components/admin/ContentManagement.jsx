@@ -273,7 +273,7 @@ const ContentManagement = () => {
   }, []);
 
   const handleTitleChange = (language, value) => {
-    updatePageField('title', value, language);
+    updatePageField('title', { ...pageForm.title, [language]: value });
     
     // Auto-generate slug from English title if not editing and slug is empty
     if (!editingPage && language === 'en' && !pageForm.slug) {
