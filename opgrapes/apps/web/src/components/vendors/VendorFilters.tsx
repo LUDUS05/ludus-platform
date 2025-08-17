@@ -10,10 +10,7 @@ import { Text } from '@opgrapes/ui/Text';
 import { Badge } from '@opgrapes/ui/Badge';
 import { Card } from '@opgrapes/ui/Card';
 import { 
-  Search, 
-  MapPin, 
   Star, 
-  Filter, 
   X,
   SlidersHorizontal,
   Building2

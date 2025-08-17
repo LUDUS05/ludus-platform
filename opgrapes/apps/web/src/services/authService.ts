@@ -246,7 +246,7 @@ class AuthService {
 
       await this.getCurrentUser();
       return true;
-    } catch (error) {
+    } catch {
       // Token is invalid or expired
       removeAuthToken();
       return false;
@@ -258,7 +258,7 @@ class AuthService {
     try {
       const { user } = await this.getCurrentUser();
       return user.role === role;
-    } catch (error) {
+    } catch {
       return false;
     }
   }
@@ -289,7 +289,7 @@ class AuthService {
         canManageUsers: user.role === 'admin',
         canViewAnalytics: user.role === 'vendor' || user.role === 'admin',
       };
-    } catch (error) {
+    } catch {
       return {
         canCreateActivities: false,
         canManageVendors: false,
@@ -304,7 +304,7 @@ class AuthService {
     try {
       const { user } = await this.getCurrentUser();
       return { valid: true, user };
-    } catch (error) {
+    } catch {
       return { valid: false };
     }
   }
@@ -318,14 +318,14 @@ class AuthService {
       // Try to get current user to validate token
       await this.getCurrentUser();
       return token;
-    } catch (error) {
+    } catch {
       // Token is invalid, try to refresh
       try {
         // Note: This would need the refresh token to be stored separately
         // For now, we'll just return null and let the user re-authenticate
         removeAuthToken();
         return null;
-      } catch (refreshError) {
+      } catch {
         removeAuthToken();
         return null;
       }

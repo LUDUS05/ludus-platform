@@ -3,11 +3,11 @@ export interface ApiError {
   message: string;
   status?: number;
   code?: string;
-  details?: any;
+  details?: unknown;
 }
 
 export class ApiErrorHandler {
-  static handleError(error: any): ApiError {
+  static handleError(error: unknown): ApiError {
     // Handle different types of errors
     if (error instanceof Error) {
       // Network or fetch errors
@@ -53,10 +53,11 @@ export class ApiErrorHandler {
       }
 
       // Handle other object errors
+      const errorObj = error as { message?: string; status?: number; code?: string };
       return {
-        message: error.message || 'An unexpected error occurred.',
-        status: error.status,
-        code: error.code,
+        message: errorObj.message || 'An unexpected error occurred.',
+        status: errorObj.status,
+        code: errorObj.code,
         details: error
       };
     }
@@ -67,7 +68,7 @@ export class ApiErrorHandler {
     };
   }
 
-  private static getErrorMessageByStatus(status: number | undefined, originalMessage: string): ApiError {
+  private static getErrorMessageByStatus(status: number | undefined): ApiError {
     if (!status) {
       return {
         message: 'An error occurred while processing your request.',
@@ -194,7 +195,7 @@ export class ApiErrorHandler {
     return error.message || 'An unexpected error occurred.';
   }
 
-  static getErrorDetails(error: ApiError): any {
+  static getErrorDetails(error: ApiError): unknown {
     return error.details || null;
   }
 
@@ -221,7 +222,7 @@ export class ApiErrorHandler {
 }
 
 // Convenience function for quick error handling
-export const handleApiError = (error: any, context?: string): ApiError => {
+export const handleApiError = (error: unknown, context?: string): ApiError => {
   const apiError = ApiErrorHandler.handleError(error);
   ApiErrorHandler.logError(apiError, context);
   return apiError;

@@ -5,13 +5,12 @@ import { Modal } from '@opgrapes/ui/Modal';
 import { Button } from '@opgrapes/ui/Button';
 import { Text } from '@opgrapes/ui/Text';
 import { Stack } from '@opgrapes/ui/Stack';
-import { Form } from '@opgrapes/ui/Form';
-import { FormField } from '@opgrapes/ui/FormField';
+
 import { Input } from '@opgrapes/ui/Input';
 import { Select } from '@opgrapes/ui/Select';
 import { Card } from '@opgrapes/ui/Card';
 import { Badge } from '@opgrapes/ui/Badge';
-import { Calendar, Clock, Users, MapPin, Star } from 'lucide-react';
+import { Clock, Users, MapPin, Star } from 'lucide-react';
 import { bookingService } from '@/services/bookingService';
 
 interface Activity {
@@ -43,14 +42,7 @@ interface ActivityBookingModalProps {
   availableTimes?: string[];
 }
 
-interface Participant {
-  firstName: string;
-  lastName: string;
-  email?: string;
-  phone?: string;
-  age?: number;
-  specialRequirements?: string;
-}
+
 
 interface BookingFormData {
   date: string; // ISO date string (no time) that backend can parse

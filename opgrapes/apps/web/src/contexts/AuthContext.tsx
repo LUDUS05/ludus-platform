@@ -197,7 +197,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       return () => clearInterval(refreshInterval);
     }
-  }, [token]);
+  }, [token, refreshToken]);
 
   const value: AuthContextType = {
     user,

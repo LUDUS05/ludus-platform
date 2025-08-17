@@ -7,7 +7,7 @@ import { Button } from '@opgrapes/ui/Button';
 import { Text } from '@opgrapes/ui/Text';
 import { Badge } from '@opgrapes/ui/Badge';
 import { Stack } from '@opgrapes/ui/Stack';
-import { Avatar } from '@opgrapes/ui/Avatar';
+
 import { MapPin, Star, Calendar, Phone, Mail, Globe, Users } from 'lucide-react';
 
 interface Vendor {
@@ -240,7 +240,7 @@ export function VendorCard({ vendor, variant = 'default' }: VendorCardProps) {
           {vendor.categories.length > 0 && (
             <div className="flex flex-wrap gap-1">
               {vendor.categories.slice(0, 3).map((category) => (
-                <Badge key={category} variant={getCategoryColor(category) as any} size="xs">
+                <Badge key={category} variant={getCategoryColor(category) as 'primary' | 'secondary' | 'success' | 'warning' | 'danger'} size="xs">
                   {category.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
                 </Badge>
               ))}

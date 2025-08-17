@@ -167,7 +167,7 @@ export function LoginForm({ onSuccess, onError }: LoginFormProps) {
       <Card.Footer>
         <Stack gap="2" className="text-center">
           <Text size="sm" color="gray">
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <button
               type="button"
               onClick={() => router.push('/auth/register')}

@@ -13,8 +13,8 @@ export interface LoadingStateWithData<T> extends LoadingState {
 }
 
 // Hook for managing loading states
-export function useLoadingState(initialData: any = null) {
-  const [state, setState] = useState<LoadingStateWithData<any>>({
+export function useLoadingState<T = unknown>(initialData: T | null = null) {
+  const [state, setState] = useState<LoadingStateWithData<T>>({
     isLoading: false,
     error: null,
     isSuccess: false,
@@ -39,7 +39,7 @@ export function useLoadingState(initialData: any = null) {
     }));
   }, []);
 
-  const setSuccess = useCallback((data?: any) => {
+  const setSuccess = useCallback((data?: T) => {
     setState(prev => ({
       ...prev,
       data: data !== undefined ? data : prev.data,
@@ -58,7 +58,7 @@ export function useLoadingState(initialData: any = null) {
     });
   }, [initialData]);
 
-  const updateData = useCallback((data: any) => {
+  const updateData = useCallback((data: T) => {
     setState(prev => ({
       ...prev,
       data
@@ -76,7 +76,7 @@ export function useLoadingState(initialData: any = null) {
 }
 
 // Hook for managing multiple loading states
-export function useMultipleLoadingStates<T extends Record<string, any>>(initialStates: T) {
+export function useMultipleLoadingStates<T extends Record<string, LoadingState>>(initialStates: T) {
   const [states, setStates] = useState<T>(initialStates);
 
   const setLoading = useCallback((key: keyof T, loading: boolean) => {
@@ -103,7 +103,7 @@ export function useMultipleLoadingStates<T extends Record<string, any>>(initialS
     }));
   }, []);
 
-  const setSuccess = useCallback((key: keyof T, data?: any) => {
+  const setSuccess = useCallback((key: keyof T, data?: unknown) => {
     setStates(prev => ({
       ...prev,
       [key]: {

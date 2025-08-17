@@ -12,8 +12,8 @@ export interface Activity {
   vendorId: {
     _id: string;
     businessName: string;
-    contactInfo: any;
-    location: any;
+    contactInfo: Record<string, unknown>;
+    location: Record<string, unknown>;
   };
   location: {
     coordinates: [number, number];

@@ -22,14 +22,14 @@ export function isAuthenticated(): boolean {
 }
 
 // Get user data from localStorage
-export function getUserData(): any | null {
+export function getUserData(): unknown | null {
   if (typeof window === 'undefined') return null;
   const userData = localStorage.getItem('userData');
   return userData ? JSON.parse(userData) : null;
 }
 
 // Set user data in localStorage
-export function setUserData(userData: any): void {
+export function setUserData(userData: unknown): void {
   if (typeof window === 'undefined') return;
   localStorage.setItem('userData', JSON.stringify(userData));
 }

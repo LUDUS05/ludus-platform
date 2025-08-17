@@ -223,7 +223,7 @@ export function ActivityCard({
         
         {/* Category Badge */}
         <div className="absolute bottom-3 left-3">
-          <Badge variant={getCategoryColor(activity.category) as any} size="sm">
+          <Badge variant={getCategoryColor(activity.category) as 'primary' | 'secondary' | 'success' | 'warning' | 'danger'} size="sm">
             {activity.category.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
           </Badge>
         </div>

@@ -34,12 +34,12 @@ export interface Booking {
     vendorId: {
       _id: string;
       businessName: string;
-      contactInfo: any;
-      location: any;
+      contactInfo: Record<string, unknown>;
+      location: Record<string, unknown>;
     };
-    pricing: any;
+    pricing: Record<string, unknown>;
     images: string[];
-    availability: any;
+    availability: Record<string, unknown>;
   };
   participants: Participant[];
   date: string;

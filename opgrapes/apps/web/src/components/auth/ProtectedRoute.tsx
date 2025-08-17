@@ -63,7 +63,7 @@ export function ProtectedRoute({
                 Access Denied
               </Text>
               <Text>
-                You don't have permission to access this page. 
+                You don&apos;t have permission to access this page. 
                 Admin access is required.
               </Text>
               <Button
