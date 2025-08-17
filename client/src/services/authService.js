@@ -4,11 +4,10 @@ export const authService = {
   // Register new user
   register: async (userData) => {
     const response = await api.post('/auth/register', userData);
-    const { user, accessToken, refreshToken } = response.data.data;
+    const { user, accessToken } = response.data.data;
     
-    // Store tokens and user data
+    // Store access token and user data (refresh token is now in HttpOnly cookie)
     localStorage.setItem('accessToken', accessToken);
-    localStorage.setItem('refreshToken', refreshToken);
     localStorage.setItem('user', JSON.stringify(user));
     
     return response.data;
@@ -17,11 +16,10 @@ export const authService = {
   // Login user
   login: async (credentials) => {
     const response = await api.post('/auth/login', credentials);
-    const { user, accessToken, refreshToken } = response.data.data;
+    const { user, accessToken } = response.data.data;
     
-    // Store tokens and user data
+    // Store access token and user data (refresh token is now in HttpOnly cookie)
     localStorage.setItem('accessToken', accessToken);
-    localStorage.setItem('refreshToken', refreshToken);
     localStorage.setItem('user', JSON.stringify(user));
     
     return response.data;
@@ -36,8 +34,8 @@ export const authService = {
       console.error('Logout error:', error);
     } finally {
       localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
       localStorage.removeItem('user');
+      // Note: HttpOnly refresh token cookie is cleared by server
     }
   },
 
@@ -47,14 +45,13 @@ export const authService = {
     return response.data;
   },
 
-  // Refresh token
+  // Refresh token (now uses HttpOnly cookie)
   refreshToken: async () => {
-    const refreshToken = localStorage.getItem('refreshToken');
-    const response = await api.post('/auth/refresh', { refreshToken });
+    const response = await api.post('/auth/refresh');
     
-    const { accessToken, refreshToken: newRefreshToken } = response.data.data;
+    const { accessToken } = response.data.data;
     localStorage.setItem('accessToken', accessToken);
-    localStorage.setItem('refreshToken', newRefreshToken);
+    // Note: New refresh token is automatically set as HttpOnly cookie by server
     
     return response.data;
   },
@@ -92,11 +89,10 @@ export const authService = {
       provider,
       token,
     });
-    const { user, accessToken, refreshToken } = response.data.data;
+    const { user, accessToken } = response.data.data;
     
-    // Store tokens and user data
+    // Store access token and user data (refresh token is now in HttpOnly cookie)
     localStorage.setItem('accessToken', accessToken);
-    localStorage.setItem('refreshToken', refreshToken);
     localStorage.setItem('user', JSON.stringify(user));
     
     return response.data;
@@ -118,7 +114,7 @@ export const authService = {
   // Clear stored data
   clearStoredData: () => {
     localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
     localStorage.removeItem('user');
+    // Note: HttpOnly refresh token cookie should be cleared by server logout
   },
 };

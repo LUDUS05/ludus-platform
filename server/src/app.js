@@ -74,11 +74,18 @@ app.get('/health', (req, res) => {
 
 // API Routes
 app.use('/api/auth', require('./routes/auth'));
+// Backward compatibility route (temporary fix for frontend deployment issue)
+app.use('/auth', require('./routes/auth'));
 app.use('/api/users', require('./routes/users'));
+app.use('/users', require('./routes/users'));
 app.use('/api/activities', require('./routes/activities'));
+app.use('/activities', require('./routes/activities'));
 app.use('/api/vendors', require('./routes/vendors'));
+app.use('/vendors', require('./routes/vendors'));
 app.use('/api/bookings', require('./routes/bookings'));
+app.use('/bookings', require('./routes/bookings'));
 app.use('/api/payments', require('./routes/payments'));
+app.use('/payments', require('./routes/payments'));
 app.use('/api/wallet', require('./routes/wallet'));
 app.use('/api/ratings', require('./routes/ratings'));
 app.use('/api/admin', require('./routes/admin'));
