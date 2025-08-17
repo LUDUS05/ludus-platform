@@ -408,7 +408,7 @@ export default function ActivityDetailPage() {
         url: window.location.href,
       });
     } else {
-      // Fallback for browsers that don't support Web Share API
+             // Fallback for browsers that don&apos;t support Web Share API
       navigator.clipboard.writeText(window.location.href);
       alert('Link copied to clipboard!');
     }

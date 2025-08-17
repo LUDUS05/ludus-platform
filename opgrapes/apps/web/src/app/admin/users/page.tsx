@@ -112,17 +112,15 @@ function UserManagementContent() {
   if (!user || user.role !== 'admin') {
     return (
       <Container size="lg" className="py-8">
-        <Card>
-          <Card.Body>
-            <div className="text-center py-8">
-              <Text size="xl" weight="bold" color="red">
-                Access Denied
-              </Text>
-              <Text size="lg" color="gray" className="mt-2">
-                You don't have permission to access user management.
-              </Text>
-            </div>
-          </Card.Body>
+        <Card className="p-6">
+          <div className="text-center py-8">
+            <Text size="xl" weight="bold" className="text-red-600">
+              Access Denied
+            </Text>
+            <Text size="lg" className="text-gray-600 mt-2">
+              You don&apos;t have permission to access user management.
+            </Text>
+          </div>
         </Card>
       </Container>
     );
@@ -130,7 +128,7 @@ function UserManagementContent() {
 
   return (
     <Container size="lg" className="py-8">
-      <Stack gap="8">
+      <Stack spacing="lg">
         {/* Header */}
         <Card>
           <Card.Body>
@@ -297,7 +295,7 @@ function UserManagementContent() {
                               const newRole = userItem.role === 'admin' ? 'user' : 'admin';
                               handleUserUpdate(userItem._id, { role: newRole });
                             }}
-                            disabled={userItem._id === user._id} // Can't change own role
+                            disabled={userItem._id === user._id} // Can&apos;t change own role
                           >
                             {userItem.role === 'admin' ? 'Remove Admin' : 'Make Admin'}
                           </Button>
@@ -324,7 +322,7 @@ function UserManagementContent() {
                               variant="danger"
                               size="sm"
                               onClick={() => handleUserDeactivate(userItem._id)}
-                              disabled={userItem._id === user._id} // Can't deactivate self
+                              disabled={userItem._id === user._id} // Can&apos;t deactivate self
                             >
                               Deactivate
                             </Button>

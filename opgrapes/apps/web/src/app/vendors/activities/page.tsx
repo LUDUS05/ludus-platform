@@ -610,7 +610,7 @@ function ActivityForm({ activity, onSave, onCancel }: ActivityFormProps) {
 
       <div>
         <Text size="sm" weight="medium" className="mb-2">
-          What's Included
+          What&apos;s Included
         </Text>
         <div className="space-y-2">
           {formData.included.map((item: string, index: number) => (

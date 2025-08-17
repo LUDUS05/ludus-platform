@@ -205,35 +205,30 @@ function ActivityModerationContent() {
                             </Badge>
                           </div>
                           
-                          <Text size="sm" color="gray" className="mb-2">
-                            {activity.description}
-                          </Text>
+                                                     <Text size="sm" color="gray" className="mb-2">
+                             {activity.title}
+                           </Text>
                           
                           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                            <div>
-                              <Text size="xs" weight="medium" color="gray">Vendor</Text>
-                              <Text size="sm">{activity.vendor?.businessName || 'N/A'}</Text>
-                            </div>
-                            <div>
-                              <Text size="xs" weight="medium" color="gray">Category</Text>
-                              <Text size="sm">{activity.category}</Text>
-                            </div>
-                            <div>
-                              <Text size="xs" weight="medium" color="gray">Price</Text>
-                              <Text size="sm">${activity.price}</Text>
-                            </div>
+                                                         <div>
+                               <Text size="xs" weight="medium" color="gray">Vendor</Text>
+                               <Text size="sm">{activity.vendorId?.businessName || 'N/A'}</Text>
+                             </div>
+                                                         <div>
+                               <Text size="xs" weight="medium" color="gray">Status</Text>
+                               <Text size="sm">{activity.status}</Text>
+                             </div>
+                             <div>
+                               <Text size="xs" weight="medium" color="gray">Active</Text>
+                               <Text size="sm">{activity.isActive ? 'Yes' : 'No'}</Text>
+                             </div>
                             <div>
                               <Text size="xs" weight="medium" color="gray">Created</Text>
                               <Text size="sm">{formatDate(activity.createdAt)}</Text>
                             </div>
                           </div>
 
-                          {activity.moderationNotes && (
-                            <div className="mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded">
-                              <Text size="sm" weight="medium" color="yellow">Moderation Notes:</Text>
-                              <Text size="sm" color="gray">{activity.moderationNotes}</Text>
-                            </div>
-                          )}
+                          
                         </div>
 
                         <div className="flex flex-col gap-2 ml-4">
@@ -287,20 +282,7 @@ function ActivityModerationContent() {
                             </Button>
                           )}
 
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => {
-                              const notes = prompt('Enter moderation notes:');
-                              if (notes !== null) {
-                                handleActivityUpdate(activity._id, {
-                                  moderationNotes: notes
-                                });
-                              }
-                            }}
-                          >
-                            Add Notes
-                          </Button>
+                          
                         </div>
                       </div>
                     </div>

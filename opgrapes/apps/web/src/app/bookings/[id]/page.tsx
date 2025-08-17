@@ -100,7 +100,7 @@ function BookingConfirmationContent() {
             Booking Confirmed!
           </Text>
           <Text size="lg" color="gray">
-            Your booking has been successfully created. You'll receive a confirmation email shortly.
+            Your booking has been successfully created. You&apos;ll receive a confirmation email shortly.
           </Text>
         </div>
 

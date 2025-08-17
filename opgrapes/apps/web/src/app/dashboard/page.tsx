@@ -125,7 +125,7 @@ function DashboardContent() {
                   Activity Preferences
                 </Text>
                 <Text size="sm" color="gray">
-                  We'll use these to recommend activities
+                  We&apos;ll use these to recommend activities
                 </Text>
               </Stack>
             </Card.Body>
@@ -141,7 +141,7 @@ function DashboardContent() {
                   Your Location
                 </Text>
                 <Text size="sm" color="gray">
-                  We'll show activities near you
+                  We&apos;ll show activities near you
                 </Text>
               </Stack>
             </Card.Body>

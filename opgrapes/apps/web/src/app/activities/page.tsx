@@ -430,7 +430,7 @@ export default function ActivitiesPage() {
           <div className="mt-12 text-center">
             <div className="bg-white rounded-lg shadow-sm border p-6">
               <h3 className="text-lg font-medium text-gray-900 mb-2">
-                Can't find what you're looking for?
+                Can&apos;t find what you&apos;re looking for?
               </h3>
               <p className="text-gray-600 mb-4">
                 Let us know what type of activity you'd like to see, and we'll add it to our collection.

@@ -9,11 +9,11 @@ import { Button } from '@opgrapes/ui/Button';
 import { Text } from '@opgrapes/ui/Text';
 import { Stack } from '@opgrapes/ui/Stack';
 import { Badge } from '@opgrapes/ui/Badge';
-import { Avatar } from '@opgrapes/ui/Avatar';
-import { Divider } from '@opgrapes/ui/Divider';
-import { Link } from '@opgrapes/ui/Link';
+
+
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
-import { adminService, DashboardData, RecentUser, RecentBooking } from '@/services/adminService';
+import { adminService, DashboardData } from '@/services/adminService';
+import { Link } from '@opgrapes/ui/Link';
 import { useRouter } from 'next/navigation';
 
 function AdminDashboardContent() {
@@ -49,7 +49,7 @@ function AdminDashboardContent() {
                 Access Denied
               </Text>
               <Text size="lg" color="gray" className="mt-2">
-                You don't have permission to access the admin dashboard.
+                You don&apos;t have permission to access the admin dashboard.
               </Text>
             </div>
           </div>
