@@ -8,8 +8,9 @@ COPY apps/api/package*.json ./
 # Install dependencies (use npm install instead of npm ci to avoid lockfile issues)
 RUN npm install --only=production
 
-# Copy source code
-COPY apps/api/ ./
+# Copy source code from the API directory
+COPY apps/api/src ./src
+COPY apps/api/tsconfig.json ./
 
 # Build the application
 RUN npm run build
