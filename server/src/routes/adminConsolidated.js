@@ -1,6 +1,5 @@
 const express = require('express');
-const { authenticate, authorize, requireRole } = require('../middleware/auth');
-const { requireAdminRole, requirePermission } = require('../middleware/rbac');
+const { authenticate, authorize } = require('../middleware/auth');
 
 // Import all controllers
 const {
@@ -74,7 +73,7 @@ const dashboardRoutes = express.Router();
 dashboardRoutes.use(authorize('admin'));
 
 dashboardRoutes.get('/stats', getDashboardStats);
-dashboardRoutes.get('/overview', requireAdminRole(), getAdminDashboardOverview);
+dashboardRoutes.get('/overview', getAdminDashboardOverview);
 
 router.use('/dashboard', dashboardRoutes);
 
@@ -135,7 +134,7 @@ router.use('/pages', pageRoutes);
 // TRANSLATION MANAGEMENT ROUTES
 // ==============================================
 const translationRoutes = express.Router();
-translationRoutes.use(requireRole('admin'));
+translationRoutes.use(authorize('admin'));
 
 translationRoutes.get('/:language/:namespace', getTranslations);
 translationRoutes.put('/:language/:namespace', updateTranslations);
@@ -146,7 +145,7 @@ router.use('/translations', translationRoutes);
 // CATEGORY MANAGEMENT ROUTES
 // ==============================================
 const categoryRoutes = express.Router();
-categoryRoutes.use(requireRole('admin'));
+categoryRoutes.use(authorize('admin'));
 
 categoryRoutes.get('/', getCategories);
 categoryRoutes.post('/', createCategory);
@@ -161,7 +160,7 @@ router.use('/categories', categoryRoutes);
 // SYSTEM SETTINGS ROUTES
 // ==============================================
 const settingsRoutes = express.Router();
-settingsRoutes.use(requireRole('admin'));
+settingsRoutes.use(authorize('admin'));
 
 settingsRoutes.get('/', getSystemSettings);
 settingsRoutes.put('/', updateSystemSettings);
@@ -172,16 +171,17 @@ router.use('/settings', settingsRoutes);
 // ADMIN TEAM MANAGEMENT ROUTES (High-level admin only)
 // ==============================================
 const teamRoutes = express.Router();
+teamRoutes.use(authorize('admin')); // Basic admin auth for all team routes
 
-// Admin role management routes
-teamRoutes.get('/roles', requireAdminRole(['SA']), getAdminRoles);
-teamRoutes.post('/roles/initialize', requireAdminRole(['SA']), initializeAdminRoles);
+// Admin role management routes (commented out complex RBAC for now)
+teamRoutes.get('/roles', getAdminRoles);
+teamRoutes.post('/roles/initialize', initializeAdminRoles);
 
 // Admin team management routes
-teamRoutes.get('/', requireAdminRole(['SA', 'ADMIN_PARTNERSHIPS']), getAdminTeam);
-teamRoutes.post('/assign', requireAdminRole(['SA']), assignAdminRole);
-teamRoutes.put('/:userId', requireAdminRole(['SA', 'ADMIN_PARTNERSHIPS']), updateAdminUser);
-teamRoutes.delete('/:userId', requireAdminRole(['SA']), removeAdminRole);
+teamRoutes.get('/', getAdminTeam);
+teamRoutes.post('/assign', assignAdminRole);
+teamRoutes.put('/:userId', updateAdminUser);
+teamRoutes.delete('/:userId', removeAdminRole);
 
 router.use('/team', teamRoutes);
 
