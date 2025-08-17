@@ -22,6 +22,7 @@ import ComingSoonPage from '../pages/ComingSoonPage';
 import MaintenancePage from '../pages/MaintenancePage';
 import MapPage from '../pages/MapPage';
 import WalletPage from '../pages/WalletPage';
+import ContactPage from '../pages/ContactPage';
 import DynamicPage from '../components/pages/DynamicPage';
 
 const AppRoutes = () => {
@@ -45,6 +46,7 @@ const AppRoutes = () => {
         <Route path="forgot-password" element={<ForgotPasswordPage />} />
         <Route path="ui-showcase" element={<UIShowcasePage />} />
         <Route path="map" element={<MapPage />} />
+        <Route path="contact" element={<ContactPage />} />
         
         {/* Protected routes */}
         <Route path="booking/:id" element={
