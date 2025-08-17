@@ -3,15 +3,14 @@ import { Routes, Route } from 'react-router-dom';
 import AdminLayout from '../../components/admin/AdminLayout';
 import AdminDashboard from '../../components/admin/AdminDashboard';
 import VendorManagement from '../../components/admin/VendorManagement';
-import VendorForm from '../../components/admin/VendorForm';
 import EnhancedVendorForm from '../../components/admin/EnhancedVendorForm';
 import ActivityManagement from '../../components/admin/ActivityManagement';
 import ActivityForm from '../../components/admin/ActivityForm';
 import PageManagement from '../../components/admin/PageManagement';
+import PageForm from '../../components/admin/PageForm';
 import BookingManagement from '../../components/admin/BookingManagement';
 import PaymentManagement from '../../components/admin/PaymentManagement';
 import CategoryManagement from '../../components/admin/CategoryManagement';
-import ContentManagement from '../../components/admin/ContentManagement';
 import TranslationManagement from '../../components/admin/TranslationManagement';
 import SystemSettings from '../../components/admin/SystemSettings';
 
@@ -31,6 +30,8 @@ const AdminRoutes = () => {
         <Route path="/payments" element={<PaymentManagement />} />
         <Route path="/categories" element={<CategoryManagement />} />
         <Route path="/content" element={<PageManagement />} />
+        <Route path="/content/new" element={<PageForm />} />
+        <Route path="/content/edit/:id" element={<PageForm />} />
         <Route path="/translations" element={<TranslationManagement />} />
         <Route path="/settings" element={<SystemSettings />} />
       </Routes>

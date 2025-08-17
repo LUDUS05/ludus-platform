@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Card from '../ui/Card';
@@ -8,7 +8,7 @@ import Alert from '../ui/Alert';
 import api from '../../services/api';
 
 const ActivityForm = () => {
-  const { t } = useTranslation();
+  const { t: _ } = useTranslation(); // eslint-disable-line no-unused-vars
   const navigate = useNavigate();
   const { id } = useParams();
   const isEditing = Boolean(id);

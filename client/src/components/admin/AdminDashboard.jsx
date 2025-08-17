@@ -6,7 +6,7 @@ import { adminService } from '../../services/adminService';
 import Card from '../ui/Card';
 import Alert from '../ui/Alert';
 import NotificationCenter from './NotificationCenter';
-import { Shield, Users, Building, Settings, FileText, BarChart3, UserCheck } from 'lucide-react';
+import { Shield, Users, Building, FileText, BarChart3 } from 'lucide-react';
 
 const AdminDashboard = () => {
   const { user } = useAuth();
