@@ -21,6 +21,8 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import UIShowcasePage from './pages/UIShowcasePage';
 import PartnerRegistrationPage from './pages/PartnerRegistrationPage';
 import UserRegistrationPage from './pages/UserRegistrationPage';
+import ComingSoonPage from './pages/ComingSoonPage';
+import MaintenancePage from './pages/MaintenancePage';
 import MapPage from './pages/MapPage';
 import WalletPage from './pages/WalletPage';
 import DynamicPage from './components/pages/DynamicPage';
@@ -321,13 +323,13 @@ function App() {
               </>
             } />
             <Route path="/partner-registration" element={
-              <>
-                <Header />
-                <main>
-                  <PartnerRegistrationPage />
-                </main>
-                <Footer />
-              </>
+              <PartnerRegistrationPage />
+            } />
+            <Route path="/coming-soon" element={
+              <ComingSoonPage />
+            } />
+            <Route path="/maintenance" element={
+              <MaintenancePage />
             } />
             <Route path="/map" element={
               <>

@@ -84,6 +84,7 @@ app.use('/api/admin', require('./routes/adminManagement'));
 app.use('/api/pages', require('./routes/pages'));
 app.use('/api', require('./routes/translations'));
 app.use('/api/uploads', require('./routes/uploads'));
+app.use('/api/site-settings', require('./routes/siteSettings'));
 
 
 // Global error handler
