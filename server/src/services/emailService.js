@@ -428,6 +428,154 @@ Follow us for the latest activities and updates!
       html,
       text
     });
+  },
+
+  // Send contact form notification to admin
+  async sendContactFormNotification(contactData) {
+    try {
+      const subject = `New Contact Form Submission - ${contactData.subject}`;
+      const html = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;">
+          <div style="background: linear-gradient(135deg, #FF6B35 0%, #FF8A50 100%); padding: 30px; border-radius: 12px; text-align: center; margin-bottom: 30px;">
+            <h1 style="color: white; margin: 0; font-size: 28px; font-weight: bold;">New Contact Form Submission</h1>
+          </div>
+          
+          <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+            <h2 style="color: #2D3748; margin-bottom: 20px; font-size: 24px;">Contact Details</h2>
+            
+            <div style="margin-bottom: 15px;">
+              <strong style="color: #4A5568;">Name:</strong> ${contactData.name}
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+              <strong style="color: #4A5568;">Email:</strong> 
+              <a href="mailto:${contactData.from}" style="color: #FF6B35;">${contactData.from}</a>
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+              <strong style="color: #4A5568;">Phone:</strong> ${contactData.phone}
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+              <strong style="color: #4A5568;">Subject:</strong> ${contactData.subject}
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+              <strong style="color: #4A5568;">Source:</strong> ${contactData.source}
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+              <strong style="color: #4A5568;">Submitted:</strong> ${new Date(contactData.timestamp).toLocaleString()}
+            </div>
+            
+            <div style="margin-top: 25px; padding: 20px; background-color: #F7FAFC; border-radius: 8px;">
+              <strong style="color: #4A5568;">Message:</strong>
+              <p style="margin-top: 10px; line-height: 1.6; color: #2D3748;">${contactData.message}</p>
+            </div>
+          </div>
+        </div>
+      `;
+
+      const text = `
+New Contact Form Submission
+
+Name: ${contactData.name}
+Email: ${contactData.from}
+Phone: ${contactData.phone}
+Subject: ${contactData.subject}
+Source: ${contactData.source}
+Submitted: ${new Date(contactData.timestamp).toLocaleString()}
+
+Message:
+${contactData.message}
+      `;
+
+      return await this.sendEmail({
+        to: process.env.ADMIN_EMAIL || 'admin@letsludus.com',
+        subject,
+        html,
+        text
+      });
+    } catch (error) {
+      console.error('Send contact form notification error:', error);
+      throw error;
+    }
+  },
+
+  // Send contact confirmation to user
+  async sendContactConfirmation(email, name, subject) {
+    try {
+      const emailSubject = 'Thank you for contacting LUDUS Platform';
+      const html = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;">
+          <div style="background: linear-gradient(135deg, #FF6B35 0%, #FF8A50 100%); padding: 30px; border-radius: 12px; text-align: center; margin-bottom: 30px;">
+            <h1 style="color: white; margin: 0; font-size: 28px; font-weight: bold;">Thank You for Reaching Out!</h1>
+          </div>
+          
+          <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+            <h2 style="color: #2D3748; margin-bottom: 20px;">Hi ${name},</h2>
+            
+            <p style="color: #4A5568; line-height: 1.6; margin-bottom: 20px;">
+              Thank you for contacting LUDUS Platform! We have received your message regarding:
+            </p>
+            
+            <div style="background-color: #F7FAFC; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+              <strong style="color: #2D3748;">"${subject}"</strong>
+            </div>
+            
+            <p style="color: #4A5568; line-height: 1.6; margin-bottom: 20px;">
+              Our team will review your message and get back to you within 24 hours during business days.
+            </p>
+            
+            <div style="background-color: #FFF5F5; border-left: 4px solid #FF6B35; padding: 15px; margin-bottom: 20px;">
+              <p style="color: #4A5568; margin: 0; font-size: 14px;">
+                <strong>Need immediate assistance?</strong><br>
+                Call us at +966 50 123 4567 or email hi@letsludus.com
+              </p>
+            </div>
+            
+            <p style="color: #4A5568; line-height: 1.6;">
+              Best regards,<br>
+              <strong style="color: #FF6B35;">The LUDUS Team</strong>
+            </p>
+          </div>
+          
+          <div style="text-align: center; margin-top: 30px; color: #A0AEC0; font-size: 12px;">
+            © 2025 LUDUS Platform. All rights reserved.<br>
+            This is an automated message, please do not reply.
+          </div>
+        </div>
+      `;
+
+      const text = `
+Thank You for Reaching Out!
+
+Hi ${name},
+
+Thank you for contacting LUDUS Platform! We have received your message regarding: "${subject}"
+
+Our team will review your message and get back to you within 24 hours during business days.
+
+Need immediate assistance?
+Call us at +966 50 123 4567 or email hi@letsludus.com
+
+Best regards,
+The LUDUS Team
+
+© 2025 LUDUS Platform. All rights reserved.
+This is an automated message, please do not reply.
+      `;
+
+      return await this.sendEmail({
+        to: email,
+        subject: emailSubject,
+        html,
+        text
+      });
+    } catch (error) {
+      console.error('Send contact confirmation error:', error);
+      throw error;
+    }
   }
 }
 

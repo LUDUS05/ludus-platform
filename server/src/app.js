@@ -93,6 +93,7 @@ app.use('/api/pages', require('./routes/pages'));
 app.use('/api', require('./routes/translations'));
 app.use('/api/uploads', require('./routes/uploads'));
 app.use('/api/site-settings', require('./routes/siteSettings'));
+app.use('/api/contact', require('./routes/contact'));
 
 
 // 404 handler for unknown routes
