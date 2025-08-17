@@ -2,15 +2,11 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy package files from the API directory
-COPY apps/api/package*.json ./
+# Copy the entire API directory
+COPY apps/api/ ./
 
-# Install dependencies (use npm install instead of npm ci to avoid lockfile issues)
+# Install dependencies
 RUN npm install --only=production
-
-# Copy source code from the API directory
-COPY apps/api/src ./src
-COPY apps/api/tsconfig.json ./
 
 # Build the application
 RUN npm run build
