@@ -45,7 +45,6 @@ const PageManagement = () => {
   const fetchPages = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem('token');
       const params = new URLSearchParams({
         page: pagination.currentPage,
         limit: 10,
@@ -54,11 +53,11 @@ const PageManagement = () => {
       
       const response = await api.get(`/admin/pages?${params}`);
       
-      setPages(response.data.pages);
+      setPages(response.data.data);
       setPagination(prev => ({
         ...prev,
-        totalPages: response.data.totalPages,
-        totalCount: response.data.totalCount
+        totalPages: response.data.pagination.totalPages,
+        totalCount: response.data.pagination.totalCount
       }));
     } catch (error) {
       console.error('Error fetching pages:', error);
