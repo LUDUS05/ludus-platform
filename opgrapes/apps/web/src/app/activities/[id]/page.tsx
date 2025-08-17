@@ -246,7 +246,7 @@ function ImageGallery({ images, title }: { images: string[], title: string }) {
 }
 
 // Review Component
-function ReviewCard({ review }: { review: any }) {
+function ReviewCard({ review }: { review: Review }) {
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, i) => (
       <Star
@@ -288,7 +288,7 @@ function ReviewCard({ review }: { review: any }) {
 }
 
 // Related Activities Component
-function RelatedActivities({ activities }: { activities: any[] }) {
+function RelatedActivities({ activities }: { activities: Activity[] }) {
   return (
     <div className="space-y-4">
       <Text variant="h3" className="text-xl font-semibold">

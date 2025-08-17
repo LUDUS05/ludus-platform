@@ -258,7 +258,7 @@ export default function ActivitiesPage() {
     setLoading(false);
   }, [activities, filters, sortBy]);
 
-  const handleFiltersChange = (newFilters: any) => {
+  const handleFiltersChange = (newFilters: SearchFilters) => {
     setFilters(newFilters);
   };
 

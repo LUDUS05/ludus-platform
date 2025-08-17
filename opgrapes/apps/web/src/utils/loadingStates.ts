@@ -132,7 +132,7 @@ export function useMultipleLoadingStates<T extends Record<string, LoadingState>>
     }
   }, [initialStates]);
 
-  const updateData = useCallback((key: keyof T, data: any) => {
+  const updateData = useCallback((key: keyof T, data: unknown) => {
     setStates(prev => ({
       ...prev,
       [key]: {
@@ -163,10 +163,10 @@ export function createInitialLoadingState<T>(initialData: T | null = null): Load
 }
 
 // Utility function to create multiple initial loading states
-export function createMultipleInitialLoadingStates<T extends Record<string, any>>(
+export function createMultipleInitialLoadingStates<T extends Record<string, LoadingState>>(
   states: T
 ): T {
-  const result: any = {};
+  const result: Record<string, LoadingState> = {};
   
   Object.keys(states).forEach(key => {
     result[key] = createInitialLoadingState(states[key]);

@@ -148,7 +148,7 @@ export default function VendorActivitiesPage() {
     setShowCreateModal(true);
   };
 
-  const handleEditActivity = (activity: any) => {
+  const handleEditActivity = (activity: Activity) => {
     setEditingActivity(activity);
     setShowCreateModal(true);
   };
@@ -159,7 +159,7 @@ export default function VendorActivitiesPage() {
     }
   };
 
-  const handleSaveActivity = (activityData: any) => {
+  const handleSaveActivity = (activityData: Partial<Activity>) => {
     if (editingActivity) {
       // Update existing activity
       setActivities(prev => prev.map(a => 
@@ -442,8 +442,8 @@ export default function VendorActivitiesPage() {
 
 // Activity Form Component
 interface ActivityFormProps {
-  activity?: any;
-  onSave: (data: any) => void;
+          activity?: Activity;
+        onSave: (data: Partial<Activity>) => void;
   onCancel: () => void;
 }
 
@@ -463,7 +463,7 @@ function ActivityForm({ activity, onSave, onCancel }: ActivityFormProps) {
     ...activity
   });
 
-  const handleInputChange = (field: string, value: any) => {
+  const handleInputChange = (field: string, value: string | number | boolean) => {
     setFormData(prev => ({
       ...prev,
       [field]: value

@@ -93,8 +93,7 @@ export default function VendorProfilePage() {
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState('basic');
   const [formData, setFormData] = useState(mockVendor);
-  const [logoFile, setLogoFile] = useState<File | null>(null);
-  const [bannerFile, setBannerFile] = useState<File | null>(null);
+
   const [logoPreview, setLogoPreview] = useState(mockVendor.logo);
   const [bannerPreview, setBannerPreview] = useState(mockVendor.banner);
 
@@ -106,7 +105,7 @@ export default function VendorProfilePage() {
     }, 1000);
   }, []);
 
-  const handleInputChange = (field: string, value: any) => {
+  const handleInputChange = (field: string, value: string | number) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
@@ -123,7 +122,7 @@ export default function VendorProfilePage() {
     }));
   };
 
-  const handleBusinessHoursChange = (day: string, field: string, value: any) => {
+  const handleBusinessHoursChange = (day: string, field: string, value: string | boolean) => {
     setFormData(prev => ({
       ...prev,
       businessHours: {

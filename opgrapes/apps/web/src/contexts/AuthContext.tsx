@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useEffect, useState, ReactNode, useCallback } from 'react';
 
 interface User {
   id: string;
@@ -138,7 +138,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setUser(null);
   };
 
-  const refreshToken = async () => {
+  const refreshToken = useCallback(async () => {
     try {
       const response = await fetch('/api/auth/refresh', {
         method: 'POST',
@@ -159,7 +159,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       console.error('Error refreshing token:', error);
       logout();
     }
-  };
+  }, [token]);
 
   const updateUser = async (userData: Partial<User>) => {
     if (!token) {
