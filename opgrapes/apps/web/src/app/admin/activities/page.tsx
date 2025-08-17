@@ -1,169 +1,5 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
-import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-import { Container } from '@opgrapes/ui/Container';
-import { Card } from '@opgrapes/ui/Card';
-import { Button } from '@opgrapes/ui/Button';
-import { Text } from '@opgrapes/ui/Text';
-import { Stack } from '@opgrapes/ui/Stack';
-import { Badge } from '@opgrapes/ui/Badge';
-import { Input } from '@opgrapes/ui/Input';
-import { Select } from '@opgrapes/ui/Select';
-import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
-import { adminService, type ActivitiesResponse, type Activity } from '@/services/adminService';
-
-function ActivityModerationContent() {
-  const { user } = useAuth();
-  const [activities, setActivities] = useState<Activity[]>([]);
-  const [pagination, setPagination] = useState({ page: 1, limit: 20, total: 0, pages: 0 });
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [filters, setFilters] = useState({ search: '', status: '' });
-
-  useEffect(() => { fetchActivities(); }, [filters, pagination.page]);
-
-  const fetchActivities = async () => {
-    try {
-      setLoading(true);
-      const res: ActivitiesResponse = await adminService.getActivities({
-        page: pagination.page,
-        limit: pagination.limit,
-        search: filters.search || undefined,
-        status: filters.status || undefined,
-      });
-      setActivities(res.activities);
-      setPagination(res.pagination);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to fetch activities');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleFilterChange = (key: string, value: string) => {
-    setFilters((prev) => ({ ...prev, [key]: value }));
-    setPagination((prev) => ({ ...prev, page: 1 }));
-  };
-
-  const handleUpdate = async (id: string, updates: Parameters<typeof adminService.updateActivity>[1]) => {
-    try {
-      await adminService.updateActivity(id, updates);
-      fetchActivities();
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to update activity');
-    }
-  };
-
-  if (!user || user.role !== 'admin') {
-    return (
-      <Container size="lg" className="py-8">
-        <Card>
-          <Card.Body>
-            <div className="text-center py-8">
-              <Text size="xl" weight="bold" color="red">Access Denied</Text>
-              <Text size="lg" color="gray" className="mt-2">You don't have permission to access activity moderation.</Text>
-            </div>
-          </Card.Body>
-        </Card>
-      </Container>
-    );
-  }
-
-  return (
-    <Container size="lg" className="py-8">
-      <Stack gap="8">
-        <Card>
-          <Card.Body>
-            <div className="flex items-center justify-between">
-              <div>
-                <Text as="div" size="xl" weight="bold">Activity Moderation 🎯</Text>
-                <Text size="lg" color="gray">Review and approve or reject activities</Text>
-              </div>
-            </div>
-          </Card.Body>
-        </Card>
-
-        <Card>
-          <Card.Body>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <Text size="sm" weight="medium" className="mb-2 block">Search</Text>
-                <Input placeholder="Title..." value={filters.search} onChange={(e) => handleFilterChange('search', e.target.value)} />
-              </div>
-              <div>
-                <Text size="sm" weight="medium" className="mb-2 block">Status</Text>
-                <Select value={filters.status} onChange={(e) => handleFilterChange('status', e.target.value)}>
-                  <option value="">All</option>
-                  <option value="pending">Pending</option>
-                  <option value="approved">Approved</option>
-                  <option value="rejected">Rejected</option>
-                </Select>
-              </div>
-              <div className="flex items-end">
-                <Button variant="primary" onClick={() => fetchActivities()} className="w-full">Apply Filters</Button>
-              </div>
-            </div>
-          </Card.Body>
-        </Card>
-
-        <Card>
-          <Card.Header>
-            <div className="flex items-center justify-between">
-              <Text as="div" size="xl" weight="bold">Activities ({pagination.total})</Text>
-              <Text size="sm" color="gray">Page {pagination.page} of {pagination.pages}</Text>
-            </div>
-          </Card.Header>
-          <Card.Body>
-            {loading ? (
-              <Stack gap="4">{[...Array(5)].map((_, i) => (<LoadingSkeleton key={i} className="h-20" />))}</Stack>
-            ) : error ? (
-              <div className="text-center py-8">
-                <Text size="lg" color="red">{error}</Text>
-                <Button variant="outline" className="mt-4" onClick={() => fetchActivities()}>Retry</Button>
-              </div>
-            ) : activities.length === 0 ? (
-              <div className="text-center py-8"><Text size="lg" color="gray">No activities found</Text></div>
-            ) : (
-              <Stack gap="4">
-                {activities.map((a) => (
-                  <div key={a._id} className="border rounded-lg p-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <Text weight="bold">{a.title}</Text>
-                        <div className="flex gap-2 mt-2">
-                          <Badge variant={a.isActive ? 'success' : 'secondary'}>{a.isActive ? 'Active' : 'Inactive'}</Badge>
-                          <Badge variant={a.status === 'approved' ? 'success' : a.status === 'pending' ? 'warning' : 'danger'}>{a.status}</Badge>
-                        </div>
-                      </div>
-                      <div className="flex gap-2">
-                        <Button variant="outline" size="sm" onClick={() => handleUpdate(a._id, { status: 'approved' })}>Approve</Button>
-                        <Button variant="outline" size="sm" onClick={() => handleUpdate(a._id, { status: 'rejected' })}>Reject</Button>
-                        <Button variant="outline" size="sm" onClick={() => handleUpdate(a._id, { isActive: !a.isActive })}>{a.isActive ? 'Deactivate' : 'Activate'}</Button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </Stack>
-            )}
-          </Card.Body>
-        </Card>
-      </Stack>
-    </Container>
-  );
-}
-
-export default function ActivityModerationPage() {
-  return (
-    <ProtectedRoute>
-      <ActivityModerationContent />
-    </ProtectedRoute>
-  );
-}
-
-'use client';
-
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
@@ -261,17 +97,44 @@ function ActivityModerationContent() {
   if (!user || user.role !== 'admin') {
     return (
       <Container size="lg" className="py-8">
-        <Card>
-          <div className="p-6">
-            <div className="text-center py-8">
-              <Text size="xl" weight="bold" color="red">
-                Access Denied
-              </Text>
-              <Text size="lg" color="gray" className="mt-2">
-                You don't have permission to access activity moderation.
-              </Text>
-            </div>
+        <Card padding="lg">
+          <div className="text-center py-8">
+            <Text size="xl" weight="bold" color="red">Access Denied</Text>
+            <Text size="lg" color="gray" className="mt-2">You don't have permission to access activity moderation.</Text>
           </div>
+        </Card>
+      </Container>
+    );
+  }
+
+  if (loading) {
+    return (
+      <Container size="lg" className="py-8">
+        <Stack spacing="lg">
+          <LoadingSkeleton />
+          <LoadingSkeleton />
+        </Stack>
+      </Container>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container size="lg" className="py-8">
+        <Card>
+          <Card.Body>
+            <div className="text-center py-8">
+              <Text size="xl" weight="bold" color="red">Error</Text>
+              <Text size="lg" color="gray" className="mt-2">{error}</Text>
+              <Button 
+                variant="primary" 
+                className="mt-4"
+                onClick={() => fetchActivities()}
+              >
+                Try Again
+              </Button>
+            </div>
+          </Card.Body>
         </Card>
       </Container>
     );
@@ -280,60 +143,43 @@ function ActivityModerationContent() {
   return (
     <Container size="lg" className="py-8">
       <Stack gap="8">
-        {/* Header */}
         <Card>
-          <div className="p-6">
+          <Card.Body>
             <div className="flex items-center justify-between">
               <div>
-                <Text as="h1" size="3xl" weight="bold">
-                  Activity Moderation 🎯
-                </Text>
-                <Text size="lg" color="gray">
-                  Review and moderate activities submitted by vendors
-                </Text>
+                <Text as="div" size="xl" weight="bold">Activity Moderation 🎯</Text>
+                <Text size="lg" color="gray">Review and approve or reject activities</Text>
               </div>
-              <Button
-                variant="outline"
-                onClick={() => router.push('/admin')}
-              >
-                Back to Dashboard
-              </Button>
             </div>
-          </div>
+          </Card.Body>
         </Card>
 
-        {/* Filters */}
         <Card>
-          <div className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Card.Body>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               <div>
-                <Text size="sm" weight="medium" className="mb-2 block">
-                  Search Activities
-                </Text>
-                <Input
-                  placeholder="Activity title..."
-                  value={filters.search}
-                  onChange={(e) => handleFilterChange('search', e.target.value)}
+                <Text size="sm" weight="medium" className="mb-2 block">Search</Text>
+                <Input 
+                  placeholder="Search activities..." 
+                  value={filters.search} 
+                  onChange={(e) => handleFilterChange('search', e.target.value)} 
                 />
               </div>
               <div>
-                <Text size="sm" weight="medium" className="mb-2 block">
-                  Status
-                </Text>
-                <Select
-                  value={filters.status}
+                <Text size="sm" weight="medium" className="mb-2 block">Status</Text>
+                <Select 
+                  value={filters.status} 
                   onChange={(e) => handleFilterChange('status', e.target.value)}
-                  options={[
-                    { value: '', label: 'All Status' },
-                    { value: 'pending', label: 'Pending' },
-                    { value: 'approved', label: 'Approved' },
-                    { value: 'rejected', label: 'Rejected' }
-                  ]}
-                />
+                >
+                  <option value="">All Statuses</option>
+                  <option value="pending">Pending</option>
+                  <option value="approved">Approved</option>
+                  <option value="rejected">Rejected</option>
+                </Select>
               </div>
               <div className="flex items-end">
-                <Button
-                  variant="primary"
+                <Button 
+                  variant="primary" 
                   onClick={() => fetchActivities()}
                   className="w-full"
                 >
@@ -341,79 +187,60 @@ function ActivityModerationContent() {
                 </Button>
               </div>
             </div>
-          </div>
-        </Card>
 
-        {/* Activities List */}
-        <Card>
-          <div className="px-6 py-4 border-b border-gray-200">
-            <div className="flex items-center justify-between">
-              <Text as="h2" size="xl" weight="bold">
-                Activities ({pagination.total})
-              </Text>
-              <Text size="sm" color="gray">
-                Page {pagination.page} of {pagination.pages}
-              </Text>
-            </div>
-          </div>
-          <div className="p-6">
-            {loading ? (
-              <Stack gap="4">
-                {[...Array(5)].map((_, i) => (
-                  <LoadingSkeleton key={i} className="h-32" />
-                ))}
-              </Stack>
-            ) : error ? (
-              <div className="text-center py-8">
-                <Text size="lg" color="red">
-                  {error}
-                </Text>
-                <Button
-                  variant="outline"
-                  className="mt-4"
-                  onClick={() => fetchActivities()}
-                >
-                  Retry
-                </Button>
-              </div>
-            ) : activities.length === 0 ? (
-              <div className="text-center py-8">
-                <Text size="lg" color="gray">
-                  No activities found matching your criteria
-                </Text>
-              </div>
-            ) : (
-              <Stack gap="4">
-                {activities.map((activity) => (
-                  <div key={activity._id} className="border rounded-lg p-4">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2">
-                          <Text size="xl" weight="bold">
-                            {activity.title}
+            <div className="space-y-4">
+              {activities.length === 0 ? (
+                <div className="text-center py-8">
+                  <Text size="lg" color="gray">No activities found</Text>
+                </div>
+              ) : (
+                <Stack gap="4">
+                  {activities.map((activity) => (
+                    <div key={activity._id} className="border rounded-lg p-4">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-2">
+                            <Text size="lg" weight="bold">{activity.title}</Text>
+                            <Badge variant={getStatusBadgeVariant(activity.status)}>
+                              {activity.status}
+                            </Badge>
+                            <Badge variant={activity.isActive ? 'success' : 'secondary'}>
+                              {activity.isActive ? 'Active' : 'Inactive'}
+                            </Badge>
+                          </div>
+                          
+                          <Text size="sm" color="gray" className="mb-2">
+                            {activity.description}
                           </Text>
-                          <Badge variant={getStatusBadgeVariant(activity.status)}>
-                            {activity.status}
-                          </Badge>
-                          <Badge variant={activity.isActive ? 'success' : 'danger'}>
-                            {activity.isActive ? 'Active' : 'Inactive'}
-                          </Badge>
-                        </div>
-                        
-                        <div className="mb-3">
-                          <Text size="sm" color="gray">
-                            <strong>Vendor:</strong> {activity.vendorId.businessName}
-                          </Text>
-                          <Text size="sm" color="gray">
-                            <strong>Contact:</strong> {activity.vendorId.email}
-                          </Text>
-                          <Text size="sm" color="gray">
-                            <strong>Submitted:</strong> {formatDate(activity.createdAt)}
-                          </Text>
+                          
+                          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                            <div>
+                              <Text size="xs" weight="medium" color="gray">Vendor</Text>
+                              <Text size="sm">{activity.vendor?.businessName || 'N/A'}</Text>
+                            </div>
+                            <div>
+                              <Text size="xs" weight="medium" color="gray">Category</Text>
+                              <Text size="sm">{activity.category}</Text>
+                            </div>
+                            <div>
+                              <Text size="xs" weight="medium" color="gray">Price</Text>
+                              <Text size="sm">${activity.price}</Text>
+                            </div>
+                            <div>
+                              <Text size="xs" weight="medium" color="gray">Created</Text>
+                              <Text size="sm">{formatDate(activity.createdAt)}</Text>
+                            </div>
+                          </div>
+
+                          {activity.moderationNotes && (
+                            <div className="mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded">
+                              <Text size="sm" weight="medium" color="yellow">Moderation Notes:</Text>
+                              <Text size="sm" color="gray">{activity.moderationNotes}</Text>
+                            </div>
+                          )}
                         </div>
 
-                        {/* Moderation Actions */}
-                        <div className="flex gap-2">
+                        <div className="flex flex-col gap-2 ml-4">
                           {activity.status === 'pending' && (
                             <>
                               <Button
@@ -438,7 +265,7 @@ function ActivityModerationContent() {
                               </Button>
                             </>
                           )}
-                          
+
                           {activity.status === 'approved' && (
                             <Button
                               variant="outline"
@@ -481,11 +308,11 @@ function ActivityModerationContent() {
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </Stack>
-            )}
-          </div>
+                  ))}
+                </Stack>
+              )}
+            </div>
+          </Card.Body>
         </Card>
 
         {/* Pagination */}
@@ -533,7 +360,7 @@ function ActivityModerationContent() {
   );
 }
 
-export default function ActivityModerationPage() {
+export default function AdminActivitiesPage() {
   return (
     <ProtectedRoute>
       <ActivityModerationContent />
