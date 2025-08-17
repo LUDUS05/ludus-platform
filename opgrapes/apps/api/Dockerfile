@@ -2,14 +2,14 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
+# Copy package files from the API directory
+COPY apps/api/package*.json ./
 
-# Install dependencies
-RUN npm ci --only=production
+# Install dependencies (use npm install instead of npm ci to avoid lockfile issues)
+RUN npm install --only=production
 
 # Copy source code
-COPY . .
+COPY apps/api/ ./
 
 # Build the application
 RUN npm run build
