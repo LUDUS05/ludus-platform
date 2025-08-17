@@ -1,3 +1,4 @@
+# OPGrapes API Dockerfile - Root Level
 FROM node:18-alpine
 
 WORKDIR /app
