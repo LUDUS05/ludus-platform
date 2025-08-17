@@ -45,10 +45,9 @@ api.interceptors.response.use(
         localStorage.setItem('accessToken', accessToken);
         // New refresh token is automatically set as HttpOnly cookie by server
 
-          // Retry original request with new token
-          originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-          return api(originalRequest);
-        }
+        // Retry original request with new token
+        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+        return api(originalRequest);
       } catch (refreshError) {
         // Refresh failed, redirect to login
         localStorage.removeItem('accessToken');
