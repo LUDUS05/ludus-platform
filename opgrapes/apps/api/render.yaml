@@ -3,6 +3,7 @@ services:
     name: opgrapes-api
     env: node
     plan: free
+    dockerfilePath: null
     buildCommand: npm install && npm run build
     startCommand: npm start
     envVars:
@@ -28,4 +29,4 @@ services:
         value: info
     healthCheckPath: /health
     autoDeploy: true
-    branch: main
+    branch: opgrapes-project
