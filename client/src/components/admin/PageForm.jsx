@@ -47,8 +47,8 @@ const PageForm = () => {
         slug: page.slug || '',
         placement: page.placement || 'none',
         status: page.status || 'draft',
-        metaDescription: page.metaDescription || '',
-        metaKeywords: page.metaKeywords || '',
+        metaDescription: page.seo?.description?.en || page.metaDescription || '',
+        metaKeywords: page.seo?.keywords?.en || page.metaKeywords || '',
         navigationOrder: page.navigationOrder || 0
       });
     } catch (error) {
