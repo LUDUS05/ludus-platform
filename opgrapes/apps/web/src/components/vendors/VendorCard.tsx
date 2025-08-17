@@ -2,12 +2,12 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Card } from '@opgrapes/ui/Card';
-import { Button } from '@opgrapes/ui/Button';
-import { Text } from '@opgrapes/ui/Text';
-import { Badge } from '@opgrapes/ui/Badge';
-import { Stack } from '@opgrapes/ui/Stack';
-import { Avatar } from '@opgrapes/ui/Avatar';
+import { Card } from 'ui/Card';
+import { Button } from 'ui/Button';
+import { Text } from 'ui/Text';
+import { Badge } from 'ui/Badge';
+import { Stack } from 'ui/Stack';
+import { Avatar } from 'ui/Avatar';
 import { MapPin, Star, Calendar, Phone, Mail, Globe, Users } from 'lucide-react';
 
 interface Vendor {
@@ -188,7 +188,7 @@ export function VendorCard({ vendor, variant = 'default' }: VendorCardProps) {
       </div>
 
       {/* Content Section */}
-      <Card.Body>
+      <div className="p-6">
         <Stack gap="3">
           {/* Name and Rating */}
           <div className="flex items-start justify-between">
@@ -292,7 +292,7 @@ export function VendorCard({ vendor, variant = 'default' }: VendorCardProps) {
             View Profile
           </Button>
         </Stack>
-      </Card.Body>
+      </div>
     </Card>
   );
 }

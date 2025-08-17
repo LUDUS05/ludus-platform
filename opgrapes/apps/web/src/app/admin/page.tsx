@@ -3,15 +3,15 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-import { Container } from '@opgrapes/ui/Container';
-import { Card } from '@opgrapes/ui/Card';
-import { Button } from '@opgrapes/ui/Button';
-import { Text } from '@opgrapes/ui/Text';
-import { Stack } from '@opgrapes/ui/Stack';
-import { Badge } from '@opgrapes/ui/Badge';
-import { Avatar } from '@opgrapes/ui/Avatar';
-import { Divider } from '@opgrapes/ui/Divider';
-import { Link } from '@opgrapes/ui/Link';
+import { Container } from 'ui/Container';
+import { Card } from 'ui/Card';
+import { Button } from 'ui/Button';
+import { Text } from 'ui/Text';
+import { Stack } from 'ui/Stack';
+import { Badge } from 'ui/Badge';
+import { Avatar } from 'ui/Avatar';
+import { Divider } from 'ui/Divider';
+import { Link } from 'ui/Link';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { adminService, DashboardData, RecentUser, RecentBooking } from '@/services/adminService';
 import { useRouter } from 'next/navigation';
@@ -43,7 +43,7 @@ function AdminDashboardContent() {
     return (
       <Container size="lg" className="py-8">
         <Card>
-          <Card.Body>
+          <div className="p-6">
             <div className="text-center py-8">
               <Text size="xl" weight="bold" color="red">
                 Access Denied
@@ -52,7 +52,7 @@ function AdminDashboardContent() {
                 You don't have permission to access the admin dashboard.
               </Text>
             </div>
-          </Card.Body>
+          </div>
         </Card>
       </Container>
     );
@@ -61,14 +61,14 @@ function AdminDashboardContent() {
   if (loading) {
     return (
       <Container size="lg" className="py-8">
-        <Stack gap="8">
-          <LoadingSkeleton className="h-32" />
+        <Stack spacing="lg">
+          <LoadingSkeleton />
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {[...Array(4)].map((_, i) => (
-              <LoadingSkeleton key={i} className="h-32" />
+              <LoadingSkeleton key={i} />
             ))}
           </div>
-          <LoadingSkeleton className="h-64" />
+          <LoadingSkeleton />
         </Stack>
       </Container>
     );
@@ -78,7 +78,7 @@ function AdminDashboardContent() {
     return (
       <Container size="lg" className="py-8">
         <Card>
-          <Card.Body>
+          <div className="p-6">
             <div className="text-center py-8">
               <Text size="xl" weight="bold" color="red">
                 Error Loading Dashboard
@@ -94,356 +94,286 @@ function AdminDashboardContent() {
                 Retry
               </Button>
             </div>
-          </Card.Body>
+          </div>
         </Card>
       </Container>
     );
   }
 
-  if (!dashboardData) return null;
-
-  const { overview, recentUsers, recentBookings } = dashboardData;
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(amount);
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-    });
-  };
-
   return (
     <Container size="lg" className="py-8">
-      <Stack gap="8">
-        {/* Admin Header */}
+              <Stack spacing="lg">
+        {/* Header */}
         <Card>
-          <Card.Body>
-            <Stack gap="6">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-6">
-                  <Avatar
-                    size="xl"
-                    src={user.profilePicture}
-                    alt={`${user.firstName} ${user.lastName}`}
-                  />
-                  <div>
-                    <Text as="h1" size="3xl" weight="bold">
-                      Admin Dashboard 👑
-                    </Text>
-                    <Text size="lg" color="gray">
-                      Welcome back, {user.firstName}! Here's what's happening on the platform.
-                    </Text>
-                  </div>
-                </div>
-                <div className="flex gap-3">
-                  <Button
-                    variant="outline"
-                    onClick={() => router.push('/admin/users')}
-                  >
-                    Manage Users
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={() => router.push('/admin/activities')}
-                  >
-                    Moderate Activities
-                  </Button>
-                </div>
+          <div className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                  <Text as="div" size="xl" weight="bold">
+                  Admin Dashboard 🎯
+                </Text>
+                <Text size="lg" color="gray">
+                  Welcome back! Here's what's happening with your platform.
+                </Text>
               </div>
-            </Stack>
-          </Card.Body>
+              <div className="flex items-center gap-3">
+                <Button
+                  variant="outline"
+                  onClick={() => router.push('/admin/users')}
+                >
+                  Manage Users
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => router.push('/admin/activities')}
+                >
+                  Moderate Activities
+                </Button>
+              </div>
+            </div>
+          </div>
         </Card>
 
-        {/* Key Metrics */}
+        {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <Card>
-            <Card.Body>
-              <Stack gap="3" className="text-center">
-                <Text size="4xl" weight="bold" color="primary">
-                  {overview.totalUsers.toLocaleString()}
+            <div className="p-6">
+              <div className="text-center">
+                <Text size="xl" weight="bold" className="text-blue-600">
+                  {dashboardData?.overview.totalUsers || 0}
                 </Text>
-                <Text size="lg" weight="medium">
-                  Total Users
-                </Text>
-                <Text size="sm" color="gray">
-                  Platform members
-                </Text>
-              </Stack>
-            </Card.Body>
+                <Text size="sm" color="gray">Total Users</Text>
+              </div>
+            </div>
           </Card>
-
+          
           <Card>
-            <Card.Body>
-              <Stack gap="3" className="text-center">
-                <Text size="4xl" weight="bold" color="primary">
-                  {overview.totalActivities.toLocaleString()}
+            <div className="p-6">
+              <div className="text-center">
+                <Text size="xl" weight="bold" className="text-green-600">
+                  {dashboardData?.overview.totalActivities || 0}
                 </Text>
-                <Text size="lg" weight="medium">
-                  Total Activities
-                </Text>
-                <Text size="sm" color="gray">
-                  Available experiences
-                </Text>
-              </Stack>
-            </Card.Body>
+                <Text size="sm" color="gray">Total Activities</Text>
+              </div>
+            </div>
           </Card>
-
+          
           <Card>
-            <Card.Body>
-              <Stack gap="3" className="text-center">
-                <Text size="4xl" weight="bold" color="primary">
-                  {overview.totalBookings.toLocaleString()}
+            <div className="p-6">
+              <div className="text-center">
+                <Text size="xl" weight="bold" className="text-purple-600">
+                  {dashboardData?.overview.totalBookings || 0}
                 </Text>
-                <Text size="lg" weight="medium">
-                  Total Bookings
-                </Text>
-                <Text size="sm" color="gray">
-                  Customer reservations
-                </Text>
-              </Stack>
-            </Card.Body>
+                <Text size="sm" color="gray">Total Bookings</Text>
+              </div>
+            </div>
           </Card>
-
+          
           <Card>
-            <Card.Body>
-              <Stack gap="3" className="text-center">
-                <Text size="4xl" weight="bold" color="primary">
-                  {formatCurrency(overview.totalRevenue)}
+            <div className="p-6">
+              <div className="text-center">
+                <Text size="xl" weight="bold" className="text-orange-600">
+                  {dashboardData?.overview.totalVendors || 0}
                 </Text>
-                <Text size="lg" weight="medium">
-                  Total Revenue
+                <Text size="sm" color="gray">Total Vendors</Text>
+              </div>
+            </div>
+          </Card>
+        </div>
+
+        {/* Revenue & Performance */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Card>
+            <div className="p-6">
+              <div className="text-center">
+                <Text size="xl" weight="bold" className="text-green-600">
+                  ${dashboardData?.overview.totalRevenue?.toFixed(2) || '0.00'}
                 </Text>
-                <Text size="sm" color="gray">
-                  Platform earnings
+                <Text size="sm" color="gray">Total Revenue</Text>
+              </div>
+            </div>
+          </Card>
+          
+          <Card>
+            <div className="p-6">
+              <div className="text-center">
+                <Text size="xl" weight="bold" className="text-blue-600">
+                  ${dashboardData?.overview.avgBookingValue?.toFixed(2) || '0.00'}
                 </Text>
-              </Stack>
-            </Card.Body>
+                <Text size="sm" color="gray">Average Booking Value</Text>
+              </div>
+            </div>
           </Card>
         </div>
 
         {/* Pending Items */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Card>
-            <Card.Header>
-              <div className="flex items-center justify-between">
-                <Text as="h2" size="xl" weight="bold">
-                  Pending Approvals
+            <div className="p-6">
+              <div className="text-center">
+                <Text size="xl" weight="bold" className="text-yellow-600">
+                  {dashboardData?.overview.pendingVendors || 0}
                 </Text>
-                <Button
-                  variant="primary"
-                  size="sm"
-                  onClick={() => router.push('/admin/vendors')}
-                >
-                  View All
-                </Button>
+                <Text size="sm" color="gray">Pending Vendor Approvals</Text>
               </div>
-            </Card.Header>
-            <Card.Body>
-              <Stack gap="4">
-                <div className="flex items-center justify-between">
-                  <Text size="lg">Pending Vendors</Text>
-                  <Badge variant="warning" size="lg">
-                    {overview.pendingVendors}
-                  </Badge>
-                </div>
-                <div className="flex items-center justify-between">
-                  <Text size="lg">Pending Activities</Text>
-                  <Badge variant="warning" size="lg">
-                    {overview.pendingActivities}
-                  </Badge>
-                </div>
-                <Divider />
-                <Button
-                  variant="outline"
-                  onClick={() => router.push('/admin/vendors?status=pending')}
-                  className="w-full"
-                >
-                  Review Pending Items
-                </Button>
-              </Stack>
-            </Card.Body>
+            </div>
           </Card>
-
+          
           <Card>
-            <Card.Header>
-              <div className="flex items-center justify-between">
-                <Text as="h2" size="xl" weight="bold">
-                  Quick Stats
+            <div className="p-6">
+              <div className="text-center">
+                <Text size="xl" weight="bold" className="text-yellow-600">
+                  {dashboardData?.overview.pendingActivities || 0}
                 </Text>
+                <Text size="sm" color="gray">Pending Activity Reviews</Text>
               </div>
-            </Card.Header>
-            <Card.Body>
-              <Stack gap="4">
-                <div className="flex items-center justify-between">
-                  <Text size="lg">Total Vendors</Text>
-                  <Text size="lg" weight="bold">
-                    {overview.totalVendors}
-                  </Text>
-                </div>
-                <div className="flex items-center justify-between">
-                  <Text size="lg">Avg Booking Value</Text>
-                  <Text size="lg" weight="bold">
-                    {formatCurrency(overview.avgBookingValue)}
-                  </Text>
-                </div>
-                <Divider />
-                <Button
-                  variant="outline"
-                  onClick={() => router.push('/admin/analytics')}
-                  className="w-full"
-                >
-                  View Analytics
-                </Button>
-              </Stack>
-            </Card.Body>
+            </div>
           </Card>
         </div>
 
-        {/* Recent Activity */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card>
-            <Card.Header>
-              <div className="flex items-center justify-between">
-                <Text as="h2" size="xl" weight="bold">
-                  Recent Users
-                </Text>
-                <Button
-                  variant="primary"
-                  size="sm"
-                  onClick={() => router.push('/admin/users')}
-                >
-                  View All
-                </Button>
-              </div>
-            </Card.Header>
-            <Card.Body>
-              <Stack gap="4">
-                {recentUsers.length > 0 ? (
-                  recentUsers.map((user) => (
-                    <div key={user._id} className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <Avatar
-                          size="sm"
-                          alt={`${user.firstName} ${user.lastName}`}
-                        />
-                        <div>
-                          <Text weight="medium">
-                            {user.firstName} {user.lastName}
-                          </Text>
-                          <Text size="sm" color="gray">
-                            {user.email}
-                          </Text>
-                        </div>
-                      </div>
-                      <Text size="sm" color="gray">
-                        {formatDate(user.createdAt)}
+        {/* Recent Users */}
+        <Card>
+          <div className="px-6 py-4 border-b border-gray-200">
+            <div className="flex items-center justify-between">
+              <Text as="div" size="xl" weight="bold">
+                Recent Users
+              </Text>
+              <Link href="/admin/users" variant="primary" size="sm">
+                View All Users
+              </Link>
+            </div>
+          </div>
+          <div className="p-6">
+            <div className="space-y-4">
+              {dashboardData?.recentUsers?.map((u) => (
+                <div key={u._id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                      <Text weight="semibold" className="text-blue-600">
+                        {(u.firstName?.[0] || 'U')}
                       </Text>
                     </div>
-                  ))
-                ) : (
-                  <Text color="gray" className="text-center py-4">
-                    No recent users
-                  </Text>
-                )}
-              </Stack>
-            </Card.Body>
-          </Card>
-
-          <Card>
-            <Card.Header>
-              <div className="flex items-center justify-between">
-                <Text as="h2" size="xl" weight="bold">
-                  Recent Bookings
-                </Text>
-                <Button
-                  variant="primary"
-                  size="sm"
-                  onClick={() => router.push('/admin/bookings')}
-                >
-                  View All
-                </Button>
-              </div>
-            </Card.Header>
-            <Card.Body>
-              <Stack gap="4">
-                {recentBookings.length > 0 ? (
-                  recentBookings.map((booking) => (
-                    <div key={booking._id} className="flex items-center justify-between">
-                      <div className="flex-1">
-                        <Text weight="medium" className="truncate">
-                          {booking.activityId.title}
-                        </Text>
-                        <Text size="sm" color="gray">
-                          {booking.userId.firstName} {booking.userId.lastName}
-                        </Text>
-                      </div>
-                      <div className="text-right">
-                        <Text weight="medium">
-                          {formatCurrency(booking.totalAmount)}
-                        </Text>
-                        <Text size="sm" color="gray">
-                          {formatDate(booking.createdAt)}
-                        </Text>
-                      </div>
+                    <div>
+                      <Text weight="medium">{u.firstName} {u.lastName}</Text>
+                      <Text size="sm" color="gray">{u.email}</Text>
                     </div>
-                  ))
-                ) : (
-                  <Text color="gray" className="text-center py-4">
-                    No recent bookings
-                  </Text>
-                )}
-              </Stack>
-            </Card.Body>
-          </Card>
-        </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge variant={'secondary'}>
+                      user
+                    </Badge>
+                    <Text size="sm" color="gray">
+                      {new Date(u.createdAt).toLocaleDateString()}
+                    </Text>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Card>
 
-        {/* Admin Actions */}
+        {/* Recent Bookings */}
         <Card>
-          <Card.Header>
-            <Text as="h2" size="xl" weight="bold">
-              Admin Actions
+          <div className="px-6 py-4 border-b border-gray-200">
+            <div className="flex items-center justify-between">
+              <Text as="div" size="xl" weight="bold">
+                Recent Bookings
+              </Text>
+              <Link href="/admin/bookings" variant="primary" size="sm">
+                View All Bookings
+              </Link>
+            </div>
+          </div>
+          <div className="p-6">
+            <div className="space-y-4">
+              {dashboardData?.recentBookings?.map((b) => (
+                <div key={b._id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                      <Text weight="semibold" className="text-blue-600">
+                        {b.activityId.title.charAt(0)}
+                      </Text>
+                    </div>
+                    <div>
+                      <Text weight="medium">{b.activityId.title}</Text>
+                      <Text size="sm" color="gray">by {b.userId.firstName} {b.userId.lastName}</Text>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge variant={b.status === 'confirmed' ? 'success' : b.status === 'pending' ? 'warning' : 'secondary'}>
+                      {b.status}
+                    </Badge>
+                    <Text size="sm" color="gray">
+                      {new Date(b.createdAt).toLocaleDateString()}
+                    </Text>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Card>
+
+        {/* System Health */}
+        <Card>
+          <div className="px-6 py-4 border-b border-gray-200">
+            <Text as="div" size="xl" weight="bold">
+              System Health
             </Text>
-          </Card.Header>
-          <Card.Body>
+          </div>
+          <div className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <Text weight="medium" className="mb-2">Database Status</Text>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                  <Text size="sm" color="gray">Connected</Text>
+                </div>
+              </div>
+              <div>
+                <Text weight="medium" className="mb-2">API Status</Text>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                  <Text size="sm" color="gray">Operational</Text>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Card>
+
+        {/* Quick Actions */}
+        <Card>
+          <div className="px-6 py-4 border-b border-gray-200">
+            <Text as="div" size="xl" weight="bold">
+              Quick Actions
+            </Text>
+          </div>
+          <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <Button
-                variant="primary"
-                size="lg"
-                className="h-24 flex flex-col items-center justify-center gap-2"
+                variant="outline"
                 onClick={() => router.push('/admin/users')}
+                className="h-20 flex flex-col items-center justify-center gap-2"
               >
-                <span className="text-2xl">👥</span>
-                <Text weight="bold">User Management</Text>
+                <Text size="lg">👥</Text>
+                <Text weight="medium">Manage Users</Text>
               </Button>
-              
               <Button
-                variant="secondary"
-                size="lg"
-                className="h-24 flex flex-col items-center justify-center gap-2"
+                variant="outline"
                 onClick={() => router.push('/admin/activities')}
+                className="h-20 flex flex-col items-center justify-center gap-2"
               >
-                <span className="text-2xl">🎯</span>
-                <Text weight="bold">Activity Moderation</Text>
+                <Text size="lg">🎯</Text>
+                <Text weight="medium">Moderate Activities</Text>
               </Button>
-              
               <Button
-                variant="secondary"
-                size="lg"
-                className="h-24 flex flex-col items-center justify-center gap-2"
-                onClick={() => router.push('/admin/vendors')}
+                variant="outline"
+                onClick={() => router.push('/admin/analytics')}
+                className="h-20 flex flex-col items-center justify-center gap-2"
               >
-                <span className="text-2xl">🏢</span>
-                <Text weight="bold">Vendor Management</Text>
+                <Text size="lg">📊</Text>
+                <Text weight="medium">View Analytics</Text>
               </Button>
             </div>
-          </Card.Body>
+          </div>
         </Card>
       </Stack>
     </Container>

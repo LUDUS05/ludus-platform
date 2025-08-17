@@ -9,15 +9,21 @@ export interface Participant {
   specialRequirements?: string;
 }
 
+// Align request payload with backend schema in apps/api/src/routes/bookings.ts
 export interface CreateBookingRequest {
   activityId: string;
-  participants: Participant[];
-  date: string;
+  participants: {
+    adults: number;
+    children?: number;
+    seniors?: number;
+    total: number;
+  };
+  date: string; // ISO 8601 datetime string
   timeSlot?: string;
   specialRequests?: string;
-  groupSize: number;
-  totalAmount: number;
-  paymentMethod?: 'credit_card' | 'debit_card' | 'paypal' | 'stripe';
+  specialRequirements?: string;
+  dietaryRestrictions?: string[];
+  accessibilityNeeds?: string[];
 }
 
 export interface Booking {
@@ -79,6 +85,11 @@ class BookingService {
     }
 
     return response.json();
+  }
+
+  async getAvailability(activityId: string, date: string): Promise<{ remainingCapacity: number; slotAvailability: Record<string, number> }> {
+    const params = new URLSearchParams({ activityId, date });
+    return this.makeRequest(`/availability?${params.toString()}`);
   }
 
   async createBooking(bookingData: CreateBookingRequest): Promise<{ message: string; booking: Booking }> {

@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import { Card } from '@opgrapes/ui/Card';
-import { Button } from '@opgrapes/ui/Button';
-import { Text } from '@opgrapes/ui/Text';
-import { Badge } from '@opgrapes/ui/Badge';
-import { Stack } from '@opgrapes/ui/Stack';
-import { Tabs } from '@opgrapes/ui/Tabs';
+import { Card } from 'ui/Card';
+import { Button } from 'ui/Button';
+import { Text } from 'ui/Text';
+import { Badge } from 'ui/Badge';
+import { Stack } from 'ui/Stack';
+import { Tabs } from 'ui/Tabs';
 import { ActivityCard } from '@/components/activities/ActivityCard';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { 
@@ -267,7 +267,7 @@ export default function VendorDetailPage() {
                 <Stack gap="6">
                   {/* Quick Stats */}
                   <Card>
-                    <Card.Body>
+                    <div className="p-6">
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
                         <div>
                           <Text size="2xl" weight="bold" className="text-primary">
@@ -294,17 +294,17 @@ export default function VendorDetailPage() {
                           <Text size="sm" color="gray">Years</Text>
                         </div>
                       </div>
-                    </Card.Body>
+                    </div>
                   </Card>
 
                   {/* Featured Activities */}
                   <Card>
-                    <Card.Header>
+                    <div className="px-6 py-4 border-b border-gray-200">
                       <Text as="h3" size="lg" weight="semibold">
                         Featured Activities
                       </Text>
-                    </Card.Header>
-                    <Card.Body>
+                    </div>
+                    <div className="p-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {activities.slice(0, 2).map((activity) => (
                           <ActivityCard key={activity.id} activity={activity} variant="compact" />
@@ -315,17 +315,17 @@ export default function VendorDetailPage() {
                           View All Activities
                         </Button>
                       </div>
-                    </Card.Body>
+                    </div>
                   </Card>
 
                   {/* Recent Reviews */}
                   <Card>
-                    <Card.Header>
+                    <div className="px-6 py-4 border-b border-gray-200">
                       <Text as="h3" size="lg" weight="semibold">
                         Recent Reviews
                       </Text>
-                    </Card.Header>
-                    <Card.Body>
+                    </div>
+                    <div className="p-6">
                       <div className="space-y-4">
                         {reviews.slice(0, 2).map((review) => (
                           <div key={review.id} className="border-b pb-4 last:border-b-0">
@@ -350,26 +350,26 @@ export default function VendorDetailPage() {
                           View All Reviews
                         </Button>
                       </div>
-                    </Card.Body>
+                    </div>
                   </Card>
                 </Stack>
               </Tabs.Panel>
 
               <Tabs.Panel value="activities" className="mt-6">
                 <Card>
-                  <Card.Body>
+                  <div className="p-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {activities.map((activity) => (
                         <ActivityCard key={activity.id} activity={activity} />
                       ))}
                     </div>
-                  </Card.Body>
+                  </div>
                 </Card>
               </Tabs.Panel>
 
               <Tabs.Panel value="reviews" className="mt-6">
                 <Card>
-                  <Card.Body>
+                  <div className="p-6">
                     <div className="space-y-6">
                       {reviews.map((review) => (
                         <div key={review.id} className="border-b pb-6 last:border-b-0">
@@ -399,30 +399,30 @@ export default function VendorDetailPage() {
                         </div>
                       ))}
                     </div>
-                  </Card.Body>
+                  </div>
                 </Card>
               </Tabs.Panel>
 
               <Tabs.Panel value="about" className="mt-6">
                 <Stack gap="6">
                   <Card>
-                    <Card.Header>
+                    <div className="px-6 py-4 border-b border-gray-200">
                       <Text as="h3" size="lg" weight="semibold">
                         About {vendor.name}
                       </Text>
-                    </Card.Header>
-                    <Card.Body>
+                    </div>
+                    <div className="p-6">
                       <Text>{vendor.about}</Text>
-                    </Card.Body>
+                    </div>
                   </Card>
 
                   <Card>
-                    <Card.Header>
+                    <div className="px-6 py-4 border-b border-gray-200">
                       <Text as="h3" size="lg" weight="semibold">
                         Certifications & Awards
                       </Text>
-                    </Card.Header>
-                    <Card.Body>
+                    </div>
+                    <div className="p-6">
                       <Stack gap="4">
                         <div>
                           <Text weight="medium" className="mb-2">Certifications:</Text>
@@ -447,16 +447,16 @@ export default function VendorDetailPage() {
                           </ul>
                         </div>
                       </Stack>
-                    </Card.Body>
+                    </div>
                   </Card>
 
                   <Card>
-                    <Card.Header>
+                    <div className="px-6 py-4 border-b border-gray-200">
                       <Text as="h3" size="lg" weight="semibold">
                         Policies & Information
                       </Text>
-                    </Card.Header>
-                    <Card.Body>
+                    </div>
+                    <div className="p-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {Object.entries(vendor.policies).map(([key, value]) => (
                           <div key={key} className="p-3 bg-gray-50 rounded-lg">
@@ -467,7 +467,7 @@ export default function VendorDetailPage() {
                           </div>
                         ))}
                       </div>
-                    </Card.Body>
+                    </div>
                   </Card>
                 </Stack>
               </Tabs.Panel>
@@ -478,12 +478,12 @@ export default function VendorDetailPage() {
           <div className="space-y-6">
             {/* Contact Card */}
             <Card>
-              <Card.Header>
+              <div className="px-6 py-4 border-b border-gray-200">
                 <Text as="h3" size="lg" weight="semibold">
                   Contact Information
                 </Text>
-              </Card.Header>
-              <Card.Body>
+              </div>
+              <div className="p-6">
                 <Stack gap="4">
                   <Button
                     variant="outline"
@@ -511,17 +511,17 @@ export default function VendorDetailPage() {
                     <ExternalLink size={14} className="ml-auto" />
                   </Button>
                 </Stack>
-              </Card.Body>
+              </div>
             </Card>
 
             {/* Categories */}
             <Card>
-              <Card.Header>
+              <div className="px-6 py-4 border-b border-gray-200">
                 <Text as="h3" size="lg" weight="semibold">
                   Categories
                 </Text>
-              </Card.Header>
-              <Card.Body>
+              </div>
+              <div className="p-6">
                 <div className="flex flex-wrap gap-2">
                   {vendor.categories.map((category) => (
                     <Badge key={category} variant="secondary" size="sm">
@@ -529,17 +529,17 @@ export default function VendorDetailPage() {
                     </Badge>
                   ))}
                 </div>
-              </Card.Body>
+              </div>
             </Card>
 
             {/* Quick Actions */}
             <Card>
-              <Card.Header>
+              <div className="px-6 py-4 border-b border-gray-200">
                 <Text as="h3" size="lg" weight="semibold">
                   Quick Actions
                 </Text>
-              </Card.Header>
-              <Card.Body>
+              </div>
+              <div className="p-6">
                 <Stack gap="3">
                   <Button variant="primary" className="w-full">
                     Book an Activity
@@ -551,7 +551,7 @@ export default function VendorDetailPage() {
                     Follow Vendor
                   </Button>
                 </Stack>
-              </Card.Body>
+              </div>
             </Card>
           </div>
         </div>

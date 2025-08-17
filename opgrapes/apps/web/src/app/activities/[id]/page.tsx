@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import { Card } from '@opgrapes/ui/Card';
-import { Button } from '@opgrapes/ui/Button';
-import { Text } from '@opgrapes/ui/Text';
-import { Badge } from '@opgrapes/ui/Badge';
-import { Stack } from '@opgrapes/ui/Stack';
-import { Tabs } from '@opgrapes/ui/Tabs';
+import { Card } from 'ui/Card';
+import { Button } from 'ui/Button';
+import { Text } from 'ui/Text';
+import { Badge } from 'ui/Badge';
+import { Stack } from 'ui/Stack';
+import { Tabs } from 'ui/Tabs';
 import { ActivityCard } from '@/components/activities/ActivityCard';
 import { ActivityBookingModal } from '@/components/activities/ActivityBookingModal';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
@@ -23,6 +23,8 @@ import {
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';
+import { bookingService, type CreateBookingRequest } from '@/services/bookingService';
+import { useToast } from '@/contexts/ToastContext';
 
 // Mock data - replace with API calls
 const mockActivity = {
@@ -333,6 +335,7 @@ export default function ActivityDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+  const toast = useToast();
 
   useEffect(() => {
     // Simulate API call
@@ -343,10 +346,31 @@ export default function ActivityDetailPage() {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleBook = async (bookingData: any) => {
-    // Handle booking logic here
-    console.log('Booking data:', bookingData);
-    // You would typically make an API call here
+  const handleBook = async (bookingData: {
+    date: string;
+    timeSlot: string;
+    participants: { adults: number; children: number; seniors: number; total: number };
+    specialRequests?: string;
+    totalAmount: number;
+  }) => {
+    try {
+      const payload: CreateBookingRequest = {
+        activityId: mockActivity.id,
+        date: bookingData.date,
+        timeSlot: bookingData.timeSlot,
+        participants: bookingData.participants,
+        specialRequests: bookingData.specialRequests,
+        // map UI total to backend; server recalculates authoritative totals
+        // additional optional fields omitted here
+      };
+      const { booking } = await bookingService.createBooking(payload);
+      toast.success('Booking created successfully', 'Success');
+      // Navigate to confirmation page
+      window.location.href = `/bookings/${booking._id}`;
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to create booking';
+      toast.error(message, 'Booking Failed');
+    }
   };
 
   const handleSave = () => {
@@ -649,6 +673,8 @@ export default function ActivityDetailPage() {
         isOpen={isBookingModalOpen}
         onClose={() => setIsBookingModalOpen(false)}
         onBook={handleBook}
+        availableDates={mockActivity.availableDates}
+        availableTimes={mockActivity.timeSlots}
       />
     </div>
   );

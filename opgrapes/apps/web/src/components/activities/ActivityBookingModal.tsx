@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Modal } from '@opgrapes/ui/Modal';
 import { Button } from '@opgrapes/ui/Button';
 import { Text } from '@opgrapes/ui/Text';
@@ -12,6 +12,7 @@ import { Select } from '@opgrapes/ui/Select';
 import { Card } from '@opgrapes/ui/Card';
 import { Badge } from '@opgrapes/ui/Badge';
 import { Calendar, Clock, Users, MapPin, Star } from 'lucide-react';
+import { bookingService } from '@/services/bookingService';
 
 interface Activity {
   id: string;
@@ -37,7 +38,9 @@ interface ActivityBookingModalProps {
   activity: Activity;
   isOpen: boolean;
   onClose: () => void;
-  onBook: (bookingData: BookingData) => void;
+  onBook: (bookingData: BookingFormData) => void;
+  availableDates?: string[];
+  availableTimes?: string[];
 }
 
 interface Participant {
@@ -49,12 +52,16 @@ interface Participant {
   specialRequirements?: string;
 }
 
-interface BookingData {
-  date: string;
-  time: string;
-  participants: Participant[];
+interface BookingFormData {
+  date: string; // ISO date string (no time) that backend can parse
+  timeSlot: string;
+  participants: {
+    adults: number;
+    children: number;
+    seniors: number;
+    total: number;
+  };
   specialRequests?: string;
-  groupSize: number;
   totalAmount: number;
 }
 
@@ -62,48 +69,75 @@ export function ActivityBookingModal({
   activity, 
   isOpen, 
   onClose, 
-  onBook 
+  onBook,
+  availableDates: datesFromProps,
+  availableTimes: timesFromProps
 }: ActivityBookingModalProps) {
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
-  const [participants, setParticipants] = useState<Participant[]>([
-    { firstName: '', lastName: '', email: '', phone: '' }
-  ]);
+  const [adults, setAdults] = useState(1);
+  const [children, setChildren] = useState(0);
+  const [seniors, setSeniors] = useState(0);
   const [specialRequests, setSpecialRequests] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [slotAvailability, setSlotAvailability] = useState<Record<string, number>>({});
+  const [remainingCapacity, setRemainingCapacity] = useState<number | null>(null);
+  const [availabilityError, setAvailabilityError] = useState<string | null>(null);
 
-  // Mock available dates and times - replace with API data
-  const availableDates = [
+  const availableDates = datesFromProps && datesFromProps.length > 0 ? datesFromProps : [
     '2024-01-20', '2024-01-21', '2024-01-22', '2024-01-25', 
     '2024-01-26', '2024-01-27', '2024-01-28', '2024-01-29'
   ];
-  
-  const availableTimes = ['9:00 AM', '1:00 PM', '5:00 PM'];
+  const availableTimes = timesFromProps && timesFromProps.length > 0 ? timesFromProps : ['9:00 AM', '1:00 PM', '5:00 PM'];
 
-  const totalPrice = activity.price.amount * participants.length;
+  const totalParticipants = useMemo(() => adults + children + seniors, [adults, children, seniors]);
+  const totalPrice = activity.price.amount * totalParticipants;
+  const remainingForSelectedSlot = selectedTime ? slotAvailability[selectedTime] : undefined;
+  const exceedsSlot = remainingForSelectedSlot !== undefined && totalParticipants > remainingForSelectedSlot;
+  const exceedsDate = remainingCapacity !== null && totalParticipants > remainingCapacity;
+  const exceedsMax = totalParticipants > activity.maxParticipants;
+
+  // Fetch availability when date changes
+  const fetchAvailability = async (dateStr: string) => {
+    setAvailabilityError(null);
+    setSlotAvailability({});
+    setRemainingCapacity(null);
+    try {
+      const { remainingCapacity, slotAvailability } = await bookingService.getAvailability(activity.id, new Date(dateStr).toISOString());
+      setRemainingCapacity(remainingCapacity);
+      setSlotAvailability(slotAvailability);
+    } catch (e) {
+      setAvailabilityError(e instanceof Error ? e.message : 'Failed to fetch availability');
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!selectedDate || !selectedTime || participants.length === 0) {
+    if (!selectedDate || !selectedTime || totalParticipants === 0) {
       return;
     }
 
-    // Validate that all participants have required fields
-    const isValid = participants.every(p => p.firstName && p.lastName);
-    if (!isValid) {
+    // Capacity validation
+    if (exceedsMax || exceedsSlot || exceedsDate) {
       return;
     }
 
     setIsSubmitting(true);
     
     try {
-      const bookingData: BookingData = {
-        date: selectedDate,
-        time: selectedTime,
-        participants,
+      // Backend expects ISO datetime string in date; we'll pass ISO date (midnight UTC) and a separate timeSlot
+      const isoDate = new Date(selectedDate).toISOString();
+      const bookingData: BookingFormData = {
+        date: isoDate,
+        timeSlot: selectedTime,
+        participants: {
+          adults,
+          children,
+          seniors,
+          total: totalParticipants
+        },
         specialRequests: specialRequests || undefined,
-        groupSize: participants.length,
         totalAmount: totalPrice
       };
 
@@ -132,22 +166,11 @@ export function ActivityBookingModal({
     });
   };
 
-  const addParticipant = () => {
-    if (participants.length < activity.maxParticipants) {
-      setParticipants([...participants, { firstName: '', lastName: '', email: '', phone: '' }]);
-    }
+  const decrement = (setter: (n: number) => void, value: number, min: number = 0) => {
+    if (value > min) setter(value - 1);
   };
-
-  const removeParticipant = (index: number) => {
-    if (participants.length > 1) {
-      setParticipants(participants.filter((_, i) => i !== index));
-    }
-  };
-
-  const updateParticipant = (index: number, field: keyof Participant, value: string) => {
-    const updated = [...participants];
-    updated[index] = { ...updated[index], [field]: value };
-    setParticipants(updated);
+  const increment = (setter: (n: number) => void, value: number, max: number) => {
+    if (value < max) setter(value + 1);
   };
 
   return (
@@ -216,7 +239,7 @@ export function ActivityBookingModal({
                 <FormField label="Select Date" required>
                   <Select
                     value={selectedDate}
-                    onChange={(e) => setSelectedDate(e.target.value)}
+                    onChange={(e) => { setSelectedDate(e.target.value); fetchAvailability(e.target.value); }}
                     placeholder="Choose a date"
                   >
                     {availableDates.map((date) => (
@@ -233,84 +256,74 @@ export function ActivityBookingModal({
                     onChange={(e) => setSelectedTime(e.target.value)}
                     placeholder="Choose a time"
                   >
-                    {availableTimes.map((time) => (
-                      <option key={time} value={time}>
-                        {time}
-                      </option>
-                    ))}
+                    {availableTimes.map((time) => {
+                      const remainingForSlot = slotAvailability[time];
+                      const disabled = remainingForSlot !== undefined && remainingForSlot <= 0;
+                      const label = remainingForSlot !== undefined ? `${time} ${disabled ? '(Full)' : `(Remaining: ${remainingForSlot})`}` : time;
+                      return (
+                        <option key={time} value={time} disabled={disabled}>
+                          {label}
+                        </option>
+                      );
+                    })}
                   </Select>
                 </FormField>
+                {exceedsSlot && (
+                  <Text size="sm" color="danger">Requested group exceeds remaining capacity for the selected time slot.</Text>
+                )}
+
+                {availabilityError && (
+                  <div className="p-2 rounded border border-red-200 bg-red-50">
+                    <Text size="sm" color="danger">{availabilityError}</Text>
+                  </div>
+                )}
+                {remainingCapacity !== null && (
+                  <Text size="sm" color="gray">Remaining capacity for selected date: {remainingCapacity}</Text>
+                )}
 
                 <FormField label="Participants" required>
                   <div className="space-y-3">
-                    {participants.map((participant, index) => (
-                      <div key={index} className="border border-gray-200 rounded-lg p-3">
-                        <div className="flex items-center justify-between mb-2">
-                          <Text size="sm" weight="medium">Participant {index + 1}</Text>
-                          {participants.length > 1 && (
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="xs"
-                              onClick={() => removeParticipant(index)}
-                            >
-                              Remove
-                            </Button>
-                          )}
-                        </div>
-                        <div className="grid grid-cols-2 gap-2">
-                          <Input
-                            type="text"
-                            placeholder="First Name"
-                            value={participant.firstName}
-                            onChange={(e) => updateParticipant(index, 'firstName', e.target.value)}
-                            required
-                          />
-                          <Input
-                            type="text"
-                            placeholder="Last Name"
-                            value={participant.lastName}
-                            onChange={(e) => updateParticipant(index, 'lastName', e.target.value)}
-                            required
-                          />
-                        </div>
-                        <div className="grid grid-cols-2 gap-2 mt-2">
-                          <Input
-                            type="email"
-                            placeholder="Email (optional)"
-                            value={participant.email || ''}
-                            onChange={(e) => updateParticipant(index, 'email', e.target.value)}
-                          />
-                          <Input
-                            type="tel"
-                            placeholder="Phone (optional)"
-                            value={participant.phone || ''}
-                            onChange={(e) => updateParticipant(index, 'phone', e.target.value)}
-                          />
-                        </div>
+                    <div className="flex items-center justify-between border border-gray-200 rounded-lg p-3">
+                      <Text size="sm" weight="medium">Adults</Text>
+                      <div className="flex items-center gap-2">
+                        <Button type="button" variant="outline" size="xs" onClick={() => decrement(setAdults, adults, 1)}>-</Button>
+                        <Input type="number" value={adults} onChange={(e) => setAdults(Math.max(1, Math.min(activity.maxParticipants, Number(e.target.value) || 0)))} />
+                        <Button type="button" variant="outline" size="xs" onClick={() => increment(setAdults, adults, activity.maxParticipants)}>+</Button>
                       </div>
-                    ))}
-                    {participants.length < activity.maxParticipants && (
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={addParticipant}
-                        className="w-full"
-                      >
-                        + Add Participant
-                      </Button>
-                    )}
+                    </div>
+                    <div className="flex items-center justify-between border border-gray-200 rounded-lg p-3">
+                      <Text size="sm" weight="medium">Children</Text>
+                      <div className="flex items-center gap-2">
+                        <Button type="button" variant="outline" size="xs" onClick={() => decrement(setChildren, children, 0)}>-</Button>
+                        <Input type="number" value={children} onChange={(e) => setChildren(Math.max(0, Math.min(activity.maxParticipants, Number(e.target.value) || 0)))} />
+                        <Button type="button" variant="outline" size="xs" onClick={() => increment(setChildren, children, activity.maxParticipants)}>+</Button>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between border border-gray-200 rounded-lg p-3">
+                      <Text size="sm" weight="medium">Seniors</Text>
+                      <div className="flex items-center gap-2">
+                        <Button type="button" variant="outline" size="xs" onClick={() => decrement(setSeniors, seniors, 0)}>-</Button>
+                        <Input type="number" value={seniors} onChange={(e) => setSeniors(Math.max(0, Math.min(activity.maxParticipants, Number(e.target.value) || 0)))} />
+                        <Button type="button" variant="outline" size="xs" onClick={() => increment(setSeniors, seniors, activity.maxParticipants)}>+</Button>
+                      </div>
+                    </div>
                   </div>
                   <Text size="sm" color="gray" className="mt-2">
-                    Maximum {activity.maxParticipants} participants
+                    Total: {totalParticipants} (Max {activity.maxParticipants})
                   </Text>
+                  {exceedsDate && (
+                    <Text size="sm" color="danger">Requested group exceeds remaining capacity for the selected date.</Text>
+                  )}
+                  {exceedsMax && (
+                    <Text size="sm" color="danger">Group exceeds maximum allowed participants for this activity.</Text>
+                  )}
                 </FormField>
               </div>
 
 
             </div>
 
-            {/* Special Requests */}
+            {/* Special Requests & Payment */}
             <FormField label="Special Requests (Optional)">
               <textarea
                 value={specialRequests}
@@ -319,6 +332,14 @@ export function ActivityBookingModal({
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                 rows={3}
               />
+            </FormField>
+
+            <FormField label="Payment Method (Placeholder)">
+              <Select value={"card"} onChange={() => {}}>
+                <option value="card">Credit/Debit Card</option>
+                <option value="paypal">PayPal</option>
+              </Select>
+              <Text size="xs" color="gray">Payment collection will be integrated later.</Text>
             </FormField>
 
             {/* Price Summary */}
@@ -337,7 +358,7 @@ export function ActivityBookingModal({
                     </div>
                     <div className="flex justify-between">
                       <Text color="gray">Participants</Text>
-                      <Text>× {participants}</Text>
+                      <Text>× {totalParticipants}</Text>
                     </div>
                     <div className="border-t border-gray-200 pt-2">
                       <div className="flex justify-between">
@@ -362,7 +383,7 @@ export function ActivityBookingModal({
             <Button
               type="submit"
               variant="primary"
-              disabled={!selectedDate || !selectedTime || participants.length === 0 || isSubmitting}
+              disabled={!selectedDate || !selectedTime || totalParticipants === 0 || totalParticipants > activity.maxParticipants || isSubmitting}
             >
               {isSubmitting ? 'Processing...' : `Book Now - ${totalPrice.toFixed(2)} ${activity.price.currency}`}
             </Button>

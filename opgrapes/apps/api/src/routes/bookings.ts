@@ -34,12 +34,19 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
     const data = createBookingSchema.parse(req.body);
     
     // Verify activity exists and is active
-    const activity = await Activity.findById(data.activityId);
+    const activity = await Activity.findById(data.activityId).populate('vendor', 'businessName contactInfo');
     if (!activity || !activity.availability.isActive || activity.status !== 'active') {
       return res.status(404).json({ error: 'Activity not found or inactive' });
     }
+
+    // Get vendor details for contact information
+    const vendor = await Vendor.findById(activity.vendor.vendorId);
+    if (!vendor) {
+      return res.status(404).json({ error: 'Vendor not found' });
+    }
     
-    // Check availability
+    // Check availability - use capacity.maxParticipants if available
+    const maxCapacity = activity.capacity?.maxParticipants || 0;
     const existingBookings = await Booking.find({
       'activity.activityId': data.activityId,
       bookingDate: new Date(data.date),
@@ -47,7 +54,7 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
     });
     
     const totalBooked = existingBookings.reduce((sum, booking) => sum + booking.participants.total, 0);
-    if (totalBooked + data.participants.total > activity.capacity.maxParticipants) {
+    if (totalBooked + data.participants.total > maxCapacity) {
       return res.status(400).json({ error: 'Insufficient capacity for this date and time' });
     }
     
@@ -57,9 +64,41 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    // Create booking
+    // Create booking with proper field mapping
     const booking = new Booking({
-      ...data,
+      activity: {
+        activityId: data.activityId,
+        title: activity.title,
+        vendorName: activity.vendor.name || 'Unknown Vendor',
+        basePrice: activity.pricing.basePrice || 0,
+        currency: activity.pricing.currency || 'USD',
+        priceType: activity.pricing.priceType || 'per-person'
+      },
+              vendor: {
+          vendorId: activity.vendor.vendorId,
+          name: activity.vendor.name || 'Unknown Vendor',
+          contactEmail: vendor.contact.email || '',
+          contactPhone: vendor.contact.phone || ''
+        },
+      participants: data.participants,
+      bookingDate: new Date(data.date),
+      startTime: data.timeSlot || '09:00', // Default time if not provided
+      endTime: data.timeSlot || '17:00', // Default time if not provided
+      duration: activity.duration?.minDuration || 60, // Default duration if not provided
+      specialRequirements: data.specialRequests,
+      dietaryRestrictions: data.dietaryRestrictions,
+      accessibilityNeeds: data.accessibilityNeeds,
+      // Calculate pricing
+      pricing: {
+        basePrice: activity.pricing.basePrice || 0,
+        participantCount: data.participants.total,
+        subtotal: (activity.pricing.basePrice || 0) * data.participants.total,
+        taxes: 0, // TODO: Implement tax calculation based on location
+        fees: 0,  // TODO: Implement service fees
+        discounts: [], // TODO: Implement discount logic
+        total: (activity.pricing.basePrice || 0) * data.participants.total,
+        currency: activity.pricing.currency || 'USD'
+      },
       user: {
         userId: req.user?.userId,
         name: `${user.firstName} ${user.lastName}`,
@@ -81,6 +120,55 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
     res.status(201).json({
       message: 'Booking created successfully',
       booking
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Check availability for an activity on a specific date
+router.get('/availability', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { activityId, date } = req.query;
+    if (!activityId || !date) {
+      return res.status(400).json({ error: 'activityId and date are required' });
+    }
+
+    const activity = await Activity.findById(activityId as string);
+    if (!activity || !activity.availability.isActive || activity.status !== 'active') {
+      return res.status(404).json({ error: 'Activity not found or inactive' });
+    }
+
+    const bookingDate = new Date(date as string);
+
+    const existingBookings = await Booking.find({
+      'activity.activityId': activityId,
+      bookingDate,
+      status: { $nin: ['cancelled', 'refunded'] }
+    });
+
+    const totalBooked = existingBookings.reduce((sum, b) => sum + (b.participants?.total || 0), 0);
+    // Use capacity.maxParticipants if available
+    const maxCapacity = activity.capacity?.maxParticipants || 0;
+    const remainingCapacity = Math.max(0, maxCapacity - totalBooked);
+
+    // Group by timeSlot string
+    const perSlot: Record<string, number> = {};
+    for (const b of existingBookings) {
+      const slot = b.startTime || 'unspecified'; // Use startTime instead of timeSlot
+      perSlot[slot] = (perSlot[slot] || 0) + (b.participants?.total || 0);
+    }
+
+    const slotAvailability: Record<string, number> = {};
+    // For now, use a simple approach without configured time slots
+    // since timeSlots is not defined in the Activity model
+    Object.keys(perSlot).forEach((slot) => {
+      slotAvailability[slot] = Math.max(0, maxCapacity - perSlot[slot]);
+    });
+
+    res.json({
+      remainingCapacity,
+      slotAvailability
     });
   } catch (error) {
     next(error);

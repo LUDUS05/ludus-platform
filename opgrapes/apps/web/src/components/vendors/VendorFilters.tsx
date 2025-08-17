@@ -1,14 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { Input } from '@opgrapes/ui/Input';
-import { Select } from '@opgrapes/ui/Select';
-import { Button } from '@opgrapes/ui/Button';
-import { Checkbox } from '@opgrapes/ui/Checkbox';
-import { Stack } from '@opgrapes/ui/Stack';
-import { Text } from '@opgrapes/ui/Text';
-import { Badge } from '@opgrapes/ui/Badge';
-import { Card } from '@opgrapes/ui/Card';
+import { Input } from 'ui/Input';
+import { Select } from 'ui/Select';
+import { Button } from 'ui/Button';
+import { Checkbox } from 'ui/Checkbox';
+import { Stack } from 'ui/Stack';
+import { Text } from 'ui/Text';
+import { Badge } from 'ui/Badge';
+import { Card } from 'ui/Card';
 import { 
   Search, 
   MapPin, 
@@ -148,7 +148,7 @@ export function VendorFilters({ onFiltersChange, className }: VendorFiltersProps
 
   return (
     <Card className={className}>
-      <Card.Body>
+      <div className="p-6">
         <Stack gap="4">
           {/* Header */}
           <div className="flex items-center justify-between">
@@ -182,8 +182,7 @@ export function VendorFilters({ onFiltersChange, className }: VendorFiltersProps
               <Input
                 placeholder="Search vendors by name, description, or activities..."
                 value={filters.search}
-                onChange={(e) => handleSearchChange(e.target.value)}
-                leftIcon={<Search size={16} />}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleSearchChange(e.target.value)}
                 className="w-full"
               />
             </div>
@@ -191,29 +190,26 @@ export function VendorFilters({ onFiltersChange, className }: VendorFiltersProps
               <Select
                 placeholder="Location"
                 value={filters.location}
-                onChange={(value) => handleLocationChange(value)}
-                leftIcon={<MapPin size={16} />}
-              >
-                <option value="">All Locations</option>
-                {locationOptions.map((location) => (
-                  <option key={location} value={location}>
-                    {location}
-                  </option>
-                ))}
-              </Select>
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleLocationChange(e.target.value)}
+                options={[
+                  { value: '', label: 'All Locations' },
+                  ...locationOptions.map((location) => ({
+                    value: location,
+                    label: location
+                  }))
+                ]}
+              />
             </div>
             <div className="w-48">
               <Select
                 placeholder="Sort by"
                 value={`${filters.sortBy}-${filters.sortOrder}`}
-                onChange={(value) => handleSortChange(value)}
-              >
-                {sortOptions.map((option) => (
-                  <option key={option.value} value={`${option.value}-desc`}>
-                    {option.label}
-                  </option>
-                ))}
-              </Select>
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleSortChange(e.target.value)}
+                options={sortOptions.map((option) => ({
+                  value: `${option.value}-desc`,
+                  label: option.label
+                }))}
+              />
             </div>
           </div>
 
@@ -229,14 +225,15 @@ export function VendorFilters({ onFiltersChange, className }: VendorFiltersProps
                   <div className="flex items-center gap-2">
                     <Select
                       value={filters.rating.toString()}
-                      onChange={(value) => handleRatingChange(value)}
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleRatingChange(e.target.value)}
                       className="w-32"
-                    >
-                      <option value="0">Any Rating</option>
-                      <option value="3">3+ Stars</option>
-                      <option value="4">4+ Stars</option>
-                      <option value="4.5">4.5+ Stars</option>
-                    </Select>
+                      options={[
+                        { value: '0', label: 'Any Rating' },
+                        { value: '3', label: '3+ Stars' },
+                        { value: '4', label: '4+ Stars' },
+                        { value: '4.5', label: '4.5+ Stars' }
+                      ]}
+                    />
                     {filters.rating > 0 && (
                       <div className="flex items-center gap-1">
                         {[...Array(5)].map((_, i) => (
@@ -310,7 +307,7 @@ export function VendorFilters({ onFiltersChange, className }: VendorFiltersProps
             </div>
           )}
         </Stack>
-      </Card.Body>
+      </div>
     </Card>
   );
 }
