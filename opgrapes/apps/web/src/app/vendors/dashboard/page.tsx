@@ -1,12 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Card } from 'ui/Card';
-import { Button } from 'ui/Button';
-import { Text } from 'ui/Text';
-import { Stack } from 'ui/Stack';
-import { Badge } from 'ui/Badge';
-import { Tabs } from 'ui/Tabs';
+import { Card } from '@opgrapes/ui/Card';
+import { Button } from '@opgrapes/ui/Button';
+import { Text } from '@opgrapes/ui/Text';
+import { Stack } from '@opgrapes/ui/Stack';
+import { Badge } from '@opgrapes/ui/Badge';
+import { Tabs } from '@opgrapes/ui/Tabs';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { 
   TrendingUp, 
@@ -28,7 +28,7 @@ import {
   LineChart,
   Plus
 } from 'lucide-react';
-import { Select } from 'ui/Select';
+import { Select } from '@opgrapes/ui/Select';
 
 // Mock dashboard data - replace with API calls
 const mockDashboardData = {

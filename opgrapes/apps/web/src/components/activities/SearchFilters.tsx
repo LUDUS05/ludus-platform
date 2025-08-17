@@ -1,13 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Card } from 'ui/Card';
-import { Button } from 'ui/Button';
-import { Input } from 'ui/Input';
-import { Select } from 'ui/Select';
-import { Text } from 'ui/Text';
-import { Stack } from 'ui/Stack';
-import { Badge } from 'ui/Badge';
+import { Card } from '@opgrapes/ui/Card';
+import { Button } from '@opgrapes/ui/Button';
+import { Input } from '@opgrapes/ui/Input';
+import { Select } from '@opgrapes/ui/Select';
+import { Text } from '@opgrapes/ui/Text';
+import { Stack } from '@opgrapes/ui/Stack';
+import { Badge } from '@opgrapes/ui/Badge';
 
 export interface SearchFilters {
   search: string;

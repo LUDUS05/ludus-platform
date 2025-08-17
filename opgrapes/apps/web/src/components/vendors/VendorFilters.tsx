@@ -1,14 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { Input } from 'ui/Input';
-import { Select } from 'ui/Select';
-import { Button } from 'ui/Button';
-import { Checkbox } from 'ui/Checkbox';
-import { Stack } from 'ui/Stack';
-import { Text } from 'ui/Text';
-import { Badge } from 'ui/Badge';
-import { Card } from 'ui/Card';
+import { Input } from '@opgrapes/ui/Input';
+import { Select } from '@opgrapes/ui/Select';
+import { Button } from '@opgrapes/ui/Button';
+import { Checkbox } from '@opgrapes/ui/Checkbox';
+import { Stack } from '@opgrapes/ui/Stack';
+import { Text } from '@opgrapes/ui/Text';
+import { Badge } from '@opgrapes/ui/Badge';
+import { Card } from '@opgrapes/ui/Card';
 import { 
   Search, 
   MapPin, 

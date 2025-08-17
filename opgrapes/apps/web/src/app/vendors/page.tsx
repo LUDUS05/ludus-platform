@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { VendorGrid } from '@/components/vendors/VendorGrid';
 import { VendorFilters, VendorFilters as VendorFiltersType } from '@/components/vendors/VendorFilters';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
-import { Text } from 'ui/Text';
+import { Text } from '@opgrapes/ui/Text';
 import { Building2, Star, MapPin, Users } from 'lucide-react';
 
 // Mock data for development - replace with API calls

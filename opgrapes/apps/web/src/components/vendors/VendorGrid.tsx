@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import { VendorCard } from './VendorCard';
-import { Button } from 'ui/Button';
-import { Text } from 'ui/Text';
-import { Stack } from 'ui/Stack';
+import { Button } from '@opgrapes/ui/Button';
+import { Text } from '@opgrapes/ui/Text';
+import { Stack } from '@opgrapes/ui/Stack';
 import { Grid, List, Grid3X3 } from 'lucide-react';
 
 interface Vendor {
