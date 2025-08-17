@@ -3,7 +3,7 @@ services:
     name: opgrapes-api
     env: node
     plan: free
-    dockerfilePath: apps/api/Dockerfile
+    dockerfilePath: Dockerfile
     buildContext: .
     buildCommand: null
     startCommand: null
