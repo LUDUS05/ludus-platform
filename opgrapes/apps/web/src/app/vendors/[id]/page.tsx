@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import { Card } from 'ui/Card';
-import { Button } from 'ui/Button';
-import { Text } from 'ui/Text';
-import { Badge } from 'ui/Badge';
-import { Stack } from 'ui/Stack';
-import { Tabs } from 'ui/Tabs';
+import { Card } from '@opgrapes/ui/Card';
+import { Button } from '@opgrapes/ui/Button';
+import { Text } from '@opgrapes/ui/Text';
+import { Badge } from '@opgrapes/ui/Badge';
+import { Stack } from '@opgrapes/ui/Stack';
+import { Tabs } from '@opgrapes/ui/Tabs';
 import { ActivityCard } from '@/components/activities/ActivityCard';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { 
