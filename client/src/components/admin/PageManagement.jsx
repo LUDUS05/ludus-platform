@@ -11,12 +11,7 @@ const PageManagement = () => {
       en: '',
       ar: ''
     },
-    content: [{
-      id: Date.now().toString(),
-      type: 'paragraph',
-      content: { en: '', ar: '' },
-      order: 0
-    }],
+    content: '',
     slug: '',
     placement: 'none',
     status: 'draft',
@@ -104,19 +99,10 @@ const PageManagement = () => {
       console.error('Error config:', error.config);
       
       let errorMessage = 'Unknown error occurred';
-      if (error.response?.status === 404) {
-        errorMessage = 'Page not found. It may have been deleted.';
-      } else if (error.response?.status === 403) {
-        errorMessage = 'You do not have permission to perform this action.';
-      } else if (error.response?.status === 400 && error.response?.data?.message?.includes('url already exists')) {
-        const currentSlug = formData.slug;
-        errorMessage = `A page with the URL "${currentSlug}" already exists. Please use a different URL slug (e.g., "${currentSlug}-${Date.now()}" or "${currentSlug}-new").`;
-      } else if (error.response?.data?.message) {
+      if (error.response?.data?.message) {
         errorMessage = error.response.data.message;
       } else if (error.response?.data?.errors) {
         errorMessage = `Validation error: ${JSON.stringify(error.response.data.errors)}`;
-      } else if (error.message === 'Network Error') {
-        errorMessage = 'Network error. Please check your connection and try again.';
       } else if (error.message) {
         errorMessage = error.message;
       }
@@ -131,14 +117,7 @@ const PageManagement = () => {
     setEditingPage(page);
     setFormData({
       title: page.title || { en: '', ar: '' },
-      content: Array.isArray(page.content) && page.content.length > 0 
-        ? page.content 
-        : [{
-            id: Date.now().toString(),
-            type: 'paragraph',
-            content: { en: '', ar: '' },
-            order: 0
-          }],
+      content: page.content || '',
       slug: page.slug || '',
       placement: page.placement || 'none',
       status: page.status || 'draft',
@@ -185,12 +164,7 @@ const PageManagement = () => {
         en: '',
         ar: ''
       },
-      content: [{
-        id: Date.now().toString(),
-        type: 'paragraph',
-        content: { en: '', ar: '' },
-        order: 0
-      }],
+      content: '',
       slug: '',
       placement: 'none',
       status: 'draft',
@@ -210,20 +184,12 @@ const PageManagement = () => {
   };
 
   const generateSlugFromTitle = (title) => {
-    const baseSlug = title
+    return title
       .toLowerCase()
       .replace(/[^a-z0-9 -]/g, '')
       .replace(/\s+/g, '-')
       .replace(/-+/g, '-')
-      .replace(/^-+|-+$/g, ''); // Remove leading/trailing dashes
-    
-    // If we're creating a new page (not editing), add a timestamp to make it more unique
-    if (!editingPage && baseSlug) {
-      const timestamp = Date.now().toString().slice(-4); // Last 4 digits of timestamp
-      return `${baseSlug}-${timestamp}`;
-    }
-    
-    return baseSlug || 'page';
+      .trim();
   };
 
   const handleTitleChange = (lang, title) => {
@@ -238,38 +204,6 @@ const PageManagement = () => {
     }));
   };
 
-  const addContentBlock = () => {
-    const newBlock = {
-      id: Date.now().toString(),
-      type: 'paragraph',
-      content: { en: '', ar: '' },
-      order: formData.content.length
-    };
-    setFormData(prev => ({
-      ...prev,
-      content: [...prev.content, newBlock]
-    }));
-  };
-
-  const updateContentBlock = (index, field, value) => {
-    setFormData(prev => ({
-      ...prev,
-      content: prev.content.map((block, i) => 
-        i === index ? { ...block, [field]: value } : block
-      )
-    }));
-  };
-
-  const removeContentBlock = (index) => {
-    if (formData.content.length <= 1) return; // Keep at least one block
-    setFormData(prev => ({
-      ...prev,
-      content: prev.content.filter((_, i) => i !== index).map((block, i) => ({
-        ...block,
-        order: i
-      }))
-    }));
-  };
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
@@ -524,22 +458,11 @@ const PageManagement = () => {
                       value={formData.slug}
                       onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
                       placeholder="e.g., about-us, contact, privacy-policy"
-                      className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                      className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-r-md dark:bg-gray-700 dark:text-white"
                     />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const uniqueSlug = generateSlugFromTitle(formData.title.en || 'page');
-                        setFormData(prev => ({ ...prev, slug: uniqueSlug }));
-                      }}
-                      className="px-3 py-2 border border-l-0 border-gray-300 dark:border-gray-600 rounded-r-md bg-gray-50 dark:bg-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm"
-                      title="Generate unique slug"
-                    >
-                      🔄
-                    </button>
                   </div>
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    Only lowercase letters, numbers, and dashes allowed. Click 🔄 to generate a unique slug.
+                    Only lowercase letters, numbers, and dashes allowed. Auto-generated from English title.
                   </p>
                 </div>
 
@@ -597,17 +520,8 @@ const PageManagement = () => {
                     Page Content *
                   </label>
                   <textarea
-                    value={formData.content[0]?.content?.en || ''}
-                    onChange={(e) => setFormData(prev => ({
-                      ...prev,
-                      content: [{
-                        ...prev.content[0],
-                        content: { 
-                          ...prev.content[0].content,
-                          en: e.target.value 
-                        }
-                      }]
-                    }))}
+                    value={formData.content}
+                    onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                     placeholder="Write your page content here... (HTML and Markdown supported)"
                     required
                     rows={12}
