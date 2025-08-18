@@ -308,9 +308,12 @@ const createPage = async (req, res) => {
     console.error('Create page error:', error);
     if (error.code === 11000) {
       const field = Object.keys(error.keyValue)[0];
+      const value = error.keyValue[field];
+      console.error('Duplicate key error creating page:', { field, value, keyValue: error.keyValue });
       return res.status(400).json({ 
         success: false, 
-        message: `Page with this ${field} already exists` 
+        message: `Page with this ${field} already exists`,
+        conflict: { field, value }
       });
     }
     if (error.name === 'ValidationError') {

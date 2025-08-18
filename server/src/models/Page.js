@@ -67,6 +67,15 @@ const pageSchema = new mongoose.Schema({
     lowercase: true,
     match: /^[a-z0-9-]+$/
   },
+  // Persisted URL (kept in sync with slug). Some environments previously had a
+  // unique index on `url` which caused duplicate-key errors when documents
+  // lacked this field (null). Persisting and indexing it as sparse avoids that.
+  url: {
+    type: String,
+    trim: true,
+    unique: true,
+    sparse: true
+  },
   // Rich content blocks
   content: [contentBlockSchema],
   
@@ -251,12 +260,16 @@ pageSchema.pre('save', async function(next) {
 });
 
 // Index for better performance
-pageSchema.index({ slug: 1 });
+// Note: `slug` is already declared with `unique: true` on the field.
+// Avoid a duplicate index by not re-declaring it here.
 pageSchema.index({ status: 1, publishDate: -1 });
 pageSchema.index({ 'title.en': 'text', 'title.ar': 'text' });
 pageSchema.index({ categories: 1 });
 pageSchema.index({ tags: 1 });
 pageSchema.index({ createdBy: 1 });
+// Ensure `url` index is created but only for documents that have it set to avoid
+// duplicate-key errors for null values in existing documents.
+pageSchema.index({ url: 1 }, { unique: true, sparse: true });
 
 // Static methods
 pageSchema.statics.findPublished = function(conditions = {}) {
