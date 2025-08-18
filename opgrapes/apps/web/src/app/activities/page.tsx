@@ -328,7 +328,7 @@ export default function ActivitiesPage() {
               </p>
               {filters.search && (
                 <span className="text-sm text-blue-600">
-                  for "{filters.search}"
+                  for &quot;{filters.search}&quot;
                 </span>
               )}
               {savedActivities.length > 0 && (
@@ -344,7 +344,7 @@ export default function ActivitiesPage() {
                 <label className="text-sm text-gray-600">Sort by:</label>
                 <select
                   value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value as any)}
+                  onChange={(e) => setSortBy(e.target.value as 'relevance' | 'price-low' | 'price-high' | 'rating' | 'duration')}
                   className="text-sm border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
                 >
                   <option value="relevance">Relevance</option>
@@ -433,7 +433,7 @@ export default function ActivitiesPage() {
                 Can&apos;t find what you&apos;re looking for?
               </h3>
               <p className="text-gray-600 mb-4">
-                Let us know what type of activity you'd like to see, and we'll add it to our collection.
+                Let us know what type of activity you&apos;d like to see, and we&apos;ll add it to our collection.
               </p>
               <button className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors">
                 Suggest an Activity

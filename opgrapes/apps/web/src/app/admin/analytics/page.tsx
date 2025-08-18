@@ -57,9 +57,9 @@ function AdminAnalyticsContent() {
               <Text size="xl" weight="bold" color="red">
                 Access Denied
               </Text>
-              <Text size="lg" color="gray" className="mt-2">
-                You don't have permission to access the admin analytics.
-              </Text>
+                      <Text size="lg" color="gray" className="mt-2">
+          You don&apos;t have permission to access the admin analytics.
+        </Text>
             </div>
           </div>
         </Card>

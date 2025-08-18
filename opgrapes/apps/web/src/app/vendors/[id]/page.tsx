@@ -7,8 +7,8 @@ import { Button } from '@opgrapes/ui/Button';
 import { Text } from '@opgrapes/ui/Text';
 import { Badge } from '@opgrapes/ui/Badge';
 import { Stack } from '@opgrapes/ui/Stack';
-import { Tabs } from '@opgrapes/ui/Tabs';
-import { ActivityCard } from '@/components/activities/ActivityCard';
+import { Tabs, TabList, Tab, TabPanel } from '@opgrapes/ui/Tabs';
+
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { 
   MapPin, 
@@ -205,7 +205,7 @@ export default function VendorDetailPage() {
             <div className="flex items-center gap-6">
               {/* Logo */}
               <div className="w-24 h-24 md:w-32 md:h-32 bg-white rounded-full flex items-center justify-center shadow-lg">
-                <Text size="3xl" weight="bold" className="text-primary">
+                <Text size="xl" weight="bold" className="text-primary">
                   {vendor.name.charAt(0)}
                 </Text>
               </div>
@@ -213,7 +213,7 @@ export default function VendorDetailPage() {
               {/* Vendor Info */}
               <div className="text-white">
                 <div className="flex items-center gap-3 mb-2">
-                  <Text as="h1" size="3xl" weight="bold">
+                  <Text as="div" size="xl" weight="bold">
                     {vendor.name}
                   </Text>
                   {vendor.verified && (
@@ -255,40 +255,40 @@ export default function VendorDetailPage() {
           {/* Main Content */}
           <div className="lg:col-span-2">
             {/* Tabs */}
-            <Tabs value={activeTab} onChange={setActiveTab}>
-              <Tabs.List>
-                <Tabs.Tab value="overview">Overview</Tabs.Tab>
-                <Tabs.Tab value="activities">Activities ({activities.length})</Tabs.Tab>
-                <Tabs.Tab value="reviews">Reviews ({reviews.length})</Tabs.Tab>
-                <Tabs.Tab value="about">About</Tabs.Tab>
-              </Tabs.List>
+            <Tabs defaultTab={activeTab}>
+              <TabList>
+                <Tab id="overview">Overview</Tab>
+                <Tab id="activities">Activities ({activities.length})</Tab>
+                <Tab id="reviews">Reviews ({reviews.length})</Tab>
+                <Tab id="about">About</Tab>
+              </TabList>
 
-              <Tabs.Panel value="overview" className="mt-6">
-                <Stack gap="6">
+              <TabPanel id="overview" className="mt-6">
+                <Stack spacing="lg">
                   {/* Quick Stats */}
                   <Card>
                     <div className="p-6">
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
                         <div>
-                          <Text size="2xl" weight="bold" className="text-primary">
+                          <Text size="xl" weight="bold" className="text-primary">
                             {vendor.activityCount}
                           </Text>
                           <Text size="sm" color="gray">Activities</Text>
                         </div>
                         <div>
-                          <Text size="2xl" weight="bold" className="text-green-600">
+                          <Text size="xl" weight="bold" className="text-green-600">
                             {vendor.rating}
                           </Text>
                           <Text size="sm" color="gray">Rating</Text>
                         </div>
                         <div>
-                          <Text size="2xl" weight="bold" className="text-blue-600">
+                          <Text size="xl" weight="bold" className="text-blue-600">
                             {vendor.reviewCount}
                           </Text>
                           <Text size="sm" color="gray">Reviews</Text>
                         </div>
                         <div>
-                          <Text size="2xl" weight="bold" className="text-purple-600">
+                          <Text size="xl" weight="bold" className="text-purple-600">
                             {new Date().getFullYear() - parseInt(vendor.established)}
                           </Text>
                           <Text size="sm" color="gray">Years</Text>
@@ -300,14 +300,28 @@ export default function VendorDetailPage() {
                   {/* Featured Activities */}
                   <Card>
                     <div className="px-6 py-4 border-b border-gray-200">
-                      <Text as="h3" size="lg" weight="semibold">
+                      <Text as="div" size="lg" weight="semibold">
                         Featured Activities
                       </Text>
                     </div>
                     <div className="p-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {activities.slice(0, 2).map((activity) => (
-                          <ActivityCard key={activity.id} activity={activity} variant="compact" />
+                          <Card key={activity.id} className="p-4">
+                            <div className="flex items-center gap-3">
+                              <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
+                                <span className="text-2xl">🏔️</span>
+                              </div>
+                              <div className="flex-1">
+                                <Text weight="semibold" className="mb-1">{activity.title}</Text>
+                                <Text size="sm" color="gray" className="mb-2">{activity.description}</Text>
+                                <div className="flex items-center gap-2">
+                                  <Badge variant="secondary" size="sm">{activity.category}</Badge>
+                                  <Text size="sm" weight="medium">${activity.price}</Text>
+                                </div>
+                              </div>
+                            </div>
+                          </Card>
                         ))}
                       </div>
                       <div className="mt-4 text-center">
@@ -321,7 +335,7 @@ export default function VendorDetailPage() {
                   {/* Recent Reviews */}
                   <Card>
                     <div className="px-6 py-4 border-b border-gray-200">
-                      <Text as="h3" size="lg" weight="semibold">
+                      <Text as="div" size="lg" weight="semibold">
                         Recent Reviews
                       </Text>
                     </div>
@@ -338,7 +352,7 @@ export default function VendorDetailPage() {
                                 {renderStars(review.rating)}
                               </div>
                             </div>
-                            <Text as="h4" size="sm" weight="medium" className="mb-1">
+                            <Text as="div" size="sm" weight="medium" className="mb-1">
                               {review.title}
                             </Text>
                             <Text size="sm" color="gray">{review.content}</Text>
@@ -353,21 +367,35 @@ export default function VendorDetailPage() {
                     </div>
                   </Card>
                 </Stack>
-              </Tabs.Panel>
+              </TabPanel>
 
-              <Tabs.Panel value="activities" className="mt-6">
+              <TabPanel id="activities" className="mt-6">
                 <Card>
                   <div className="p-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {activities.map((activity) => (
-                        <ActivityCard key={activity.id} activity={activity} />
+                        <Card key={activity.id} className="p-4">
+                          <div className="flex items-center gap-3">
+                            <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
+                              <span className="text-2xl">🏔️</span>
+                            </div>
+                            <div className="flex-1">
+                              <Text weight="semibold" className="mb-1">{activity.title}</Text>
+                              <Text size="sm" color="gray" className="mb-2">{activity.description}</Text>
+                              <div className="flex items-center gap-2">
+                                <Badge variant="secondary" size="sm">{activity.category}</Badge>
+                                <Text size="sm" weight="medium">${activity.price}</Text>
+                              </div>
+                            </div>
+                          </div>
+                        </Card>
                       ))}
                     </div>
                   </div>
                 </Card>
-              </Tabs.Panel>
+              </TabPanel>
 
-              <Tabs.Panel value="reviews" className="mt-6">
+              <TabPanel id="reviews" className="mt-6">
                 <Card>
                   <div className="p-6">
                     <div className="space-y-6">
@@ -389,7 +417,7 @@ export default function VendorDetailPage() {
                               {renderStars(review.rating)}
                             </div>
                           </div>
-                          <Text as="h4" size="lg" weight="medium" className="mb-2">
+                          <Text as="div" size="lg" weight="medium" className="mb-2">
                             {review.title}
                           </Text>
                           <Text color="gray">{review.content}</Text>
@@ -401,13 +429,13 @@ export default function VendorDetailPage() {
                     </div>
                   </div>
                 </Card>
-              </Tabs.Panel>
+              </TabPanel>
 
-              <Tabs.Panel value="about" className="mt-6">
-                <Stack gap="6">
+              <TabPanel id="about" className="mt-6">
+                <Stack spacing="lg">
                   <Card>
                     <div className="px-6 py-4 border-b border-gray-200">
-                      <Text as="h3" size="lg" weight="semibold">
+                      <Text as="div" size="lg" weight="semibold">
                         About {vendor.name}
                       </Text>
                     </div>
@@ -418,12 +446,12 @@ export default function VendorDetailPage() {
 
                   <Card>
                     <div className="px-6 py-4 border-b border-gray-200">
-                      <Text as="h3" size="lg" weight="semibold">
+                      <Text as="div" size="lg" weight="semibold">
                         Certifications & Awards
                       </Text>
                     </div>
                     <div className="p-6">
-                      <Stack gap="4">
+                      <Stack spacing="md">
                         <div>
                           <Text weight="medium" className="mb-2">Certifications:</Text>
                           <ul className="space-y-1">
@@ -452,7 +480,7 @@ export default function VendorDetailPage() {
 
                   <Card>
                     <div className="px-6 py-4 border-b border-gray-200">
-                      <Text as="h3" size="lg" weight="semibold">
+                      <Text as="div" size="lg" weight="semibold">
                         Policies & Information
                       </Text>
                     </div>
@@ -470,7 +498,7 @@ export default function VendorDetailPage() {
                     </div>
                   </Card>
                 </Stack>
-              </Tabs.Panel>
+              </TabPanel>
             </Tabs>
           </div>
 
@@ -479,12 +507,12 @@ export default function VendorDetailPage() {
             {/* Contact Card */}
             <Card>
               <div className="px-6 py-4 border-b border-gray-200">
-                <Text as="h3" size="lg" weight="semibold">
+                <Text as="div" size="lg" weight="semibold">
                   Contact Information
                 </Text>
               </div>
               <div className="p-6">
-                <Stack gap="4">
+                <Stack spacing="md">
                   <Button
                     variant="outline"
                     onClick={() => handleContact('phone')}
@@ -517,7 +545,7 @@ export default function VendorDetailPage() {
             {/* Categories */}
             <Card>
               <div className="px-6 py-4 border-b border-gray-200">
-                <Text as="h3" size="lg" weight="semibold">
+                <Text as="div" size="lg" weight="semibold">
                   Categories
                 </Text>
               </div>
@@ -535,12 +563,12 @@ export default function VendorDetailPage() {
             {/* Quick Actions */}
             <Card>
               <div className="px-6 py-4 border-b border-gray-200">
-                <Text as="h3" size="lg" weight="semibold">
+                <Text as="div" size="lg" weight="semibold">
                   Quick Actions
                 </Text>
               </div>
               <div className="p-6">
-                <Stack gap="3">
+                <Stack spacing="sm">
                   <Button variant="primary" className="w-full">
                     Book an Activity
                   </Button>

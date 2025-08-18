@@ -18,29 +18,29 @@ function FavoritesContent() {
 
   return (
     <Container size="lg" className="py-8">
-      <Stack gap="8">
+      <Stack spacing="lg">
         {/* Page Header */}
         <Card>
-          <Card.Body>
-            <Stack gap="4">
-              <Text as="h1" size="3xl" weight="bold">
+          <div className="p-6">
+            <Stack spacing="md">
+              <Text as="div" size="xl" weight="bold">
                 My Favorites
               </Text>
               <Text size="lg" color="gray">
                 Your saved activities and experiences
               </Text>
             </Stack>
-          </Card.Body>
+          </div>
         </Card>
 
         {/* Favorites List */}
         <Card>
-          <Card.Header>
-            <Text as="h2" size="xl" weight="bold">
+          <div className="p-6 border-b border-gray-200">
+            <Text as="div" size="xl" weight="bold">
               Saved Activities
             </Text>
-          </Card.Header>
-          <Card.Body>
+          </div>
+          <div className="p-6">
             <div className="text-center py-12">
               <Text size="lg" color="gray">
                 No favorite activities yet
@@ -56,17 +56,17 @@ function FavoritesContent() {
                 Explore Activities
               </Button>
             </div>
-          </Card.Body>
+          </div>
         </Card>
 
         {/* Quick Actions */}
         <Card>
-          <Card.Header>
-            <Text as="h2" size="xl" weight="bold">
+          <div className="p-6 border-b border-gray-200">
+            <Text as="div" size="xl" weight="bold">
               Quick Actions
             </Text>
-          </Card.Header>
-          <Card.Body>
+          </div>
+          <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Button
                 variant="primary"
@@ -88,7 +88,7 @@ function FavoritesContent() {
                 <Text weight="bold">Update Preferences</Text>
               </Button>
             </div>
-          </Card.Body>
+          </div>
         </Card>
       </Stack>
     </Container>

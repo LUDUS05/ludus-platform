@@ -131,10 +131,10 @@ function UserManagementContent() {
       <Stack spacing="lg">
         {/* Header */}
         <Card>
-          <Card.Body>
+          <div className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <Text as="h1" size="3xl" weight="bold">
+                <Text as="div" size="xl" weight="bold">
                   User Management 👥
                 </Text>
                 <Text size="lg" color="gray">
@@ -148,12 +148,12 @@ function UserManagementContent() {
                 Back to Dashboard
               </Button>
             </div>
-          </Card.Body>
+          </div>
         </Card>
 
         {/* Filters */}
         <Card>
-          <Card.Body>
+          <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div>
                 <Text size="sm" weight="medium" className="mb-2 block">
@@ -172,12 +172,13 @@ function UserManagementContent() {
                 <Select
                   value={filters.role}
                   onChange={(e) => handleFilterChange('role', e.target.value)}
-                >
-                  <option value="">All Roles</option>
-                  <option value="user">User</option>
-                  <option value="vendor">Vendor</option>
-                  <option value="admin">Admin</option>
-                </Select>
+                  options={[
+                    { value: '', label: 'All Roles' },
+                    { value: 'user', label: 'User' },
+                    { value: 'vendor', label: 'Vendor' },
+                    { value: 'admin', label: 'Admin' }
+                  ]}
+                />
               </div>
               <div>
                 <Text size="sm" weight="medium" className="mb-2 block">
@@ -186,11 +187,12 @@ function UserManagementContent() {
                 <Select
                   value={filters.status}
                   onChange={(e) => handleFilterChange('status', e.target.value)}
-                >
-                  <option value="">All Status</option>
-                  <option value="active">Active</option>
-                  <option value="inactive">Inactive</option>
-                </Select>
+                  options={[
+                    { value: '', label: 'All Status' },
+                    { value: 'active', label: 'Active' },
+                    { value: 'inactive', label: 'Inactive' }
+                  ]}
+                />
               </div>
               <div className="flex items-end">
                 <Button
@@ -202,26 +204,26 @@ function UserManagementContent() {
                 </Button>
               </div>
             </div>
-          </Card.Body>
+          </div>
         </Card>
 
         {/* Users List */}
         <Card>
-          <Card.Header>
+          <div className="p-6 border-b border-gray-200">
             <div className="flex items-center justify-between">
-              <Text as="h2" size="xl" weight="bold">
+              <Text as="div" size="xl" weight="bold">
                 Users ({pagination.total})
               </Text>
               <Text size="sm" color="gray">
                 Page {pagination.page} of {pagination.pages}
               </Text>
             </div>
-          </Card.Header>
-          <Card.Body>
+          </div>
+          <div className="p-6">
             {loading ? (
-              <Stack gap="4">
+              <Stack spacing="md">
                 {[...Array(5)].map((_, i) => (
-                  <LoadingSkeleton key={i} className="h-20" />
+                  <LoadingSkeleton key={i} />
                 ))}
               </Stack>
             ) : error ? (
@@ -244,7 +246,7 @@ function UserManagementContent() {
                 </Text>
               </div>
             ) : (
-              <Stack gap="4">
+              <Stack spacing="md">
                 {users.map((userItem) => (
                   <div key={userItem._id} className="border rounded-lg p-4">
                     <div className="flex items-center justify-between">
@@ -295,7 +297,7 @@ function UserManagementContent() {
                               const newRole = userItem.role === 'admin' ? 'user' : 'admin';
                               handleUserUpdate(userItem._id, { role: newRole });
                             }}
-                            disabled={userItem._id === user._id} // Can&apos;t change own role
+                            disabled={userItem._id === user.id} // Can&apos;t change own role
                           >
                             {userItem.role === 'admin' ? 'Remove Admin' : 'Make Admin'}
                           </Button>
@@ -322,7 +324,7 @@ function UserManagementContent() {
                               variant="danger"
                               size="sm"
                               onClick={() => handleUserDeactivate(userItem._id)}
-                              disabled={userItem._id === user._id} // Can&apos;t deactivate self
+                              disabled={userItem._id === user.id} // Can&apos;t deactivate self
                             >
                               Deactivate
                             </Button>
@@ -334,13 +336,13 @@ function UserManagementContent() {
                 ))}
               </Stack>
             )}
-          </Card.Body>
+          </div>
         </Card>
 
         {/* Pagination */}
         {pagination.pages > 1 && (
           <Card>
-            <Card.Body>
+            <div className="p-6">
               <div className="flex items-center justify-center gap-2">
                 <Button
                   variant="outline"
@@ -374,7 +376,7 @@ function UserManagementContent() {
                   Next
                 </Button>
               </div>
-            </Card.Body>
+            </div>
           </Card>
         )}
       </Stack>

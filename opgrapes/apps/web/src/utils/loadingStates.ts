@@ -76,7 +76,7 @@ export function useLoadingState<T = unknown>(initialData: T | null = null) {
 }
 
 // Hook for managing multiple loading states
-export function useMultipleLoadingStates<T extends Record<string, LoadingState>>(initialStates: T) {
+export function useMultipleLoadingStates<T extends Record<string, LoadingStateWithData<unknown>>>(initialStates: T) {
   const [states, setStates] = useState<T>(initialStates);
 
   const setLoading = useCallback((key: keyof T, loading: boolean) => {
@@ -163,13 +163,13 @@ export function createInitialLoadingState<T>(initialData: T | null = null): Load
 }
 
 // Utility function to create multiple initial loading states
-export function createMultipleInitialLoadingStates<T extends Record<string, LoadingState>>(
+export function createMultipleInitialLoadingStates<T extends Record<string, LoadingStateWithData<unknown>>>(
   states: T
-): T {
-  const result: Record<string, LoadingState> = {};
+): Record<string, LoadingStateWithData<unknown>> {
+  const result: Record<string, LoadingStateWithData<unknown>> = {};
   
   Object.keys(states).forEach(key => {
-    result[key] = createInitialLoadingState(states[key]);
+    result[key] = createInitialLoadingState(states[key].data);
   });
   
   return result;
@@ -197,11 +197,16 @@ export async function withLoadingState<T>(
 
 // Utility for managing form submission states
 export function useFormSubmissionState() {
-  const [state, setState] = useState({
+  const [state, setState] = useState<{
+    isSubmitting: boolean;
+    isSubmitted: boolean;
+    error: string | null;
+    successMessage: string | null;
+  }>({
     isSubmitting: false,
     isSubmitted: false,
-    error: string | null,
-    successMessage: string | null
+    error: null,
+    successMessage: null
   });
 
   const startSubmission = useCallback(() => {

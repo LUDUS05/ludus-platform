@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { Spinner } from '@opgrapes/ui/Spinner';
-import { Card } from '@opgrapes/ui/Card';
+import { Card, CardBody } from '@opgrapes/ui/Card';
 import { Text } from '@opgrapes/ui/Text';
 import { Button } from '@opgrapes/ui/Button';
 import { Stack } from '@opgrapes/ui/Stack';
@@ -29,7 +29,7 @@ export function ProtectedRoute({
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Stack gap="4" className="text-center">
+        <Stack spacing="md" className="text-center">
           <Spinner size="lg" />
           <Text>Loading...</Text>
         </Stack>
@@ -57,9 +57,9 @@ export function ProtectedRoute({
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Card className="w-full max-w-md mx-auto">
-          <Card.Body>
-            <Stack gap="4" className="text-center">
-              <Text as="h2" size="xl" weight="bold" color="red">
+          <CardBody>
+            <Stack spacing="md" className="text-center">
+              <Text as="div" size="xl" weight="bold" color="red" className="text-xl font-bold text-red-600">
                 Access Denied
               </Text>
               <Text>
@@ -73,7 +73,7 @@ export function ProtectedRoute({
                 Go to Dashboard
               </Button>
             </Stack>
-          </Card.Body>
+          </CardBody>
         </Card>
       </div>
     );

@@ -1,14 +1,14 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { Modal } from '@opgrapes/ui/Modal';
+import { Modal, ModalHeader, ModalBody, ModalFooter } from '@opgrapes/ui/Modal';
 import { Button } from '@opgrapes/ui/Button';
 import { Text } from '@opgrapes/ui/Text';
 import { Stack } from '@opgrapes/ui/Stack';
 import { FormField } from '@opgrapes/ui/FormField';
 import { Input } from '@opgrapes/ui/Input';
 import { Select } from '@opgrapes/ui/Select';
-import { Card } from '@opgrapes/ui/Card';
+import { Card, CardBody } from '@opgrapes/ui/Card';
 import { Badge } from '@opgrapes/ui/Badge';
 import { Clock, Users, MapPin, Star } from 'lucide-react';
 import { bookingService } from '@/services/bookingService';
@@ -167,24 +167,24 @@ export function ActivityBookingModal({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="lg">
-      <Modal.Header>
-        <Text as="h2" size="xl" weight="bold">
+      <ModalHeader>
+        <Text as="div" size="xl" weight="bold" className="text-xl font-bold">
           Book {activity.title}
         </Text>
-      </Modal.Header>
+      </ModalHeader>
 
-      <form onSubmit={handleSubmit}>
-        <Modal.Body>
-          <Stack gap="6">
+              <form onSubmit={handleSubmit}>
+          <ModalBody>
+            <Stack spacing="lg">
             {/* Activity Summary */}
             <Card>
-              <Card.Body>
-                <Stack gap="4">
+              <CardBody>
+                <Stack spacing="md">
                   <div className="flex items-start justify-between">
                     <div>
-                      <Text as="h3" size="lg" weight="semibold">
-                        {activity.title}
-                      </Text>
+                                              <Text as="div" size="lg" weight="semibold" className="text-lg font-semibold">
+                          {activity.title}
+                        </Text>
                       <div className="flex items-center gap-4 mt-2 text-sm text-gray-600">
                         <div className="flex items-center gap-1">
                           <MapPin size={14} />
@@ -213,7 +213,7 @@ export function ActivityBookingModal({
                       <Text size="sm" color="gray" className="mt-1">
                         {activity.vendor.name}
                         {activity.vendor.verified && (
-                          <Badge variant="success" size="xs" className="ml-2">
+                          <Badge variant="success" size="sm" className="ml-2">
                             Verified
                           </Badge>
                         )}
@@ -221,7 +221,7 @@ export function ActivityBookingModal({
                     </div>
                   </div>
                 </Stack>
-              </Card.Body>
+              </CardBody>
             </Card>
 
             {/* Booking Details */}
@@ -233,13 +233,11 @@ export function ActivityBookingModal({
                     value={selectedDate}
                     onChange={(e) => { setSelectedDate(e.target.value); fetchAvailability(e.target.value); }}
                     placeholder="Choose a date"
-                  >
-                    {availableDates.map((date) => (
-                      <option key={date} value={date}>
-                        {formatDate(date)}
-                      </option>
-                    ))}
-                  </Select>
+                    options={availableDates.map((date) => ({
+                      value: date,
+                      label: formatDate(date)
+                    }))}
+                  />
                 </FormField>
 
                 <FormField label="Select Time" required>
@@ -247,18 +245,17 @@ export function ActivityBookingModal({
                     value={selectedTime}
                     onChange={(e) => setSelectedTime(e.target.value)}
                     placeholder="Choose a time"
-                  >
-                    {availableTimes.map((time) => {
+                    options={availableTimes.map((time) => {
                       const remainingForSlot = slotAvailability[time];
                       const disabled = remainingForSlot !== undefined && remainingForSlot <= 0;
                       const label = remainingForSlot !== undefined ? `${time} ${disabled ? '(Full)' : `(Remaining: ${remainingForSlot})`}` : time;
-                      return (
-                        <option key={time} value={time} disabled={disabled}>
-                          {label}
-                        </option>
-                      );
+                      return {
+                        value: time,
+                        label: label,
+                        disabled: disabled
+                      };
                     })}
-                  </Select>
+                  />
                 </FormField>
                 {exceedsSlot && (
                   <Text size="sm" color="danger">Requested group exceeds remaining capacity for the selected time slot.</Text>
@@ -278,25 +275,25 @@ export function ActivityBookingModal({
                     <div className="flex items-center justify-between border border-gray-200 rounded-lg p-3">
                       <Text size="sm" weight="medium">Adults</Text>
                       <div className="flex items-center gap-2">
-                        <Button type="button" variant="outline" size="xs" onClick={() => decrement(setAdults, adults, 1)}>-</Button>
+                        <Button type="button" variant="outline" size="sm" onClick={() => decrement(setAdults, adults, 1)}>-</Button>
                         <Input type="number" value={adults} onChange={(e) => setAdults(Math.max(1, Math.min(activity.maxParticipants, Number(e.target.value) || 0)))} />
-                        <Button type="button" variant="outline" size="xs" onClick={() => increment(setAdults, adults, activity.maxParticipants)}>+</Button>
+                        <Button type="button" variant="outline" size="sm" onClick={() => increment(setAdults, adults, activity.maxParticipants)}>+</Button>
                       </div>
                     </div>
                     <div className="flex items-center justify-between border border-gray-200 rounded-lg p-3">
                       <Text size="sm" weight="medium">Children</Text>
                       <div className="flex items-center gap-2">
-                        <Button type="button" variant="outline" size="xs" onClick={() => decrement(setChildren, children, 0)}>-</Button>
+                        <Button type="button" variant="outline" size="sm" onClick={() => decrement(setChildren, children, 0)}>-</Button>
                         <Input type="number" value={children} onChange={(e) => setChildren(Math.max(0, Math.min(activity.maxParticipants, Number(e.target.value) || 0)))} />
-                        <Button type="button" variant="outline" size="xs" onClick={() => increment(setChildren, children, activity.maxParticipants)}>+</Button>
+                        <Button type="button" variant="outline" size="sm" onClick={() => increment(setChildren, children, activity.maxParticipants)}>+</Button>
                       </div>
                     </div>
                     <div className="flex items-center justify-between border border-gray-200 rounded-lg p-3">
                       <Text size="sm" weight="medium">Seniors</Text>
                       <div className="flex items-center gap-2">
-                        <Button type="button" variant="outline" size="xs" onClick={() => decrement(setSeniors, seniors, 0)}>-</Button>
+                        <Button type="button" variant="outline" size="sm" onClick={() => decrement(setSeniors, seniors, 0)}>-</Button>
                         <Input type="number" value={seniors} onChange={(e) => setSeniors(Math.max(0, Math.min(activity.maxParticipants, Number(e.target.value) || 0)))} />
-                        <Button type="button" variant="outline" size="xs" onClick={() => increment(setSeniors, seniors, activity.maxParticipants)}>+</Button>
+                        <Button type="button" variant="outline" size="sm" onClick={() => increment(setSeniors, seniors, activity.maxParticipants)}>+</Button>
                       </div>
                     </div>
                   </div>
@@ -327,18 +324,22 @@ export function ActivityBookingModal({
             </FormField>
 
             <FormField label="Payment Method (Placeholder)">
-              <Select value={"card"} onChange={() => {}}>
-                <option value="card">Credit/Debit Card</option>
-                <option value="paypal">PayPal</option>
-              </Select>
+              <Select 
+                value={"card"} 
+                onChange={() => {}}
+                options={[
+                  { value: "card", label: "Credit/Debit Card" },
+                  { value: "paypal", label: "PayPal" }
+                ]}
+              />
               <Text size="xs" color="gray">Payment collection will be integrated later.</Text>
             </FormField>
 
             {/* Price Summary */}
             <Card>
-              <Card.Body>
-                <Stack gap="3">
-                  <Text as="h4" size="lg" weight="semibold">
+              <CardBody>
+                <Stack spacing="sm">
+                  <Text as="div" size="lg" weight="semibold" className="text-lg font-semibold">
                     Price Summary
                   </Text>
                   <div className="space-y-2">
@@ -362,12 +363,12 @@ export function ActivityBookingModal({
                     </div>
                   </div>
                 </Stack>
-              </Card.Body>
+              </CardBody>
             </Card>
           </Stack>
-        </Modal.Body>
+        </ModalBody>
 
-        <Modal.Footer>
+        <ModalFooter>
           <div className="flex justify-end gap-3">
             <Button variant="outline" onClick={onClose}>
               Cancel
@@ -380,7 +381,7 @@ export function ActivityBookingModal({
               {isSubmitting ? 'Processing...' : `Book Now - ${totalPrice.toFixed(2)} ${activity.price.currency}`}
             </Button>
           </div>
-        </Modal.Footer>
+        </ModalFooter>
       </form>
     </Modal>
   );

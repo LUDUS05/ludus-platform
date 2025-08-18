@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Card } from '@opgrapes/ui/Card';
+import { Card, CardBody } from '@opgrapes/ui/Card';
 import { Button } from '@opgrapes/ui/Button';
 import { Text } from '@opgrapes/ui/Text';
 import { Badge } from '@opgrapes/ui/Badge';
@@ -137,7 +137,7 @@ export function ActivityCard({
           </div>
           
           <div className="flex-1 min-w-0">
-            <Text as="h3" size="lg" weight="semibold" className="truncate">
+            <Text as="div" size="lg" weight="semibold" className="truncate text-lg font-semibold">
               {activity.title}
             </Text>
             <Text size="sm" color="gray" className="line-clamp-2 mb-2">
@@ -230,11 +230,11 @@ export function ActivityCard({
       </div>
 
       {/* Content Section */}
-      <Card.Body>
-        <Stack gap="3">
+      <CardBody>
+        <Stack spacing="sm">
           {/* Title and Rating */}
           <div className="flex items-start justify-between">
-            <Text as="h3" size="lg" weight="semibold" className="flex-1 pr-2">
+            <Text as="div" size="lg" weight="semibold" className="flex-1 pr-2 text-lg font-semibold">
               {activity.title}
             </Text>
             <div className="flex items-center gap-1 flex-shrink-0">
@@ -265,7 +265,7 @@ export function ActivityCard({
                 {activity.vendor.name}
               </Text>
               {activity.vendor.verified && (
-                <Badge variant="success" size="xs">
+                <Badge variant="success" size="sm">
                   Verified
                 </Badge>
               )}
@@ -292,12 +292,12 @@ export function ActivityCard({
           {activity.tags.length > 0 && (
             <div className="flex flex-wrap gap-1">
               {activity.tags.slice(0, 3).map((tag) => (
-                <Badge key={tag} variant="secondary" size="xs">
+                <Badge key={tag} variant="secondary" size="sm">
                   {tag}
                 </Badge>
               ))}
               {activity.tags.length > 3 && (
-                <Badge variant="secondary" size="xs">
+                <Badge variant="secondary" size="sm">
                   +{activity.tags.length - 3} more
                 </Badge>
               )}
@@ -320,7 +320,7 @@ export function ActivityCard({
             </Button>
           </div>
         </Stack>
-      </Card.Body>
+      </CardBody>
     </Card>
   );
 }

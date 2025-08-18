@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@opgrapes/ui/Button';
 import { Input } from '@opgrapes/ui/Input';
-import { Card } from '@opgrapes/ui/Card';
+import { Card, CardBody, CardHeader, CardFooter } from '@opgrapes/ui/Card';
 import { Text } from '@opgrapes/ui/Text';
 import { Stack } from '@opgrapes/ui/Stack';
 import { Form } from '@opgrapes/ui/Form';
@@ -49,9 +49,10 @@ export function LoginForm({ onSuccess, onError }: LoginFormProps) {
     } catch (error) {
       if (error instanceof z.ZodError) {
         const newErrors: Partial<LoginFormData> = {};
-        error.errors.forEach(err => {
-          if (err.path[0]) {
-            newErrors[err.path[0] as keyof LoginFormData] = err.message;
+        error.issues.forEach(err => {
+          const path = err.path[0];
+          if (path && typeof path === 'string') {
+            (newErrors as Record<string, string>)[path] = err.message;
           }
         });
         setErrors(newErrors);
@@ -109,18 +110,18 @@ export function LoginForm({ onSuccess, onError }: LoginFormProps) {
 
   return (
     <Card className="w-full max-w-md mx-auto">
-      <Card.Header>
-        <Text as="h2" size="2xl" weight="bold" className="text-center">
+      <CardHeader>
+        <Text as="div" size="xl" weight="bold" className="text-center text-3xl">
           Welcome Back
         </Text>
         <Text size="sm" color="gray" className="text-center">
           Sign in to your account to continue
         </Text>
-      </Card.Header>
+      </CardHeader>
       
-      <Card.Body>
+      <CardBody>
         <Form onSubmit={handleSubmit}>
-          <Stack gap="4">
+          <Stack spacing="md">
             <FormField
               label="Email Address"
               error={errors.email}
@@ -132,7 +133,7 @@ export function LoginForm({ onSuccess, onError }: LoginFormProps) {
                 value={formData.email}
                 onChange={(e) => handleInputChange('email', e.target.value)}
                 disabled={isLoading}
-                error={!!errors.email}
+                error={errors.email}
               />
             </FormField>
 
@@ -147,7 +148,7 @@ export function LoginForm({ onSuccess, onError }: LoginFormProps) {
                 value={formData.password}
                 onChange={(e) => handleInputChange('password', e.target.value)}
                 disabled={isLoading}
-                error={!!errors.password}
+                error={errors.password}
               />
             </FormField>
 
@@ -162,10 +163,10 @@ export function LoginForm({ onSuccess, onError }: LoginFormProps) {
             </Button>
           </Stack>
         </Form>
-      </Card.Body>
+      </CardBody>
       
-      <Card.Footer>
-        <Stack gap="2" className="text-center">
+      <CardFooter>
+        <Stack spacing="sm" className="text-center">
           <Text size="sm" color="gray">
             Don&apos;t have an account?{' '}
             <button
@@ -185,7 +186,7 @@ export function LoginForm({ onSuccess, onError }: LoginFormProps) {
             Forgot your password?
           </button>
         </Stack>
-      </Card.Footer>
+      </CardFooter>
     </Card>
   );
 }

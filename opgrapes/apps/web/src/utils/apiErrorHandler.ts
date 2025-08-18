@@ -23,7 +23,7 @@ export class ApiErrorHandler {
         const statusMatch = error.message.match(/status: (\d+)/);
         const status = statusMatch ? parseInt(statusMatch[1]) : undefined;
         
-        return this.getErrorMessageByStatus(status, error.message);
+        return this.getErrorMessageByStatus(status);
       }
 
       // Generic error
@@ -43,12 +43,13 @@ export class ApiErrorHandler {
 
     if (error && typeof error === 'object') {
       // Handle API response error objects
-      if (error.error) {
+      if ('error' in error && error.error) {
+        const apiError = error as { error: string; status?: number; code?: string; details?: unknown };
         return {
-          message: error.error,
-          status: error.status,
-          code: error.code,
-          details: error.details
+          message: apiError.error,
+          status: apiError.status,
+          code: apiError.code,
+          details: apiError.details
         };
       }
 
@@ -176,11 +177,11 @@ export class ApiErrorHandler {
   }
 
   static isServerError(error: ApiError): boolean {
-    return error.status && error.status >= 500;
+    return typeof error.status === 'number' && error.status >= 500;
   }
 
   static isClientError(error: ApiError): boolean {
-    return error.status && error.status >= 400 && error.status < 500;
+    return typeof error.status === 'number' && error.status >= 400 && error.status < 500;
   }
 
   static getRetryableErrors(): string[] {

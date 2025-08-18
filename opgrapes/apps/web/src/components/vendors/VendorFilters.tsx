@@ -91,7 +91,7 @@ export function VendorFilters({ onFiltersChange, className }: VendorFiltersProps
         return acc + (value ? 1 : 0);
       }
       if (key === 'rating') {
-        return acc + (value > 0 ? 1 : 0);
+        return acc + (typeof value === 'number' && value > 0 ? 1 : 0);
       }
       if (key === 'categories') {
         return acc + (Array.isArray(value) && value.length > 0 ? 1 : 0);
@@ -146,12 +146,12 @@ export function VendorFilters({ onFiltersChange, className }: VendorFiltersProps
   return (
     <Card className={className}>
       <div className="p-6">
-        <Stack gap="4">
+        <Stack spacing="md">
           {/* Header */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Building2 size={20} className="text-primary" />
-              <Text as="h3" size="lg" weight="semibold">
+              <Text as="div" size="lg" weight="semibold" className="text-lg font-semibold">
                 Find Vendors
               </Text>
             </div>
@@ -213,7 +213,7 @@ export function VendorFilters({ onFiltersChange, className }: VendorFiltersProps
           {/* Expanded Filters */}
           {isExpanded && (
             <div className="border-t pt-4">
-              <Stack gap="4">
+              <Stack spacing="md">
                 {/* Rating Filter */}
                 <div>
                   <Text size="sm" weight="medium" className="mb-2">

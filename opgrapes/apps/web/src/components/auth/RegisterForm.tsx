@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@opgrapes/ui/Button';
 import { Input } from '@opgrapes/ui/Input';
-import { Card } from '@opgrapes/ui/Card';
+import { Card, CardBody, CardHeader, CardFooter } from '@opgrapes/ui/Card';
 import { Text } from '@opgrapes/ui/Text';
 import { Stack } from '@opgrapes/ui/Stack';
 import { Form } from '@opgrapes/ui/Form';
@@ -78,9 +78,10 @@ export function RegisterForm({ onSuccess, onError }: RegisterFormProps) {
     } catch (error) {
       if (error instanceof z.ZodError) {
         const newErrors: Partial<RegisterFormData> = {};
-        error.errors.forEach(err => {
-          if (err.path[0]) {
-            newErrors[err.path[0] as keyof RegisterFormData] = err.message;
+        error.issues.forEach(err => {
+          const path = err.path[0];
+          if (path && typeof path === 'string') {
+            (newErrors as Record<string, string>)[path] = err.message;
           }
         });
         setErrors(newErrors);
@@ -138,18 +139,18 @@ export function RegisterForm({ onSuccess, onError }: RegisterFormProps) {
 
   return (
     <Card className="w-full max-w-lg mx-auto">
-      <Card.Header>
-        <Text as="h2" size="2xl" weight="bold" className="text-center">
+      <CardHeader>
+        <Text as="div" size="xl" weight="bold" className="text-center text-3xl">
           Create Your Account
         </Text>
         <Text size="sm" color="gray" className="text-center">
           Join LUDUS to discover amazing activities and experiences
         </Text>
-      </Card.Header>
+      </CardHeader>
       
-      <Card.Body>
+      <CardBody>
         <Form onSubmit={handleSubmit}>
-          <Stack gap="4">
+          <Stack spacing="md">
             <div className="grid grid-cols-2 gap-4">
               <FormField
                 label="First Name"
@@ -162,7 +163,7 @@ export function RegisterForm({ onSuccess, onError }: RegisterFormProps) {
                   value={formData.firstName}
                   onChange={(e) => handleInputChange('firstName', e.target.value)}
                   disabled={isLoading}
-                  error={!!errors.firstName}
+                  error={errors.firstName}
                 />
               </FormField>
 
@@ -177,7 +178,7 @@ export function RegisterForm({ onSuccess, onError }: RegisterFormProps) {
                   value={formData.lastName}
                   onChange={(e) => handleInputChange('lastName', e.target.value)}
                   disabled={isLoading}
-                  error={!!errors.lastName}
+                  error={errors.lastName}
                 />
               </FormField>
             </div>
@@ -193,7 +194,7 @@ export function RegisterForm({ onSuccess, onError }: RegisterFormProps) {
                 value={formData.email}
                 onChange={(e) => handleInputChange('email', e.target.value)}
                 disabled={isLoading}
-                error={!!errors.email}
+                                  error={errors.email}
               />
             </FormField>
 
@@ -209,7 +210,7 @@ export function RegisterForm({ onSuccess, onError }: RegisterFormProps) {
                   value={formData.password}
                   onChange={(e) => handleInputChange('password', e.target.value)}
                   disabled={isLoading}
-                  error={!!errors.password}
+                  error={errors.password}
                 />
               </FormField>
 
@@ -224,7 +225,7 @@ export function RegisterForm({ onSuccess, onError }: RegisterFormProps) {
                   value={formData.confirmPassword}
                   onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
                   disabled={isLoading}
-                  error={!!errors.confirmPassword}
+                  error={errors.confirmPassword}
                 />
               </FormField>
             </div>
@@ -239,7 +240,7 @@ export function RegisterForm({ onSuccess, onError }: RegisterFormProps) {
                 value={formData.phone}
                 onChange={(e) => handleInputChange('phone', e.target.value)}
                 disabled={isLoading}
-                error={!!errors.phone}
+                                  error={errors.phone}
               />
             </FormField>
 
@@ -254,23 +255,22 @@ export function RegisterForm({ onSuccess, onError }: RegisterFormProps) {
                 value={formData.location}
                 onChange={(e) => handleInputChange('location', e.target.value)}
                 disabled={isLoading}
-                error={!!errors.location}
+                                  error={errors.location}
               />
             </FormField>
 
             <FormField
               label="Activity Preferences"
-              error={errors.preferences}
+              error={Array.isArray(errors.preferences) ? errors.preferences.join(', ') : errors.preferences}
               required
             >
-              <Select
-                multiple
+                            <Select
                 placeholder="Select your preferred activity types"
                 options={activityPreferences}
-                value={formData.preferences}
-                onChange={(value) => handleInputChange('preferences', value)}
+                value={formData.preferences[0] || ''}
+                onChange={(e) => handleInputChange('preferences', [e.target.value])}
                 disabled={isLoading}
-                error={!!errors.preferences}
+                error={Array.isArray(errors.preferences) ? errors.preferences.join(', ') : errors.preferences}
               />
               <Text size="xs" color="gray" className="mt-1">
                 Select multiple preferences to get personalized recommendations
@@ -286,43 +286,43 @@ export function RegisterForm({ onSuccess, onError }: RegisterFormProps) {
             >
               {isLoading ? 'Creating Account...' : 'Create Account'}
             </Button>
+                      </Stack>
+          </Form>
+        </CardBody>
+        
+                <CardFooter>
+          <Stack spacing="sm" className="text-center">
+            <Text size="sm" color="gray">
+              Already have an account?{' '}
+              <button
+                type="button"
+                onClick={() => router.push('/auth/login')}
+                className="text-blue-600 hover:text-blue-800 underline"
+              >
+                Sign in here
+              </button>
+            </Text>
+            
+            <Text size="xs" color="gray">
+              By creating an account, you agree to our{' '}
+              <button
+                type="button"
+                onClick={() => router.push('/terms')}
+                className="text-blue-600 hover:text-blue-800 underline"
+              >
+                Terms of Service
+              </button>{' '}
+              and{' '}
+              <button
+                type="button"
+                onClick={() => router.push('/privacy')}
+                className="text-blue-600 hover:text-blue-800 underline"
+              >
+                Privacy Policy
+              </button>
+            </Text>
           </Stack>
-        </Form>
-      </Card.Body>
-      
-      <Card.Footer>
-        <Stack gap="2" className="text-center">
-          <Text size="sm" color="gray">
-            Already have an account?{' '}
-            <button
-              type="button"
-              onClick={() => router.push('/auth/login')}
-              className="text-blue-600 hover:text-blue-800 underline"
-            >
-              Sign in here
-            </button>
-          </Text>
-          
-          <Text size="xs" color="gray">
-            By creating an account, you agree to our{' '}
-            <button
-              type="button"
-              onClick={() => router.push('/terms')}
-              className="text-blue-600 hover:text-blue-800 underline"
-            >
-              Terms of Service
-            </button>{' '}
-            and{' '}
-            <button
-              type="button"
-              onClick={() => router.push('/privacy')}
-              className="text-blue-600 hover:text-blue-800 underline"
-            >
-              Privacy Policy
-            </button>
-          </Text>
-        </Stack>
-      </Card.Footer>
+        </CardFooter>
     </Card>
   );
 }

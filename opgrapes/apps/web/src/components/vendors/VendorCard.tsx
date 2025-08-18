@@ -110,11 +110,11 @@ export function VendorCard({ vendor, variant = 'default' }: VendorCardProps) {
           
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
-              <Text as="h3" size="lg" weight="semibold" className="truncate">
-                {vendor.name}
-              </Text>
+                          <Text as="div" size="lg" weight="semibold" className="truncate text-lg font-semibold">
+              {vendor.name}
+            </Text>
               {vendor.verified && (
-                <Badge variant="success" size="xs">Verified</Badge>
+                <Badge variant="success" size="sm">Verified</Badge>
               )}
             </div>
             
@@ -189,10 +189,10 @@ export function VendorCard({ vendor, variant = 'default' }: VendorCardProps) {
 
       {/* Content Section */}
       <div className="p-6">
-        <Stack gap="3">
+        <Stack spacing="sm">
           {/* Name and Rating */}
           <div className="flex items-start justify-between">
-            <Text as="h3" size="lg" weight="semibold" className="flex-1 pr-2">
+            <Text as="div" size="lg" weight="semibold" className="flex-1 pr-2 text-lg font-semibold">
               {vendor.name}
             </Text>
             <div className="flex items-center gap-1 flex-shrink-0">
@@ -240,12 +240,12 @@ export function VendorCard({ vendor, variant = 'default' }: VendorCardProps) {
           {vendor.categories.length > 0 && (
             <div className="flex flex-wrap gap-1">
               {vendor.categories.slice(0, 3).map((category) => (
-                <Badge key={category} variant={getCategoryColor(category) as 'primary' | 'secondary' | 'success' | 'warning' | 'danger'} size="xs">
+                <Badge key={category} variant={getCategoryColor(category) as 'primary' | 'secondary' | 'success' | 'warning' | 'danger'} size="sm">
                   {category.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
                 </Badge>
               ))}
               {vendor.categories.length > 3 && (
-                <Badge variant="secondary" size="xs">
+                <Badge variant="secondary" size="sm">
                   +{vendor.categories.length - 3} more
                 </Badge>
               )}

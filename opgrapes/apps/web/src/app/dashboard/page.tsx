@@ -26,20 +26,18 @@ function DashboardContent() {
 
   return (
     <Container size="lg" className="py-8">
-      <Stack gap="8">
+      <Stack spacing="lg">
         {/* Welcome Header */}
         <Card>
-          <Card.Body>
-            <Stack gap="6">
+          <div className="p-6">
+            <Stack spacing="lg">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-6">
-                  <Avatar
-                    size="xl"
-                    src={user.avatar}
-                    alt={`${user.firstName} ${user.lastName}`}
-                  />
+                  <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                    {user.firstName.charAt(0)}{user.lastName.charAt(0)}
+                  </div>
                   <div>
-                    <Text as="h1" size="3xl" weight="bold">
+                    <Text as="div" size="xl" weight="bold">
                       Welcome back, {user.firstName}! 👋
                     </Text>
                     <Text size="lg" color="gray">
@@ -52,17 +50,17 @@ function DashboardContent() {
                 </Button>
               </div>
             </Stack>
-          </Card.Body>
+          </div>
         </Card>
 
         {/* Quick Actions */}
         <Card>
-          <Card.Header>
-            <Text as="h2" size="xl" weight="bold">
+          <div className="p-6 border-b border-gray-200">
+            <Text as="div" size="xl" weight="bold">
               Quick Actions
             </Text>
-          </Card.Header>
-          <Card.Body>
+          </div>
+          <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <Button
                 variant="primary"
@@ -94,15 +92,15 @@ function DashboardContent() {
                 <Text weight="bold">My Bookings</Text>
               </Button>
             </div>
-          </Card.Body>
+          </div>
         </Card>
 
         {/* User Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card>
-            <Card.Body>
-              <Stack gap="3" className="text-center">
-                <Text size="4xl" weight="bold" color="primary">
+            <div className="p-6">
+              <Stack spacing="md" className="text-center">
+                <Text size="xl" weight="bold" color="primary">
                   0
                 </Text>
                 <Text size="lg" weight="medium">
@@ -112,13 +110,13 @@ function DashboardContent() {
                   Start exploring to book your first activity!
                 </Text>
               </Stack>
-            </Card.Body>
+            </div>
           </Card>
 
           <Card>
-            <Card.Body>
-              <Stack gap="3" className="text-center">
-                <Text size="4xl" weight="bold" color="primary">
+            <div className="p-6">
+              <Stack spacing="md" className="text-center">
+                <Text size="xl" weight="bold" color="primary">
                   {user.preferences.length}
                 </Text>
                 <Text size="lg" weight="medium">
@@ -128,13 +126,13 @@ function DashboardContent() {
                   We&apos;ll use these to recommend activities
                 </Text>
               </Stack>
-            </Card.Body>
+            </div>
           </Card>
 
           <Card>
-            <Card.Body>
-              <Stack gap="3" className="text-center">
-                <Text size="4xl" weight="bold" color="primary">
+            <div className="p-6">
+              <Stack spacing="md" className="text-center">
+                <Text size="xl" weight="bold" color="primary">
                   {user.location}
                 </Text>
                 <Text size="lg" weight="medium">
@@ -144,18 +142,18 @@ function DashboardContent() {
                   We&apos;ll show activities near you
                 </Text>
               </Stack>
-            </Card.Body>
+            </div>
           </Card>
         </div>
 
         {/* Recent Activity */}
         <Card>
-          <Card.Header>
-            <Text as="h2" size="xl" weight="bold">
+          <div className="p-6 border-b border-gray-200">
+            <Text as="div" size="xl" weight="bold">
               Recent Activity
             </Text>
-          </Card.Header>
-          <Card.Body>
+          </div>
+          <div className="p-6">
             <div className="text-center py-8">
               <Text size="lg" color="gray">
                 No recent activity yet
@@ -171,18 +169,18 @@ function DashboardContent() {
                 Explore Activities
               </Button>
             </div>
-          </Card.Body>
+          </div>
         </Card>
 
         {/* Preferences Summary */}
         <Card>
-          <Card.Header>
-            <Text as="h2" size="xl" weight="bold">
+          <div className="p-6 border-b border-gray-200">
+            <Text as="div" size="xl" weight="bold">
               Your Activity Preferences
             </Text>
-          </Card.Header>
-          <Card.Body>
-            <Stack gap="4">
+          </div>
+          <div className="p-6">
+            <Stack spacing="md">
               <div className="flex flex-wrap gap-2">
                 {user.preferences.length > 0 ? (
                   user.preferences.map((pref) => (
@@ -201,7 +199,7 @@ function DashboardContent() {
                 Update Preferences
               </Button>
             </Stack>
-          </Card.Body>
+          </div>
         </Card>
       </Stack>
     </Container>

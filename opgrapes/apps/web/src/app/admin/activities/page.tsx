@@ -100,7 +100,7 @@ function ActivityModerationContent() {
         <Card padding="lg">
           <div className="text-center py-8">
             <Text size="xl" weight="bold" color="red">Access Denied</Text>
-            <Text size="lg" color="gray" className="mt-2">You don't have permission to access activity moderation.</Text>
+            <Text size="lg" color="gray" className="mt-2">You don&apos;t have permission to access activity moderation.</Text>
           </div>
         </Card>
       </Container>

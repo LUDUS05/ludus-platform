@@ -5,7 +5,7 @@ import { VendorCard } from './VendorCard';
 import { Button } from '@opgrapes/ui/Button';
 import { Text } from '@opgrapes/ui/Text';
 
-import { Grid, List, Grid3X3 } from 'lucide-react';
+import { Grid, List } from 'lucide-react';
 
 interface Vendor {
   id: string;
@@ -63,9 +63,9 @@ export function VendorGrid({ vendors, loading = false, className }: VendorGridPr
       <div className={`text-center py-12 ${className}`}>
         <div className="max-w-md mx-auto">
           <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Grid3X3 size={32} className="text-gray-400" />
+            <Grid size={32} className="text-gray-400" />
           </div>
-          <Text as="h3" size="lg" weight="semibold" className="mb-2">
+          <Text as="div" size="lg" weight="semibold" className="mb-2 text-lg font-semibold">
             No vendors found
           </Text>
           <Text size="sm" color="gray">
@@ -141,7 +141,7 @@ export function VendorGrid({ vendors, loading = false, className }: VendorGridPr
             onClick={() => setViewMode('compact')}
             className="px-3 py-1"
           >
-            <Grid3X3 size={16} />
+            <Grid size={16} />
           </Button>
         </div>
       </div>

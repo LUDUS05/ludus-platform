@@ -39,9 +39,9 @@ export default function CheckoutPage() {
   return (
     <Container size="md" className="py-10">
       <Card>
-        <Card.Body>
-          <Stack gap="4">
-            <Text as="h1" size="2xl" weight="bold">Checkout (Placeholder)</Text>
+        <div className="p-6">
+          <Stack spacing="md">
+            <Text as="div" size="xl" weight="bold">Checkout (Placeholder)</Text>
             <Text color="gray">Payment integration will be added here. Review your booking details below.</Text>
             <div className="space-y-2 text-sm text-gray-700">
               <div><strong>Activity:</strong> {booking.activityId.title}</div>
@@ -56,7 +56,7 @@ export default function CheckoutPage() {
               <Button variant="secondary" onClick={() => router.push(`/activities/${booking.activityId._id}`)}>Back to Activity</Button>
             </div>
           </Stack>
-        </Card.Body>
+        </div>
       </Card>
     </Container>
   );

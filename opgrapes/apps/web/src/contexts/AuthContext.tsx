@@ -11,6 +11,7 @@ interface User {
   location: string;
   preferences: string[];
   role: 'user' | 'admin';
+  avatar?: string;
   createdAt: string;
   updatedAt: string;
 }

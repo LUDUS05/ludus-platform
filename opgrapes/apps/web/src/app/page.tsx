@@ -6,8 +6,8 @@ async function getHealth(): Promise<"ok" | "down"> {
   const base = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
   try {
     const res = await fetch(`${base}/health`, { cache: "no-store" });
-    const json = await res.json().catch(() => null as any);
-    return res.ok && (json as any)?.ok ? "ok" : "down";
+    const json = await res.json().catch(() => null);
+    return res.ok && (json as { ok?: boolean })?.ok ? "ok" : "down";
   } catch {
     return "down";
   }

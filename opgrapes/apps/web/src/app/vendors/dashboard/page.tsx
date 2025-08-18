@@ -6,7 +6,7 @@ import { Button } from '@opgrapes/ui/Button';
 import { Text } from '@opgrapes/ui/Text';
 import { Stack } from '@opgrapes/ui/Stack';
 import { Badge } from '@opgrapes/ui/Badge';
-import { Tabs } from '@opgrapes/ui/Tabs';
+import { Tabs, TabList, Tab, TabPanel } from '@opgrapes/ui/Tabs';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { 
   TrendingUp, 
@@ -177,17 +177,17 @@ export default function VendorDashboardPage() {
         </div>
 
         {/* Dashboard Tabs */}
-        <Tabs value={activeTab} onChange={setActiveTab}>
-          <Tabs.List className="mb-6">
-            <Tabs.Tab value="overview">Overview</Tabs.Tab>
-            <Tabs.Tab value="analytics">Analytics</Tabs.Tab>
-            <Tabs.Tab value="activities">Activities</Tabs.Tab>
-            <Tabs.Tab value="customers">Customers</Tabs.Tab>
-          </Tabs.List>
+        <Tabs defaultTab={activeTab}>
+          <TabList className="mb-6">
+            <Tab id="overview">Overview</Tab>
+            <Tab id="analytics">Analytics</Tab>
+            <Tab id="activities">Activities</Tab>
+            <Tab id="customers">Customers</Tab>
+          </TabList>
 
           {/* Overview Tab */}
-          <Tabs.Panel value="overview">
-            <Stack gap="6">
+          <TabPanel id="overview">
+            <Stack spacing="lg">
               {/* Key Metrics Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <Card>
@@ -197,7 +197,7 @@ export default function VendorDashboardPage() {
                         <Text size="sm" color="gray" className="mb-1">
                           Total Revenue
                         </Text>
-                        <Text size="2xl" weight="bold" className="text-green-600">
+                        <Text size="xl" weight="bold" className="text-green-600 text-3xl">
                           {formatCurrency(dashboardData.overview.totalRevenue)}
                         </Text>
                       </div>
@@ -222,7 +222,7 @@ export default function VendorDashboardPage() {
                         <Text size="sm" color="gray" className="mb-1">
                           Total Bookings
                         </Text>
-                        <Text size="2xl" weight="bold" className="text-blue-600">
+                        <Text size="xl" weight="bold" className="text-blue-600 text-3xl">
                           {formatNumber(dashboardData.overview.totalBookings)}
                         </Text>
                       </div>
@@ -247,7 +247,7 @@ export default function VendorDashboardPage() {
                         <Text size="sm" color="gray" className="mb-1">
                           Average Rating
                         </Text>
-                        <Text size="2xl" weight="bold" className="text-yellow-600">
+                        <Text size="xl" weight="bold" className="text-yellow-600 text-3xl">
                           {dashboardData.overview.averageRating}
                         </Text>
                       </div>
@@ -270,7 +270,7 @@ export default function VendorDashboardPage() {
                         <Text size="sm" color="gray" className="mb-1">
                           Active Activities
                         </Text>
-                        <Text size="2xl" weight="bold" className="text-purple-600">
+                        <Text size="xl" weight="bold" className="text-purple-600 text-3xl">
                           {dashboardData.overview.activeActivities}
                         </Text>
                       </div>
@@ -292,7 +292,7 @@ export default function VendorDashboardPage() {
                 {/* Recent Activity */}
                 <Card>
                   <div className="px-6 py-4 border-b border-gray-200">
-                    <Text as="h3" size="lg" weight="semibold">
+                    <Text as="div" size="lg" weight="semibold" className="text-lg font-semibold">
                       Recent Activity
                     </Text>
                   </div>
@@ -326,7 +326,7 @@ export default function VendorDashboardPage() {
                 {/* Top Activities */}
                 <Card>
                   <div className="px-6 py-4 border-b border-gray-200">
-                    <Text as="h3" size="lg" weight="semibold">
+                    <Text as="div" size="lg" weight="semibold" className="text-lg font-semibold">
                       Top Performing Activities
                     </Text>
                   </div>
@@ -365,9 +365,9 @@ export default function VendorDashboardPage() {
               {/* Quick Actions */}
               <Card>
                 <div className="px-6 py-4 border-b border-gray-200">
-                  <Text as="h3" size="lg" weight="semibold">
-                    Quick Actions
-                  </Text>
+                                      <Text as="div" size="lg" weight="semibold" className="text-lg font-semibold">
+                      Quick Actions
+                    </Text>
                 </div>
                 <div className="p-6">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -387,14 +387,14 @@ export default function VendorDashboardPage() {
                 </div>
               </Card>
             </Stack>
-          </Tabs.Panel>
+          </TabPanel>
 
           {/* Analytics Tab */}
-          <Tabs.Panel value="analytics">
-            <Stack gap="6">
+          <TabPanel id="analytics">
+            <Stack spacing="lg">
               <Card>
                 <div className="px-6 py-4 border-b border-gray-200">
-                  <Text as="h3" size="lg" weight="semibold">
+                  <Text as="div" size="lg" weight="semibold" className="text-lg font-semibold">
                     Performance Metrics
                   </Text>
                 </div>
@@ -440,7 +440,7 @@ export default function VendorDashboardPage() {
               {/* Placeholder for charts */}
               <Card>
                 <div className="px-6 py-4 border-b border-gray-200">
-                  <Text as="h3" size="lg" weight="semibold">
+                  <Text as="div" size="lg" weight="semibold" className="text-lg font-semibold">
                     Monthly Trends
                   </Text>
                 </div>
@@ -457,15 +457,15 @@ export default function VendorDashboardPage() {
                 </div>
               </Card>
             </Stack>
-          </Tabs.Panel>
+          </TabPanel>
 
           {/* Activities Tab */}
-          <Tabs.Panel value="activities">
-            <Stack gap="6">
+          <TabPanel id="activities">
+            <Stack spacing="lg">
               <Card>
                 <div className="px-6 py-4 border-b border-gray-200">
                   <div className="flex items-center justify-between">
-                    <Text as="h3" size="lg" weight="semibold">
+                    <Text as="div" size="lg" weight="semibold" className="text-lg font-semibold">
                       Activity Performance
                     </Text>
                     <Button variant="outline" size="sm">
@@ -520,14 +520,14 @@ export default function VendorDashboardPage() {
                 </div>
               </Card>
             </Stack>
-          </Tabs.Panel>
+          </TabPanel>
 
           {/* Customers Tab */}
-          <Tabs.Panel value="customers">
-            <Stack gap="6">
+          <TabPanel id="customers">
+            <Stack spacing="lg">
               <Card>
                 <div className="px-6 py-4 border-b border-gray-200">
-                  <Text as="h3" size="lg" weight="semibold">
+                  <Text as="div" size="lg" weight="semibold" className="text-lg font-semibold">
                     Customer Insights
                   </Text>
                 </div>
@@ -537,7 +537,7 @@ export default function VendorDashboardPage() {
                       <Text weight="medium" className="mb-4">Customer Satisfaction</Text>
                       <div className="flex items-center gap-4">
                         <div className="text-center">
-                          <Text size="3xl" weight="bold" className="text-green-600">
+                          <Text size="xl" weight="bold" className="text-green-600 text-3xl">
                             {dashboardData.overview.customerSatisfaction}%
                           </Text>
                           <Text size="sm" color="gray">Satisfaction Rate</Text>
@@ -577,7 +577,7 @@ export default function VendorDashboardPage() {
                 </div>
               </Card>
             </Stack>
-          </Tabs.Panel>
+          </TabPanel>
         </Tabs>
       </div>
     </div>

@@ -12,9 +12,9 @@ export const metadata: Metadata = {
 export default function RegisterPage() {
   return (
     <Container size="sm" className="py-12">
-      <Stack gap="8" className="text-center">
-        <Stack gap="4">
-          <Text as="h1" size="4xl" weight="bold" className="text-center">
+      <Stack spacing="lg" className="text-center">
+        <Stack spacing="md">
+          <Text as="div" size="xl" weight="bold" className="text-center">
             Join LUDUS Today
           </Text>
           <Text size="lg" color="gray" className="max-w-md mx-auto">

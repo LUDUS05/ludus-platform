@@ -76,68 +76,68 @@ function BookingsContent() {
 
   return (
     <Container size="lg" className="py-8">
-      <Stack gap="8">
+      <Stack spacing="lg">
         {/* Page Header */}
         <Card>
-          <Card.Body>
-            <Stack gap="4">
-              <Text as="h1" size="3xl" weight="bold">
+          <div className="p-6">
+            <Stack spacing="md">
+              <Text as="div" size="xl" weight="bold">
                 My Bookings
               </Text>
               <Text size="lg" color="gray">
                 Track your upcoming and past activity bookings
               </Text>
             </Stack>
-          </Card.Body>
+          </div>
         </Card>
 
         {/* Stats Overview */}
         {stats && (
           <Card>
-            <Card.Header>
-              <Text as="h2" size="xl" weight="bold">
+            <div className="p-6 border-b border-gray-200">
+              <Text as="div" size="xl" weight="bold">
                 Booking Overview
               </Text>
-            </Card.Header>
-            <Card.Body>
+            </div>
+            <div className="p-6">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="text-center">
-                  <Text size="2xl" weight="bold" color="primary">
+                  <Text size="xl" weight="bold" color="primary">
                     {stats.totalBookings}
                   </Text>
                   <Text size="sm" color="gray">Total Bookings</Text>
                 </div>
                 <div className="text-center">
-                  <Text size="2xl" weight="bold" color="warning">
+                  <Text size="xl" weight="bold" color="warning">
                     {stats.pendingBookings}
                   </Text>
                   <Text size="sm" color="gray">Pending</Text>
                 </div>
                 <div className="text-center">
-                  <Text size="2xl" weight="bold" color="success">
+                  <Text size="xl" weight="bold" color="success">
                     {stats.confirmedBookings}
                   </Text>
                   <Text size="sm" color="gray">Confirmed</Text>
                 </div>
                 <div className="text-center">
-                  <Text size="2xl" weight="bold" color="success">
+                  <Text size="xl" weight="bold" color="success">
                     {stats.completedBookings}
                   </Text>
                   <Text size="sm" color="gray">Completed</Text>
                 </div>
               </div>
-            </Card.Body>
+            </div>
           </Card>
         )}
 
         {/* Upcoming Bookings */}
         <Card>
-          <Card.Header>
-            <Text as="h2" size="xl" weight="bold">
+          <div className="p-6 border-b border-gray-200">
+            <Text as="div" size="xl" weight="bold">
               Upcoming Bookings
             </Text>
-          </Card.Header>
-          <Card.Body>
+          </div>
+          <div className="p-6">
             {loading ? (
               <div className="space-y-4">
                 {[...Array(3)].map((_, i) => (
@@ -209,17 +209,17 @@ function BookingsContent() {
                 </Button>
               </div>
             )}
-          </Card.Body>
+          </div>
         </Card>
 
         {/* Past Bookings */}
         <Card>
-          <Card.Header>
-            <Text as="h2" size="xl" weight="bold">
+          <div className="p-6 border-b border-gray-200">
+            <Text as="div" size="xl" weight="bold">
               Past Bookings
             </Text>
-          </Card.Header>
-          <Card.Body>
+          </div>
+          <div className="p-6">
             {loading ? (
               <div className="space-y-4">
                 {[...Array(3)].map((_, i) => (
@@ -281,17 +281,17 @@ function BookingsContent() {
                 </Text>
               </div>
             )}
-          </Card.Body>
+          </div>
         </Card>
 
         {/* Quick Actions */}
         <Card>
-          <Card.Header>
-            <Text as="h2" size="xl" weight="bold">
+          <div className="p-6 border-b border-gray-200">
+            <Text as="div" size="xl" weight="bold">
               Quick Actions
             </Text>
-          </Card.Header>
-          <Card.Body>
+          </div>
+          <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Button
                 variant="primary"
@@ -313,7 +313,7 @@ function BookingsContent() {
                 <Text weight="bold">Update Preferences</Text>
               </Button>
             </div>
-          </Card.Body>
+          </div>
         </Card>
       </Stack>
     </Container>

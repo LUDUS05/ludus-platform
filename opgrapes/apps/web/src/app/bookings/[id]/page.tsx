@@ -96,7 +96,7 @@ function BookingConfirmationContent() {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
             <CheckCircle className="w-8 h-8 text-green-600" />
           </div>
-          <Text as="h1" size="2xl" weight="bold" className="mb-2">
+          <Text as="div" size="xl" weight="bold" className="mb-2">
             Booking Confirmed!
           </Text>
           <Text size="lg" color="gray">
@@ -109,11 +109,11 @@ function BookingConfirmationContent() {
           <div className="lg:col-span-2 space-y-6">
             {/* Activity Details */}
             <Card>
-              <Card.Body>
-                <Stack gap="4">
+              <div className="p-6">
+                <Stack spacing="md">
                   <div className="flex items-start justify-between">
                     <div>
-                      <Text as="h2" size="xl" weight="bold">
+                      <Text as="div" size="xl" weight="bold">
                         {booking.activityId.title}
                       </Text>
                       <div className="flex items-center gap-4 mt-2 text-sm text-gray-600">
@@ -126,14 +126,14 @@ function BookingConfirmationContent() {
                     {getStatusBadge(booking.status)}
                   </div>
                 </Stack>
-              </Card.Body>
+              </div>
             </Card>
 
             {/* Booking Details */}
             <Card>
-              <Card.Body>
-                <Stack gap="4">
-                  <Text as="h3" size="lg" weight="semibold">
+              <div className="p-6">
+                <Stack spacing="md">
+                  <Text as="div" size="lg" weight="semibold">
                     Booking Details
                   </Text>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -180,20 +180,20 @@ function BookingConfirmationContent() {
                     </div>
                   </div>
                 </Stack>
-              </Card.Body>
+              </div>
             </Card>
 
             {/* Special Requests */}
             {booking.specialRequests && (
               <Card>
-                <Card.Body>
-                  <Stack gap="4">
-                    <Text as="h3" size="lg" weight="semibold">
+                <div className="p-6">
+                  <Stack spacing="md">
+                    <Text as="div" size="lg" weight="semibold">
                       Special Requests
                     </Text>
                     <Text color="gray">{booking.specialRequests}</Text>
                   </Stack>
-                </Card.Body>
+                </div>
               </Card>
             )}
           </div>
@@ -202,9 +202,9 @@ function BookingConfirmationContent() {
           <div className="space-y-6">
             {/* Actions */}
             <Card>
-              <Card.Body>
-                <Stack gap="4">
-                  <Text as="h3" size="lg" weight="semibold">
+              <div className="p-6">
+                <Stack spacing="md">
+                  <Text as="div" size="lg" weight="semibold">
                     Actions
                   </Text>
                   <div className="space-y-3">
@@ -246,14 +246,14 @@ function BookingConfirmationContent() {
                     </Button>
                   </div>
                 </Stack>
-              </Card.Body>
+              </div>
             </Card>
 
             {/* Contact Info */}
             <Card>
-              <Card.Body>
-                <Stack gap="4">
-                  <Text as="h3" size="lg" weight="semibold">
+              <div className="p-6">
+                <Stack spacing="md">
+                  <Text as="div" size="lg" weight="semibold">
                     Need Help?
                   </Text>
                   <div className="space-y-2 text-sm">
@@ -265,7 +265,7 @@ function BookingConfirmationContent() {
                     </Text>
                   </div>
                 </Stack>
-              </Card.Body>
+              </div>
             </Card>
           </div>
         </div>

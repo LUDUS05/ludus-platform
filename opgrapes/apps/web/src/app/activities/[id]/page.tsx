@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
+import Link from 'next/link';
 import { Card } from '@opgrapes/ui/Card';
 import { Button } from '@opgrapes/ui/Button';
 import { Text } from '@opgrapes/ui/Text';
@@ -55,7 +56,7 @@ const mockActivity = {
   description: 'Experience the thrill of rock climbing in the beautiful mountains. This adventure is perfect for both beginners and experienced climbers. Our certified instructors will guide you through the basics of climbing, safety procedures, and help you conquer challenging routes. The experience includes all necessary equipment, safety gear, and professional instruction.',
   longDescription: `Join us for an unforgettable rock climbing adventure in the stunning mountain ranges! This comprehensive experience is designed to cater to all skill levels, from complete beginners to seasoned climbers.
 
-Our expert instructors will provide personalized guidance, ensuring you feel confident and safe throughout your climbing journey. We'll cover essential climbing techniques, safety protocols, and help you develop the skills needed to tackle various climbing challenges.
+        Our expert instructors will provide personalized guidance, ensuring you feel confident and safe throughout your climbing journey. We&apos;ll cover essential climbing techniques, safety protocols, and help you develop the skills needed to tackle various climbing challenges.
 
 The adventure includes:
 • Professional climbing equipment and safety gear
@@ -425,9 +426,9 @@ export default function ActivityDetailPage() {
         <nav className="mb-6">
           <ol className="flex items-center space-x-2 text-sm text-gray-500">
             <li>
-              <a href="/activities" className="hover:text-blue-600">
-                Activities
-              </a>
+                          <Link href="/activities" className="hover:text-blue-600">
+              Activities
+            </Link>
             </li>
             <li>/</li>
             <li className="text-gray-900">{mockActivity.category}</li>
@@ -531,7 +532,7 @@ export default function ActivityDetailPage() {
             <Card className="p-6">
               <Tabs defaultTab="included">
                 <TabList>
-                  <Tab id="included">What's Included</Tab>
+                  <Tab id="included">What&apos;s Included</Tab>
                   <Tab id="requirements">Requirements</Tab>
                   <Tab id="cancellation">Cancellation Policy</Tab>
                 </TabList>

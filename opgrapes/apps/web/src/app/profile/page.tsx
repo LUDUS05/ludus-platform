@@ -46,7 +46,11 @@ function ProfileContent() {
   const handleInputChange = (field: string, value: string | string[]) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: undefined }));
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
     }
   };
 
@@ -79,19 +83,17 @@ function ProfileContent() {
 
   return (
     <Container size="lg" className="py-8">
-      <Stack gap="8">
+      <Stack spacing="lg">
         {/* Profile Header */}
         <Card>
-          <Card.Body>
-            <Stack gap="6">
+          <div className="p-6">
+            <Stack spacing="lg">
               <div className="flex items-center gap-6">
-                <Avatar
-                  size="xl"
-                  src={user.avatar}
-                  alt={`${user.firstName} ${user.lastName}`}
-                />
+                <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                  {user.firstName.charAt(0)}{user.lastName.charAt(0)}
+                </div>
                 <div className="flex-1">
-                  <Text as="h1" size="3xl" weight="bold">
+                  <Text as="div" size="xl" weight="bold">
                     {user.firstName} {user.lastName}
                   </Text>
                   <Text size="lg" color="gray">
@@ -113,20 +115,20 @@ function ProfileContent() {
                 </Button>
               </div>
             </Stack>
-          </Card.Body>
+          </div>
         </Card>
 
         {/* Profile Details */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Personal Information */}
           <Card>
-            <Card.Header>
-              <Text as="h2" size="xl" weight="bold">
+            <div className="p-6 border-b border-gray-200">
+              <Text as="div" size="xl" weight="bold">
                 Personal Information
               </Text>
-            </Card.Header>
-            <Card.Body>
-              <Stack gap="4">
+            </div>
+            <div className="p-6">
+              <Stack spacing="md">
                 <div className="grid grid-cols-2 gap-4">
                   <FormField
                     label="First Name"
@@ -136,7 +138,7 @@ function ProfileContent() {
                       value={formData.firstName}
                       onChange={(e) => handleInputChange('firstName', e.target.value)}
                       disabled={!isEditing || isLoading}
-                      error={!!errors.firstName}
+                      error={errors.firstName}
                     />
                   </FormField>
 
@@ -148,7 +150,7 @@ function ProfileContent() {
                       value={formData.lastName}
                       onChange={(e) => handleInputChange('lastName', e.target.value)}
                       disabled={!isEditing || isLoading}
-                      error={!!errors.lastName}
+                      error={errors.lastName}
                     />
                   </FormField>
                 </div>
@@ -162,7 +164,7 @@ function ProfileContent() {
                     value={formData.phone}
                     onChange={(e) => handleInputChange('phone', e.target.value)}
                     disabled={!isEditing || isLoading}
-                    error={!!errors.phone}
+                                          error={errors.phone}
                     placeholder="No phone number set"
                   />
                 </FormField>
@@ -175,22 +177,22 @@ function ProfileContent() {
                     value={formData.location}
                     onChange={(e) => handleInputChange('location', e.target.value)}
                     disabled={!isEditing || isLoading}
-                    error={!!errors.location}
+                                          error={errors.location}
                   />
                 </FormField>
               </Stack>
-            </Card.Body>
+            </div>
           </Card>
 
           {/* Preferences */}
           <Card>
-            <Card.Header>
-              <Text as="h2" size="xl" weight="bold">
+            <div className="p-6 border-b border-gray-200">
+              <Text as="div" size="xl" weight="bold">
                 Activity Preferences
               </Text>
-            </Card.Header>
-            <Card.Body>
-              <Stack gap="4">
+            </div>
+            <div className="p-6">
+              <Stack spacing="md">
                 <FormField
                   label="Preferred Activity Types"
                   error={errors.preferences}
@@ -199,9 +201,13 @@ function ProfileContent() {
                     multiple
                     options={activityPreferences}
                     value={formData.preferences}
-                    onChange={(value) => handleInputChange('preferences', value)}
+                    onChange={(e) => {
+                      const select = e.target as HTMLSelectElement;
+                      const selectedOptions = Array.from(select.selectedOptions).map(option => option.value);
+                      handleInputChange('preferences', selectedOptions);
+                    }}
                     disabled={!isEditing || isLoading}
-                    error={!!errors.preferences}
+                    error={errors.preferences}
                   />
                 </FormField>
 
@@ -213,15 +219,15 @@ function ProfileContent() {
                   ))}
                 </div>
               </Stack>
-            </Card.Body>
+            </div>
           </Card>
         </div>
 
         {/* Action Buttons */}
         {isEditing && (
           <Card>
-            <Card.Body>
-              <Stack gap="4" direction="row" className="justify-end">
+            <div className="p-6">
+              <Stack spacing="md" direction="horizontal" className="justify-end">
                 <Button
                   variant="outline"
                   onClick={handleCancel}
@@ -237,18 +243,18 @@ function ProfileContent() {
                   {isLoading ? 'Saving...' : 'Save Changes'}
                 </Button>
               </Stack>
-            </Card.Body>
+            </div>
           </Card>
         )}
 
         {/* Error Display */}
         {errors.general && (
           <Card>
-            <Card.Body>
+            <div className="p-6">
               <Text color="red" className="text-center">
                 {errors.general}
               </Text>
-            </Card.Body>
+            </div>
           </Card>
         )}
       </Stack>

@@ -112,7 +112,7 @@ function AdminDashboardContent() {
                   Admin Dashboard 🎯
                 </Text>
                 <Text size="lg" color="gray">
-                  Welcome back! Here's what's happening with your platform.
+                  Welcome back! Here&apos;s what&apos;s happening with your platform.
                 </Text>
               </div>
               <div className="flex items-center gap-3">
