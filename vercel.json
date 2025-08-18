@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "buildCommand": "npm install && npm run build",
-  "outputDirectory": "apps/web/.next",
-  "installCommand": "npm install",
+  "buildCommand": "cd opgrapes && npm install && npm run build",
+  "outputDirectory": "opgrapes/apps/web/.next",
+  "installCommand": "cd opgrapes && npm install",
   "framework": "nextjs",
-  "rootDirectory": "apps/web",
+  "rootDirectory": "opgrapes/apps/web",
   "functions": {
     "app/api/**/*.ts": {
       "runtime": "nodejs18.x"
