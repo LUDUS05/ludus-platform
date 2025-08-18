@@ -197,6 +197,63 @@ After updating CORS, redeploy your backend service in Render.
 - Check variable names match exactly
 - Restart services after variable changes
 
+#### 5. Render Deployment Issues - "Could not find task 'start'"
+**Problem**: Render deployment fails with error "Could not find task 'start' in project"
+
+**Solution**: Ensure your `turbo.json` includes the start task:
+```json
+{
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", "!.next/cache/**"]
+    },
+    "start": {
+      "dependsOn": ["build"],
+      "cache": false
+    },
+    "dev": {
+      "cache": false
+    }
+  }
+}
+```
+
+#### 6. Vercel Root Directory Issues
+**Problem**: Vercel shows "Root Directory 'client' does not exist"
+
+**Solution**: Ensure your `vercel.json` points to the correct directory:
+```json
+{
+  "rootDirectory": "apps/web",
+  "buildCommand": "npm install && npm run build",
+  "outputDirectory": "apps/web/.next"
+}
+```
+
+#### 7. Missing Render Configuration
+**Problem**: Web app deployment fails on Render
+
+**Solution**: Create `apps/web/render.yaml` with proper configuration:
+```yaml
+services:
+  - type: web
+    name: opgrapes-web
+    env: node
+    plan: free
+    rootDirectory: .
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+    healthCheckPath: /health
+    autoDeploy: true
+    branch: opgrapes-project
+```
+
 ### Getting Help
 - Check Render/Vercel documentation
 - Review MongoDB Atlas guides
