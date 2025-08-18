@@ -1,5 +1,4 @@
 const User = require('../models/User');
-const { requireAdminRole } = require('../middleware/rbac');
 
 // @desc    Get user profile
 // @route   GET /api/users/profile
@@ -133,10 +132,9 @@ const updateUserPreferences = async (req, res) => {
       { preferences },
       { 
         new: true, 
-        runValidators: true,
-        select: '-password'
+        runValidators: true
       }
-    );
+    ).select('-password');
 
     if (!updatedUser) {
       return res.status(404).json({
@@ -240,7 +238,7 @@ const getUserFavorites = async (req, res) => {
 // @access  Private
 const addToFavorites = async (req, res) => {
   try {
-    const { activityId } = req.params;
+  const { activityId: _activityId } = req.params;
     
     // TODO: Implement favorites functionality
     res.status(200).json({
@@ -262,7 +260,7 @@ const addToFavorites = async (req, res) => {
 // @access  Private
 const removeFromFavorites = async (req, res) => {
   try {
-    const { activityId } = req.params;
+  const { activityId: _activityId } = req.params;
     
     // TODO: Implement favorites functionality
     res.status(200).json({
@@ -284,7 +282,7 @@ const removeFromFavorites = async (req, res) => {
 // @access  Private
 const getDashboardStats = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const _userId = req.user.id;
 
     // For now, return mock stats since booking system is not fully implemented
     const stats = {

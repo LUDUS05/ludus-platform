@@ -63,7 +63,8 @@ const adminRoleSchema = new mongoose.Schema({
 });
 
 // Index for performance
-adminRoleSchema.index({ name: 1 });
+// `name` is already declared with `unique: true` in the schema definition.
+// Avoid duplicating that index here.
 adminRoleSchema.index({ hierarchy: 1 });
 
 // Static method to seed default roles

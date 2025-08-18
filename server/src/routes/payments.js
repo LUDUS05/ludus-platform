@@ -11,7 +11,7 @@ const {
 } = require('../controllers/paymentController');
 const { authenticate } = require('../middleware/auth');
 const { validatePayment, validateRefund, validateSavePaymentMethod } = require('../middleware/validation');
-const { verifyMoyasarWebhook } = require('../middleware/moyasarWebhook');
+// Moyasar webhook verification handled inside controller's handler
 
 // Create payment for booking
 router.post('/create-payment', authenticate, validatePayment, createPayment);

@@ -1,7 +1,6 @@
 const Booking = require('../models/Booking');
 const Activity = require('../models/Activity');
 const Vendor = require('../models/Vendor');
-const User = require('../models/User');
 
 // @desc    Create new booking
 // @route   POST /api/bookings

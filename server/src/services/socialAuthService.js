@@ -50,7 +50,7 @@ const verifyFacebookToken = async (accessToken) => {
 };
 
 // Verify Apple ID token (placeholder for future implementation)
-const verifyAppleToken = async (identityToken) => {
+const verifyAppleToken = async (_identityToken) => {
   try {
     // Apple Sign In implementation would go here
     // This would involve verifying the JWT with Apple's public keys

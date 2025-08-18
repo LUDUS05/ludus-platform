@@ -1,5 +1,5 @@
 const User = require('../models/User');
-const { generateTokens, verifyToken, generateEmailVerificationToken, generatePasswordResetToken } = require('../utils/generateTokens');
+const { generateTokens, verifyToken, generatePasswordResetToken } = require('../utils/generateTokens');
 const { setRefreshTokenCookie, clearRefreshTokenCookie, getRefreshTokenFromCookie } = require('../utils/cookieHelpers');
 const { verifySocialToken } = require('../services/socialAuthService');
 const emailService = require('../services/emailService');
@@ -40,7 +40,7 @@ const register = async (req, res, next) => {
     setRefreshTokenCookie(res, refreshToken);
 
     // Generate email verification token
-    const emailVerificationToken = generateEmailVerificationToken(user._id, user.email);
+  // email verification token generation moved to email workflow when needed
     
     // Send welcome email
     try {
@@ -131,7 +131,7 @@ const login = async (req, res, next) => {
 // @desc    Refresh access token
 // @route   POST /api/auth/refresh
 // @access  Public
-const refreshToken = async (req, res, next) => {
+const refreshToken = async (req, res, _next) => {
   try {
     // Get refresh token from HttpOnly cookie
     const token = getRefreshTokenFromCookie(req);

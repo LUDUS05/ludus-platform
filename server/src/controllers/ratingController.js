@@ -6,7 +6,7 @@ const Booking = require('../models/Booking');
 // @desc    Submit post-event rating
 // @route   POST /api/ratings
 // @access  Private
-const submitRating = async (req, res, next) => {
+const submitRating = async (req, res, _next) => {
   try {
     const userId = req.user.id;
     const { eventId, participantRatings, eventRating, partnerRating, feedback } = req.body;
@@ -105,7 +105,7 @@ const submitRating = async (req, res, next) => {
 // @desc    Get user's community rating
 // @route   GET /api/ratings/community/:userId
 // @access  Public
-const getUserCommunityRating = async (req, res, next) => {
+const getUserCommunityRating = async (req, res, _next) => {
   try {
     const { userId } = req.params;
 
@@ -167,7 +167,7 @@ const getUserCommunityRating = async (req, res, next) => {
 // @desc    Get event rating statistics
 // @route   GET /api/ratings/event/:eventId
 // @access  Public
-const getEventRatings = async (req, res, next) => {
+const getEventRatings = async (req, res, _next) => {
   try {
     const { eventId } = req.params;
 
@@ -203,7 +203,7 @@ const getEventRatings = async (req, res, next) => {
 // @desc    Get user's submitted ratings
 // @route   GET /api/ratings/my-ratings
 // @access  Private
-const getMyRatings = async (req, res, next) => {
+const getMyRatings = async (req, res, _next) => {
   try {
     const userId = req.user.id;
     const { page = 1, limit = 10 } = req.query;
@@ -244,7 +244,7 @@ const getMyRatings = async (req, res, next) => {
 // @desc    Check if user needs to rate an event
 // @route   GET /api/ratings/check/:eventId
 // @access  Private
-const checkRatingStatus = async (req, res, next) => {
+const checkRatingStatus = async (req, res, _next) => {
   try {
     const userId = req.user.id;
     const { eventId } = req.params;
@@ -309,7 +309,7 @@ const checkRatingStatus = async (req, res, next) => {
 // @desc    Get rating statistics for admin
 // @route   GET /api/ratings/admin/stats
 // @access  Private (Admin only)
-const getAdminRatingStats = async (req, res, next) => {
+const getAdminRatingStats = async (req, res, _next) => {
   try {
     // Verify admin access
     if (req.user.role !== 'admin') {

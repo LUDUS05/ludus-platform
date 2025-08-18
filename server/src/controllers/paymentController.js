@@ -2,7 +2,6 @@ const moyasarService = require('../services/moyasarService');
 const emailService = require('../services/emailService');
 const Booking = require('../models/Booking');
 const User = require('../models/User');
-const Activity = require('../models/Activity');
 const Vendor = require('../models/Vendor');
 
 const createPayment = async (req, res) => {
@@ -175,8 +174,8 @@ const confirmPayment = async (req, res) => {
       booking.payment.paidAt = new Date();
       
       // Send booking confirmation email
-      try {
-        const vendor = await Vendor.findById(booking.vendor);
+  try {
+  const _vendor = await Vendor.findById(booking.vendor);
         const populatedBooking = await Booking.findById(booking._id)
           .populate('activity')
           .populate('vendor')
@@ -188,7 +187,7 @@ const confirmPayment = async (req, res) => {
           populatedBooking.vendor
         );
         console.log(`✅ Booking confirmation email sent to ${booking.user.email}`);
-      } catch (emailError) {
+  } catch (emailError) {
         console.error('Failed to send booking confirmation email:', emailError);
         // Don't fail the payment confirmation if email fails
       }

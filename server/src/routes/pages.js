@@ -5,7 +5,7 @@ const {
   getPages 
 } = require('../controllers/pageController');
 const { validatePageSlug } = require('../middleware/pageValidation');
-const auth = require('../middleware/auth');
+// auth middleware intentionally not used in public pages routes
 
 // Get all published pages with filtering (public)
 router.get('/', async (req, res) => {
@@ -125,8 +125,7 @@ router.get('/slug/:slug', validatePageSlug, async (req, res) => {
 // Legacy route for backward compatibility - Get single page by URL
 router.get('/by-url/*', async (req, res) => {
   try {
-    const url = '/' + req.params[0];
-    const Page = require('../models/Page');
+  const url = '/' + req.params[0];
     
     // Extract slug from URL (assumes format /pages/slug)
     const urlParts = url.split('/');

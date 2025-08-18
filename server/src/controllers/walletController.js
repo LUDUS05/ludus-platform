@@ -1,11 +1,10 @@
 const Wallet = require('../models/Wallet');
-const User = require('../models/User');
 const { moyasarService } = require('../services/moyasarService');
 
 // @desc    Get user wallet
 // @route   GET /api/wallet
 // @access  Private
-const getUserWallet = async (req, res, next) => {
+const getUserWallet = async (req, res, _next) => {
   try {
     const userId = req.user.id;
     
@@ -32,7 +31,7 @@ const getUserWallet = async (req, res, next) => {
 // @desc    Get wallet transaction history
 // @route   GET /api/wallet/transactions
 // @access  Private
-const getWalletTransactions = async (req, res, next) => {
+const getWalletTransactions = async (req, res, _next) => {
   try {
     const userId = req.user.id;
     const {
@@ -87,7 +86,7 @@ const getWalletTransactions = async (req, res, next) => {
 // @desc    Add funds to wallet
 // @route   POST /api/wallet/deposit
 // @access  Private
-const depositFunds = async (req, res, next) => {
+const depositFunds = async (req, res, _next) => {
   try {
     const userId = req.user.id;
     const { amount, paymentMethodId, description = 'Wallet deposit' } = req.body;
@@ -175,7 +174,7 @@ const depositFunds = async (req, res, next) => {
 // @desc    Process successful deposit (webhook/callback)
 // @route   POST /api/wallet/deposit/confirm
 // @access  Private
-const confirmDeposit = async (req, res, next) => {
+const confirmDeposit = async (req, res, _next) => {
   try {
     const { paymentId, status } = req.body;
 
@@ -256,7 +255,7 @@ const confirmDeposit = async (req, res, next) => {
 // @desc    Withdraw funds from wallet
 // @route   POST /api/wallet/withdraw
 // @access  Private
-const withdrawFunds = async (req, res, next) => {
+const withdrawFunds = async (req, res, _next) => {
   try {
     const userId = req.user.id;
     const { amount, description = 'Wallet withdrawal' } = req.body;
@@ -322,7 +321,7 @@ const withdrawFunds = async (req, res, next) => {
 // @desc    Use wallet funds for payment
 // @route   POST /api/wallet/pay
 // @access  Private
-const payWithWallet = async (req, res, next) => {
+const payWithWallet = async (req, res, _next) => {
   try {
     const userId = req.user.id;
     const { amount, bookingId, description = 'Activity booking payment' } = req.body;
@@ -390,7 +389,7 @@ const payWithWallet = async (req, res, next) => {
 // @desc    Process refund to wallet
 // @route   POST /api/wallet/refund
 // @access  Private (typically called by booking system)
-const processRefund = async (req, res, next) => {
+const processRefund = async (req, res, _next) => {
   try {
     const { userId, amount, bookingId, description = 'Booking refund' } = req.body;
 
@@ -448,7 +447,7 @@ const processRefund = async (req, res, next) => {
 // @desc    Update wallet settings
 // @route   PUT /api/wallet/settings
 // @access  Private
-const updateWalletSettings = async (req, res, next) => {
+const updateWalletSettings = async (req, res, _next) => {
   try {
     const userId = req.user.id;
     const { settings } = req.body;
@@ -485,7 +484,7 @@ const updateWalletSettings = async (req, res, next) => {
 // @desc    Get wallet statistics
 // @route   GET /api/wallet/stats
 // @access  Private
-const getWalletStats = async (req, res, next) => {
+const getWalletStats = async (req, res, _next) => {
   try {
     const userId = req.user.id;
 

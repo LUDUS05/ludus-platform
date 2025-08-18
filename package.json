@@ -1,5 +1,9 @@
 {
+  "scripts": {
+    "dev": "concurrently \"cd server && npm run dev\" \"cd client && npm start\""
+  },
   "devDependencies": {
+    "concurrently": "^8.2.0",
     "eslint": "^8.57.1",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "mongodb-memory-server": "^10.1.4"

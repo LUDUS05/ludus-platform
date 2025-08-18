@@ -67,6 +67,16 @@ cd server && npm run dev
 cd client && npm start
 ```
 
+If you're on Windows (PowerShell), use these commands instead:
+
+```powershell
+# Terminal 1 - Backend (PowerShell)
+Set-Location server; npm run dev
+
+# Terminal 2 - Frontend (PowerShell)
+Set-Location client; npm start
+```
+
 6. **Test API (optional):**
 ```bash
 cd server && npm run test-api

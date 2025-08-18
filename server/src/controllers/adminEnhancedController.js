@@ -120,16 +120,16 @@ const createCategory = async (req, res) => {
 
 const updateCategory = async (req, res) => {
   try {
-    const { id } = req.params;
+  const { id: _id } = req.params;
     const categoryData = req.body;
-    
+
     // Mock implementation - replace with actual database operations
     const updatedCategory = {
-      _id: id,
+      _id: _id,
       ...categoryData,
       updatedAt: new Date()
     };
-    
+
     res.json({
       success: true,
       data: updatedCategory,
@@ -146,11 +146,11 @@ const updateCategory = async (req, res) => {
 
 const deleteCategory = async (req, res) => {
   try {
-    const { id } = req.params;
-    
+    const { id: _id } = req.params;
+
     // Mock implementation - replace with actual database operations
     // Check if category has activities first
-    
+
     res.json({
       success: true,
       message: 'Category deleted successfully'
@@ -166,7 +166,7 @@ const deleteCategory = async (req, res) => {
 
 const reorderCategories = async (req, res) => {
   try {
-    const { draggedId, targetId } = req.body;
+  const { draggedId: _draggedId, targetId: _targetId } = req.body;
     
     // Mock implementation - replace with actual reordering logic
     
@@ -185,11 +185,11 @@ const reorderCategories = async (req, res) => {
 
 const updateCategoryStatus = async (req, res) => {
   try {
-    const { id } = req.params;
+  const { id: _id } = req.params;
     const { isActive } = req.body;
-    
+
     // Mock implementation - replace with actual database operations
-    
+
     res.json({
       success: true,
       message: `Category ${isActive ? 'activated' : 'deactivated'} successfully`
@@ -271,16 +271,16 @@ const createPage = async (req, res) => {
 
 const updatePage = async (req, res) => {
   try {
-    const { id } = req.params;
+  const { id: _id } = req.params;
     const pageData = req.body;
-    
+
     // Mock implementation - replace with actual database operations
     const updatedPage = {
-      _id: id,
+      _id: _id,
       ...pageData,
       updatedAt: new Date()
     };
-    
+
     res.json({
       success: true,
       data: updatedPage,
@@ -297,7 +297,7 @@ const updatePage = async (req, res) => {
 
 const deletePage = async (req, res) => {
   try {
-    const { id } = req.params;
+  const { id: _id } = req.params;
     
     // Mock implementation - replace with actual database operations
     
@@ -363,10 +363,10 @@ const getSystemSettings = async (req, res) => {
 
 const updateSystemSettings = async (req, res) => {
   try {
-    const settingsData = req.body;
-    
+    const _settingsData = req.body; // kept for future use; intentionally unused for now
+
     // Mock implementation - replace with actual database operations
-    
+
     res.json({
       success: true,
       message: 'System settings updated successfully'

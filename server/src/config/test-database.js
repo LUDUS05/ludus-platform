@@ -1,10 +1,12 @@
 const mongoose = require('mongoose');
-const { MongoMemoryServer } = require('mongodb-memory-server');
 
 let mongod;
 
 const connectTestDB = async () => {
   try {
+  // Import mongodb-memory-server lazily to avoid extraneous-require in production
+  // eslint-disable-next-line node/no-extraneous-require
+  const { MongoMemoryServer } = require('mongodb-memory-server');
     mongod = await MongoMemoryServer.create();
     const uri = mongod.getUri();
     

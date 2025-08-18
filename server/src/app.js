@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const dotenv = require('dotenv');
 const { connectDB } = require('./config/database');
+const logger = require('./utils/logger');
 
 // Load environment variables
 dotenv.config();
@@ -14,14 +15,14 @@ const app = express();
 // Connect to MongoDB only if not in test mode or if MONGODB_URI is available
 if (process.env.NODE_ENV !== 'test' && process.env.MONGODB_URI) {
   connectDB().catch(err => {
-    console.error('Failed to connect to database:', err.message);
-    console.log('Server will continue running without database');
+    logger.error({ err }, 'Failed to connect to database');
+    logger.warn('Server will continue running without database');
   });
 } else if (process.env.MONGODB_URI === 'memory://test') {
   // Skip connection - test database already connected
-  console.log('Using test database connection');
+  logger.info('Using test database connection');
 } else {
-  console.log('Skipping database connection (test mode or no MONGODB_URI)');
+  logger.info('Skipping database connection (test mode or no MONGODB_URI)');
 }
 
 // Trust proxy for production deployment (Railway/Render)
@@ -111,9 +112,9 @@ app.use(require('./middleware/errorHandler'));
 if (require.main === module) {
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, '0.0.0.0', () => {
-    console.log(`✅ Server running on port ${PORT}`);
-    console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
-    console.log(`🔗 API URL: http://localhost:${PORT}/api`);
+    logger.info({ port: PORT }, 'Server running');
+    logger.info({ environment: process.env.NODE_ENV || 'development' }, 'Environment');
+    logger.info({ apiUrl: `http://localhost:${PORT}/api` }, 'API URL');
   });
 }
 

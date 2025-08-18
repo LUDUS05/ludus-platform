@@ -109,7 +109,8 @@ const walletSchema = new mongoose.Schema({
 });
 
 // Indexes for performance
-walletSchema.index({ user: 1 }, { unique: true });
+// Note: `user` field is already declared with `unique: true`.
+// Avoid creating the same unique index twice by not re-declaring it here.
 walletSchema.index({ 'transactions.createdAt': -1 });
 walletSchema.index({ 'transactions.type': 1 });
 walletSchema.index({ 'transactions.status': 1 });

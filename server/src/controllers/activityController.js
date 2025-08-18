@@ -1,5 +1,4 @@
 const Activity = require('../models/Activity');
-const Vendor = require('../models/Vendor');
 
 // @desc    Get all activities with filters
 // @route   GET /api/activities

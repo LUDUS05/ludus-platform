@@ -18,7 +18,7 @@ const contactValidation = [
   
   body('phone')
     .optional()
-    .matches(/^[\+]?[\d\s\-\(\)]{8,20}$/)
+    .matches(/^[+]?[\d\s\-()]{8,20}$/)
     .withMessage('Please provide a valid phone number'),
   
   body('subject')

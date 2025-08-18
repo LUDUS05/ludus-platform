@@ -1,6 +1,5 @@
 const User = require('../models/User');
 const AdminRole = require('../models/AdminRole');
-const { hasHigherOrEqualRole } = require('../middleware/rbac');
 
 // @desc    Get all admin roles
 // @route   GET /api/admin/roles
@@ -141,8 +140,8 @@ const assignAdminRole = async (req, res) => {
 const updateAdminUser = async (req, res) => {
   try {
     const { userId } = req.params;
-    const { adminRole, assignedPartners } = req.body;
-    const updaterId = req.user.id;
+  const { adminRole, assignedPartners } = req.body;
+  const _updaterId = req.user.id; // currently unused, kept for audit trails
 
     const user = await User.findById(userId);
     if (!user || user.role !== 'admin') {
