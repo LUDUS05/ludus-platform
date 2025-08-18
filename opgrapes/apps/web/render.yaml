@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: opgrapes-web
+    env: node
+    plan: free
+    rootDirectory: .
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: NEXT_PUBLIC_API_URL
+        sync: false
+      - key: NEXT_PUBLIC_APP_URL
+        sync: false
+    healthCheckPath: /health
+    autoDeploy: true
+    branch: opgrapes-project
