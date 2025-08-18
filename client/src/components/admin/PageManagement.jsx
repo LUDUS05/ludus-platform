@@ -110,11 +110,18 @@ const PageManagement = () => {
       console.error('Error config:', error.config);
       
       let errorMessage = 'Unknown error occurred';
-      if (error.response?.status === 400 && error.response?.data?.message?.includes('url already exists')) {
-        const currentSlug = formData.slug;
+      // Handle uniqueness / slug conflict errors more flexibly
+      const serverMessage = error.response?.data?.message || '';
+      const serverMessageLower = serverMessage.toLowerCase();
+      if (error.response?.status === 400 && (
+        serverMessageLower.includes('url') ||
+        serverMessageLower.includes('slug') ||
+        serverMessageLower.includes('already exists')
+      )) {
+        const currentSlug = formData.slug || '';
         const timestamp = Date.now();
         errorMessage = `A page with the URL "${currentSlug}" already exists. Please use a different URL slug (e.g., "${currentSlug}-${timestamp}" or "${currentSlug}-new").`;
-      } else if (error.response?.data?.message) {
+      } else if (serverMessage) {
         errorMessage = error.response.data.message;
       } else if (error.response?.data?.errors) {
         errorMessage = `Validation error: ${JSON.stringify(error.response.data.errors)}`;

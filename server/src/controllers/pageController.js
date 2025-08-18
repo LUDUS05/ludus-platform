@@ -265,7 +265,8 @@ const createPage = async (req, res) => {
       if (existingPage) {
         return res.status(400).json({ 
           success: false, 
-          message: 'A page with this slug already exists' 
+          message: 'A page with this slug already exists',
+          conflict: { field: 'slug', value: slug }
         });
       }
     }
