@@ -254,6 +254,36 @@ services:
     branch: opgrapes-project
 ```
 
+#### 8. API ES Module Import Errors
+**Problem**: API fails to start with error "Cannot find module '/opt/render/project/src/opgrapes/apps/api/dist/app'"
+
+**Solution**: This is caused by ES module import issues. Fix by:
+
+1. **Update TypeScript configuration** in `apps/api/tsconfig.json`:
+```json
+{
+  "compilerOptions": {
+    "moduleResolution": "node",  // Change from "bundler" to "node"
+    "module": "ESNext"
+  }
+}
+```
+
+2. **Add .js extensions** to all import statements in TypeScript files:
+```typescript
+// Before (will fail)
+import { app } from "./app";
+
+// After (will work)
+import { app } from "./app.js";
+```
+
+3. **Rebuild the API** after making these changes:
+```bash
+cd apps/api
+npm run build
+```
+
 ### Getting Help
 - Check Render/Vercel documentation
 - Review MongoDB Atlas guides
