@@ -187,10 +187,9 @@ const pageSchema = new mongoose.Schema({
   toObject: { virtuals: true }
 });
 
-// Virtual for full URL
-pageSchema.virtual('url').get(function() {
-  return `/pages/${this.slug}`;
-});
+// Persisted URL is stored on the document (see `url` field). Keep it in sync
+// with the slug in pre-save so callers can read `page.url` and the value is
+// available as a real path on the document.
 
 // Virtual for published status
 pageSchema.virtual('isPublished').get(function() {
@@ -254,6 +253,12 @@ pageSchema.pre('save', async function(next) {
   // Update version for content changes
   if (this.isModified('content')) {
     this.version = (this.version || 0) + 1;
+  }
+  
+  // Ensure persisted `url` is kept in sync with the slug. This avoids
+  // documents with `url: null` and makes the field available as a real path.
+  if (this.slug) {
+    this.url = `/pages/${this.slug}`;
   }
   
   next();
