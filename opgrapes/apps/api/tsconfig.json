@@ -6,7 +6,7 @@
 
     // Environment Settings
     "module": "ESNext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "target": "es2022",
     "types": ["node"],
     "lib": ["esnext"],

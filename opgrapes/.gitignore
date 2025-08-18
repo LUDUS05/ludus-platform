@@ -12,6 +12,9 @@ dist/
 .out/
 coverage/
 
+# Turbo
+.turbo/
+
 # Env
 .env*
 !.env.example
