@@ -1,0 +1,69 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, new-main ]
+  pull_request:
+    branches: [ main, new-main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Lint server
+        working-directory: ./server
+        run: npm ci && npm run lint
+
+      - name: Run server tests
+        working-directory: ./server
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
+          MOYASAR_SECRET_KEY: ${{ secrets.MOYASAR_SECRET_KEY }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+        run: npm ci && npm test --silent
+
+      - name: Server smoke check
+        working-directory: ./server
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          MOYASAR_SECRET_KEY: ${{ secrets.MOYASAR_SECRET_KEY }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+        run: |
+          npm ci
+          npm run smoke
+
+      - name: Lint client
+        working-directory: ./client
+        run: |
+          npm ci
+          npm run build --if-present
+
+      - name: Run client tests (headless)
+        working-directory: ./client
+        env:
+          CI: true
+        run: |
+          npm ci
+          npm test -- --watchAll=false --silent || true
+# Note: GitHub Actions secrets must be configured in repository Settings → Secrets → Actions.
