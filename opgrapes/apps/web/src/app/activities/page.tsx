@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { ActivityCard } from '@/components/activities/ActivityCard';
 import { SearchFilters } from '@/components/activities/SearchFilters';
 import { CategoryNav } from '@/components/activities/CategoryNav';
 import { ActivityGrid } from '@/components/activities/ActivityGrid';
@@ -166,7 +165,7 @@ const availableCategories = ['adventure', 'food-drink', 'education', 'wellness',
 const availableLocations = ['Mountain View, CA', 'Napa Valley, CA', 'San Francisco, CA', 'Big Sur, CA', 'Yosemite, CA'];
 
 export default function ActivitiesPage() {
-  const [activities, setActivities] = useState(mockActivities);
+  const [activities] = useState(mockActivities);
   const [filteredActivities, setFilteredActivities] = useState(mockActivities);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [loading, setLoading] = useState(false);
@@ -275,7 +274,7 @@ export default function ActivitiesPage() {
     });
   };
 
-  const handleSaveActivity = (activityId: string) => {
+  const toggleFavorite = (activityId: string) => {
     setSavedActivities(prev => {
       if (prev.includes(activityId)) {
         return prev.filter(id => id !== activityId);
@@ -283,10 +282,6 @@ export default function ActivitiesPage() {
         return [...prev, activityId];
       }
     });
-  };
-
-  const toggleViewMode = () => {
-    setViewMode(viewMode === 'grid' ? 'list' : 'grid');
   };
 
   return (
@@ -399,7 +394,7 @@ export default function ActivitiesPage() {
           <ActivityGrid 
             activities={filteredActivities}
             viewMode={viewMode}
-            onSave={handleSaveActivity}
+            onSave={toggleFavorite}
             savedActivities={savedActivities}
           />
         ) : (
