@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import FacebookLogin from 'react-facebook-login';
 import { useAuth } from '../../context/AuthContext';
 
 const SocialLogin = ({ onSuccess, onError }) => {
@@ -40,9 +39,10 @@ const SocialLogin = ({ onSuccess, onError }) => {
   };
 
   const handleFacebookResponse = async (response) => {
-    if (response.accessToken) {
+    if (response && (response.accessToken || response.access_token)) {
       try {
-        const result = await loginWithSocial('facebook', response.accessToken);
+        const accessToken = response.accessToken || response.access_token;
+        const result = await loginWithSocial('facebook', accessToken);
         onSuccess?.(result);
       } catch (error) {
         console.error('Facebook login error:', error);
@@ -241,22 +241,45 @@ const SocialLogin = ({ onSuccess, onError }) => {
         </button>
 
         {/* Facebook Login */}
-        <FacebookLogin
-          appId={process.env.REACT_APP_FACEBOOK_APP_ID}
-          callback={handleFacebookResponse}
-          render={(renderProps) => (
-            <button
-              onClick={renderProps.onClick}
-              disabled={renderProps.disabled}
-              className="social-button facebook"
-              title={t('auth.continueWithFacebook', 'Continue with Facebook')}
-            >
-              <svg className="social-icon" fill="#1877F2" viewBox="0 0 24 24">
-                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-              </svg>
-            </button>
-          )}
-        />
+        <button
+          onClick={() => {
+            // Initialize Facebook SDK if not already done
+            if (window.FB) {
+              window.FB.login((response) => {
+                if (response.authResponse) {
+                  handleFacebookResponse(response.authResponse);
+                }
+              }, { scope: 'email' });
+            } else {
+              // Load Facebook SDK
+              window.fbAsyncInit = function() {
+                window.FB.init({
+                  appId: process.env.REACT_APP_FACEBOOK_APP_ID,
+                  cookie: true,
+                  xfbml: true,
+                  version: 'v18.0'
+                });
+                window.FB.login((response) => {
+                  if (response.authResponse) {
+                    handleFacebookResponse(response.authResponse);
+                  }
+                }, { scope: 'email' });
+              };
+              const script = document.createElement('script');
+              script.async = true;
+              script.defer = true;
+              script.crossOrigin = 'anonymous';
+              script.src = 'https://connect.facebook.net/en_US/sdk.js';
+              document.head.appendChild(script);
+            }
+          }}
+          className="social-button facebook"
+          title={t('auth.continueWithFacebook', 'Continue with Facebook')}
+        >
+          <svg className="social-icon" fill="#1877F2" viewBox="0 0 24 24">
+            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+          </svg>
+        </button>
 
         {/* Apple Login */}
         <button
