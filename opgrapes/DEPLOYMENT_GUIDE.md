@@ -278,11 +278,25 @@ import { app } from "./app";
 import { app } from "./app.js";
 ```
 
-3. **Rebuild the API** after making these changes:
+3. **Use full file paths** for directory imports:
+```typescript
+// Before (will fail with ERR_UNSUPPORTED_DIR_IMPORT)
+import routes from "./routes";
+
+// After (will work)
+import routes from "./routes/index.js";
+```
+
+4. **Rebuild the API** after making these changes:
 ```bash
 cd apps/api
 npm run build
 ```
+
+**Common ES Module Issues**:
+- Missing `.js` extensions in import statements
+- Directory imports without specifying the index file
+- Using `"moduleResolution": "bundler"` instead of `"node"`
 
 ### Getting Help
 - Check Render/Vercel documentation
