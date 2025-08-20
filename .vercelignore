@@ -1,0 +1,19 @@
+# Ignore everything except the web app
+opgrapes/apps/api/
+opgrapes/apps/mobile/
+opgrapes/packages/
+opgrapes/.turbo/
+opgrapes/node_modules/
+opgrapes/.next/
+opgrapes/dist/
+opgrapes/coverage/
+opgrapes/.env*
+opgrapes/*.log
+opgrapes/.DS_Store
+opgrapes/Thumbs.db
+
+# Only include the web app
+!opgrapes/apps/web/
+!opgrapes/package.json
+!opgrapes/turbo.json
+!opgrapes/tsconfig.json
