@@ -1,10 +1,20 @@
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
 const dotenv = require('dotenv');
 const { connectDB } = require('./config/database');
 const logger = require('./utils/logger');
+
+// Performance optimization imports
+const {
+  compressionMiddleware,
+  createRateLimiters,
+  requestIdMiddleware,
+  performanceMonitoringMiddleware,
+  queryPerformanceMiddleware,
+  cacheControlMiddleware,
+  responseTimeOptimization
+} = require('./middleware/performance');
 
 // Load environment variables
 dotenv.config();
@@ -30,6 +40,14 @@ if (process.env.NODE_ENV === 'production') {
   app.set('trust proxy', 1);
 }
 
+// Performance optimization middleware
+app.use(compressionMiddleware);
+app.use(requestIdMiddleware);
+app.use(performanceMonitoringMiddleware);
+app.use(queryPerformanceMiddleware);
+app.use(cacheControlMiddleware);
+app.use(responseTimeOptimization);
+
 // Security middleware
 app.use(helmet());
 // Simple CORS - allow all Vercel deployments and specific domains
@@ -45,13 +63,11 @@ app.use(cors({
   credentials: true
 }));
 
-// Rate limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
-  message: 'Too many requests from this IP, please try again later.'
-});
-app.use('/api', limiter);
+// Enhanced rate limiting with performance considerations
+const { apiLimiter, authLimiter, speedLimiter } = createRateLimiters();
+app.use('/api', speedLimiter);
+app.use('/api', apiLimiter);
+app.use('/api/auth', authLimiter);
 
 // Body parsing middleware
 app.use(express.json({ limit: '10mb' }));
@@ -95,6 +111,7 @@ app.use('/api', require('./routes/translations'));
 app.use('/api/uploads', require('./routes/uploads'));
 app.use('/api/site-settings', require('./routes/siteSettings'));
 app.use('/api/contact', require('./routes/contact'));
+app.use('/api/performance', require('./routes/performance'));
 
 
 // 404 handler for unknown routes
