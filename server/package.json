@@ -14,6 +14,7 @@
     "test-api": "node test-api.js",
     "test-production": "node test-production-api.js",
     "test-runner": "node run-production-tests.js",
+    "migrate-content": "node migrate-content-to-new-cms.js",
     "setup": "npm run seed && echo '\u2705 Setup complete! Run npm run dev to start the server.'",
     "build": "npm ci --production",
     "postinstall": "echo 'Backend dependencies installed successfully'"
