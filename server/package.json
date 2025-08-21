@@ -12,6 +12,8 @@
   "format": "prettier --write \"**/*.{js,json,md}\"",
     "seed": "cross-env NODE_ENV=development node src/seeds/index.js",
     "test-api": "node test-api.js",
+    "test-production": "node test-production-api.js",
+    "test-runner": "node run-production-tests.js",
     "setup": "npm run seed && echo '\u2705 Setup complete! Run npm run dev to start the server.'",
     "build": "npm ci --production",
     "postinstall": "echo 'Backend dependencies installed successfully'"
