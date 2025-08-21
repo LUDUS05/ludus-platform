@@ -1,4 +1,14 @@
 {
+  "framework": "nextjs",
+  "installCommand": "npm ci --no-audit --no-fund --include=dev",
+  "buildCommand": "cd opgrapes && npm ci --no-audit --no-fund --include=dev && npm --workspace apps/web run build",
+  "outputDirectory": "opgrapes/apps/web/.next",
+  "env": {
+    "NEXT_TELEMETRY_DISABLED": "1"
+  }
+}
+
+{
   "version": 2,
   "buildCommand": "cd opgrapes && npm install && npm run build",
   "outputDirectory": "opgrapes/apps/web/.next",
