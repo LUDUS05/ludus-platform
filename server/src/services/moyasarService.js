@@ -7,16 +7,41 @@ class MoyasarService {
     this.baseURL = process.env.MOYASAR_BASE_URL || 'https://api.moyasar.com/v1';
     this.webhookSecret = process.env.MOYASAR_WEBHOOK_SECRET;
     
-    this.client = axios.create({
-      baseURL: this.baseURL,
-      headers: {
-        'Authorization': `Basic ${Buffer.from(this.apiKey + ':').toString('base64')}`,
-        'Content-Type': 'application/json'
-      }
-    });
+    // Enable mock mode if explicitly requested or if no API key is available
+    this.mockMode = process.env.MOYASAR_MOCK === 'true' || !this.apiKey;
+
+    if (!this.mockMode) {
+      this.client = axios.create({
+        baseURL: this.baseURL,
+        headers: {
+          'Authorization': `Basic ${Buffer.from(this.apiKey + ':').toString('base64')}`,
+          'Content-Type': 'application/json'
+        }
+      });
+    }
   }
 
   async createPayment(paymentData) {
+    if (this.mockMode) {
+      const mockId = `pay_mock_${Math.random().toString(36).slice(2, 10)}`;
+      const amountHalalas = Math.round(paymentData.amount * 100);
+      return {
+        id: mockId,
+        status: 'paid',
+        amount: amountHalalas,
+        currency: 'SAR',
+        description: paymentData.description,
+        source: {
+          type: paymentData.source?.type || 'creditcard',
+          company: 'MockCard',
+          brand: 'Mock',
+          last_four: '4242'
+        },
+        created_at: new Date().toISOString(),
+        metadata: paymentData.metadata || {}
+      };
+    }
+
     try {
       const payload = {
         amount: Math.round(paymentData.amount * 100), // Convert SAR to halalas
@@ -40,6 +65,17 @@ class MoyasarService {
   }
 
   async retrievePayment(paymentId) {
+    if (this.mockMode) {
+      return {
+        id: paymentId,
+        status: 'paid',
+        amount: 100,
+        currency: 'SAR',
+        description: 'Mock payment',
+        created_at: new Date().toISOString()
+      };
+    }
+
     try {
       const response = await this.client.get(`/payments/${paymentId}`);
       return response.data;
@@ -49,6 +85,17 @@ class MoyasarService {
   }
 
   async refundPayment(paymentId, refundData) {
+    if (this.mockMode) {
+      const mockRefundId = `refund_mock_${Math.random().toString(36).slice(2, 10)}`;
+      return {
+        id: mockRefundId,
+        status: 'refunded',
+        amount: Math.round(refundData.amount * 100),
+        currency: 'SAR',
+        description: refundData.reason || 'Booking cancellation refund'
+      };
+    }
+
     try {
       const payload = {
         amount: Math.round(refundData.amount * 100), // Convert SAR to halalas
@@ -63,6 +110,19 @@ class MoyasarService {
   }
 
   async createInvoice(invoiceData) {
+    if (this.mockMode) {
+      const mockInvoiceId = `inv_mock_${Math.random().toString(36).slice(2, 10)}`;
+      return {
+        id: mockInvoiceId,
+        amount: Math.round(invoiceData.amount * 100),
+        currency: 'SAR',
+        description: invoiceData.description,
+        status: 'paid',
+        created_at: new Date().toISOString(),
+        metadata: invoiceData.metadata || {}
+      };
+    }
+
     try {
       const payload = {
         amount: Math.round(invoiceData.amount * 100), // Convert SAR to halalas
@@ -81,6 +141,10 @@ class MoyasarService {
 
   verifyWebhookSignature(payload, signature) {
     if (!this.webhookSecret) {
+      if (this.mockMode) {
+        // In mock mode, accept all webhooks
+        return true;
+      }
       console.warn('Moyasar webhook secret not configured');
       return false;
     }
@@ -99,6 +163,14 @@ class MoyasarService {
   }
 
   async tokenizeCard(cardData) {
+    if (this.mockMode) {
+      return {
+        id: `tok_mock_${Math.random().toString(36).slice(2, 10)}`,
+        last_four: (cardData.number || '0000').slice(-4),
+        brand: 'MockCard'
+      };
+    }
+
     try {
       const payload = {
         name: cardData.name,
