@@ -15,6 +15,9 @@
     "test-production": "node test-production-api.js",
     "test-runner": "node run-production-tests.js",
     "migrate-content": "node migrate-content-to-new-cms.js",
+    "uat": "node run-uat-tests.js",
+    "uat-all": "node run-uat-tests.js --verbose",
+    "uat-report": "node run-uat-tests.js --format html --output uat-report.html"
     "setup": "npm run seed && echo '\u2705 Setup complete! Run npm run dev to start the server.'",
     "build": "npm ci --production",
     "postinstall": "echo 'Backend dependencies installed successfully'"

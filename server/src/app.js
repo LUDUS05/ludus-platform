@@ -112,6 +112,7 @@ app.use('/api/uploads', require('./routes/uploads'));
 app.use('/api/site-settings', require('./routes/siteSettings'));
 app.use('/api/contact', require('./routes/contact'));
 app.use('/api/performance', require('./routes/performance'));
+app.use('/api/uat', require('./routes/uat'));
 
 
 // 404 handler for unknown routes
