@@ -113,6 +113,7 @@ app.use('/api/site-settings', require('./routes/siteSettings'));
 app.use('/api/contact', require('./routes/contact'));
 app.use('/api/performance', require('./routes/performance'));
 app.use('/api/uat', require('./routes/uat'));
+app.use('/api/integration', require('./routes/integration'));
 
 
 // 404 handler for unknown routes
