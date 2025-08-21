@@ -77,7 +77,8 @@ const bookingSchema = new mongoose.Schema({
   payment: {
     moyasarPaymentId: {
       type: String,
-      required: true
+      // not required at creation; set after payment is created
+      required: false
     },
     moyasarInvoiceId: String, // Optional for invoice-based payments
     status: {
@@ -88,7 +89,7 @@ const bookingSchema = new mongoose.Schema({
     method: {
       type: String,
       enum: ['credit_card', 'mada', 'apple_pay', 'stc_pay', 'sadad'],
-      required: true
+      required: false // set when creating payment
     },
     last4: String, // Last 4 digits of card (if applicable)
     brand: String, // Payment method brand
@@ -173,8 +174,8 @@ const bookingSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Generate unique booking ID
-bookingSchema.pre('save', function(next) {
+// Generate unique booking ID before validation so required passes
+bookingSchema.pre('validate', function(next) {
   if (!this.bookingId) {
     const timestamp = Date.now().toString(36);
     const random = Math.random().toString(36).substr(2, 5);
