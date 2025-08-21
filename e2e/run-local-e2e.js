@@ -4,7 +4,8 @@
  */
 
 process.env.NODE_ENV = 'test';
-process.env.MOYASAR_MOCK = 'true';
+// Only default to mock if not provided externally
+process.env.MOYASAR_MOCK = (typeof process.env.MOYASAR_MOCK === 'undefined') ? 'true' : process.env.MOYASAR_MOCK;
 process.env.JWT_SECRET = process.env.JWT_SECRET || 'test-secret-key';
 process.env.JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'test-refresh-secret';
 process.env.CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:3000';
@@ -136,7 +137,7 @@ async function createPayment() {
     paymentMethod: 'credit_card',
     cardData: {
       name: 'Ahmed Al-Rashid',
-      number: '4242424242424242',
+      number: '4111111111111111',
       cvc: '123',
       month: 12,
       year: new Date().getFullYear() + 2
