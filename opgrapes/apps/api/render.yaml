@@ -3,7 +3,7 @@ services:
     name: opgrapes-api
     env: node
     plan: free
-    rootDirectory: .
+    rootDirectory: opgrapes/apps/api
     buildCommand: npm install && npm run build
     startCommand: npm start
     envVars:
