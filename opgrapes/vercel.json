@@ -1,20 +1,10 @@
 {
-<<<<<<< HEAD
+  "version": 2,
   "framework": "nextjs",
   "installCommand": "npm ci --no-audit --no-fund --include=dev",
-  "buildCommand": "npm run build",
-  "outputDirectory": "apps/web/.next",
-  "env": {
-    "NEXT_TELEMETRY_DISABLED": "1"
-  }
-}
-
-=======
-  "version": 2,
   "buildCommand": "npm run build:web",
   "outputDirectory": "apps/web/.next",
-  "installCommand": "npm install",
-  "framework": "nextjs",
+  "rootDirectory": "opgrapes",
   "functions": {
     "app/api/**/*.ts": {
       "runtime": "nodejs18.x"
@@ -22,7 +12,8 @@
   },
   "env": {
     "NEXT_PUBLIC_API_URL": "@opgrapes_api_url",
-    "NEXT_PUBLIC_APP_URL": "@opgrapes_app_url"
+    "NEXT_PUBLIC_APP_URL": "@opgrapes_app_url",
+    "NEXT_TELEMETRY_DISABLED": "1"
   },
   "headers": [
     {
@@ -54,4 +45,3 @@
     }
   ]
 }
->>>>>>> e8ba886 (feat: Complete Phase 1 Analytics & Performance Foundation - Implement comprehensive analytics system with Redis caching, event tracking, and performance monitoring - Add AnalyticsService, EventTracker, and CacheManager services - Integrate analytics middleware and API endpoints - Fix ESLint v9 configuration and resolve globals module issue - Update progress tracking documentation - Progress: Phase 1 75% complete)

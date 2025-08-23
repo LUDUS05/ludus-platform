@@ -1,4 +1,4 @@
-# Since rootDirectory is set to "opgrapes", ignore everything except the web app and its dependencies
+# Ignore everything except the web app and its dependencies
 apps/api/
 apps/mobile/
 .turbo/
