@@ -115,6 +115,68 @@ router.put('/preferences', async (req: Request, res: Response, next: NextFunctio
   }
 });
 
+// Change password
+router.post('/change-password', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ error: 'Current password and new password are required' });
+    }
+    
+    if (newPassword.length < 8) {
+      return res.status(400).json({ error: 'New password must be at least 8 characters long' });
+    }
+    
+    const user = await User.findById(req.user?.userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    // Verify current password
+    const isCurrentPasswordValid = await user.comparePassword(currentPassword);
+    if (!isCurrentPasswordValid) {
+      return res.status(400).json({ error: 'Current password is incorrect' });
+    }
+    
+    // Update password
+    user.password = newPassword;
+    await user.save();
+    
+    res.json({ message: 'Password changed successfully' });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Upload avatar
+router.post('/profile/avatar', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    // For now, this is a placeholder endpoint
+    // In production, you would handle file upload to cloud storage
+    // and return the URL of the uploaded image
+    
+    // Mock response for now
+    const avatarUrl = `https://via.placeholder.com/150x150?text=${encodeURIComponent('Avatar')}`;
+    
+    const user = await User.findById(req.user?.userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    // Update user's profile picture
+    user.profilePicture = avatarUrl;
+    await user.save();
+    
+    res.json({ 
+      message: 'Avatar uploaded successfully',
+      avatarUrl 
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 // Get user's saved activities (bookmarks)
 router.get('/saved-activities', async (req: Request, res: Response, next: NextFunction) => {
   try {

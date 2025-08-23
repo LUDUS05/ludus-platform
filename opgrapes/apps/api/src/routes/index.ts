@@ -5,6 +5,7 @@ import vendorRoutes from './vendors.js';
 import activityRoutes from './activities.js';
 import bookingRoutes from './bookings.js';
 import adminRoutes from './admin.js';
+import analyticsRoutes from './analytics.js';
 
 const router = Router();
 
@@ -23,5 +24,6 @@ router.use('/vendors', vendorRoutes);
 router.use('/activities', activityRoutes);
 router.use('/bookings', bookingRoutes);
 router.use('/admin', adminRoutes);
+router.use('/analytics', analyticsRoutes);
 
 export default router;

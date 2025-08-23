@@ -296,17 +296,41 @@ router.get('/category/:category', async (req: Request, res: Response, next: Next
 });
 
 // Get featured activities
-router.get('/featured/featured', async (req: Request, res: Response, next: NextFunction) => {
+router.get('/featured', async (req: Request, res: Response, next: NextFunction) => {
   try {
+    const { limit = 6 } = req.query;
+    
     const activities = await Activity.find({ 
       isActive: true,
       isFeatured: true 
     })
     .populate('vendorId', 'businessName location rating isVerified')
-    .limit(6)
+    .limit(Number(limit))
     .sort({ rating: -1, createdAt: -1 });
     
     res.json({ activities });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Get activity categories
+router.get('/categories', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const categories = [
+      'outdoor-adventure',
+      'indoor-activities',
+      'water-sports',
+      'team-sports',
+      'cultural-experiences',
+      'food-tours',
+      'wellness-spa',
+      'entertainment',
+      'educational',
+      'fitness'
+    ];
+    
+    res.json({ categories });
   } catch (error) {
     next(error);
   }

@@ -221,4 +221,62 @@ router.get('/:id/stats', authenticateToken, requireVendor, async (req: Request, 
   }
 });
 
+// Upload vendor logo
+router.post('/profile/logo', authenticateToken, requireVendor, async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    // For now, this is a placeholder endpoint
+    // In production, you would handle file upload to cloud storage
+    // and return the URL of the uploaded image
+    
+    // Mock response for now
+    const logoUrl = `https://via.placeholder.com/200x100?text=${encodeURIComponent('Logo')}`;
+    
+    // Find vendor by owner ID
+    const vendor = await Vendor.findOne({ 'owner.userId': req.user?.userId });
+    if (!vendor) {
+      return res.status(404).json({ error: 'Vendor profile not found' });
+    }
+    
+    // Update vendor's logo
+    vendor.logo = logoUrl;
+    await vendor.save();
+    
+    res.json({ 
+      message: 'Logo uploaded successfully',
+      logoUrl 
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Upload vendor banner
+router.post('/profile/banner', authenticateToken, requireVendor, async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    // For now, this is a placeholder endpoint
+    // In production, you would handle file upload to cloud storage
+    // and return the URL of the uploaded image
+    
+    // Mock response for now
+    const bannerUrl = `https://via.placeholder.com/800x200?text=${encodeURIComponent('Banner')}`;
+    
+    // Find vendor by owner ID
+    const vendor = await Vendor.findOne({ 'owner.userId': req.user?.userId });
+    if (!vendor) {
+      return res.status(404).json({ error: 'Vendor profile not found' });
+    }
+    
+    // Update vendor's banner
+    vendor.banner = bannerUrl;
+    await vendor.save();
+    
+    res.json({ 
+      message: 'Banner uploaded successfully',
+      bannerUrl 
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 export default router;

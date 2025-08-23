@@ -2,15 +2,15 @@
 export const API_CONFIG = {
   // Base URLs
   BASE_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000',
-  WEB_URL: process.env.NEXT_PUBLIC_WEB_URL || 'http://localhost:3000',
+  WEB_URL: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
   
-  // API Endpoints
+  // API Endpoints - Updated to match actual backend routes
   ENDPOINTS: {
     AUTH: {
       LOGIN: '/api/auth/login',
       REGISTER: '/api/auth/register',
       LOGOUT: '/api/auth/logout',
-      REFRESH_TOKEN: '/api/auth/refresh-token',
+      REFRESH_TOKEN: '/api/auth/refresh',
       FORGOT_PASSWORD: '/api/auth/forgot-password',
       RESET_PASSWORD: '/api/auth/reset-password',
       VERIFY_EMAIL: '/api/auth/verify-email',

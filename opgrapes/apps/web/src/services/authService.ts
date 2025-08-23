@@ -107,7 +107,7 @@ export interface UserProfile {
 
 class AuthService {
   private async makeRequest(endpoint: string, options: RequestInit = {}) {
-    const response = await fetch(`${API_BASE_URL}/api/auth${endpoint}`, {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       ...options,
       headers: {
         'Content-Type': 'application/json',
@@ -125,7 +125,7 @@ class AuthService {
 
   // User login
   async login(credentials: LoginRequest): Promise<AuthResponse> {
-    const response = await this.makeRequest('/login', {
+    const response = await this.makeRequest('/api/auth/login', {
       method: 'POST',
       body: JSON.stringify(credentials),
     });
@@ -140,7 +140,7 @@ class AuthService {
 
   // User registration
   async register(userData: RegisterRequest): Promise<AuthResponse> {
-    const response = await this.makeRequest('/register', {
+    const response = await this.makeRequest('/api/auth/register', {
       method: 'POST',
       body: JSON.stringify(userData),
     });
@@ -159,7 +159,7 @@ class AuthService {
     
     if (token) {
       try {
-        await this.makeRequest('/logout', {
+        await this.makeRequest('/api/auth/logout', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -179,7 +179,7 @@ class AuthService {
 
   // Refresh access token
   async refreshToken(refreshToken: string): Promise<RefreshTokenResponse> {
-    const response = await this.makeRequest('/refresh-token', {
+    const response = await this.makeRequest('/api/auth/refresh', {
       method: 'POST',
       body: JSON.stringify({ refreshToken }),
     });
@@ -194,7 +194,7 @@ class AuthService {
 
   // Forgot password
   async forgotPassword(emailData: ForgotPasswordRequest): Promise<{ message: string }> {
-    return this.makeRequest('/forgot-password', {
+    return this.makeRequest('/api/auth/forgot-password', {
       method: 'POST',
       body: JSON.stringify(emailData),
     });
@@ -202,7 +202,7 @@ class AuthService {
 
   // Reset password
   async resetPassword(resetData: ResetPasswordRequest): Promise<{ message: string }> {
-    return this.makeRequest('/reset-password', {
+    return this.makeRequest('/api/auth/reset-password', {
       method: 'POST',
       body: JSON.stringify(resetData),
     });
@@ -210,7 +210,7 @@ class AuthService {
 
   // Verify email
   async verifyEmail(verifyData: VerifyEmailRequest): Promise<{ message: string }> {
-    return this.makeRequest('/verify-email', {
+    return this.makeRequest('/api/auth/verify-email', {
       method: 'POST',
       body: JSON.stringify(verifyData),
     });
