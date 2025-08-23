@@ -17,6 +17,7 @@
     "dev:web": "npm --workspace apps/web run dev",
     "dev:api": "npm --workspace apps/api run dev",
     "dev:all": "concurrently -n web,api -c blue,green \"npm run dev:web\" \"npm run dev:api\"",
+    "build:web": "npm run build",
     "test:ci:local": "bash scripts/test-ci.sh",
     "test:ci:local:win": "powershell -ExecutionPolicy Bypass -File scripts/test-ci.ps1",
     "setup:git": "powershell -ExecutionPolicy Bypass -File scripts/setup-git.ps1"
