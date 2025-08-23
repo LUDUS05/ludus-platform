@@ -14,7 +14,6 @@
     "blurhash": "^2.0.5",
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.12",
-    "i18next": "^25.3.2",
     "i18next-browser-languagedetector": "^8.2.0",
     "lucide-react": "^0.460.0",
     "moyasar": "^0.5.1",
@@ -23,7 +22,6 @@
     "react-blurhash": "^0.3.0",
     "react-dom": "^19.1.1",
     "react-facebook-login": "^4.1.1",
-    "react-i18next": "^15.6.1",
     "react-quill": "^2.0.0",
     "react-router-dom": "^7.7.1",
     "react-scripts": "^5.0.1",
@@ -31,9 +29,10 @@
     "tailwindcss": "^3.3.5"
   },
   "scripts": {
-  "start": "react-scripts start",
-  "build": "cross-env SKIP_PREFLIGHT_CHECK=true CI=false react-scripts build",
-    "test": "react-scripts test",
+    "start": "react-scripts start",
+    "build": "cross-env SKIP_PREFLIGHT_CHECK=true CI=false react-scripts build",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
     "eject": "react-scripts eject",
     "build:vercel": "SKIP_PREFLIGHT_CHECK=true CI=false react-scripts build"
   },
@@ -49,7 +48,16 @@
     ]
   },
   "devDependencies": {
-    "cross-env": "^7.0.3"
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@vitejs/plugin-react": "^5.0.1",
+    "@vitest/ui": "^3.2.4",
+    "cross-env": "^7.0.3",
+    "i18next": "^25.4.1",
+    "jsdom": "^26.1.0",
+    "react-i18next": "^15.7.2",
+    "vitest": "^3.2.4"
   },
   "browserslist": {
     "production": [

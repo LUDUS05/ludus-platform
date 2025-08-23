@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import './i18n';
-import App from './App';
+import App from './App.jsx';
 
 // Initialize Sentry for error tracking (only in production)
 if (process.env.NODE_ENV === 'production' && process.env.REACT_APP_SENTRY_DSN && !process.env.REACT_APP_SENTRY_DSN.includes('your-sentry')) {
