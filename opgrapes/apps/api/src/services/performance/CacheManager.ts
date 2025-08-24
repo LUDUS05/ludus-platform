@@ -17,8 +17,8 @@ export interface CacheStats {
 }
 
 export class CacheManager {
-  private redis: RedisClientType;
-  private logger: winston.Logger;
+  private redis!: RedisClientType;
+  private logger!: winston.Logger;
   private stats: Map<string, { hits: number; misses: number }> = new Map();
 
   constructor() {
@@ -233,7 +233,7 @@ export class CacheManager {
       const keys = await this.redis.keys(pattern);
       
       if (keys.length > 0) {
-        await this.redis.del(...keys);
+        await this.redis.del(keys as string[]);
         this.logger.info('Cache invalidated', { pattern, keyCount: keys.length, reason });
       } else {
         this.logger.info('No cache keys found for pattern', { pattern, reason });

@@ -302,7 +302,7 @@ export function validateAnalyticsConfig(config: AnalyticsConfig): string[] {
 
   // Validate cache TTLs
   Object.entries(config.cache).forEach(([key, value]) => {
-    if (key.includes('TTL') && value < 60) {
+    if (key.includes('TTL') && typeof value === 'number' && value < 60) {
       errors.push(`Cache TTL for ${key} must be at least 60 seconds.`);
     }
   });

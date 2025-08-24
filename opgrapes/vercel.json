@@ -1,9 +1,10 @@
 {
   "version": 2,
   "framework": "nextjs",
-  "installCommand": "cd opgrapes && npm ci --no-audit --no-fund --include=dev",
-  "buildCommand": "cd opgrapes && npm --workspace apps/web run build",
-  "outputDirectory": "opgrapes/apps/web/.next",
+  "rootDirectory": "opgrapes",
+  "installCommand": "npm ci --no-audit --no-fund --include=dev",
+  "buildCommand": "npm --workspace apps/web run build",
+  "outputDirectory": "apps/web/.next",
   "functions": {
     "app/api/**/*.ts": {
       "runtime": "nodejs18.x"

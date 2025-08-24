@@ -238,7 +238,7 @@ router.post('/profile/logo', authenticateToken, requireVendor, async (req: Reque
     }
     
     // Update vendor's logo
-    vendor.logo = logoUrl;
+    vendor.images.logo = logoUrl;
     await vendor.save();
     
     res.json({ 
@@ -267,7 +267,7 @@ router.post('/profile/banner', authenticateToken, requireVendor, async (req: Req
     }
     
     // Update vendor's banner
-    vendor.banner = bannerUrl;
+    vendor.images.banner = bannerUrl;
     await vendor.save();
     
     res.json({ 

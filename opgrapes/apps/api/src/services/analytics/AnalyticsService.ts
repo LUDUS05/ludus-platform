@@ -100,9 +100,9 @@ export interface ErrorEvent {
 }
 
 export class AnalyticsService {
-  private redis: RedisClientType;
-  private logger: winston.Logger;
-  private mixpanel: Mixpanel.Mixpanel;
+  private redis!: RedisClientType;
+  private logger!: winston.Logger;
+  private mixpanel!: Mixpanel.Mixpanel;
 
   constructor() {
     this.initializeRedis();

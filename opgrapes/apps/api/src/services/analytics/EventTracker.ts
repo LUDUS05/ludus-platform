@@ -44,8 +44,8 @@ export interface FormInteractionEvent {
 }
 
 export class EventTracker {
-  private redis: RedisClientType;
-  private logger: winston.Logger;
+  private redis!: RedisClientType;
+  private logger!: winston.Logger;
 
   constructor() {
     this.initializeRedis();

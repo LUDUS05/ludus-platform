@@ -28,7 +28,7 @@ export const analyticsMiddleware = (analyticsService: AnalyticsService, eventTra
     const startTime = Date.now();
     
     // Extract user information from request
-    const userId = req.user?.id || req.headers['x-user-id'] as string;
+    const userId = req.user?.userId || req.user?.id || req.headers['x-user-id'] as string;
     const sessionId = req.headers['x-session-id'] as string || generateSessionId();
     const ipAddress = req.ip || req.connection.remoteAddress;
     const userAgent = req.headers['user-agent'];

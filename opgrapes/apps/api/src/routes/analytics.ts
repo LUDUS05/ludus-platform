@@ -73,7 +73,7 @@ router.get('/insights', authenticateToken, async (req, res) => {
 router.get('/user/:userId', authenticateToken, async (req, res) => {
   try {
     const { userId } = req.params;
-    const requestingUserId = req.user?.id;
+    const requestingUserId = req.user?.userId || req.user?.id;
 
     // Check if user is accessing their own data or is admin
     if (requestingUserId !== userId && req.user?.role !== 'admin') {
@@ -242,7 +242,7 @@ router.post('/cache/invalidate', authenticateToken, async (req, res) => {
 router.post('/events/track', authenticateToken, async (req, res) => {
   try {
     const { event, properties } = req.body;
-    const userId = req.user?.id;
+    const userId = req.user?.userId || req.user?.id;
 
     if (!event) {
       return res.status(400).json({ error: 'Event name is required' });
@@ -275,7 +275,7 @@ router.post('/events/track', authenticateToken, async (req, res) => {
 router.post('/conversion/track', authenticateToken, async (req, res) => {
   try {
     const { funnel, step, stepName, value, metadata } = req.body;
-    const userId = req.user?.id;
+    const userId = req.user?.userId || req.user?.id;
 
     if (!funnel || !step || !stepName) {
       return res.status(400).json({ 
@@ -317,7 +317,7 @@ router.post('/conversion/track', authenticateToken, async (req, res) => {
 router.post('/revenue/track', authenticateToken, async (req, res) => {
   try {
     const { amount, currency, activityId, vendorId, paymentMethod, transactionId } = req.body;
-    const userId = req.user?.id;
+    const userId = req.user?.userId || req.user?.id;
 
     if (!amount || !currency || !activityId || !vendorId) {
       return res.status(400).json({ 
