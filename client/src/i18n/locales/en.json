@@ -107,7 +107,9 @@
     "profile": "Profile",
     "admin": "Admin",
     "about": "About",
-    "contact": "Contact"
+    "contact": "Contact",
+    "map": "Map",
+    "howItWorks": "How It Works"
   },
   "profile": {
     "manageAccount": "Manage your account settings and personal information",
@@ -214,7 +216,8 @@
     "statistics": "Statistics",
     "totalBookings": "Total Bookings",
     "upcomingActivities": "Upcoming Activities",
-    "preferences": "Preferences"
+    "preferences": "Preferences",
+    "myBookings": "My Bookings"
   },
   "admin": {
     "dashboard": "Admin Dashboard",

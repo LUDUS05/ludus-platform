@@ -5,12 +5,14 @@ import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../LanguageSwitcher';
 import ThemeToggle from '../ui/ThemeToggle';
 import Logo from './Logo';
+import useMenuPages from '../../hooks/useMenuPages';
 
 const Header = () => {
   const { user, isAuthenticated, logout } = useAuth();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { pages: headerPages } = useMenuPages('header');
 
   const handleLogout = async () => {
     try {
@@ -42,14 +44,24 @@ const Header = () => {
               to="/map"
               className="text-charcoal dark:text-dark-text-secondary hover:text-ludus-orange dark:hover:text-dark-ludus-orange font-medium transition-colors duration-200"
             >
-              Map
+              {t('navigation.map')}
             </Link>
             <Link
               to="/how-it-works"
               className="text-charcoal dark:text-dark-text-secondary hover:text-ludus-orange dark:hover:text-dark-ludus-orange font-medium transition-colors duration-200"
             >
-              How It Works
+              {t('navigation.howItWorks')}
             </Link>
+            {/* Dynamic Header Menu Pages */}
+            {headerPages.filter(page => page.status === 'published').map((page) => (
+              <Link
+                key={page.slug}
+                to={`/pages/${page.slug}`}
+                className="text-charcoal dark:text-dark-text-secondary hover:text-ludus-orange dark:hover:text-dark-ludus-orange font-medium transition-colors duration-200"
+              >
+                {page.title?.[i18n.language] || page.title?.en || page.title?.ar || page.title}
+              </Link>
+            ))}
             {isAuthenticated && (
               <>
                 <Link
@@ -167,8 +179,19 @@ const Header = () => {
                 className="text-charcoal dark:text-dark-text-secondary hover:text-ludus-orange dark:hover:text-dark-ludus-orange font-medium transition-colors duration-200"
                 onClick={() => setIsMenuOpen(false)}
               >
-                How It Works
+                {t('navigation.howItWorks')}
               </Link>
+              {/* Dynamic Header Menu Pages - Mobile */}
+              {headerPages.filter(page => page.status === 'published').map((page) => (
+                <Link
+                  key={page.slug}
+                  to={`/pages/${page.slug}`}
+                  className="text-charcoal dark:text-dark-text-secondary hover:text-ludus-orange dark:hover:text-dark-ludus-orange font-medium transition-colors duration-200"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {page.title?.[i18n.language] || page.title?.en || page.title?.ar || page.title}
+                </Link>
+              ))}
               {isAuthenticated ? (
                 <>
                   <Link

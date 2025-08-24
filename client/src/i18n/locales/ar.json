@@ -41,7 +41,9 @@
     "profile": "الملف الشخصي",
     "admin": "الإدارة",
     "about": "حول",
-    "contact": "اتصل بنا"
+    "contact": "اتصل بنا",
+    "map": "الخريطة",
+    "howItWorks": "كيف يعمل"
   },
   "profile": {
     "manageAccount": "إدارة إعدادات حسابك والمعلومات الشخصية",
@@ -172,7 +174,8 @@
     "statistics": "الإحصائيات",
     "totalBookings": "إجمالي الحجوزات",
     "upcomingActivities": "الأنشطة القادمة",
-    "preferences": "التفضيلات"
+    "preferences": "التفضيلات",
+    "myBookings": "حجوزاتي"
   },
   "admin": {
     "dashboard": "لوحة تحكم الإدارة",

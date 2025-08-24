@@ -291,6 +291,7 @@ const PageManagement = () => {
               <option value="all">All Placements</option>
               <option value="header">Header Menu</option>
               <option value="footer">Footer Menu</option>
+              <option value="both">Both Header & Footer</option>
               <option value="none">No Menu</option>
             </select>
           </div>
@@ -359,7 +360,7 @@ const PageManagement = () => {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                    {page.placement === 'none' ? 'No Menu' : `${page.placement.charAt(0).toUpperCase() + page.placement.slice(1)} Menu`}
+                    {page.placement === 'none' ? 'No Menu' : page.placement === 'both' ? 'Both Header & Footer' : `${page.placement.charAt(0).toUpperCase() + page.placement.slice(1)} Menu`}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <button
@@ -519,6 +520,7 @@ const PageManagement = () => {
                       <option value="none">No Menu</option>
                       <option value="header">Header Menu</option>
                       <option value="footer">Footer Menu</option>
+                      <option value="both">Both Header & Footer</option>
                     </select>
                   </div>
                   

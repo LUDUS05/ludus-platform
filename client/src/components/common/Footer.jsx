@@ -1,8 +1,11 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import useMenuPages from '../../hooks/useMenuPages';
 
 const Footer = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const { pages: footerPages, loading: pagesLoading } = useMenuPages('footer');
 
   const socialLinks = [
     {
@@ -43,11 +46,22 @@ const Footer = () => {
     { name: 'About Us', href: '/about' }
   ];
 
-  const supportLinks = [
+  // Static support links (fallback)
+  const staticSupportLinks = [
     { name: 'Help Center', href: '/help' },
     { name: 'Contact Us', href: '/contact' },
     { name: 'Privacy Policy', href: '/privacy' },
     { name: 'Terms of Service', href: '/terms' }
+  ];
+
+  // Combine static links with dynamic pages
+  const supportLinks = [
+    ...staticSupportLinks,
+    ...footerPages.filter(page => page.status === 'published').map(page => ({
+      name: page.title?.[i18n.language] || page.title?.en || page.title?.ar || page.title,
+      href: `/pages/${page.slug}`,
+      isExternal: false
+    }))
   ];
 
   return (
@@ -90,12 +104,12 @@ const Footer = () => {
             <ul className="space-y-2">
               {quickLinks.map((link) => (
                 <li key={link.name}>
-                  <a
-                    href={link.href}
+                  <Link
+                    to={link.href}
                     className="text-white/70 dark:text-dark-text-secondary hover:text-ludus-orange dark:hover:text-dark-ludus-orange transition-colors duration-200 text-sm"
                   >
                     {link.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -108,13 +122,22 @@ const Footer = () => {
             </h3>
             <ul className="space-y-2">
               {supportLinks.map((link) => (
-                <li key={link.name}>
-                  <a
-                    href={link.href}
-                    className="text-white/70 dark:text-dark-text-secondary hover:text-ludus-orange dark:hover:text-dark-ludus-orange transition-colors duration-200 text-sm"
-                  >
-                    {link.name}
-                  </a>
+                <li key={link.name + link.href}>
+                  {link.isExternal !== false ? (
+                    <a
+                      href={link.href}
+                      className="text-white/70 dark:text-dark-text-secondary hover:text-ludus-orange dark:hover:text-dark-ludus-orange transition-colors duration-200 text-sm"
+                    >
+                      {link.name}
+                    </a>
+                  ) : (
+                    <Link
+                      to={link.href}
+                      className="text-white/70 dark:text-dark-text-secondary hover:text-ludus-orange dark:hover:text-dark-ludus-orange transition-colors duration-200 text-sm"
+                    >
+                      {link.name}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>

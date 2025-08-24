@@ -150,4 +150,97 @@ router.get('/by-url/*', async (req, res) => {
   }
 });
 
+// Get pages by placement (header, footer, both)
+router.get('/menu/:placement', async (req, res) => {
+  try {
+    const { placement } = req.params;
+    const Page = require('../models/Page');
+    
+    // Validate placement
+    const validPlacements = ['header', 'footer', 'both'];
+    if (!validPlacements.includes(placement)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid placement. Must be: header, footer, or both'
+      });
+    }
+    
+    // Build query - for 'both' placement, get pages where placement is 'both'
+    // For 'header' or 'footer', get pages with that specific placement OR 'both'
+    const query = {
+      status: 'published'
+    };
+    
+    if (placement === 'both') {
+      query.placement = 'both';
+    } else {
+      query.placement = { $in: [placement, 'both'] };
+    }
+    
+    const pages = await Page.find(query)
+      .select('title slug placement navigationOrder createdAt')
+      .sort({ navigationOrder: 1, createdAt: -1 })
+      .lean();
+    
+    // Transform to include computed URL
+    const pagesWithUrl = pages.map(page => ({
+      ...page,
+      url: `/pages/${page.slug}`
+    }));
+    
+    res.json({
+      success: true,
+      data: pagesWithUrl
+    });
+  } catch (error) {
+    console.error('Get pages by placement error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error retrieving pages by placement'
+    });
+  }
+});
+
+// Get pages by specific placement only (excluding 'both')
+router.get('/by-placement/:placement', async (req, res) => {
+  try {
+    const { placement } = req.params;
+    const Page = require('../models/Page');
+    
+    // Validate placement
+    const validPlacements = ['header', 'footer', 'none'];
+    if (!validPlacements.includes(placement)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid placement. Must be: header, footer, or none'
+      });
+    }
+    
+    const pages = await Page.find({
+      status: 'published',
+      placement: placement
+    })
+      .select('title slug placement navigationOrder createdAt')
+      .sort({ navigationOrder: 1, createdAt: -1 })
+      .lean();
+    
+    // Transform to include computed URL
+    const pagesWithUrl = pages.map(page => ({
+      ...page,
+      url: `/pages/${page.slug}`
+    }));
+    
+    res.json({
+      success: true,
+      data: pagesWithUrl
+    });
+  } catch (error) {
+    console.error('Get pages by specific placement error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error retrieving pages by specific placement'
+    });
+  }
+});
+
 module.exports = router;

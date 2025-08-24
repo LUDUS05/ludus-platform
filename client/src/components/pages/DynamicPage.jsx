@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const DynamicPage = () => {
-  const { slug } = useParams();
+  const { url } = useParams();
   const navigate = useNavigate();
   const [page, setPage] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -11,28 +11,15 @@ const DynamicPage = () => {
 
   useEffect(() => {
     fetchPage();
-  }, [slug]);
+  }, [url]);
 
   const fetchPage = async () => {
     try {
       setLoading(true);
       setError(null);
       
-      // First try to get page by URL
-      const url = `/${slug}`;
-      let response;
-      
-      try {
-        response = await axios.get(`/api/pages/by-url${url}`);
-      } catch (err) {
-        // If URL lookup fails, try by slug
-        if (err.response?.status === 404) {
-          response = await axios.get(`/api/pages/${slug}`);
-        } else {
-          throw err;
-        }
-      }
-      
+      // Try to get page by slug directly
+      const response = await axios.get(`/api/pages/slug/${url}`);
       setPage(response.data);
     } catch (error) {
       console.error('Error fetching page:', error);
@@ -129,7 +116,7 @@ const DynamicPage = () => {
                          prose-strong:text-gray-900 dark:prose-strong:text-white
                          prose-ul:text-gray-700 dark:prose-ul:text-gray-300
                          prose-ol:text-gray-700 dark:prose-ol:text-gray-300"
-              dangerouslySetInnerHTML={{ __html: page.content }}
+              dangerouslySetInnerHTML={{ __html: Array.isArray(page.content) && page.content.length > 0 ? page.content[0]?.content?.en || page.content[0]?.content || '' : page.content || '' }}
             />
           </div>
         </article>
