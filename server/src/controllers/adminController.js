@@ -152,10 +152,15 @@ const getVendors = async (req, res) => {
 // @access  Private (Admin only)
 const createVendor = async (req, res) => {
   try {
+    const { logoUrl, ...otherData } = req.body;
     const vendorData = {
-      ...req.body,
-      createdBy: req.user._id
+      ...otherData,
+      createdBy: req.user._id,
     };
+
+    if (logoUrl) {
+      vendorData.images = { ...vendorData.images, logo: logoUrl };
+    }
 
     const vendor = new Vendor(vendorData);
     await vendor.save();
@@ -193,9 +198,16 @@ const createVendor = async (req, res) => {
 // @access  Private (Admin only)
 const updateVendor = async (req, res) => {
   try {
+    const { logoUrl, ...otherData } = req.body;
+    const updateData = { ...otherData };
+
+    if (logoUrl) {
+      updateData['images.logo'] = logoUrl;
+    }
+
     const vendor = await Vendor.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      { $set: updateData },
       { new: true, runValidators: true }
     ).populate('createdBy', 'firstName lastName');
 
@@ -333,10 +345,15 @@ const getActivities = async (req, res) => {
 // @access  Private (Admin only)
 const createActivity = async (req, res) => {
   try {
+    const { imageUrl, ...otherData } = req.body;
     const activityData = {
-      ...req.body,
-      createdBy: req.user._id
+      ...otherData,
+      createdBy: req.user._id,
     };
+
+    if (imageUrl) {
+      activityData.images = [{ url: imageUrl, alt: 'Primary image', isPrimary: true }];
+    }
 
     const activity = new Activity(activityData);
     await activity.save();
@@ -377,9 +394,18 @@ const createActivity = async (req, res) => {
 // @access  Private (Admin only)
 const updateActivity = async (req, res) => {
   try {
+    const { imageUrl, ...otherData } = req.body;
+    const updateData = { ...otherData };
+
+    if (imageUrl) {
+      // This will replace the entire images array.
+      // A more sophisticated approach might allow adding/removing specific images.
+      updateData.images = [{ url: imageUrl, alt: 'Primary image', isPrimary: true }];
+    }
+
     const activity = await Activity.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      updateData,
       { new: true, runValidators: true }
     ).populate([
       { path: 'vendor', select: 'businessName' },

@@ -206,28 +206,40 @@ const VendorProfilePage = () => {
         </nav>
 
         {/* Vendor Header */}
-        <div className="bg-white rounded-lg shadow border border-gray-200 mb-8">
+        <div className="bg-white rounded-lg shadow border border-gray-200 mb-8 relative">
           {/* Banner */}
-          <div className="h-64 bg-gradient-to-r from-ludus-orange to-ludus-orange-dark rounded-t-lg relative">
-            <div className="absolute inset-0 bg-black bg-opacity-20 rounded-t-lg"></div>
-            <div className="absolute bottom-6 left-6 text-white">
-              <h1 className="text-4xl font-bold mb-2">{vendor.businessName}</h1>
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center">
-                  {renderStars(vendor.rating?.average || 0)}
-                  <span className="ml-2 text-white font-medium">
-                    {vendor.rating?.average?.toFixed(1) || '0.0'} ({vendor.rating?.count || 0} reviews)
-                  </span>
-                </div>
-                <span className="text-white">📍 {vendor.location?.city}, {vendor.location?.state}</span>
+          <div className="h-48 bg-gradient-to-r from-ludus-orange to-ludus-orange-dark rounded-t-lg"></div>
+
+          {/* Profile Picture and Name */}
+          <div className="absolute top-28 left-6 flex items-end gap-4">
+            {vendor.images?.logo ? (
+              <img
+                src={vendor.images.logo}
+                alt={`${vendor.businessName} logo`}
+                className="w-32 h-32 rounded-full border-4 border-white bg-gray-200 shadow-lg"
+              />
+            ) : (
+              <div className="w-32 h-32 rounded-full border-4 border-white bg-gray-300 flex items-center justify-center shadow-lg">
+                <span className="text-4xl text-gray-500">{vendor.businessName?.charAt(0)}</span>
+              </div>
+            )}
+            <div className="pb-4">
+              <h1 className="text-3xl font-bold text-gray-900">{vendor.businessName}</h1>
+              <div className="flex items-center text-sm text-gray-600">
+                {renderStars(vendor.rating?.average || 0)}
+                <span className="ml-2">
+                  {vendor.rating?.average?.toFixed(1) || '0.0'} ({vendor.rating?.count || 0} reviews)
+                </span>
+                <span className="mx-2">·</span>
+                <span>📍 {vendor.location?.city}, {vendor.location?.state}</span>
               </div>
             </div>
           </div>
 
           {/* Vendor Info */}
-          <div className="p-6">
+          <div className="pt-20 p-6">
             <div className="flex items-start justify-between">
-              <div className="flex-1">
+              <div className="flex-1 mt-4">
                 <div className="flex items-center space-x-4 mb-4">
                   {vendor.categories?.map((category, index) => (
                     <span

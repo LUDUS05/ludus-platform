@@ -127,10 +127,20 @@ const ActivityDetailPage = () => {
             {/* Activity Header */}
             <div className="bg-white rounded-lg shadow border border-gray-200 p-6 mb-6">
               {/* Activity Image */}
-              <div className="h-64 md:h-80 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg mb-6 flex items-center justify-center">
-                <div className="text-white text-6xl">
-                  {getCategoryIcon(activity.category)}
-                </div>
+              <div className="h-64 md:h-80 bg-gray-200 rounded-lg mb-6 overflow-hidden">
+                {activity.images && activity.images.length > 0 ? (
+                  <img
+                    src={activity.images[0].url}
+                    alt={activity.title}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                    <div className="text-white text-6xl">
+                      {getCategoryIcon(activity.category)}
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Activity Info */}
@@ -216,9 +226,13 @@ const ActivityDetailPage = () => {
             <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">About the Provider</h2>
               <div className="flex items-start space-x-4">
-                <div className="w-16 h-16 bg-ludus-orange rounded-full flex items-center justify-center text-white text-xl font-bold">
-                  {activity.vendor?.businessName?.charAt(0)}
-                </div>
+                {activity.vendor?.images?.logo ? (
+                  <img src={activity.vendor.images.logo} alt={activity.vendor.businessName} className="w-16 h-16 rounded-full object-cover" />
+                ) : (
+                  <div className="w-16 h-16 bg-ludus-orange rounded-full flex items-center justify-center text-white text-xl font-bold">
+                    {activity.vendor?.businessName?.charAt(0)}
+                  </div>
+                )}
                 <div className="flex-1">
                   <Link 
                     to={`/vendors/${activity.vendor?._id}`}

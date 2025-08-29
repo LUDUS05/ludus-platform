@@ -112,7 +112,7 @@ const ActivityCard = ({
         <motion.div variants={imageVariants}>
           <ProgressiveImage
             unsplashId={activity.unsplashId}
-            src={activity.image}
+            src={activity.images?.[0]?.url || activity.image}
             category={activity.category}
             alt={activity.title}
             width={400}
