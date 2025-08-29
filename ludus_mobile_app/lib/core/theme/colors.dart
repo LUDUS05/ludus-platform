@@ -112,6 +112,7 @@ class AppColors {
   static const Color borderLight = Color(0xFFE5E7EB);
   static const Color borderMedium = Color(0xFFD1D5DB);
   static const Color borderDark = Color(0xFF9CA3AF);
+  static const Color outline = Color(0xFFE5E7EB);
   
   // Disabled Colors
   static const Color disabled = Color(0xFF9CA3AF);

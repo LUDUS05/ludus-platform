@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
 // Core imports
 import 'core/theme/app_theme.dart';
 import 'core/constants/app_constants.dart';
@@ -12,10 +11,14 @@ import 'features/auth/screens/onboarding_screen.dart';
 import 'features/auth/screens/login_screen.dart';
 import 'features/auth/screens/register_screen.dart';
 import 'features/discovery/screens/home_screen.dart';
+import 'features/discovery/screens/map_screen.dart';
+import 'features/discovery/screens/activity_detail_screen.dart';
 import 'features/booking/screens/booking_screen.dart';
-import 'features/vendor/screens/vendor_dashboard_screen.dart';
+import 'features/payment/screens/payment_screen.dart';
 import 'features/profile/screens/profile_screen.dart';
-import 'features/social/screens/social_screen.dart';
+import 'features/notifications/screens/notification_screen.dart';
+import 'features/offline/screens/offline_settings_screen.dart';
+import 'features/auth/screens/forgot_password_screen.dart';
 
 // Shared imports
 import 'shared/widgets/loading/loading_screen.dart';
@@ -79,41 +82,53 @@ final _router = GoRouter(
       path: '/register',
       builder: (context, state) => const RegisterScreen(),
     ),
+    GoRoute(
+      path: '/forgot-password',
+      builder: (context, state) => const ForgotPasswordScreen(),
+    ),
     
     // Main app routes
-    ShellRoute(
-      builder: (context, state, child) => MainScaffold(child: child),
-      routes: [
-        // Home/Discovery
-        GoRoute(
-          path: '/home',
-          builder: (context, state) => const HomeScreen(),
-        ),
-        
-        // Booking
-        GoRoute(
-          path: '/booking',
-          builder: (context, state) => const BookingScreen(),
-        ),
-        
-        // Vendor Dashboard
-        GoRoute(
-          path: '/vendor',
-          builder: (context, state) => const VendorDashboardScreen(),
-        ),
-        
-        // Profile
-        GoRoute(
-          path: '/profile',
-          builder: (context, state) => const ProfileScreen(),
-        ),
-        
-        // Social
-        GoRoute(
-          path: '/social',
-          builder: (context, state) => const SocialScreen(),
-        ),
-      ],
+    GoRoute(
+      path: '/home',
+      builder: (context, state) => const HomeScreen(),
+    ),
+    GoRoute(
+      path: '/map',
+      builder: (context, state) => const MapScreen(),
+    ),
+    GoRoute(
+      path: '/activity/:id',
+      builder: (context, state) {
+        final activityId = state.pathParameters['id']!;
+        return ActivityDetailScreen(activityId: activityId);
+      },
+    ),
+    GoRoute(
+      path: '/booking/:id',
+      builder: (context, state) {
+        final activityId = state.pathParameters['id']!;
+        return BookingScreen(activityId: activityId);
+      },
+    ),
+    GoRoute(
+      path: '/payment/:bookingId/:amount',
+      builder: (context, state) {
+        final bookingId = state.pathParameters['bookingId']!;
+        final amount = double.parse(state.pathParameters['amount']!);
+        return PaymentScreen(bookingId: bookingId, amount: amount);
+      },
+    ),
+    GoRoute(
+      path: '/profile',
+      builder: (context, state) => ProfileScreen(),
+    ),
+    GoRoute(
+      path: '/notifications',
+      builder: (context, state) => NotificationScreen(),
+    ),
+    GoRoute(
+      path: '/offline-settings',
+      builder: (context, state) => OfflineSettingsScreen(),
     ),
   ],
   errorBuilder: (context, state) => ErrorScreen(
@@ -122,74 +137,7 @@ final _router = GoRouter(
   ),
 );
 
-// Main scaffold with bottom navigation
-class MainScaffold extends ConsumerStatefulWidget {
-  final Widget child;
-  
-  const MainScaffold({
-    super.key,
-    required this.child,
-  });
 
-  @override
-  ConsumerState<MainScaffold> createState() => _MainScaffoldState();
-}
-
-class _MainScaffoldState extends ConsumerState<MainScaffold> {
-  int _currentIndex = 0;
-  
-  final List<String> _routes = [
-    '/home',
-    '/booking',
-    '/vendor',
-    '/profile',
-    '/social',
-  ];
-  
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: widget.child,
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-          context.go(_routes[index]);
-        },
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today_outlined),
-            activeIcon: Icon(Icons.calendar_today),
-            label: 'Bookings',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.store_outlined),
-            activeIcon: Icon(Icons.store),
-            label: 'Vendor',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            activeIcon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.people_outline),
-            activeIcon: Icon(Icons.people),
-            label: 'Social',
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 // Global loading screen
 class GlobalLoadingScreen extends StatelessWidget {

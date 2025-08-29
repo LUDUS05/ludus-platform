@@ -46,20 +46,29 @@ dependencies:
   # Navigation
   go_router: ^13.2.0
 
+  # Firebase (temporarily disabled for web compatibility)
+  # firebase_core: ^2.24.2
+  # firebase_auth: ^4.15.3
+  # cloud_firestore: ^4.13.6
+  # firebase_storage: ^11.5.6
+  # firebase_analytics: ^10.7.4
+  # firebase_messaging: ^14.7.10
+  # firebase_crashlytics: ^3.4.8
+
   # Authentication & Social Login (temporarily disabled)
   # google_sign_in: ^6.1.6
   # flutter_facebook_auth: ^6.0.4
   # sign_in_with_apple: ^5.0.0
 
-  # Location & Maps (temporarily disabled)
-  # geolocator: ^10.1.0
-  # geocoding: ^2.1.1
-  # google_maps_flutter: ^2.5.3
+  # Location & Maps
+  geolocator: ^10.1.0
+  geocoding: ^2.1.1
+  google_maps_flutter: ^2.5.3
 
-  # Payment & QR Code (temporarily disabled)
-  # stripe_platform_interface: ^8.0.0
-  # qr_flutter: ^4.1.0
-  # qr_code_scanner: ^1.0.1
+  # Payment & QR Code
+  stripe_platform_interface: ^8.0.0
+  qr_flutter: ^4.1.0
+  qr_code_scanner: ^1.0.1
 
   # Utilities
   intl: ^0.19.0
@@ -75,6 +84,7 @@ dependencies:
   dio: ^5.4.0
   retrofit: ^4.0.3
   json_annotation: ^4.8.1
+  http: ^1.1.0
 
   # Local Storage
   hive: ^2.2.3

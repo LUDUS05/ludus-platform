@@ -1,324 +1,423 @@
-# LUDUS Platform - AI Agent Integration Guide
+# LUDUS Platform - AI Agents & Development Assistants
 
-## 🤖 For AI Tools (JULES, Claude, etc.)
+## 🤖 **AI Agent Overview**
 
-This document provides comprehensive information for AI agents working with the LUDUS platform codebase.
-
-## 📊 Platform Overview
-
-**LUDUS** is a Saudi Arabian social activity discovery platform that connects users with local experiences and vendors.
-
-### Core Business Model
-- **Target Market**: Saudi Arabia (Arabic/English bilingual)
-- **Currency**: Saudi Riyal (SAR)
-- **Payment Gateway**: Moyasar (local Saudi payment processor)
-- **Primary Users**: Activity seekers, vendors, administrators
-
-### Architecture
-```
-Frontend (React) ↔ Backend (Express.js) ↔ Database (MongoDB Atlas)
-       ↕                    ↕
-   Vercel Deploy        Railway Deploy
-```
-
-## 🏗️ Technical Stack
-
-### Frontend (`/client/`)
-- **Framework**: React 19.1.1 + React Router DOM 7.7.1
-- **Styling**: Tailwind CSS 3.3.5 with custom LUDUS design system
-- **State Management**: React Context (AuthContext, ThemeContext)
-- **Internationalization**: i18next (Arabic/English RTL support)
-- **Payment**: Moyasar SDK integration
-- **Icons**: Heroicons + Lucide React
-- **Animations**: Framer Motion
-- **Maps**: Google Maps JS API
-
-### Backend (`/server/`)
-- **Runtime**: Node.js 18+ with Express.js 4.18.2
-- **Database**: MongoDB with Mongoose ODM
-- **Authentication**: JWT with bcryptjs
-- **Email**: Nodemailer with Google Workspace SMTP
-- **Payment Processing**: Moyasar API integration
-- **File Upload**: Multer + Cloudinary
-- **Security**: Helmet, CORS, express-rate-limit
-
-## 📁 Project Structure
-
-```
-lds-app/
-├── client/                 # React frontend
-│   ├── src/
-│   │   ├── components/     # UI components organized by feature
-│   │   │   ├── ui/         # Design system components (Button, Input, etc.)
-│   │   │   ├── admin/      # Admin panel components
-│   │   │   ├── auth/       # Authentication forms
-│   │   │   ├── booking/    # Booking flow components
-│   │   │   ├── payment/    # Payment processing UI
-│   │   │   └── vendor/     # Vendor-related components
-│   │   ├── pages/          # Route-based page components
-│   │   ├── services/       # API service layers
-│   │   ├── context/        # React Context providers
-│   │   ├── hooks/          # Custom React hooks
-│   │   ├── i18n/           # Internationalization setup
-│   │   └── utils/          # Helper functions
-│   └── public/             # Static assets
-├── server/                 # Express backend
-│   └── src/
-│       ├── controllers/    # Route handlers
-│       ├── models/         # Mongoose schemas
-│       ├── routes/         # Express routes
-│       ├── middleware/     # Custom middleware
-│       ├── services/       # Business logic (email, payment)
-│       ├── seeds/          # Database seeding scripts
-│       └── config/         # Configuration files
-└── [Documentation files]  # Various .md files
-```
-
-## 🔐 Authentication & Authorization
-
-### User Roles
-1. **Regular User**: Browse activities, make bookings, manage profile
-2. **Vendor**: Manage business profile and activities (planned)
-3. **Admin**: Full platform management access
-
-### Authentication Flow
-- JWT-based with refresh tokens
-- Social login support (Google, Facebook)
-- Email verification system
-- Password reset with secure tokens
-
-### Protected Routes
-- Admin routes require admin role
-- User routes require authentication
-- API endpoints use middleware for authorization
-
-## 🛠️ Key Components & Services
-
-### Frontend Services (`/client/src/services/`)
-- `api.js`: Axios instance with auth interceptors
-- `authService.js`: Authentication operations
-- `paymentService.js`: Moyasar payment integration
-- `adminService.js`: Admin panel operations
-- `userService.js`: User profile management
-- `vendorService.js`: Vendor operations
-
-### Backend Models (`/server/src/models/`)
-- `User.js`: User accounts with roles
-- `Vendor.js`: Business profiles with verification
-- `Activity.js`: Bookable experiences with pricing
-- `Booking.js`: Reservations with payment tracking
-- `AdminRole.js`: Role-based access control
-- `Wallet.js`: User credit system (planned)
-
-### Design System (`/client/src/components/ui/`)
-- `Button.jsx`: LUDUS-branded buttons with variants
-- `Input.jsx`: Form inputs with validation states
-- `Card.jsx`: Content containers
-- `Alert.jsx`: Notification components
-- Custom typography system with Arabic support
-
-## 🔌 API Endpoints
-
-### Authentication (`/api/auth/`)
-- `POST /register` - User registration
-- `POST /login` - User login
-- `GET /me` - Current user info
-- `POST /forgot-password` - Password reset request
-- `POST /reset-password` - Reset password with token
-
-### Activities (`/api/activities/`)
-- `GET /` - List activities (with filtering)
-- `GET /:id` - Activity details
-- `GET /search` - Search activities
-
-### Bookings (`/api/bookings/`)
-- `POST /` - Create booking
-- `GET /` - User bookings
-- `PUT /:id/cancel` - Cancel booking
-
-### Payments (`/api/payments/`)
-- `POST /create` - Create Moyasar payment
-- `POST /confirm` - Confirm payment
-- `POST /webhook` - Moyasar webhook handler
-
-### Admin (`/api/admin/`)
-- `GET /dashboard/stats` - Platform statistics
-- `GET /vendors` - Vendor management
-- `GET /activities` - Activity management
-- `GET /bookings` - Booking management
-
-## 💳 Payment Integration
-
-### Moyasar Configuration
-- **Environment**: Test/Production keys in environment variables
-- **Supported Methods**: MADA, Visa, Mastercard, Apple Pay, STC Pay
-- **Currency**: SAR (Saudi Riyal)
-- **Webhook**: Automated payment confirmation
-
-### Payment Flow
-1. User selects activity and fills booking form
-2. Frontend creates payment intent via backend
-3. Moyasar handles secure payment processing
-4. Webhook confirms payment and updates booking
-5. Email confirmation sent to user
-
-## 📧 Email System
-
-### Google Workspace Integration
-- **Domain**: hi@letsludus.com
-- **Service**: Google Workspace SMTP Relay
-- **Templates**: HTML emails with LUDUS branding
-
-### Email Types
-- Welcome emails for new users
-- Password reset with secure tokens
-- Booking confirmations
-- Payment receipts
-
-## 🌐 Internationalization
-
-### Language Support
-- **Primary**: Arabic (RTL)
-- **Secondary**: English (LTR)
-- **Implementation**: i18next with browser language detection
-
-### RTL Considerations
-- Tailwind CSS RTL utilities
-- Arabic typography optimization
-- Proper text direction handling
-
-## 🔧 Development Workflow
-
-### Getting Started
-```bash
-# Clone and install dependencies
-npm install
-cd client && npm install
-cd ../server && npm install
-
-# Environment setup
-cp .env.example .env
-# Configure MongoDB, Moyasar, email credentials
-
-# Start development servers
-cd server && npm run dev    # Backend on :5000
-cd client && npm start      # Frontend on :3000
-```
-
-### Testing
-```bash
-# Backend API testing
-cd server && npm run test-api
-
-# Frontend testing
-cd client && npm test
-
-# Database seeding
-cd server && npm run seed
-```
-
-### Deployment
-- **Frontend**: Vercel (automated from git)
-- **Backend**: Railway (automated from git)
-- **Database**: MongoDB Atlas (cloud)
-
-## 🚨 Important Security Notes
-
-### Environment Variables
-```env
-# Database
-MONGODB_URI=mongodb+srv://...
-
-# Authentication
-JWT_SECRET=secure-secret-key
-
-# Moyasar Payment Gateway
-MOYASAR_SECRET_KEY=sk_test_...
-MOYASAR_PUBLISHABLE_KEY=pk_test_...
-
-# Email Service
-SMTP_HOST=smtp-relay.gmail.com
-SMTP_USER=hi@letsludus.com
-SMTP_PASS=app-specific-password
-```
-
-### Security Measures
-- JWT token rotation
-- Password hashing with bcrypt
-- Rate limiting on API endpoints
-- CORS configuration
-- Input validation and sanitization
-
-## 📋 Common AI Agent Tasks
-
-### Code Analysis
-- Use `/client/src/` for frontend components
-- Use `/server/src/` for backend logic
-- Check `package.json` files for dependencies
-
-### Database Operations
-- Models are in `/server/src/models/`
-- Seeding scripts in `/server/src/seeds/`
-- Test data available for development
-
-### API Integration
-- Service files show API usage patterns
-- Controller files contain business logic
-- Route files define endpoint structure
-
-### UI/UX Work
-- Design system in `/client/src/components/ui/`
-- Page components in `/client/src/pages/`
-- Styling follows LUDUS brand guidelines
-
-## 🎯 Current Development Status
-
-### ✅ Completed Features
-- Complete authentication system
-- Activity browsing and booking
-- Payment processing with Moyasar
-- Admin panel with full CRUD operations
-- User dashboard and profiles
-- Email notification system
-- LUDUS design system implementation
-- Arabic/English internationalization
-
-### 🔄 In Progress
-- Performance optimization
-- Enhanced analytics
-- Mobile app considerations
-
-### 📈 Key Metrics
-- Saudi market focus
-- SAR currency throughout
-- Mobile-first responsive design
-- Arabic language priority
-
-## 🔍 AI Agent Guidelines
-
-### When Working with This Codebase:
-1. **Respect Saudi Market Context**: All features should consider local preferences
-2. **Maintain RTL Support**: Any UI changes must work in Arabic
-3. **Follow LUDUS Design System**: Use existing UI components
-4. **Preserve Payment Integration**: Don't modify Moyasar setup without testing
-5. **Keep Security Standards**: Maintain authentication and validation patterns
-
-### Common Pitfalls to Avoid:
-- Breaking RTL layout with new CSS
-- Hardcoding English text instead of using i18n
-- Modifying payment flows without understanding Moyasar requirements
-- Adding dependencies without checking existing stack
-- Breaking admin role-based access control
-
-### Recommended Development Approach:
-1. Check CLAUDE.md for current status and context
-2. Examine existing similar components before creating new ones
-3. Use the established service layer patterns
-4. Test with seeded Saudi market data
-5. Verify both Arabic and English interfaces
+This document defines the AI agents and their roles in the LUDUS platform development ecosystem. These agents work together to streamline development, improve code quality, and accelerate project delivery.
 
 ---
 
-**Last Updated**: 2025-08-12  
-**Platform Status**: MVP Complete with Production-Ready Features  
-**Agent-Friendly**: ✅ Ready for AI development assistance
+## 🎯 **Primary Development Agents**
+
+### **1. Code Review Agent** 🔍
+**Purpose**: Automated code review and quality assurance
+
+**Capabilities**:
+- **Static Code Analysis**: ESLint, Prettier, and custom rule enforcement
+- **Security Scanning**: Vulnerability detection and security best practices
+- **Performance Review**: Code optimization suggestions
+- **Documentation Check**: Code documentation completeness
+- **Test Coverage**: Unit test coverage analysis
+
+**Integration**:
+- GitHub Actions workflow integration
+- Pre-commit hooks for local development
+- Automated PR reviews and comments
+- Quality gate enforcement
+
+**Configuration**:
+```yaml
+# .github/workflows/code-review.yml
+name: Code Review
+on: [pull_request]
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run ESLint
+        run: npm run lint
+      - name: Run Security Scan
+        run: npm audit
+      - name: Check Test Coverage
+        run: npm run test:coverage
+```
+
+### **2. Testing Agent** 🧪
+**Purpose**: Automated testing and quality assurance
+
+**Capabilities**:
+- **Unit Testing**: Automated unit test execution
+- **Integration Testing**: API and database integration tests
+- **E2E Testing**: Playwright-based end-to-end testing
+- **Performance Testing**: Load and stress testing
+- **Visual Regression**: UI component testing
+
+**Test Suites**:
+- **Backend Tests**: Jest + Supertest for API testing
+- **Frontend Tests**: React Testing Library + Jest
+- **Mobile Tests**: Flutter widget testing
+- **E2E Tests**: Playwright for critical user flows
+
+**Configuration**:
+```yaml
+# .github/workflows/testing.yml
+name: Testing
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Backend Tests
+        run: npm run test:backend
+      - name: Run Frontend Tests
+        run: npm run test:frontend
+      - name: Run E2E Tests
+        run: npm run test:e2e
+```
+
+### **3. Documentation Agent** 📚
+**Purpose**: Automated documentation generation and maintenance
+
+**Capabilities**:
+- **API Documentation**: OpenAPI/Swagger documentation generation
+- **Code Documentation**: JSDoc and inline documentation
+- **Component Documentation**: Storybook story generation
+- **Architecture Documentation**: System architecture diagrams
+- **User Guides**: Automated user guide generation
+
+**Generated Documentation**:
+- API reference documentation
+- Component library documentation
+- Architecture decision records (ADRs)
+- User onboarding guides
+- Developer setup guides
+
+**Configuration**:
+```yaml
+# .github/workflows/documentation.yml
+name: Documentation
+on: [push]
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate API Docs
+        run: npm run docs:api
+      - name: Generate Component Docs
+        run: npm run docs:components
+      - name: Deploy to GitHub Pages
+        run: npm run docs:deploy
+```
+
+### **4. Deployment Agent** 🚀
+**Purpose**: Automated deployment and infrastructure management
+
+**Capabilities**:
+- **Environment Management**: Staging and production environment setup
+- **Database Migrations**: Automated database schema updates
+- **Health Checks**: Application health monitoring
+- **Rollback Management**: Automated rollback procedures
+- **Performance Monitoring**: Real-time performance tracking
+
+**Deployment Pipeline**:
+1. **Code Review** → Automated quality checks
+2. **Testing** → Comprehensive test suite execution
+3. **Build** → Application build and optimization
+4. **Deploy** → Staging deployment and testing
+5. **Promote** → Production deployment with monitoring
+
+**Configuration**:
+```yaml
+# .github/workflows/deploy.yml
+name: Deploy
+on: [push to main]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to Staging
+        run: npm run deploy:staging
+      - name: Run Health Checks
+        run: npm run health:check
+      - name: Deploy to Production
+        run: npm run deploy:production
+```
+
+---
+
+## 🛠️ **Specialized Development Agents**
+
+### **5. Mobile Development Agent** 📱
+**Purpose**: Flutter mobile app development assistance
+
+**Capabilities**:
+- **Code Generation**: Flutter widget and screen generation
+- **State Management**: Riverpod provider optimization
+- **UI/UX Review**: Apple HIG and Material Design compliance
+- **Performance Optimization**: Mobile app performance analysis
+- **Testing**: Flutter widget and integration testing
+
+**Mobile-Specific Features**:
+- **Platform Compliance**: iOS and Android platform guidelines
+- **Accessibility**: WCAG compliance for mobile apps
+- **Offline Support**: Data synchronization strategies
+- **Push Notifications**: Notification system implementation
+
+### **6. Security Agent** 🔒
+**Purpose**: Security monitoring and vulnerability prevention
+
+**Capabilities**:
+- **Dependency Scanning**: Automated vulnerability scanning
+- **Code Security**: Security best practices enforcement
+- **Authentication Review**: JWT and OAuth security analysis
+- **Data Protection**: GDPR and privacy compliance
+- **Penetration Testing**: Automated security testing
+
+**Security Checks**:
+- Dependency vulnerability scanning
+- Code injection prevention
+- SQL injection protection
+- XSS prevention
+- CSRF protection
+
+### **7. Performance Agent** ⚡
+**Purpose**: Performance optimization and monitoring
+
+**Capabilities**:
+- **Performance Testing**: Load and stress testing
+- **Optimization Suggestions**: Code and database optimization
+- **Monitoring**: Real-time performance metrics
+- **Caching Strategies**: Cache optimization recommendations
+- **Bundle Analysis**: Frontend bundle size optimization
+
+**Performance Metrics**:
+- Page load times
+- API response times
+- Database query performance
+- Memory usage optimization
+- Bundle size analysis
+
+---
+
+## 🤝 **Agent Collaboration Workflow**
+
+### **Development Workflow**
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    AGENT COLLABORATION WORKFLOW             │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐     │
+│  │   DEVELOP   │───►│   REVIEW    │───►│    TEST     │     │
+│  │             │    │             │    │             │     │
+│  │ • Code      │    │ • Quality   │    │ • Unit      │     │
+│  │ • Features  │    │ • Security  │    │ • E2E       │     │
+│  │ • Bug Fixes │    │ • Standards │    │ • Performance│     │
+│  └─────────────┘    └─────────────┘    └─────────────┘     │
+│                                                             │
+│  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐     │
+│  │  DOCUMENT   │◄───│   DEPLOY    │◄───│   MONITOR   │     │
+│  │             │    │             │    │             │     │
+│  │ • API Docs  │    │ • Staging   │    │ • Health    │     │
+│  │ • Guides    │    │ • Production│    │ • Performance│     │
+│  │ • Updates   │    │ • Rollback  │    │ • Alerts    │     │
+│  └─────────────┘    └─────────────┘    └─────────────┘     │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### **Agent Communication Protocol**
+1. **Event-Driven**: Agents respond to development events
+2. **Status Updates**: Real-time status reporting
+3. **Escalation**: Automatic escalation for critical issues
+4. **Collaboration**: Cross-agent communication for complex tasks
+
+---
+
+## 📊 **Agent Performance Metrics**
+
+### **Code Review Agent Metrics**
+- **Review Time**: Average time to complete code review
+- **Issue Detection**: Number of issues found per review
+- **False Positives**: Accuracy of issue detection
+- **Developer Satisfaction**: Feedback from development team
+
+### **Testing Agent Metrics**
+- **Test Coverage**: Percentage of code covered by tests
+- **Test Execution Time**: Time to run complete test suite
+- **Test Reliability**: Percentage of tests passing consistently
+- **Bug Detection**: Number of bugs caught by automated tests
+
+### **Deployment Agent Metrics**
+- **Deployment Success Rate**: Percentage of successful deployments
+- **Deployment Time**: Time from commit to production
+- **Rollback Frequency**: Number of rollbacks required
+- **Uptime**: Application availability percentage
+
+---
+
+## 🔧 **Agent Configuration & Customization**
+
+### **Environment-Specific Configuration**
+```yaml
+# agents-config.yml
+agents:
+  code_review:
+    enabled: true
+    rules:
+      - eslint
+      - prettier
+      - security_scan
+    thresholds:
+      coverage: 80
+      complexity: 10
+  
+  testing:
+    enabled: true
+    suites:
+      - unit
+      - integration
+      - e2e
+    parallel: true
+  
+  deployment:
+    enabled: true
+    environments:
+      - staging
+      - production
+    auto_rollback: true
+```
+
+### **Custom Agent Rules**
+```javascript
+// custom-agent-rules.js
+module.exports = {
+  // Custom code review rules
+  codeReview: {
+    maxFileSize: '500KB',
+    maxComplexity: 10,
+    requiredTests: true,
+    documentationRequired: true
+  },
+  
+  // Custom testing rules
+  testing: {
+    minCoverage: 80,
+    maxTestTime: '5m',
+    requiredE2E: true
+  },
+  
+  // Custom deployment rules
+  deployment: {
+    healthCheckTimeout: '30s',
+    maxDeploymentTime: '10m',
+    autoRollbackThreshold: 3
+  }
+};
+```
+
+---
+
+## 🚀 **Agent Integration with Development Tools**
+
+### **IDE Integration**
+- **VS Code Extensions**: Agent feedback in real-time
+- **GitHub Integration**: Automated PR reviews and comments
+- **Slack Notifications**: Real-time status updates
+- **Email Alerts**: Critical issue notifications
+
+### **CI/CD Pipeline Integration**
+```yaml
+# .github/workflows/agent-pipeline.yml
+name: Agent Pipeline
+on: [push, pull_request]
+
+jobs:
+  agent-pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code Review Agent
+        run: npm run agent:review
+      
+      - name: Testing Agent
+        run: npm run agent:test
+      
+      - name: Security Agent
+        run: npm run agent:security
+      
+      - name: Performance Agent
+        run: npm run agent:performance
+      
+      - name: Documentation Agent
+        run: npm run agent:docs
+      
+      - name: Deployment Agent
+        if: github.ref == 'refs/heads/main'
+        run: npm run agent:deploy
+```
+
+---
+
+## 📈 **Agent Learning & Improvement**
+
+### **Machine Learning Capabilities**
+- **Pattern Recognition**: Learning from code patterns and issues
+- **Predictive Analysis**: Predicting potential issues before they occur
+- **Optimization Suggestions**: Continuous improvement recommendations
+- **Adaptive Rules**: Rules that adapt based on project needs
+
+### **Feedback Loop**
+1. **Data Collection**: Collecting agent performance data
+2. **Analysis**: Analyzing effectiveness and accuracy
+3. **Optimization**: Improving agent rules and capabilities
+4. **Implementation**: Deploying improved agents
+5. **Monitoring**: Continuous monitoring of improvements
+
+---
+
+## 🔮 **Future Agent Capabilities**
+
+### **Planned Enhancements**
+- **AI-Powered Code Generation**: Intelligent code generation
+- **Natural Language Processing**: Understanding developer intent
+- **Predictive Maintenance**: Predicting system issues
+- **Automated Refactoring**: Intelligent code refactoring
+- **User Experience Optimization**: AI-driven UX improvements
+
+### **Advanced Features**
+- **Multi-Project Coordination**: Coordinating across multiple projects
+- **Cross-Team Collaboration**: Facilitating team communication
+- **Business Intelligence**: Providing business insights
+- **Automated Decision Making**: Making development decisions
+
+---
+
+## 📞 **Agent Support & Maintenance**
+
+### **Support Channels**
+- **Documentation**: Comprehensive agent documentation
+- **Troubleshooting**: Common issues and solutions
+- **Training**: Agent usage training for development team
+- **Feedback**: Continuous feedback collection and improvement
+
+### **Maintenance Schedule**
+- **Daily**: Health checks and status monitoring
+- **Weekly**: Performance analysis and optimization
+- **Monthly**: Feature updates and capability enhancements
+- **Quarterly**: Major version updates and new capabilities
+
+---
+
+*Last Updated: January 2025*
+*Version: 2.0*
+*Status: Active Development*
+
+---
+
+**This AGENTS.md file defines the AI agent ecosystem for the LUDUS platform. These agents work together to create an efficient, automated, and intelligent development environment.**
