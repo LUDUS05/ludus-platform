@@ -42,7 +42,7 @@ const AppRoutes = () => {
       
       {/* Routes with main layout */}
       <Route path="/" element={<MainLayout />}>
-        <Route index element={<HomePage />} />
+        <Route index element={<Navigate to="/neo/home" replace />} />
         <Route path="login" element={<LoginForm />} />
         <Route path="register-form" element={<RegisterForm />} />
         <Route path="activities" element={<ActivitiesPageComponent />} />
