@@ -24,6 +24,12 @@ import MapPage from '../pages/MapPage';
 import WalletPage from '../pages/WalletPage';
 import ContactPage from '../pages/ContactPage';
 import DynamicPage from '../components/pages/DynamicPage';
+import NeoLayout from '../neoui/Layout';
+import NeoHome from '../neoui/pages/Home';
+import NeoSearch from '../neoui/pages/Search';
+import NeoActivityDetails from '../neoui/pages/ActivityDetails';
+import NeoProfile from '../neoui/pages/Profile';
+import NeoDashboard from '../neoui/pages/Dashboard';
 
 const AppRoutes = () => {
   return (
@@ -77,6 +83,16 @@ const AppRoutes = () => {
         
         {/* Dynamic pages */}
         <Route path="pages/:url" element={<DynamicPage />} />
+      </Route>
+
+      {/* Neumorphic demo routes */}
+      <Route path="/neo" element={<NeoLayout />}>
+        <Route index element={<Navigate to="home" replace />} />
+        <Route path="home" element={<NeoHome />} />
+        <Route path="search" element={<NeoSearch />} />
+        <Route path="activity-details" element={<NeoActivityDetails />} />
+        <Route path="profile" element={<NeoProfile />} />
+        <Route path="dashboard" element={<NeoDashboard />} />
       </Route>
       
       {/* Admin routes (separate layout) */}
