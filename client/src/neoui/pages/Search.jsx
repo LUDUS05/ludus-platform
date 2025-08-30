@@ -16,11 +16,11 @@ export default function SearchPage() {
 
   const categories = ['all', 'sports', 'music', 'art', 'food', 'outdoor', 'fitness', 'workshops', 'nightlife', 'culture'];
   const priceRanges = [
-    { id: 'all', label: 'All Prices' },
-    { id: '0-25', label: 'Under $25' },
-    { id: '25-50', label: '$25 - $50' },
-    { id: '50-100', label: '$50 - $100' },
-    { id: '100+', label: '$100+' }
+    { id: 'all', label: 'كل الأسعار' },
+    { id: '0-25', label: 'أقل من 25' },
+    { id: '25-50', label: '25 - 50' },
+    { id: '50-100', label: '50 - 100' },
+    { id: '100+', label: '100+' }
   ];
 
   const filterActivities = useCallback(() => {
@@ -90,7 +90,7 @@ export default function SearchPage() {
           <SearchIcon className="w-5 h-5 text-gray-500" />
           <input
             type="text"
-            placeholder="Search activities, locations, hosts..."
+            placeholder="ابحث عن أنشطة، مواقع، أو مضيفين..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="flex-1 bg-transparent text-neumorphic placeholder-gray-500 outline-none"
@@ -113,7 +113,7 @@ export default function SearchPage() {
           <div>
             <div className="flex items-center gap-2 mb-3">
               <MapPin className="w-4 h-4 text-gray-600" />
-              <span className="font-semibold text-neumorphic text-sm">Category</span>
+              <span className="font-semibold text-neumorphic text-sm">الفئة</span>
             </div>
             <div className="flex flex-wrap gap-2">
               {categories.map((category) => (
@@ -126,7 +126,17 @@ export default function SearchPage() {
                       : 'neumorphic-subtle hover:neumorphic text-gray-600'
                   }`}
                 >
-                  {category === 'all' ? 'All' : category.charAt(0).toUpperCase() + category.slice(1)}
+                  {category === 'all' ? 'الكل' : (
+                    category === 'sports' ? 'رياضة' :
+                    category === 'music' ? 'موسيقى' :
+                    category === 'art' ? 'فن' :
+                    category === 'food' ? 'طعام' :
+                    category === 'outdoor' ? 'هواء طلق' :
+                    category === 'fitness' ? 'لياقة' :
+                    category === 'workshops' ? 'ورش' :
+                    category === 'nightlife' ? 'سهرات' :
+                    category === 'culture' ? 'ثقافة' : category)
+                  }
                 </button>
               ))}
             </div>
@@ -136,7 +146,7 @@ export default function SearchPage() {
           <div>
             <div className="flex items-center gap-2 mb-3">
               <DollarSign className="w-4 h-4 text-gray-600" />
-              <span className="font-semibold text-neumorphic text-sm">Price Range</span>
+              <span className="font-semibold text-neumorphic text-sm">نطاق السعر</span>
             </div>
             <div className="flex flex-wrap gap-2">
               {priceRanges.map((range) => (
@@ -159,7 +169,7 @@ export default function SearchPage() {
             onClick={clearFilters}
             className="w-full py-2 text-sm font-medium text-gray-600 hover:text-gray-800 transition-colors"
           >
-            Clear All Filters
+            مسح جميع الفلاتر
           </button>
         </div>
       )}

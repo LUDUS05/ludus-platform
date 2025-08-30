@@ -87,12 +87,10 @@ export default function ProfilePage() {
                   value={editData.full_name}
                   onChange={(e) => setEditData({...editData, full_name: e.target.value})}
                   className="text-xl font-bold bg-transparent border-b-2 border-gray-300 focus:border-blue-600 outline-none text-neumorphic"
-                  placeholder="Your name"
+                  placeholder="اسمك"
                 />
               ) : (
-                <h1 className="text-xl font-bold text-neumorphic">
-                  {user.full_name || 'Anonymous User'}
-                </h1>
+                <h1 className="text-xl font-bold text-neumorphic">{user.full_name || 'مستخدم'}</h1>
               )}
               <p className="text-sm text-gray-600">{user.email}</p>
             </div>
@@ -113,7 +111,7 @@ export default function ProfilePage() {
                 value={editData.bio}
                 onChange={(e) => setEditData({...editData, bio: e.target.value})}
                 className="w-full p-3 neumorphic-subtle rounded-xl bg-transparent text-gray-700 placeholder-gray-500 outline-none"
-                placeholder="Tell us about yourself..."
+                placeholder="حدّثنا عن نفسك..."
               />
             </div>
             <div>
@@ -122,7 +120,7 @@ export default function ProfilePage() {
                 value={editData.location}
                 onChange={(e) => setEditData({...editData, location: e.target.value})}
                 className="w-full p-3 neumorphic-subtle rounded-xl bg-transparent text-gray-700 placeholder-gray-500 outline-none"
-                placeholder="Your location"
+                placeholder="موقعك"
               />
             </div>
             <div className="flex gap-3">
@@ -130,20 +128,20 @@ export default function ProfilePage() {
                 onClick={() => setIsEditing(false)}
                 className="flex-1 py-2 text-sm font-medium text-gray-600 hover:text-gray-800"
               >
-                Cancel
+                إلغاء
               </button>
               <button
                 onClick={handleSaveProfile}
                 className="flex-1 py-2 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-colors"
               >
-                Save
+                حفظ
               </button>
             </div>
           </div>
         ) : (
           <div className="space-y-3">
             <p className="text-gray-600">
-              {user.bio || 'No bio yet. Click edit to add one!'}
+              {user.bio || 'لا توجد نبذة حتى الآن. اضغط تحرير لإضافة نبذة!'}
             </p>
             {user.location && (
               <div className="flex items-center gap-2 text-sm text-gray-600">
@@ -160,28 +158,28 @@ export default function ProfilePage() {
             <p className="text-xl font-bold text-neumorphic">
               {bookedActivities.length}
             </p>
-            <p className="text-xs text-gray-600">Activities</p>
+            <p className="text-xs text-gray-600">أنشطة</p>
           </div>
           <div className="text-center">
             <p className="text-xl font-bold text-neumorphic">
               {user.followers_count || 0}
             </p>
-            <p className="text-xs text-gray-600">Followers</p>
+            <p className="text-xs text-gray-600">متابعون</p>
           </div>
           <div className="text-center">
             <p className="text-xl font-bold text-neumorphic">
               {user.following_count || 0}
             </p>
-            <p className="text-xs text-gray-600">Following</p>
+            <p className="text-xs text-gray-600">يتابع</p>
           </div>
         </div>
       </div>
 
       {/* Bookings */}
       <div className="neumorphic rounded-2xl p-6">
-        <h2 className="text-lg font-bold text-neumorphic mb-4">Your Bookings</h2>
+        <h2 className="text-lg font-bold text-neumorphic mb-4">حجوزاتك</h2>
         {bookedActivities.length === 0 ? (
-          <p className="text-gray-600">No bookings yet.</p>
+          <p className="text-gray-600">لا توجد حجوزات.</p>
         ) : (
           <div className="space-y-3">
             {bookedActivities.map(item => (
@@ -192,8 +190,8 @@ export default function ProfilePage() {
                     <p className="text-sm text-gray-600">{item.activity.location}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm text-gray-600">Participants: {item.participants}</p>
-                    <p className="text-sm text-gray-600">${item.total_price}</p>
+                    <p className="text-sm text-gray-600">عدد الأشخاص: {item.participants}</p>
+                    <p className="text-sm text-gray-600">ر.س {item.total_price}</p>
                   </div>
                 </div>
               </div>

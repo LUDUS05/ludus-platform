@@ -3,17 +3,17 @@ import { Link, Outlet, useLocation } from 'react-router-dom';
 import { Home, Search, User, Calendar } from 'lucide-react';
 
 const navItems = [
-  { id: 'home', title: 'Discover', url: '/neo/home', icon: Home },
-  { id: 'search', title: 'Search', url: '/neo/search', icon: Search },
-  { id: 'dashboard', title: 'Dashboard', url: '/neo/dashboard', icon: Calendar },
-  { id: 'profile', title: 'Profile', url: '/neo/profile', icon: User },
+  { id: 'home', title: 'اكتشف', url: '/neo/home', icon: Home },
+  { id: 'search', title: 'بحث', url: '/neo/search', icon: Search },
+  { id: 'dashboard', title: 'لوحة التحكم', url: '/neo/dashboard', icon: Calendar },
+  { id: 'profile', title: 'الملف الشخصي', url: '/neo/profile', icon: User },
 ];
 
 export default function Layout() {
   const location = useLocation();
 
   return (
-    <div className="min-h-screen bg-[#e0e0e0]" style={{ backgroundColor: '#e0e0e0' }}>
+    <div className="min-h-screen bg-[#e0e0e0]" style={{ backgroundColor: '#e0e0e0' }} dir="rtl" lang="ar">
       <style>
         {`
           .neumorphic {

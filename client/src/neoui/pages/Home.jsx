@@ -114,19 +114,19 @@ export default function HomePage() {
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-2xl font-black text-neumorphic mb-2">
-          Discover Amazing
+          اكتشف فعاليات مميزة
         </h1>
         <p className="text-gray-600">
-          Find activities that match your vibe
+          اعثر على أنشطة تناسب ذوقك
         </p>
       </div>
 
       {/* Filter Pills */}
       <div className="flex gap-3 mb-6 overflow-x-auto pb-2">
         {[
-          { id: 'all', label: 'All', icon: Filter },
-          { id: 'recommended', label: 'For You', icon: Sparkles },
-          { id: 'trending', label: 'Trending', icon: TrendingUp }
+          { id: 'all', label: 'الكل', icon: Filter },
+          { id: 'recommended', label: 'مقترحة لك', icon: Sparkles },
+          { id: 'trending', label: 'الأكثر رواجًا', icon: TrendingUp }
         ].map((filter) => (
           <button
             key={filter.id}
@@ -136,9 +136,7 @@ export default function HomePage() {
             }`}
           >
             <filter.icon className="w-4 h-4" />
-            <span className="font-medium text-sm">
-              {filter.label}
-            </span>
+            <span className="font-medium text-sm">{filter.label}</span>
           </button>
         ))}
       </div>
@@ -159,7 +157,7 @@ export default function HomePage() {
               <Sparkles className="w-10 h-10 text-gray-400" />
             </div>
             <p className="text-gray-600">
-              No activities found. Try adjusting your filters!
+              لا توجد أنشطة. جرّب تعديل الفلاتر!
             </p>
           </div>
         )}

@@ -53,10 +53,10 @@ export default function ActivityDetailsPage() {
         current_participants: (activity.current_participants || 0) + participants
       });
       
-      alert('Booking confirmed! Check your dashboard for details.');
+      alert('تم تأكيد الحجز! تحقق من لوحة التحكم.');
       navigate(-1);
     } catch (error) {
-      alert('Booking failed. Please try again.');
+      alert('فشل الحجز. حاول مرة أخرى.');
     }
     setIsBooking(false);
   };
@@ -135,7 +135,7 @@ export default function ActivityDetailsPage() {
           <div className="neumorphic rounded-xl p-4">
             <div className="flex items-center gap-2 mb-2">
               <MapPin className="w-4 h-4 text-gray-500" />
-              <span className="text-sm font-medium text-gray-700">Location</span>
+              <span className="text-sm font-medium text-gray-700">الموقع</span>
             </div>
             <p className="text-sm text-gray-600">{activity.location}</p>
           </div>
@@ -143,7 +143,7 @@ export default function ActivityDetailsPage() {
           <div className="neumorphic rounded-xl p-4">
             <div className="flex items-center gap-2 mb-2">
               <Clock className="w-4 h-4 text-gray-500" />
-              <span className="text-sm font-medium text-gray-700">Duration</span>
+              <span className="text-sm font-medium text-gray-700">المدة</span>
             </div>
             <p className="text-sm text-gray-600">{activity.duration || '2h'}</p>
           </div>
@@ -151,7 +151,7 @@ export default function ActivityDetailsPage() {
           <div className="neumorphic rounded-xl p-4">
             <div className="flex items-center gap-2 mb-2">
               <Calendar className="w-4 h-4 text-gray-500" />
-              <span className="text-sm font-medium text-gray-700">Date</span>
+              <span className="text-sm font-medium text-gray-700">التاريخ</span>
             </div>
             <p className="text-sm text-gray-600">
               {activity.date ? new Date(activity.date).toLocaleDateString() : 'TBD'}
@@ -161,7 +161,7 @@ export default function ActivityDetailsPage() {
           <div className="neumorphic rounded-xl p-4">
             <div className="flex items-center gap-2 mb-2">
               <Users className="w-4 h-4 text-gray-500" />
-              <span className="text-sm font-medium text-gray-700">Capacity</span>
+              <span className="text-sm font-medium text-gray-700">السعة</span>
             </div>
             <p className="text-sm text-gray-600">
               {(activity.current_participants || 0)}/{activity.max_participants || 10}
@@ -172,7 +172,7 @@ export default function ActivityDetailsPage() {
         {/* Booking Controls */}
         <div className="neumorphic rounded-2xl p-4">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-neumorphic font-bold text-lg">${activity.price} per person</span>
+            <span className="text-neumorphic font-bold text-lg">ر.س {activity.price} للشخص</span>
             <div className="flex items-center">
               <button
                 className="neumorphic rounded-full w-8 h-8 flex items-center justify-center"
@@ -194,7 +194,7 @@ export default function ActivityDetailsPage() {
             disabled={isBooking}
             className="w-full py-3 rounded-xl font-bold text-white bg-blue-600 hover:bg-blue-700 transition-colors"
           >
-            {isBooking ? 'Booking...' : 'Book Now'}
+            {isBooking ? 'جاري الحجز...' : 'احجز الآن'}
           </button>
         </div>
       </div>

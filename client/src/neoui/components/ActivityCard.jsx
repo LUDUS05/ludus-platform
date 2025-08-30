@@ -13,9 +13,9 @@ export default function ActivityCard({ activity, onTap }) {
           alt={activity.title}
           className="w-full h-48 object-cover rounded-xl"
         />
-        <div className="absolute top-3 right-3 neumorphic-subtle rounded-full px-3 py-1">
+        <div className="absolute top-3 left-3 neumorphic-subtle rounded-full px-3 py-1">
           <span className="text-sm font-semibold text-gray-700">
-            ${activity.price}
+            ر.س {activity.price}
           </span>
         </div>
       </div>
@@ -63,7 +63,7 @@ export default function ActivityCard({ activity, onTap }) {
             <span>{activity.current_participants || 0}/{activity.max_participants || 10}</span>
           </div>
           <span className="text-xs text-gray-500">
-            By {activity.vendor_name}
+            بواسطة {activity.vendor_name}
           </span>
         </div>
       </div>

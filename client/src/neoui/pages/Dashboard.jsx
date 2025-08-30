@@ -79,12 +79,8 @@ export default function DashboardPage() {
             </span>
           </div>
           <div>
-            <h1 className="text-xl font-bold text-neumorphic">
-              Hey, {user.full_name?.split(' ')[0] || 'there'}!
-            </h1>
-            <p className="text-sm text-gray-600">
-              Manage your activity bookings
-            </p>
+            <h1 className="text-xl font-bold text-neumorphic">مرحبًا، {user.full_name?.split(' ')[0] || 'صديقنا'}!</h1>
+            <p className="text-sm text-gray-600">إدارة حجوزات أنشطتك</p>
           </div>
         </div>
 
@@ -94,13 +90,13 @@ export default function DashboardPage() {
             <p className="text-2xl font-bold text-neumorphic">
               {bookings.length}
             </p>
-            <p className="text-xs text-gray-600">Total Bookings</p>
+            <p className="text-xs text-gray-600">إجمالي الحجوزات</p>
           </div>
           <div className="neumorphic-subtle rounded-xl p-3 text-center">
             <p className="text-2xl font-bold text-neumorphic">
               ${bookings.reduce((sum, b) => sum + (b.total_price || 0), 0)}
             </p>
-            <p className="text-xs text-gray-600">Total Spent</p>
+            <p className="text-xs text-gray-600">إجمالي الإنفاق</p>
           </div>
         </div>
       </div>
@@ -109,8 +105,8 @@ export default function DashboardPage() {
       <div className="neumorphic rounded-2xl p-2">
         <div className="flex">
           {[
-            { id: 'upcoming', label: 'Upcoming' },
-            { id: 'past', label: 'Past Activities' }
+            { id: 'upcoming', label: 'قادمة' },
+            { id: 'past', label: 'أنشطة سابقة' }
           ].map((tab) => (
             <button
               key={tab.id}
@@ -144,20 +140,16 @@ export default function DashboardPage() {
                 />
                 <div className="flex-1 space-y-2">
                   <div className="flex items-start justify-between">
-                    <h3 className="font-bold text-neumorphic text-sm">
-                      {booking.activity.title}
-                    </h3>
+                    <h3 className="font-bold text-neumorphic text-sm">{booking.activity.title}</h3>
                     <ChevronRight className="w-4 h-4 text-gray-400 mt-1" />
                   </div>
 
                   <div className="space-y-1">
                     <div className="flex items-center gap-2 text-xs text-gray-600">
                       <Calendar className="w-3 h-3" />
-                      <span>
-                        {booking.activity.date ? new Date(booking.activity.date).toLocaleDateString() : 'TBD'}
-                      </span>
+                      <span>{booking.activity.date ? new Date(booking.activity.date).toLocaleDateString('ar-SA') : 'لاحقًا'}</span>
                       <Clock className="w-3 h-3 ml-2" />
-                      <span>{booking.activity.time || 'TBD'}</span>
+                      <span>{booking.activity.time || 'لاحقًا'}</span>
                     </div>
                     
                     <div className="flex items-center gap-2 text-xs text-gray-600">
@@ -167,7 +159,7 @@ export default function DashboardPage() {
 
                     <div className="flex items-center gap-2 text-xs text-gray-600">
                       <Users className="w-3 h-3" />
-                      <span>{booking.participants} people</span>
+                      <span>{booking.participants} أشخاص</span>
                       <Star className="w-3 h-3 ml-2 text-yellow-500" />
                       <span>{booking.activity.vendor_rating || 4.5}</span>
                     </div>
@@ -177,9 +169,7 @@ export default function DashboardPage() {
             </div>
           ))
         ) : (
-          <div className="text-center py-12">
-            <p className="text-gray-600">No bookings found for this tab.</p>
-          </div>
+          <div className="text-center py-12"><p className="text-gray-600">لا توجد حجوزات في هذا القسم.</p></div>
         )}
       </div>
     </div>

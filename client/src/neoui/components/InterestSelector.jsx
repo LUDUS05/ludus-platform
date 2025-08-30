@@ -2,15 +2,15 @@ import React from 'react';
 import { Check } from 'lucide-react';
 
 const INTERESTS = [
-  { id: 'sports', name: 'Sports', emoji: '⚽' },
-  { id: 'music', name: 'Music', emoji: '🎵' },
-  { id: 'art', name: 'Art', emoji: '🎨' },
-  { id: 'food', name: 'Food', emoji: '🍽️' },
-  { id: 'outdoor', name: 'Outdoor', emoji: '🌲' },
-  { id: 'fitness', name: 'Fitness', emoji: '💪' },
-  { id: 'workshops', name: 'Workshops', emoji: '🛠️' },
-  { id: 'nightlife', name: 'Nightlife', emoji: '🌙' },
-  { id: 'culture', name: 'Culture', emoji: '🎭' }
+  { id: 'sports', name: 'الرياضة', emoji: '⚽' },
+  { id: 'music', name: 'الموسيقى', emoji: '🎵' },
+  { id: 'art', name: 'الفنون', emoji: '🎨' },
+  { id: 'food', name: 'الطعام', emoji: '🍽️' },
+  { id: 'outdoor', name: 'الهواء الطلق', emoji: '🌲' },
+  { id: 'fitness', name: 'اللياقة', emoji: '💪' },
+  { id: 'workshops', name: 'الورش', emoji: '🛠️' },
+  { id: 'nightlife', name: 'السهرات', emoji: '🌙' },
+  { id: 'culture', name: 'الثقافة', emoji: '🎭' }
 ];
 
 export default function InterestSelector({ selectedInterests = [], onInterestsChange }) {
