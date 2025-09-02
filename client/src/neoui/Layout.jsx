@@ -27,13 +27,18 @@ export default function Layout() {
 
   return (
     <div className="neo-container" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'} lang={i18n.language}>
-      {/* Left Sidebar Navigation */}
-      <nav className="neo-sidebar">
-        <div className="neo-sidebar-container">
+      {/* Main Content */}
+      <div className="neo-content neo-layout">
+        <Outlet />
+      </div>
+
+      {/* Compact Vertical Navigation Bar - Positioned near content */}
+      <nav className="neo-nav-vertical">
+        <div className="neo-nav-vertical-container">
           {/* Language Switcher - Top */}
           <div className="neo-language-section">
             <div className="neo-language-item">
-              <Globe className="w-5 h-5 text-gray-600" />
+              <Globe className="w-4 h-4 text-gray-600" />
               <button
                 onClick={toggleLanguage}
                 className="neo-language-button-compact"
@@ -44,8 +49,8 @@ export default function Layout() {
             </div>
           </div>
 
-          {/* Navigation Items */}
-          <div className="neo-nav-items">
+          {/* Navigation Items - Vertical */}
+          <div className="neo-nav-items-vertical">
             {navItems.map((item) => {
               const isActive = location.pathname.startsWith(item.url);
               const Icon = item.icon;
@@ -53,24 +58,16 @@ export default function Layout() {
                 <Link
                   key={item.id}
                   to={item.url}
-                  className={`neo-nav-item ${isActive ? 'active' : ''}`}
+                  className={`neo-nav-item-vertical ${isActive ? 'active' : ''}`}
                 >
-                  <Icon className="w-6 h-6" />
-                  <span className="text-sm font-medium">{item.title}</span>
+                  <Icon className="w-5 h-5" />
+                  <span className="text-xs">{item.title}</span>
                 </Link>
               );
             })}
           </div>
-
-          {/* Bottom spacer */}
-          <div className="neo-sidebar-spacer"></div>
         </div>
       </nav>
-
-      {/* Main Content */}
-      <div className="neo-content neo-layout">
-        <Outlet />
-      </div>
     </div>
   );
 }
