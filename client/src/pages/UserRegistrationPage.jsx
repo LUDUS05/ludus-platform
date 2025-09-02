@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -51,8 +51,8 @@ const UserRegistrationPage = () => {
     return i18n.language === 'ar' ? 'English' : 'العربية';
   };
   
-  // Conversational questions configuration
-  const conversationSteps = [
+  // Conversational questions configuration - moved inside useMemo to fix translation issues
+  const conversationSteps = useMemo(() => [
     {
       key: 'firstName',
       question: t('user.registration.questions.firstName.question'),
@@ -109,7 +109,7 @@ const UserRegistrationPage = () => {
       required: false,
       buttonText: t('user.registration.questions.dateOfBirth.buttonText')
     }
-  ];
+  ], [t, formData.firstName]);
 
   // Check for referral code in URL
   useEffect(() => {
@@ -366,6 +366,15 @@ const UserRegistrationPage = () => {
             <div className="w-20 h-20 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-6">
               <span className="text-3xl font-bold text-white">L</span>
             </div>
+            
+            {/* Debug info - remove this after confirming translations work */}
+            <div className="mb-4 p-2 bg-gray-100 rounded text-xs text-gray-600">
+              <div>Current Language: {i18n.language}</div>
+              <div>Translation Ready: {i18n.isInitialized ? 'Yes' : 'No'}</div>
+              <div>Raw Key: user.registration.title</div>
+              <div>Translated: {t('user.registration.title')}</div>
+            </div>
+            
             <h1 className="text-3xl font-bold text-gray-800 mb-4">
               {t('user.registration.title')}
             </h1>
