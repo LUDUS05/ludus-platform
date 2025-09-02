@@ -1,0 +1,139 @@
+/* Neumorphic Design System for LUDUS Platform */
+
+/* Base neumorphic styles */
+.neumorphic {
+  background: #f0f0f0;
+  box-shadow: 
+    8px 8px 16px #d1d1d1,
+    -8px -8px 16px #ffffff;
+  border-radius: 16px;
+}
+
+.neumorphic-subtle {
+  background: #f8f8f8;
+  box-shadow: 
+    4px 4px 8px #e0e0e0,
+    -4px -4px 8px #ffffff;
+  border-radius: 12px;
+}
+
+.neumorphic-pressed {
+  background: #e8e8e8;
+  box-shadow: 
+    inset 4px 4px 8px #d1d1d1,
+    inset -4px -4px 8px #ffffff;
+  border-radius: 16px;
+}
+
+.neumorphic-inset {
+  background: #f0f0f0;
+  box-shadow: 
+    inset 6px 6px 12px #d1d1d1,
+    inset -6px -6px 12px #ffffff;
+  border-radius: 16px;
+}
+
+/* Enhanced neumorphic variants */
+.neumorphic-elevated {
+  background: #f0f0f0;
+  box-shadow: 
+    12px 12px 24px #d1d1d1,
+    -12px -12px 24px #ffffff;
+  border-radius: 20px;
+}
+
+.neumorphic-flat {
+  background: #f0f0f0;
+  box-shadow: 
+    2px 2px 4px #d1d1d1,
+    -2px -2px 4px #ffffff;
+  border-radius: 12px;
+}
+
+/* Interactive states */
+.neumorphic:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    10px 10px 20px #d1d1d1,
+    -10px -10px 20px #ffffff;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.neumorphic-subtle:hover {
+  transform: translateY(-1px);
+  box-shadow: 
+    6px 6px 12px #e0e0e0,
+    -6px -6px 12px #ffffff;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Dark mode support */
+.dark .neumorphic {
+  background: #2a2a2a;
+  box-shadow: 
+    8px 8px 16px #1a1a1a,
+    -8px -8px 16px #3a3a3a;
+}
+
+.dark .neumorphic-subtle {
+  background: #323232;
+  box-shadow: 
+    4px 4px 8px #222222,
+    -4px -4px 8px #424242;
+}
+
+.dark .neumorphic-pressed {
+  background: #282828;
+  box-shadow: 
+    inset 4px 4px 8px #1a1a1a,
+    inset -4px -4px 8px #3a3a3a;
+}
+
+/* Smooth transitions */
+.neumorphic,
+.neumorphic-subtle,
+.neumorphic-pressed,
+.neumorphic-elevated,
+.neumorphic-flat {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Focus states for accessibility */
+.neumorphic:focus,
+.neumorphic-subtle:focus {
+  outline: 2px solid #FF6600;
+  outline-offset: 2px;
+}
+
+/* Animation utilities */
+@keyframes neumorphic-pulse {
+  0%, 100% {
+    box-shadow: 
+      8px 8px 16px #d1d1d1,
+      -8px -8px 16px #ffffff;
+  }
+  50% {
+    box-shadow: 
+      12px 12px 24px #d1d1d1,
+      -12px -12px 24px #ffffff;
+  }
+}
+
+.animate-neumorphic-pulse {
+  animation: neumorphic-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .neumorphic {
+    box-shadow: 
+      4px 4px 8px #d1d1d1,
+      -4px -4px 8px #ffffff;
+  }
+  
+  .neumorphic-subtle {
+    box-shadow: 
+      2px 2px 4px #e0e0e0,
+      -2px -2px 4px #ffffff;
+  }
+}

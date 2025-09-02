@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../services/api';
-import { Eye, Search, Filter, MoreHorizontal } from 'lucide-react';
+import { Eye, Search, Filter, Users } from 'lucide-react';
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
