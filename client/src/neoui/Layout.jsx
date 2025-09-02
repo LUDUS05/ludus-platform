@@ -27,25 +27,6 @@ export default function Layout() {
 
   return (
     <div className="neo-container" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'} lang={i18n.language}>
-      {/* Language Switcher */}
-      <div className="neo-language-switcher">
-        <div className="neo-language-container">
-          <div className="flex items-center gap-3">
-            <Globe className="w-5 h-5 text-gray-700" />
-            <span className="text-sm text-gray-700 font-medium">
-              {i18n.language === 'ar' ? 'اللغة' : 'Language'}
-            </span>
-          </div>
-          <button
-            onClick={toggleLanguage}
-            className="neo-language-button"
-            type="button"
-          >
-            {getCurrentLanguageText()}
-          </button>
-        </div>
-      </div>
-
       <div className="neo-content neo-layout">
         <Outlet />
       </div>
@@ -53,20 +34,40 @@ export default function Layout() {
       <nav className="neo-nav">
         <div className="neo-nav-container">
           <div className="neo-nav-bar">
-            {navItems.map((item) => {
-              const isActive = location.pathname.startsWith(item.url);
-              const Icon = item.icon;
-              return (
-                <Link
-                  key={item.id}
-                  to={item.url}
-                  className={`neo-nav-item ${isActive ? 'active' : ''}`}
+            {/* Language Switcher - Left side */}
+            <div className="neo-language-section">
+              <div className="neo-language-item">
+                <Globe className="w-4 h-4 text-gray-600" />
+                <button
+                  onClick={toggleLanguage}
+                  className="neo-language-button-compact"
+                  type="button"
                 >
-                  <Icon className="w-5 h-5" />
-                  <span className="text-xs">{item.title}</span>
-                </Link>
-              );
-            })}
+                  {getCurrentLanguageText()}
+                </button>
+              </div>
+            </div>
+
+            {/* Navigation Items - Center */}
+            <div className="neo-nav-items">
+              {navItems.map((item) => {
+                const isActive = location.pathname.startsWith(item.url);
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.id}
+                    to={item.url}
+                    className={`neo-nav-item ${isActive ? 'active' : ''}`}
+                  >
+                    <Icon className="w-5 h-5" />
+                    <span className="text-xs">{item.title}</span>
+                  </Link>
+                );
+              })}
+            </div>
+
+            {/* Right side spacer for balance */}
+            <div className="neo-nav-spacer"></div>
           </div>
         </div>
       </nav>
