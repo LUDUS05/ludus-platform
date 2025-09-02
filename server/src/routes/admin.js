@@ -13,7 +13,8 @@ const {
   updateActivity,
   deleteActivity,
   getBookings,
-  updateBookingStatus
+  updateBookingStatus,
+  getUsers
 } = require('../controllers/adminController');
 
 const {
@@ -76,6 +77,16 @@ dashboardRoutes.get('/stats', getDashboardStats);
 dashboardRoutes.get('/overview', getAdminDashboardOverview);
 
 router.use('/dashboard', dashboardRoutes);
+
+// ==============================================
+// USER MANAGEMENT ROUTES
+// ==============================================
+const userRoutes = express.Router();
+userRoutes.use(authorize('admin'));
+
+userRoutes.get('/', getUsers);
+
+router.use('/users', userRoutes);
 
 // ==============================================
 // VENDOR MANAGEMENT ROUTES

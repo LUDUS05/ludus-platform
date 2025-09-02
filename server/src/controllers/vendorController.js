@@ -1,6 +1,91 @@
 const Vendor = require('../models/Vendor');
 const Activity = require('../models/Activity');
 
+// @desc    Register new vendor
+// @route   POST /api/vendors
+// @access  Public
+const registerVendor = async (req, res) => {
+  try {
+    const {
+      contactName,
+      companyName,
+      email,
+      phone,
+      website,
+      description
+    } = req.body;
+
+    // Validate required fields
+    if (!contactName || !companyName || !email || !phone || !description) {
+      return res.status(400).json({
+        success: false,
+        message: 'Missing required fields: contactName, companyName, email, phone, description'
+      });
+    }
+
+    // Check if vendor with this email already exists
+    const existingVendor = await Vendor.findOne({ 'contactInfo.email': email });
+    if (existingVendor) {
+      return res.status(400).json({
+        success: false,
+        message: 'A vendor with this email already exists'
+      });
+    }
+
+    // Create new vendor with required fields and sensible defaults
+    const vendor = new Vendor({
+      businessName: companyName,
+      description,
+      contactInfo: {
+        email,
+        phone
+      },
+      location: {
+        address: 'Address to be provided',
+        city: 'City to be provided',
+        state: 'State to be provided',
+        zipCode: '00000',
+        coordinates: [0, 0] // Default coordinates, will be updated later
+      },
+      categories: ['unique'], // Default category
+      isActive: false, // Not active until approved
+      isFeatured: false,
+      statusHistory: [{
+        status: 'inactive', // Use valid enum value
+        note: 'Vendor registration submitted - pending admin approval',
+        timestamp: new Date(),
+        admin: 'System' // Default admin value
+      }],
+      createdBy: '000000000000000000000000', // Default ObjectId for system creation
+      bankingInfo: {
+        accountStatus: 'pending'
+      }
+    });
+
+    await vendor.save();
+
+    res.status(201).json({
+      success: true,
+      message: 'Vendor registration submitted successfully. Awaiting admin approval.',
+      data: {
+        vendor: {
+          id: vendor._id,
+          businessName: vendor.businessName,
+          email: vendor.contactInfo.email,
+          status: vendor.statusHistory[0].status
+        }
+      }
+    });
+
+  } catch (error) {
+    console.error('Vendor registration error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to register vendor'
+    });
+  }
+};
+
 // @desc    Get vendor profile by ID or slug
 // @route   GET /api/vendors/:id
 // @access  Public
@@ -312,5 +397,6 @@ module.exports = {
   getVendorProfile,
   getVendorActivities,
   getVendors,
-  getVendorReviews
+  getVendorReviews,
+  registerVendor
 };

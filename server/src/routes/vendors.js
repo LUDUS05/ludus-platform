@@ -5,8 +5,14 @@ const {
   getVendorProfile,
   getVendorActivities,
   getVendors,
-  getVendorReviews
+  getVendorReviews,
+  registerVendor
 } = require('../controllers/vendorController');
+
+// @desc    Register new vendor
+// @route   POST /api/vendors
+// @access  Public
+router.post('/', registerVendor);
 
 // @desc    Get all vendors
 // @route   GET /api/vendors

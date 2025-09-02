@@ -552,6 +552,62 @@ const updateBookingStatus = async (req, res) => {
   }
 };
 
+// @desc    Get all users for admin
+// @route   GET /api/admin/users
+// @access  Private (Admin only)
+const getUsers = async (req, res) => {
+  try {
+    const { page = 1, limit = 20, search = '', role = '' } = req.query;
+    
+    // Build query
+    const query = {};
+    if (search) {
+      query.$or = [
+        { firstName: { $regex: search, $options: 'i' } },
+        { lastName: { $regex: search, $options: 'i' } },
+        { email: { $regex: search, $options: 'i' } }
+      ];
+    }
+    if (role) {
+      query.role = role;
+    }
+
+    // Calculate pagination
+    const skip = (page - 1) * limit;
+    
+    // Get users with pagination
+    const users = await User.find(query)
+      .select('-password -refreshToken')
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(parseInt(limit));
+
+    // Get total count for pagination
+    const totalUsers = await User.countDocuments(query);
+
+    res.status(200).json({
+      success: true,
+      data: {
+        users,
+        pagination: {
+          currentPage: parseInt(page),
+          totalPages: Math.ceil(totalUsers / limit),
+          totalUsers,
+          hasNextPage: page * limit < totalUsers,
+          hasPrevPage: page > 1
+        }
+      }
+    });
+
+  } catch (error) {
+    console.error('Get users error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch users'
+    });
+  }
+};
+
 module.exports = {
   getDashboardStats,
   getVendors,
@@ -563,5 +619,6 @@ module.exports = {
   updateActivity,
   deleteActivity,
   getBookings,
-  updateBookingStatus
+  updateBookingStatus,
+  getUsers
 };

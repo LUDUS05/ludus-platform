@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
+import api from '../services/api';
 
 const PartnerRegistrationPage = () => {
   const { t } = useTranslation();
@@ -276,15 +277,27 @@ const PartnerRegistrationPage = () => {
     setIsSubmitting(true);
 
     try {
-      // Simulate API call - replace with actual API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Show success message
-      setShowSuccess(true);
+      // Send vendor registration to backend
+      const response = await api.post('/vendors', {
+        contactName: formData.contactName,
+        companyName: formData.companyName,
+        email: formData.email,
+        phone: formData.phone,
+        website: formData.website,
+        description: formData.description
+      });
+
+      if (response.data.success) {
+        // Show success message
+        setShowSuccess(true);
+      } else {
+        setErrors({ current: response.data.message || t('partner.registration.validation.submissionError') });
+      }
 
     } catch (error) {
       console.error('Submission error:', error);
-      setErrors({ current: t('partner.registration.validation.submissionError') });
+      const errorMessage = error.response?.data?.message || t('partner.registration.validation.submissionError');
+      setErrors({ current: errorMessage });
     } finally {
       setIsSubmitting(false);
     }
