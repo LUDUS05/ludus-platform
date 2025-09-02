@@ -31,6 +31,7 @@ import NeoActivityDetails from '../neoui/pages/ActivityDetails';
 import NeoProfile from '../neoui/pages/Profile';
 import NeoDashboard from '../neoui/pages/Dashboard';
 import NeoWallet from '../neoui/pages/Wallet';
+import TestHomePage from '../pages/TestHomePage';
 
 const AppRoutes = () => {
   return (
@@ -40,6 +41,7 @@ const AppRoutes = () => {
       <Route path="/partner-registration" element={<PartnerRegistrationPage />} />
       <Route path="/coming-soon" element={<ComingSoonPage />} />
       <Route path="/maintenance" element={<MaintenancePage />} />
+      <Route path="/test" element={<TestHomePage />} />
       
       {/* Routes with main layout */}
       <Route path="/" element={<MainLayout />}>

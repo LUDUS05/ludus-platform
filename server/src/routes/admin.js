@@ -9,6 +9,7 @@ const {
   updateVendor,
   deleteVendor,
   getActivities,
+  getActivity,
   createActivity,
   updateActivity,
   deleteActivity,
