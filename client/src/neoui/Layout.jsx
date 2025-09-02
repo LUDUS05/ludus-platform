@@ -27,50 +27,50 @@ export default function Layout() {
 
   return (
     <div className="neo-container" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'} lang={i18n.language}>
+      {/* Left Sidebar Navigation */}
+      <nav className="neo-sidebar">
+        <div className="neo-sidebar-container">
+          {/* Language Switcher - Top */}
+          <div className="neo-language-section">
+            <div className="neo-language-item">
+              <Globe className="w-5 h-5 text-gray-600" />
+              <button
+                onClick={toggleLanguage}
+                className="neo-language-button-compact"
+                type="button"
+              >
+                {getCurrentLanguageText()}
+              </button>
+            </div>
+          </div>
+
+          {/* Navigation Items */}
+          <div className="neo-nav-items">
+            {navItems.map((item) => {
+              const isActive = location.pathname.startsWith(item.url);
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.id}
+                  to={item.url}
+                  className={`neo-nav-item ${isActive ? 'active' : ''}`}
+                >
+                  <Icon className="w-6 h-6" />
+                  <span className="text-sm font-medium">{item.title}</span>
+                </Link>
+              );
+            })}
+          </div>
+
+          {/* Bottom spacer */}
+          <div className="neo-sidebar-spacer"></div>
+        </div>
+      </nav>
+
+      {/* Main Content */}
       <div className="neo-content neo-layout">
         <Outlet />
       </div>
-
-      <nav className="neo-nav">
-        <div className="neo-nav-container">
-          <div className="neo-nav-bar">
-            {/* Language Switcher - Left side */}
-            <div className="neo-language-section">
-              <div className="neo-language-item">
-                <Globe className="w-4 h-4 text-gray-600" />
-                <button
-                  onClick={toggleLanguage}
-                  className="neo-language-button-compact"
-                  type="button"
-                >
-                  {getCurrentLanguageText()}
-                </button>
-              </div>
-            </div>
-
-            {/* Navigation Items - Center */}
-            <div className="neo-nav-items">
-              {navItems.map((item) => {
-                const isActive = location.pathname.startsWith(item.url);
-                const Icon = item.icon;
-                return (
-                  <Link
-                    key={item.id}
-                    to={item.url}
-                    className={`neo-nav-item ${isActive ? 'active' : ''}`}
-                  >
-                    <Icon className="w-5 h-5" />
-                    <span className="text-xs">{item.title}</span>
-                  </Link>
-                );
-              })}
-            </div>
-
-            {/* Right side spacer for balance */}
-            <div className="neo-nav-spacer"></div>
-          </div>
-        </div>
-      </nav>
     </div>
   );
 }
