@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>LUDUS - Redirecting...</title>
+    <script>
+        // SPA Routing Fallback
+        // Redirect all 404s to the main React app
+        console.log('404 detected, redirecting to main app...');
+        
+        // Get the current path
+        const currentPath = window.location.pathname;
+        console.log('Current path:', currentPath);
+        
+        // Redirect to the main app with the same path
+        // This will let React Router handle the routing
+        window.location.href = '/?redirect=' + encodeURIComponent(currentPath);
+    </script>
+</head>
+<body>
+    <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif;">
+        <h1>LUDUS</h1>
+        <p>Redirecting to the main application...</p>
+        <p>If you're not redirected automatically, <a href="/">click here</a>.</p>
+    </div>
+</body>
+</html>
