@@ -100,9 +100,9 @@ export default function ProfilePage() {
 
   if (!user) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="neumorphic rounded-full w-16 h-16 flex items-center justify-center">
-          <div className="animate-spin w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full"></div>
+      <div className="neo-loading">
+        <div className="neo-spinner">
+          <div className="neo-spinner-inner"></div>
         </div>
       </div>
     );
@@ -113,10 +113,10 @@ export default function ProfilePage() {
   return (
     <div className="max-w-md mx-auto space-y-6">
       {/* Profile Header */}
-      <div className="neumorphic rounded-2xl p-6">
+      <div className="neo-activity-card p-6">
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-4">
-            <div className="neumorphic-subtle rounded-full w-16 h-16 flex items-center justify-center">
+            <div className="neo-category-badge w-16 h-16 flex items-center justify-center">
               {user.avatar_url ? (
                 <img src={user.avatar_url} alt="Profile" className="w-16 h-16 rounded-full object-cover" />
               ) : (
@@ -142,7 +142,7 @@ export default function ProfilePage() {
           </div>
           <button
             onClick={() => setIsEditing(!isEditing)}
-            className="neumorphic-subtle rounded-full p-2 hover:neumorphic transition-all duration-200"
+            className="neo-category-badge rounded-full p-2 hover:neo-filter-pill transition-all duration-200"
           >
             <Edit3 className="w-4 h-4 text-gray-600" />
           </button>
@@ -155,7 +155,7 @@ export default function ProfilePage() {
                 type="text"
                 value={editData.bio}
                 onChange={(e) => setEditData({...editData, bio: e.target.value})}
-                className="w-full p-3 neumorphic-subtle rounded-xl bg-transparent text-gray-700 placeholder-gray-500 outline-none"
+                className="w-full p-3 neo-category-badge bg-transparent text-gray-700 placeholder-gray-500 outline-none"
                 placeholder="حدّثنا عن نفسك..."
               />
             </div>
@@ -164,7 +164,7 @@ export default function ProfilePage() {
                 type="text"
                 value={editData.location}
                 onChange={(e) => setEditData({...editData, location: e.target.value})}
-                className="w-full p-3 neumorphic-subtle rounded-xl bg-transparent text-gray-700 placeholder-gray-500 outline-none"
+                className="w-full p-3 neo-category-badge bg-transparent text-gray-700 placeholder-gray-500 outline-none"
                 placeholder="موقعك"
               />
             </div>
@@ -221,14 +221,14 @@ export default function ProfilePage() {
       </div>
 
       {/* Bookings */}
-      <div className="neumorphic rounded-2xl p-6">
+      <div className="neo-activity-card p-6">
         <h2 className="text-lg font-bold text-neumorphic mb-4">حجوزاتك</h2>
         {bookedActivities.length === 0 ? (
           <p className="text-gray-600">لا توجد حجوزات.</p>
         ) : (
           <div className="space-y-3">
             {bookedActivities.map(item => (
-              <div key={item.id} className="neumorphic-subtle rounded-xl p-4">
+              <div key={item.id} className="neo-category-badge p-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-semibold text-neumorphic">{item.activity.title}</p>
@@ -247,7 +247,7 @@ export default function ProfilePage() {
 
       {/* Referral Section */}
       {referralStats && (
-        <div className="neumorphic rounded-2xl p-6">
+        <div className="neo-activity-card p-6">
           <h2 className="text-lg font-semibold text-gray-800 mb-4">برنامج الإحالة</h2>
           
           <div className="grid grid-cols-2 gap-4 mb-4">
@@ -272,7 +272,7 @@ export default function ProfilePage() {
               </div>
               <button
                 onClick={copyReferralLink}
-                className="neumorphic-subtle hover:neumorphic-pressed p-2 rounded-lg transition-all duration-200"
+                className="neo-category-badge hover:neo-filter-pill active p-2 rounded-lg transition-all duration-200"
               >
                 {copied ? <Check className="w-5 h-5 text-green-600" /> : <Copy className="w-5 h-5 text-gray-600" />}
               </button>
@@ -280,7 +280,7 @@ export default function ProfilePage() {
 
             <button
               onClick={() => setShowQRModal(true)}
-              className="w-full flex items-center justify-center gap-3 p-3 neumorphic-subtle hover:neumorphic-pressed rounded-lg transition-all duration-200"
+              className="w-full flex items-center justify-center gap-3 p-3 neo-category-badge hover:neo-filter-pill active rounded-lg transition-all duration-200"
             >
               <QrCode className="w-5 h-5 text-gray-600" />
               <span className="text-gray-700">عرض رمز QR</span>
@@ -292,12 +292,12 @@ export default function ProfilePage() {
       {/* QR Code Modal */}
       {showQRModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="neumorphic rounded-2xl p-6 max-w-sm w-full mx-4">
+          <div className="neo-activity-card p-6 max-w-sm w-full mx-4">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-800">رمز QR للإحالة</h3>
               <button
                 onClick={() => setShowQRModal(false)}
-                className="neumorphic-pressed rounded-full p-2"
+                className="neo-filter-pill active rounded-full p-2"
               >
                 <X className="w-5 h-5 text-gray-700" />
               </button>

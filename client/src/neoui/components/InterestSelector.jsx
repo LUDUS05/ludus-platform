@@ -22,16 +22,14 @@ export default function InterestSelector({ selectedInterests = [], onInterestsCh
   };
 
   return (
-    <div className="grid grid-cols-2 gap-3">
+    <div className="neo-interest-grid">
       {INTERESTS.map((interest) => {
         const isSelected = selectedInterests.includes(interest.id);
         return (
           <div
             key={interest.id}
             onClick={() => toggleInterest(interest.id)}
-            className={`p-4 rounded-xl cursor-pointer transition-all duration-200 ${
-              isSelected ? 'neumorphic-pressed' : 'neumorphic hover:neumorphic-subtle'
-            }`}
+            className={`neo-interest-item ${isSelected ? 'selected' : ''}`}
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
@@ -41,7 +39,7 @@ export default function InterestSelector({ selectedInterests = [], onInterestsCh
                 </span>
               </div>
               {isSelected && (
-                <div className="neumorphic-subtle rounded-full p-1">
+                <div className="neo-interest-check">
                   <Check className="w-4 h-4 text-blue-600" />
                 </div>
               )}

@@ -1,6 +1,17 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+// Environment-aware API configuration
+const getApiBaseUrl = () => {
+  // Production: Use environment variable or default to production URL
+  if (process.env.NODE_ENV === 'production') {
+    return process.env.REACT_APP_API_URL || 'https://app.letsludus.com/api';
+  }
+  
+  // Development: Use local backend
+  return process.env.REACT_APP_API_URL || 'http://localhost:5001/api';
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 // Create axios instance
 const api = axios.create({

@@ -86,7 +86,7 @@ export default function SearchPage() {
     <div className="max-w-md mx-auto">
       {/* Search Bar */}
       <div className="mb-6">
-        <div className="neumorphic rounded-2xl p-4 flex items-center gap-3">
+        <div className="neo-activity-card p-4 flex items-center gap-3">
           <SearchIcon className="w-5 h-5 text-gray-500" />
           <input
             type="text"
@@ -98,17 +98,17 @@ export default function SearchPage() {
           <button
             onClick={() => setShowFilters(!showFilters)}
             className={`p-2 rounded-xl transition-all duration-200 ${
-              showFilters ? 'neumorphic-pressed' : 'neumorphic-subtle hover:neumorphic'
+              showFilters ? 'neo-filter-pill active' : 'neo-filter-pill'
             }`}
           >
-            <SlidersHorizontal className="w-5 h-5 text-gray-600" />
+            <SlidersHorizontal className="w-5 h-5" />
           </button>
         </div>
       </div>
 
       {/* Filters */}
       {showFilters && (
-        <div className="neumorphic rounded-2xl p-4 mb-6 space-y-4">
+        <div className="neo-activity-card p-4 mb-6 space-y-4">
           {/* Categories */}
           <div>
             <div className="flex items-center gap-2 mb-3">
@@ -120,11 +120,7 @@ export default function SearchPage() {
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${
-                    selectedCategory === category 
-                      ? 'neumorphic-pressed text-blue-600' 
-                      : 'neumorphic-subtle hover:neumorphic text-gray-600'
-                  }`}
+                  className={`neo-filter-pill ${selectedCategory === category ? 'active' : ''}`}
                 >
                   {category === 'all' ? 'الكل' : (
                     category === 'sports' ? 'رياضة' :
@@ -153,11 +149,7 @@ export default function SearchPage() {
                 <button
                   key={range.id}
                   onClick={() => setPriceRange(range.id)}
-                  className={`px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${
-                    priceRange === range.id 
-                      ? 'neumorphic-pressed text-blue-600' 
-                      : 'neumorphic-subtle hover:neumorphic text-gray-600'
-                  }`}
+                  className={`neo-filter-pill ${priceRange === range.id ? 'active' : ''}`}
                 >
                   {range.label}
                 </button>

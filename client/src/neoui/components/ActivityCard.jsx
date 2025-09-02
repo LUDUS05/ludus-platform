@@ -4,16 +4,16 @@ import { MapPin, Clock, Users, Star } from 'lucide-react';
 export default function ActivityCard({ activity, onTap }) {
   return (
     <div 
-      className="neumorphic rounded-2xl p-4 mb-4 cursor-pointer transition-all duration-200 hover:neumorphic-pressed"
+      className="neo-activity-card"
       onClick={() => onTap(activity)}
     >
       <div className="relative mb-4">
         <img 
           src={activity.image_url} 
           alt={activity.title}
-          className="w-full h-48 object-cover rounded-xl"
+          className="neo-activity-image"
         />
-        <div className="absolute top-3 left-3 neumorphic-subtle rounded-full px-3 py-1">
+        <div className="neo-price-badge">
           <span className="text-sm font-semibold text-gray-800">
             ر.س {activity.price}
           </span>
@@ -26,7 +26,7 @@ export default function ActivityCard({ activity, onTap }) {
             {activity.title}
           </h3>
           <div className="flex items-center gap-2">
-            <div className="neumorphic-subtle rounded-full px-3 py-1">
+            <div className="neo-category-badge">
               <span className="text-xs font-medium text-gray-700">
                 {activity.category?.toUpperCase?.()}
               </span>

@@ -66,7 +66,7 @@ export default function HomePage() {
     return (
       <div className="max-w-md mx-auto">
         <div className="text-center mb-8">
-          <div className="neumorphic rounded-full w-20 h-20 mx-auto mb-4 flex items-center justify-center">
+          <div className="neo-empty-icon">
             <Sparkles className="w-10 h-10 text-purple-600" />
           </div>
           <h1 className="text-2xl font-black text-gray-800 mb-2">
@@ -86,10 +86,8 @@ export default function HomePage() {
           <button
             onClick={handleOnboardingComplete}
             disabled={selectedInterests.length === 0}
-            className={`w-full py-4 rounded-xl font-bold text-white transition-all duration-200 ${
-              selectedInterests.length > 0 
-                ? 'bg-blue-600 hover:bg-blue-700 neumorphic' 
-                : 'bg-gray-400 cursor-not-allowed'
+            className={`neo-button primary ${
+              selectedInterests.length === 0 ? 'disabled' : ''
             }`}
           >
             متابعة ({selectedInterests.length} محدد)
@@ -101,9 +99,9 @@ export default function HomePage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="neumorphic rounded-full w-16 h-16 flex items-center justify-center">
-          <div className="animate-spin w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full"></div>
+      <div className="neo-loading">
+        <div className="neo-spinner">
+          <div className="neo-spinner-inner"></div>
         </div>
       </div>
     );
@@ -122,7 +120,7 @@ export default function HomePage() {
       </div>
 
       {/* Filter Pills */}
-      <div className="flex gap-3 mb-6 overflow-x-auto pb-2">
+      <div className="neo-filter-container">
         {[
           { id: 'all', label: 'الكل', icon: Filter },
           { id: 'recommended', label: 'مقترحة لك', icon: Sparkles },
@@ -131,15 +129,9 @@ export default function HomePage() {
           <button
             key={filter.id}
             onClick={() => setActiveFilter(filter.id)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl whitespace-nowrap transition-all duration-200 ${
-              activeFilter === filter.id 
-                ? 'neumorphic-pressed text-blue-600' 
-                : 'neumorphic hover:neumorphic-subtle text-gray-800'
-            }`}
+            className={`neo-filter-pill ${activeFilter === filter.id ? 'active' : ''}`}
           >
-            <filter.icon className={`w-4 h-4 ${
-              activeFilter === filter.id ? 'text-blue-600' : 'text-gray-700'
-            }`} />
+            <filter.icon className="w-4 h-4" />
             <span className="font-medium text-sm">{filter.label}</span>
           </button>
         ))}
@@ -156,8 +148,8 @@ export default function HomePage() {
             />
           ))
         ) : (
-          <div className="text-center py-12">
-            <div className="neumorphic rounded-full w-20 h-20 mx-auto mb-4 flex items-center justify-center">
+          <div className="neo-empty-state">
+            <div className="neo-empty-icon">
               <Sparkles className="w-10 h-10 text-gray-400" />
             </div>
             <p className="text-gray-700">

@@ -58,9 +58,9 @@ export default function DashboardPage() {
 
   if (!user) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="neumorphic rounded-full w-16 h-16 flex items-center justify-center">
-          <div className="animate-spin w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full"></div>
+      <div className="neo-loading">
+        <div className="neo-spinner">
+          <div className="neo-spinner-inner"></div>
         </div>
       </div>
     );
@@ -71,9 +71,9 @@ export default function DashboardPage() {
   return (
     <div className="max-w-md mx-auto space-y-6">
       {/* Header */}
-      <div className="neumorphic rounded-2xl p-6">
+      <div className="neo-activity-card p-6">
         <div className="flex items-center gap-4 mb-4">
-          <div className="neumorphic-subtle rounded-full w-12 h-12 flex items-center justify-center">
+          <div className="neo-category-badge w-12 h-12 flex items-center justify-center">
             <span className="text-lg font-bold text-gray-700">
               {user.full_name?.charAt(0) || user.email.charAt(0)}
             </span>
@@ -86,13 +86,13 @@ export default function DashboardPage() {
 
         {/* Quick Stats */}
         <div className="grid grid-cols-2 gap-4">
-          <div className="neumorphic-subtle rounded-xl p-3 text-center">
+          <div className="neo-category-badge p-3 text-center">
             <p className="text-2xl font-bold text-neumorphic">
               {bookings.length}
             </p>
             <p className="text-xs text-gray-600">إجمالي الحجوزات</p>
           </div>
-          <div className="neumorphic-subtle rounded-xl p-3 text-center">
+          <div className="neo-category-badge p-3 text-center">
             <p className="text-2xl font-bold text-neumorphic">
               ${bookings.reduce((sum, b) => sum + (b.total_price || 0), 0)}
             </p>
@@ -102,7 +102,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Tabs */}
-      <div className="neumorphic rounded-2xl p-2">
+      <div className="neo-activity-card p-2">
         <div className="flex">
           {[
             { id: 'upcoming', label: 'قادمة' },
@@ -113,8 +113,8 @@ export default function DashboardPage() {
               onClick={() => setActiveTab(tab.id)}
               className={`flex-1 py-3 px-4 rounded-xl font-medium transition-all duration-200 ${
                 activeTab === tab.id 
-                  ? 'neumorphic-pressed text-blue-600' 
-                  : 'text-gray-600 hover:neumorphic-subtle'
+                  ? 'neo-filter-pill active' 
+                  : 'text-gray-600 hover:neo-filter-pill'
               }`}
             >
               {tab.label}
@@ -130,7 +130,7 @@ export default function DashboardPage() {
             <div
               key={booking.id}
               onClick={() => handleActivityTap(booking.activity)}
-              className="neumorphic rounded-2xl p-4 cursor-pointer hover:neumorphic-pressed transition-all duration-200"
+              className="neo-activity-card cursor-pointer hover:neo-activity-card:hover transition-all duration-200"
             >
               <div className="flex gap-4">
                 <img 
