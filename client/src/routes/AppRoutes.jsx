@@ -30,6 +30,7 @@ import NeoSearch from '../neoui/pages/Search';
 import NeoActivityDetails from '../neoui/pages/ActivityDetails';
 import NeoProfile from '../neoui/pages/Profile';
 import NeoDashboard from '../neoui/pages/Dashboard';
+import NeoWallet from '../neoui/pages/Wallet';
 
 const AppRoutes = () => {
   return (
@@ -93,6 +94,7 @@ const AppRoutes = () => {
         <Route path="activity-details" element={<NeoActivityDetails />} />
         <Route path="profile" element={<NeoProfile />} />
         <Route path="dashboard" element={<NeoDashboard />} />
+        <Route path="wallet" element={<NeoWallet />} />
       </Route>
       
       {/* Admin routes (separate layout) */}

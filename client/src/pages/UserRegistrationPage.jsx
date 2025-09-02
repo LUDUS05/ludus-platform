@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import referralService from '../services/referralService';
 
 const UserRegistrationPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { register } = useAuth();
   
   // Form data
@@ -16,7 +18,8 @@ const UserRegistrationPage = () => {
     password: '',
     confirmPassword: '',
     phone: '',
-    dateOfBirth: ''
+    dateOfBirth: '',
+    referralCode: ''
   });
   
   // Conversational flow state
@@ -123,6 +126,14 @@ const UserRegistrationPage = () => {
       setTimeout(() => inputRef.current?.focus(), 300);
     }
   }, [currentStep]);
+
+  // Get referral code from URL on component mount
+  useEffect(() => {
+    const refCode = searchParams.get('ref');
+    if (refCode && referralService.validateReferralCode(refCode)) {
+      setFormData(prev => ({ ...prev, referralCode: refCode }));
+    }
+  }, [searchParams]);
 
   const validateCurrentField = (value) => {
     const question = getCurrentQuestion();
@@ -240,7 +251,21 @@ const UserRegistrationPage = () => {
 
     try {
       const { confirmPassword, ...registrationData } = formData;
-      await register(registrationData);
+      
+      // Register the user
+      const user = await register(registrationData);
+      
+      // Process referral if code exists
+      if (formData.referralCode) {
+        try {
+          await referralService.processReferralSignup(formData.referralCode, user.id);
+          console.log('Referral processed successfully');
+        } catch (referralError) {
+          console.error('Referral processing failed:', referralError);
+          // Don't fail registration if referral fails
+        }
+      }
+      
       setShowSuccess(true);
       setTimeout(() => {
         navigate('/dashboard');

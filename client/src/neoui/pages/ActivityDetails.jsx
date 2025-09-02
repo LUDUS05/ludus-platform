@@ -3,7 +3,8 @@ import { Activity } from '../entities/Activity';
 import { Booking } from '../entities/Booking';
 import { User } from '../entities/User';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, MapPin, Clock, Users, Star, Calendar, Heart, Share } from 'lucide-react';
+import { ArrowLeft, MapPin, Clock, Users, Star, Calendar, Heart, Share, X, Link, MessageCircle, Facebook } from 'lucide-react';
+import referralService from '../../services/referralService';
 
 export default function ActivityDetailsPage() {
   const navigate = useNavigate();
@@ -12,6 +13,8 @@ export default function ActivityDetailsPage() {
   const [participants, setParticipants] = useState(1);
   const [isBooking, setIsBooking] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [referralCode, setReferralCode] = useState('');
 
   useEffect(() => {
     loadData();
@@ -30,9 +33,78 @@ export default function ActivityDetailsPage() {
     try {
       const currentUser = await User.me();
       setUser(currentUser);
+      // Generate referral code for the user
+      if (currentUser) {
+        const stats = await referralService.getReferralStats(currentUser.id);
+        setReferralCode(stats.referralCode);
+      }
     } catch (error) {
       // ignore for demo
     }
+  };
+
+  const generateReferralLink = () => {
+    if (!referralCode) return '';
+    const baseUrl = window.location.origin;
+    return `${baseUrl}/register?ref=${referralCode}`;
+  };
+
+  const handleShare = async (platform) => {
+    const referralLink = generateReferralLink();
+    const activityTitle = activity?.title || 'Amazing Activity';
+    const shareText = `Check out this amazing activity: ${activityTitle}`;
+    
+    let shareUrl = '';
+    
+    switch (platform) {
+      case 'link':
+        // Copy to clipboard
+        try {
+          await navigator.clipboard.writeText(referralLink);
+          alert('Referral link copied to clipboard!');
+        } catch (err) {
+          // Fallback for older browsers
+          const textArea = document.createElement('textarea');
+          textArea.value = referralLink;
+          document.body.appendChild(textArea);
+          textArea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textArea);
+          alert('Referral link copied to clipboard!');
+        }
+        break;
+        
+      case 'sms':
+        shareUrl = `sms:?body=${encodeURIComponent(shareText + ' ' + referralLink)}`;
+        window.open(shareUrl);
+        break;
+        
+      case 'whatsapp':
+        shareUrl = `https://wa.me/?text=${encodeURIComponent(shareText + ' ' + referralLink)}`;
+        window.open(shareUrl);
+        break;
+        
+      case 'facebook':
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(referralLink)}&quote=${encodeURIComponent(shareText)}`;
+        window.open(shareUrl);
+        break;
+        
+      default:
+        break;
+    }
+    
+    // Award referral points for sharing (mock)
+    if (user && platform !== 'link') {
+      try {
+        // TODO: Replace with actual API call to award sharing points
+        console.log('Awarding sharing points for:', platform);
+        // Mock API call would go here
+      } catch (error) {
+        console.error('Failed to award sharing points:', error);
+      }
+    }
+    
+    setShowShareModal(false);
   };
 
   const handleBooking = async () => {
@@ -90,7 +162,10 @@ export default function ActivityDetailsPage() {
           >
             <Heart className={`w-5 h-5 ${isLiked ? 'text-red-500 fill-current' : 'text-gray-700'}`} />
           </button>
-          <button className="neumorphic rounded-full p-3 hover:neumorphic-pressed transition-all duration-200">
+          <button 
+            onClick={() => setShowShareModal(true)}
+            className="neumorphic rounded-full p-3 hover:neumorphic-pressed transition-all duration-200"
+          >
             <Share className="w-5 h-5 text-gray-700" />
           </button>
         </div>
@@ -198,6 +273,64 @@ export default function ActivityDetailsPage() {
           </button>
         </div>
       </div>
+
+      {/* Share Modal */}
+      {showShareModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="neumorphic rounded-2xl p-6 max-w-sm w-full mx-4">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-800">مشاركة النشاط</h3>
+              <button
+                onClick={() => setShowShareModal(false)}
+                className="neumorphic-pressed rounded-full p-2"
+              >
+                <X className="w-5 h-5 text-gray-700" />
+              </button>
+            </div>
+            
+            <div className="space-y-3 mb-4">
+              <button
+                onClick={() => handleShare('link')}
+                className="w-full flex items-center gap-3 p-3 neumorphic-subtle hover:neumorphic-pressed rounded-lg transition-all duration-200"
+              >
+                <Link className="w-5 h-5 text-blue-600" />
+                <span className="text-gray-700">نسخ رابط الإحالة</span>
+              </button>
+              
+              <button
+                onClick={() => handleShare('sms')}
+                className="w-full flex items-center gap-3 p-3 neumorphic-subtle hover:neumorphic-pressed rounded-lg transition-all duration-200"
+              >
+                <MessageCircle className="w-5 h-5 text-green-600" />
+                <span className="text-gray-700">مشاركة عبر الرسائل</span>
+              </button>
+              
+              <button
+                onClick={() => handleShare('whatsapp')}
+                className="w-full flex items-center gap-3 p-3 neumorphic-subtle hover:neumorphic-pressed rounded-lg transition-all duration-200"
+              >
+                <MessageCircle className="w-5 h-5 text-green-500" />
+                <span className="text-gray-700">مشاركة عبر واتساب</span>
+              </button>
+              
+              <button
+                onClick={() => handleShare('facebook')}
+                className="w-full flex items-center gap-3 p-3 neumorphic-subtle hover:neumorphic-pressed rounded-lg transition-all duration-200"
+              >
+                <Facebook className="w-5 h-5 text-blue-600" />
+                <span className="text-gray-700">مشاركة عبر فيسبوك</span>
+              </button>
+            </div>
+            
+            {referralCode && (
+              <div className="text-center p-3 bg-gray-50 rounded-lg">
+                <p className="text-sm text-gray-600 mb-2">كود الإحالة الخاص بك:</p>
+                <p className="font-mono font-bold text-blue-600">{referralCode}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

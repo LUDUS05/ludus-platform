@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { User } from '../entities/User';
 import { Activity } from '../entities/Activity';
 import { Booking } from '../entities/Booking';
-import { Settings, MapPin, Heart, Users, Edit3 } from 'lucide-react';
+import { Settings, MapPin, Heart, Users, Edit3, Share2, QrCode, Copy, Check, X } from 'lucide-react';
+import referralService from '../../services/referralService';
 
 export default function ProfilePage() {
   const [user, setUser] = useState(null);
@@ -10,6 +11,9 @@ export default function ProfilePage() {
   const [activities, setActivities] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({});
+  const [referralStats, setReferralStats] = useState(null);
+  const [showQRModal, setShowQRModal] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -24,6 +28,14 @@ export default function ProfilePage() {
         bio: currentUser.bio || '',
         location: currentUser.location || '',
       });
+
+      // Load referral stats
+      try {
+        const stats = await referralService.getReferralStats(currentUser.id);
+        setReferralStats(stats);
+      } catch (error) {
+        console.error('Error loading referral stats:', error);
+      }
 
       const allBookings = await Booking.list();
       const userBookings = allBookings.filter(b => b.user_email === currentUser.email);
@@ -51,6 +63,39 @@ export default function ProfilePage() {
       const activity = activities.find(a => a.id === booking.activity_id);
       return { ...booking, activity };
     }).filter(item => item.activity);
+  };
+
+  const generateReferralLink = () => {
+    if (!referralStats?.referralCode) return '';
+    const baseUrl = window.location.origin;
+    return `${baseUrl}/register?ref=${referralStats.referralCode}`;
+  };
+
+  const copyReferralLink = async () => {
+    const referralLink = generateReferralLink();
+    try {
+      await navigator.clipboard.writeText(referralLink);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = referralLink;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  const generateQRCode = () => {
+    const referralLink = generateReferralLink();
+    if (!referralLink) return '';
+    
+    // Simple QR code generation using Google Charts API
+    return `https://chart.googleapis.com/chart?chs=200x200&chld=L|0&cht=qr&chl=${encodeURIComponent(referralLink)}`;
   };
 
   if (!user) {
@@ -199,6 +244,81 @@ export default function ProfilePage() {
           </div>
         )}
       </div>
+
+      {/* Referral Section */}
+      {referralStats && (
+        <div className="neumorphic rounded-2xl p-6">
+          <h2 className="text-lg font-semibold text-gray-800 mb-4">برنامج الإحالة</h2>
+          
+          <div className="grid grid-cols-2 gap-4 mb-4">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-blue-600">{referralStats.totalReferrals}</div>
+              <div className="text-sm text-gray-600">إجمالي الإحالات</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-green-600">{referralStats.totalEarnings} ريال</div>
+              <div className="text-sm text-gray-600">إجمالي الأرباح</div>
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-center gap-3">
+                <Share2 className="w-5 h-5 text-blue-600" />
+                <div>
+                  <div className="font-medium text-gray-800">رابط الإحالة</div>
+                  <div className="text-sm text-gray-500 font-mono">{referralStats.referralCode}</div>
+                </div>
+              </div>
+              <button
+                onClick={copyReferralLink}
+                className="neumorphic-subtle hover:neumorphic-pressed p-2 rounded-lg transition-all duration-200"
+              >
+                {copied ? <Check className="w-5 h-5 text-green-600" /> : <Copy className="w-5 h-5 text-gray-600" />}
+              </button>
+            </div>
+
+            <button
+              onClick={() => setShowQRModal(true)}
+              className="w-full flex items-center justify-center gap-3 p-3 neumorphic-subtle hover:neumorphic-pressed rounded-lg transition-all duration-200"
+            >
+              <QrCode className="w-5 h-5 text-gray-600" />
+              <span className="text-gray-700">عرض رمز QR</span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* QR Code Modal */}
+      {showQRModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="neumorphic rounded-2xl p-6 max-w-sm w-full mx-4">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-800">رمز QR للإحالة</h3>
+              <button
+                onClick={() => setShowQRModal(false)}
+                className="neumorphic-pressed rounded-full p-2"
+              >
+                <X className="w-5 h-5 text-gray-700" />
+              </button>
+            </div>
+            
+            <div className="text-center">
+              <img 
+                src={generateQRCode()} 
+                alt="Referral QR Code" 
+                className="mx-auto mb-4 rounded-lg"
+              />
+              <p className="text-sm text-gray-600 mb-3">
+                شارك هذا الرمز مع أصدقائك للحصول على مكافآت
+              </p>
+              <div className="text-xs text-gray-500 font-mono bg-gray-50 p-2 rounded">
+                {generateReferralLink()}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

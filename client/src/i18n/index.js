@@ -17,7 +17,7 @@ i18n
         translation: ar
       }
     },
-    fallbackLng: 'en',
+    fallbackLng: 'ar',
     debug: false,
     
     detection: {

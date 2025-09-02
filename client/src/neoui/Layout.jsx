@@ -1,19 +1,31 @@
 import React from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import { Home, Search, User, Calendar } from 'lucide-react';
+import { Home, Search, User, Calendar, Globe, Wallet } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const navItems = [
   { id: 'home', title: 'اكتشف', url: '/neo/home', icon: Home },
   { id: 'search', title: 'بحث', url: '/neo/search', icon: Search },
   { id: 'dashboard', title: 'لوحة التحكم', url: '/neo/dashboard', icon: Calendar },
+  { id: 'wallet', title: 'المحفظة', url: '/neo/wallet', icon: Wallet },
   { id: 'profile', title: 'الملف الشخصي', url: '/neo/profile', icon: User },
 ];
 
 export default function Layout() {
   const location = useLocation();
+  const { i18n, t } = useTranslation();
+
+  const toggleLanguage = () => {
+    const newLang = i18n.language === 'ar' ? 'en' : 'ar';
+    i18n.changeLanguage(newLang);
+  };
+
+  const getCurrentLanguageText = () => {
+    return i18n.language === 'ar' ? 'English' : 'العربية';
+  };
 
   return (
-    <div className="min-h-screen bg-[#e0e0e0]" style={{ backgroundColor: '#e0e0e0' }} dir="rtl" lang="ar">
+    <div className="min-h-screen bg-[#e0e0e0]" style={{ backgroundColor: '#e0e0e0' }} dir={i18n.language === 'ar' ? 'rtl' : 'ltr'} lang={i18n.language}>
       <style>
         {`
           .neumorphic {
@@ -34,7 +46,25 @@ export default function Layout() {
         `}
       </style>
 
-      <div className="max-w-md mx-auto pb-24 px-4 pt-6">
+      {/* Language Switcher */}
+      <div className="max-w-md mx-auto px-4 pt-6 pb-4">
+        <div className="neumorphic rounded-xl p-3 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Globe className="w-5 h-5 text-gray-700" />
+            <span className="text-sm text-gray-700 font-medium">
+              {i18n.language === 'ar' ? 'اللغة' : 'Language'}
+            </span>
+          </div>
+          <button
+            onClick={toggleLanguage}
+            className="neumorphic-subtle hover:neumorphic-pressed px-4 py-2 rounded-lg transition-all duration-200 text-sm font-medium text-gray-700"
+          >
+            {getCurrentLanguageText()}
+          </button>
+        </div>
+      </div>
+
+      <div className="max-w-md mx-auto pb-24 px-4">
         <Outlet />
       </div>
 
