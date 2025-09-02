@@ -22,7 +22,7 @@ services:
       - key: MOYASAR_WEBHOOK_SECRET
         sync: false # Set in Render dashboard
       - key: CLIENT_URL
-        value: https://ludus-frontend-gf1g.onrender.com
+        value: https://app.letsludus.com
 
   # Frontend Service (Static React App)
   - type: web

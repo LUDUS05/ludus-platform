@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-// Simplified API configuration for Render deployment
+// Simplified API configuration for Render deployment with custom domain
 const getApiBaseUrl = () => {
-  // Production: Use Render backend URL (actual deployed URL)
+  // Production: Use custom domain
   if (process.env.NODE_ENV === 'production') {
-    return process.env.REACT_APP_API_URL || 'https://ludus-backend-gf1g.onrender.com/api';
+    return process.env.REACT_APP_API_URL || 'https://app.letsludus.com/api';
   }
   
   // Development: Use local backend
