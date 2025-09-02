@@ -32,7 +32,7 @@ export default function Layout() {
         <Outlet />
       </div>
 
-      {/* Compact Vertical Navigation Bar - Positioned near content */}
+      {/* Compact Vertical Navigation Bar - Positioned next to content */}
       <nav className="neo-nav-vertical">
         <div className="neo-nav-vertical-container">
           {/* Language Switcher - Top */}
