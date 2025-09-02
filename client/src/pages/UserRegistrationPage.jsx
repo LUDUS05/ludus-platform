@@ -3,9 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import referralService from '../services/referralService';
+import { Globe, ArrowLeft, ArrowRight, Check, Eye, EyeOff } from 'lucide-react';
 
 const UserRegistrationPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { register } = useAuth();
@@ -27,13 +28,28 @@ const UserRegistrationPage = () => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
+  const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false);
   
   // Form state
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   
   // Refs
   const inputRef = useRef(null);
+  const termsModalRef = useRef(null);
+  
+  // Language switcher
+  const toggleLanguage = () => {
+    const newLang = i18n.language === 'ar' ? 'en' : 'ar';
+    i18n.changeLanguage(newLang);
+  };
+
+  const getCurrentLanguageText = () => {
+    return i18n.language === 'ar' ? 'English' : 'العربية';
+  };
   
   // Conversational questions configuration
   const conversationSteps = [
@@ -47,7 +63,7 @@ const UserRegistrationPage = () => {
     },
     {
       key: 'lastName',
-      question: (firstName) => t('user.registration.questions.lastName.question', { name: firstName || '' }),
+      question: t('user.registration.questions.lastName.question', { name: formData.firstName || '' }),
       placeholder: t('user.registration.questions.lastName.placeholder'),
       type: 'text',
       required: true,
@@ -55,7 +71,7 @@ const UserRegistrationPage = () => {
     },
     {
       key: 'email',
-      question: (firstName) => t('user.registration.questions.email.question', { name: firstName || '' }),
+      question: t('user.registration.questions.email.question', { name: formData.firstName || '' }),
       placeholder: t('user.registration.questions.email.placeholder'),
       type: 'email',
       required: true,
@@ -95,6 +111,14 @@ const UserRegistrationPage = () => {
     }
   ];
 
+  // Check for referral code in URL
+  useEffect(() => {
+    const refCode = searchParams.get('ref');
+    if (refCode) {
+      setFormData(prev => ({ ...prev, referralCode: refCode }));
+    }
+  }, [searchParams]);
+
   const getCurrentQuestion = () => {
     if (currentStep < 0 || currentStep >= conversationSteps.length) return null;
     return conversationSteps[currentStep];
@@ -112,123 +136,105 @@ const UserRegistrationPage = () => {
   };
 
   const getCurrentValue = () => {
-    const question = getCurrentQuestion();
-    return question ? formData[question.key] : '';
-  };
-
-  const isWelcomeScreen = () => currentStep === -1;
-  const isTermsStep = () => currentStep === conversationSteps.length;
-  const getProgress = () => Math.max(0, (currentStep + 1) / (conversationSteps.length + 1) * 100);
-
-  useEffect(() => {
-    // Focus input when step changes
-    if (inputRef.current && currentStep >= 0 && currentStep < conversationSteps.length) {
-      setTimeout(() => inputRef.current?.focus(), 300);
-    }
-  }, [currentStep]);
-
-  // Get referral code from URL on component mount
-  useEffect(() => {
-    const refCode = searchParams.get('ref');
-    if (refCode && referralService.validateReferralCode(refCode)) {
-      setFormData(prev => ({ ...prev, referralCode: refCode }));
-    }
-  }, [searchParams]);
-
-  const validateCurrentField = (value) => {
-    const question = getCurrentQuestion();
-    if (!question) return '';
-
-    if (!value && question.required) {
-      return t('user.registration.validation.required');
-    }
-    
-    switch (question.key) {
-      case 'email':
-        return value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) 
-          ? t('user.registration.validation.invalidEmail') 
-          : '';
-      case 'password':
-        return value && value.length < 8 
-          ? t('user.registration.validation.passwordTooShort') 
-          : '';
-      case 'confirmPassword':
-        return value && value !== formData.password
-          ? t('user.registration.validation.passwordMismatch')
-          : '';
-      case 'phone':
-        return value && !/^[+]?[\d\s\-\(\)]{10,}$/.test(value) 
-          ? t('user.registration.validation.invalidPhone') 
-          : '';
-      case 'firstName':
-      case 'lastName':
-        return value && value.length < 2
-          ? t('user.registration.validation.nameTooShort')
-          : '';
-      default:
-        return '';
-    }
+    const currentQuestion = getCurrentQuestion();
+    if (!currentQuestion) return '';
+    return formData[currentQuestion.key] || '';
   };
 
   const handleInputChange = (e) => {
-    const question = getCurrentQuestion();
-    if (!question) return;
-    
-    const value = e.target.value;
-    setFormData(prev => ({ ...prev, [question.key]: value }));
-    
-    // Clear errors when typing
-    if (errors.current) {
-      setErrors(prev => ({ ...prev, current: '' }));
+    const { value } = e.target;
+    const currentQuestion = getCurrentQuestion();
+    if (currentQuestion) {
+      setFormData(prev => ({
+        ...prev,
+        [currentQuestion.key]: value
+      }));
     }
-  };
-
-  const handleNext = () => {
-    if (isWelcomeScreen()) {
-      // Start the conversation
-      setIsAnimating(true);
-      setTimeout(() => {
-        setCurrentStep(0);
-        setIsAnimating(false);
-      }, 300);
-      return;
-    }
-
-    if (isTermsStep()) {
-      handleSubmit();
-      return;
-    }
-
-    const question = getCurrentQuestion();
-    if (!question) return;
-
-    const value = formData[question.key]?.trim() || '';
-    const error = validateCurrentField(value);
-    
-    if (error) {
-      setErrors({ current: error });
-      return;
-    }
-
-    // Move to next step
-    setIsAnimating(true);
-    setErrors({});
-    
-    setTimeout(() => {
-      if (currentStep >= conversationSteps.length - 1) {
-        setCurrentStep(conversationSteps.length); // Terms step
-      } else {
-        setCurrentStep(prev => prev + 1);
-      }
-      setIsAnimating(false);
-    }, 300);
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === 'Enter') {
       e.preventDefault();
       handleNext();
     }
+  };
+
+  const validateCurrentStep = () => {
+    const currentQuestion = getCurrentQuestion();
+    if (!currentQuestion) return true;
+    
+    const value = formData[currentQuestion.key];
+    if (currentQuestion.required && !value) {
+      setErrors({ current: t('user.registration.validation.required') });
+      return false;
+    }
+    
+    // Email validation
+    if (currentQuestion.key === 'email' && value) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(value)) {
+        setErrors({ current: t('user.registration.validation.invalidEmail') });
+        return false;
+      }
+    }
+    
+    // Password validation
+    if (currentQuestion.key === 'password' && value) {
+      if (value.length < 8) {
+        setErrors({ current: t('user.registration.validation.passwordTooShort') });
+        return false;
+      }
+    }
+    
+    // Confirm password validation
+    if (currentQuestion.key === 'confirmPassword' && value) {
+      if (value !== formData.password) {
+        setErrors({ current: t('user.registration.validation.passwordMismatch') });
+        return false;
+      }
+    }
+    
+    // Phone validation
+    if (currentQuestion.key === 'phone' && value) {
+      const phoneRegex = /^[\+]?[0-9\s\-\(\)]{8,}$/;
+      if (!phoneRegex.test(value)) {
+        setErrors({ current: t('user.registration.validation.invalidPhone') });
+        return false;
+      }
+    }
+    
+    setErrors({});
+    return true;
+  };
+
+  const handleNext = async () => {
+    if (!validateCurrentStep()) return;
+    
+    if (currentStep === conversationSteps.length - 1) {
+      // Last step - show terms
+      setCurrentStep(conversationSteps.length);
+      return;
+    }
+    
+    if (currentStep === conversationSteps.length) {
+      // Terms step - submit form
+      if (!acceptTerms) {
+        setErrors({ current: t('user.registration.validation.termsRequired') });
+        return;
+      }
+      
+      await handleSubmit();
+      return;
+    }
+    
+    setIsAnimating(true);
+    setTimeout(() => {
+      setCurrentStep(prev => prev + 1);
+      setIsAnimating(false);
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    }, 300);
   };
 
   const handleBack = () => {
@@ -237,620 +243,354 @@ const UserRegistrationPage = () => {
       setTimeout(() => {
         setCurrentStep(prev => prev - 1);
         setIsAnimating(false);
+        if (inputRef.current) {
+          inputRef.current.focus();
+        }
       }, 300);
     }
   };
 
   const handleSubmit = async () => {
-    if (!acceptTerms) {
-      setErrors({ current: t('user.registration.validation.termsRequired') });
-      return;
-    }
-
     setIsSubmitting(true);
-
+    
     try {
-      const { confirmPassword, ...registrationData } = formData;
-      
-      // Register the user
-      const user = await register(registrationData);
-      
-      // Process referral if code exists
+      // Process referral if exists
       if (formData.referralCode) {
-        try {
-          await referralService.processReferralSignup(formData.referralCode, user.id);
-          console.log('Referral processed successfully');
-        } catch (referralError) {
-          console.error('Referral processing failed:', referralError);
-          // Don't fail registration if referral fails
-        }
+        await referralService.processReferralSignup(formData.referralCode);
       }
       
+      // Register user
+      await register(formData);
       setShowSuccess(true);
+      
+      // Redirect after delay
       setTimeout(() => {
         navigate('/dashboard');
       }, 3000);
+      
     } catch (error) {
       console.error('Registration error:', error);
-      setErrors({ current: error.response?.data?.message || t('user.registration.validation.submissionError') });
+      setErrors({ current: error.message || t('user.registration.validation.submissionError') });
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  const isTermsStep = () => {
+    return currentStep === conversationSteps.length;
+  };
+
+  const handleTermsScroll = (e) => {
+    const { scrollTop, scrollHeight, clientHeight } = e.target;
+    if (scrollTop + clientHeight >= scrollHeight - 10) {
+      setHasScrolledToBottom(true);
+    }
+  };
+
+  const openTermsModal = () => {
+    setShowTermsModal(true);
+    setHasScrolledToBottom(false);
+  };
+
+  const closeTermsModal = () => {
+    setShowTermsModal(false);
+    setHasScrolledToBottom(false);
+  };
+
   // Success screen
   if (showSuccess) {
     return (
-      <div className="ludus-form-container">
-        <style>
-          {`
-            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@300;400;500;600&display=swap');
-            
-            .ludus-form-container {
-              font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-              background: linear-gradient(135deg, #FAFAFA 0%, #F5F5F5 100%);
-              min-height: 100vh;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              padding: 20px;
-            }
-            
-            .success-screen {
-              text-align: center;
-              max-width: 600px;
-              background: white;
-              border-radius: 20px;
-              padding: 60px 40px;
-              box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-            }
-            
-            .success-icon {
-              width: 80px;
-              height: 80px;
-              background: #FF6600;
-              border-radius: 50%;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              margin: 0 auto 30px;
-              animation: successPulse 2s ease-in-out infinite;
-            }
-            
-            @keyframes successPulse {
-              0%, 100% { transform: scale(1); }
-              50% { transform: scale(1.05); }
-            }
-            
-            .success-checkmark {
-              color: white;
-              font-size: 36px;
-              font-weight: bold;
-            }
-            
-            .success-title {
-              font-size: 32px;
-              font-weight: 600;
-              color: #2B2B2B;
-              margin-bottom: 20px;
-              font-family: 'Manrope', sans-serif;
-            }
-            
-            .success-message {
-              font-size: 18px;
-              color: #666;
-              line-height: 1.6;
-              margin-bottom: 40px;
-            }
-            
-            .redirect-info {
-              background: #F8F9FA;
-              border-radius: 12px;
-              padding: 24px;
-              color: #666;
-              font-size: 15px;
-            }
-          `}
-        </style>
-        
-        <div className="success-screen">
-          <div className="success-icon">
-            <span className="success-checkmark">✓</span>
+      <div className="min-h-screen bg-[#e0e0e0] flex items-center justify-center p-4" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'} lang={i18n.language}>
+        <div className="neumorphic rounded-2xl p-8 text-center max-w-md">
+          <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Check className="w-8 h-8 text-white" />
           </div>
-          
-          <h1 className="success-title">{t('user.registration.success.title')}</h1>
-          
-          <p className="success-message">
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">
+            {t('user.registration.success.title')}
+          </h1>
+          <p className="text-gray-600 mb-6">
             {t('user.registration.success.message', { name: formData.firstName })}
           </p>
-          
-          <div className="redirect-info">
+          <p className="text-sm text-gray-500">
             {t('user.registration.success.redirecting')}
-          </div>
+          </p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="ludus-form-container">
+    <div className="min-h-screen bg-[#e0e0e0]" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'} lang={i18n.language}>
       <style>
         {`
-          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@300;400;500;600&display=swap');
-          
-          .ludus-form-container {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #FAFAFA 0%, #F5F5F5 100%);
-            min-height: 100vh;
-            position: relative;
-            overflow: hidden;
+          .neumorphic {
+            box-shadow: 8px 8px 16px #bebebe, -8px -8px 16px #ffffff;
+            background-color: #e0e0e0;
           }
-          
-          .progress-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 4px;
-            background: #FF6600;
-            transition: width 0.6s ease;
-            z-index: 1000;
+          .neumorphic-pressed {
+            box-shadow: inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff;
           }
-          
-          .form-screen {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            opacity: 1;
-            transform: translateY(0);
-            transition: all 0.3s ease;
+          .neumorphic-subtle {
+            box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #ffffff;
+            background-color: #e0e0e0;
           }
-          
-          .form-screen.animating {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          
-          .welcome-screen {
-            text-align: center;
-            max-width: 700px;
-          }
-          
-          .ludus-logo {
-            width: 120px;
-            height: 40px;
-            margin: 0 auto 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-          }
-          
-          .ludus-logo img {
-            height: 100%;
-            width: auto;
-            object-fit: contain;
-          }
-          
-          .welcome-title {
-            font-size: 48px;
-            font-weight: 600;
-            color: #2B2B2B;
-            margin-bottom: 20px;
-            font-family: 'Manrope', sans-serif;
-            line-height: 1.2;
-          }
-          
-          .welcome-subtitle {
-            font-size: 20px;
-            color: #666;
-            margin-bottom: 30px;
-            line-height: 1.4;
-          }
-          
-          .login-link {
-            font-size: 16px;
-            color: #666;
-            margin-bottom: 30px;
-          }
-          
-          .login-link a {
-            color: #FF6600;
-            text-decoration: none;
-            font-weight: 500;
-          }
-          
-          .login-link a:hover {
-            text-decoration: underline;
-          }
-          
-          .start-button {
-            background: #FF6600;
-            color: white;
-            border: none;
-            border-radius: 50px;
-            padding: 16px 40px;
-            font-size: 18px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: inherit;
-          }
-          
-          .start-button:hover {
-            background: #E55A00;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(255, 102, 0, 0.3);
-          }
-          
-          .question-screen {
-            max-width: 600px;
-            width: 100%;
-          }
-          
-          .question-container {
-            background: white;
-            border-radius: 20px;
-            padding: 50px 40px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-            text-align: center;
-          }
-          
-          .question-text {
-            font-size: 28px;
-            font-weight: 500;
-            color: #2B2B2B;
-            margin-bottom: 40px;
-            line-height: 1.3;
-            font-family: 'Manrope', sans-serif;
-          }
-          
-          .input-container {
-            margin-bottom: 30px;
-            position: relative;
-          }
-          
-          .form-input {
-            width: 100%;
-            border: none;
-            border-bottom: 3px solid #E5E5E5;
-            background: transparent;
-            padding: 16px 0;
-            font-size: 20px;
-            color: #2B2B2B;
-            text-align: center;
-            outline: none;
-            transition: border-color 0.3s ease;
-            font-family: inherit;
-          }
-          
-          .form-input:focus {
-            border-bottom-color: #FF6600;
-          }
-          
-          .form-input::placeholder {
-            color: #999;
-            font-weight: 300;
-          }
-          
-          .error-message {
-            color: #FF4444;
-            font-size: 16px;
-            margin-top: 15px;
-            font-weight: 400;
-          }
-          
-          .button-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 40px;
-          }
-          
-          .back-button {
-            background: transparent;
-            border: none;
-            color: #999;
-            font-size: 16px;
-            cursor: pointer;
-            padding: 12px 20px;
-            transition: color 0.3s ease;
-            font-family: inherit;
-          }
-          
-          .back-button:hover {
-            color: #666;
-          }
-          
-          .back-button:disabled {
-            color: #CCC;
-            cursor: not-allowed;
-          }
-          
-          .next-button {
-            background: #FF6600;
-            color: white;
-            border: none;
-            border-radius: 50px;
-            padding: 14px 32px;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: inherit;
-            min-width: 120px;
-          }
-          
-          .next-button:hover {
-            background: #E55A00;
-            transform: translateY(-1px);
-          }
-          
-          .next-button:disabled {
-            background: #CCC;
-            cursor: not-allowed;
-            transform: none;
-          }
-          
-          .terms-screen {
-            max-width: 600px;
-            width: 100%;
-          }
-          
-          .terms-container {
-            background: white;
-            border-radius: 20px;
-            padding: 50px 40px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-            text-align: center;
-          }
-          
-          .terms-title {
-            font-size: 28px;
-            font-weight: 500;
-            color: #2B2B2B;
-            margin-bottom: 30px;
-            font-family: 'Manrope', sans-serif;
-          }
-          
-          .checkbox-container {
-            display: flex;
-            align-items: flex-start;
-            justify-content: center;
-            gap: 15px;
-            margin: 30px 0;
-            text-align: left;
-          }
-          
-          .checkbox-input {
-            width: 20px;
-            height: 20px;
-            accent-color: #FF6600;
-            margin-top: 2px;
-            flex-shrink: 0;
-          }
-          
-          .checkbox-label {
-            font-size: 16px;
-            color: #666;
-            line-height: 1.5;
-            cursor: pointer;
-            flex: 1;
-          }
-          
-          .terms-link {
-            color: #FF6600;
-            text-decoration: underline;
-            cursor: pointer;
-            font-weight: 500;
-          }
-          
-          .terms-link:hover {
-            color: #E55A00;
-          }
-          
-          .submit-button {
-            background: #FF6600;
-            color: white;
-            border: none;
-            border-radius: 50px;
-            padding: 16px 40px;
-            font-size: 18px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: inherit;
-            margin-top: 20px;
-          }
-          
-          .submit-button:hover {
-            background: #E55A00;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(255, 102, 0, 0.3);
-          }
-          
-          .submit-button:disabled {
-            background: #CCC;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-          }
-          
-          @media (max-width: 768px) {
-            .welcome-title {
-              font-size: 36px;
-            }
-            
-            .welcome-subtitle {
-              font-size: 18px;
-            }
-            
-            .question-text {
-              font-size: 24px;
-            }
-            
-            .question-container,
-            .terms-container {
-              padding: 40px 30px;
-            }
-            
-            .form-input {
-              font-size: 18px;
-            }
-          }
-          
-          @media (max-width: 480px) {
-            .ludus-form-container {
-              padding: 15px;
-            }
-            
-            .question-container,
-            .terms-container {
-              padding: 30px 25px;
-            }
-            
-            .welcome-title {
-              font-size: 28px;
-            }
-            
-            .question-text {
-              font-size: 22px;
-            }
-            
-            .button-container {
-              flex-direction: column;
-              gap: 20px;
-            }
-            
-            .next-button,
-            .submit-button {
-              width: 100%;
-              padding: 16px;
-            }
+          .text-neumorphic {
+            color: #2d3748;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
           }
         `}
       </style>
-      
-      {/* Progress Bar */}
-      {!isWelcomeScreen() && (
-        <div className="progress-bar" style={{ width: `${getProgress()}%` }}></div>
-      )}
-      
-      <div className={`form-screen ${isAnimating ? 'animating' : ''}`}>
+
+      {/* Language Switcher */}
+      <div className="max-w-md mx-auto px-4 pt-6 pb-4">
+        <div className="neumorphic rounded-xl p-3 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Globe className="w-5 h-5 text-gray-700" />
+            <span className="text-sm text-gray-700 font-medium">
+              {i18n.language === 'ar' ? 'اللغة' : 'Language'}
+            </span>
+          </div>
+          <button
+            onClick={toggleLanguage}
+            className="neumorphic-subtle hover:neumorphic-pressed px-4 py-2 rounded-lg transition-all duration-200 text-sm font-medium text-gray-700"
+          >
+            {getCurrentLanguageText()}
+          </button>
+        </div>
+      </div>
+
+      <div className="max-w-md mx-auto pb-24 px-4">
         {/* Welcome Screen */}
-        {isWelcomeScreen() && (
-          <div className="welcome-screen">
-            <div className="ludus-logo">
-              <img src="/logos/ludus-logo-dark.png" alt="LUDUS" />
+        {currentStep === -1 && (
+          <div className="neumorphic rounded-2xl p-8 text-center">
+            <div className="w-20 h-20 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-6">
+              <span className="text-3xl font-bold text-white">L</span>
             </div>
-            <h1 className="welcome-title">{t('user.registration.title')}</h1>
-            <p className="welcome-subtitle">
+            <h1 className="text-3xl font-bold text-gray-800 mb-4">
+              {t('user.registration.title')}
+            </h1>
+            <p className="text-gray-600 mb-8">
               {t('user.registration.subtitle')}
             </p>
-            <p className="login-link">
-              {t('user.registration.alreadyHaveAccount')} <Link to="/login">{t('common.login')}</Link>
-            </p>
-            <button className="start-button" onClick={handleNext}>
+            <div className="mb-6">
+              <p className="text-sm text-gray-500">
+                {t('user.registration.alreadyHaveAccount')}{' '}
+                <Link to="/login" className="text-orange-500 font-medium hover:underline">
+                  {t('common.login')}
+                </Link>
+              </p>
+            </div>
+            <button
+              onClick={handleNext}
+              className="neumorphic-subtle hover:neumorphic-pressed w-full py-3 px-6 rounded-xl text-lg font-medium text-gray-700 transition-all duration-200"
+            >
               {t('user.registration.getStarted')}
             </button>
           </div>
         )}
-        
+
         {/* Question Screens */}
         {currentStep >= 0 && currentStep < conversationSteps.length && (
-          <div className="question-screen">
-            <div className="question-container">
-              <h2 className="question-text">
-                {getPersonalizedQuestion(currentStep)}
-              </h2>
-              
-              <div className="input-container">
-                <input
-                  ref={inputRef}
-                  type={getCurrentQuestion()?.type || 'text'}
-                  className="form-input"
-                  value={getCurrentValue()}
-                  onChange={handleInputChange}
-                  onKeyDown={handleKeyDown}
-                  placeholder={getCurrentQuestion()?.placeholder}
-                />
-                
-                {errors.current && (
-                  <div className="error-message">{errors.current}</div>
+          <div className={`neumorphic rounded-2xl p-8 transition-all duration-300 ${isAnimating ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
+            <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+              {getPersonalizedQuestion(currentStep)}
+            </h2>
+            
+            <div className="mb-6">
+              <div className="relative">
+                {getCurrentQuestion()?.type === 'password' ? (
+                  <div className="relative">
+                    <input
+                      ref={inputRef}
+                      type={showPassword ? 'text' : 'password'}
+                      className="w-full px-4 py-3 border-0 rounded-xl neumorphic-pressed bg-gray-50 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      value={getCurrentValue()}
+                      onChange={handleInputChange}
+                      onKeyDown={handleKeyDown}
+                      placeholder={getCurrentQuestion()?.placeholder}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                    >
+                      {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    </button>
+                  </div>
+                ) : getCurrentQuestion()?.type === 'date' ? (
+                  <input
+                    ref={inputRef}
+                    type="date"
+                    className="w-full px-4 py-3 border-0 rounded-xl neumorphic-pressed bg-gray-50 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    value={getCurrentValue()}
+                    onChange={handleInputChange}
+                    onKeyDown={handleKeyDown}
+                  />
+                ) : (
+                  <input
+                    ref={inputRef}
+                    type={getCurrentQuestion()?.type || 'text'}
+                    className="w-full px-4 py-3 border-0 rounded-xl neumorphic-pressed bg-gray-50 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    value={getCurrentValue()}
+                    onChange={handleInputChange}
+                    onKeyDown={handleKeyDown}
+                    placeholder={getCurrentQuestion()?.placeholder}
+                  />
                 )}
               </div>
               
-              <div className="button-container">
-                <button
-                  className="back-button"
-                  onClick={handleBack}
-                  disabled={currentStep === 0}
-                >
-                  ← Back
-                </button>
-                
-                <button
-                  className="next-button"
-                  onClick={handleNext}
-                >
-                  {getCurrentQuestion()?.buttonText || 'Continue'}
-                </button>
-              </div>
+              {errors.current && (
+                <div className="mt-2 text-red-500 text-sm text-center">{errors.current}</div>
+              )}
+            </div>
+            
+            <div className="flex gap-3">
+              <button
+                className="flex-1 neumorphic-subtle hover:neumorphic-pressed py-3 px-4 rounded-xl text-gray-700 font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={handleBack}
+                disabled={currentStep === 0}
+              >
+                <ArrowLeft className="w-5 h-5 inline mr-2" />
+                {t('common.back')}
+              </button>
+              
+              <button
+                className="flex-1 neumorphic-subtle hover:neumorphic-pressed py-3 px-4 rounded-xl text-gray-700 font-medium transition-all duration-200"
+                onClick={handleNext}
+              >
+                {getCurrentQuestion()?.buttonText || t('common.next')}
+                <ArrowRight className="w-5 h-5 inline ml-2" />
+              </button>
             </div>
           </div>
         )}
         
         {/* Terms Screen */}
         {isTermsStep() && (
-          <div className="terms-screen">
-            <div className="terms-container">
-              <h2 className="terms-title">
-                {t('user.registration.terms.title', { name: formData.firstName })}
-              </h2>
-              
-              <div className="checkbox-container">
-                <input
-                  type="checkbox"
-                  id="acceptTerms"
-                  className="checkbox-input"
-                  checked={acceptTerms}
-                  onChange={(e) => {
-                    setAcceptTerms(e.target.checked);
-                    if (errors.current) {
-                      setErrors({});
-                    }
-                  }}
-                />
-                <label htmlFor="acceptTerms" className="checkbox-label">
-                  {t('user.registration.terms.checkbox')}
-                </label>
-              </div>
-              
-              {errors.current && (
-                <div className="error-message">{errors.current}</div>
-              )}
-              
+          <div className="neumorphic rounded-2xl p-8">
+            <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+              {t('user.registration.terms.title', { name: formData.firstName })}
+            </h2>
+            
+            <div className="mb-6">
               <button
-                className="submit-button"
-                onClick={handleNext}
-                disabled={isSubmitting}
+                onClick={openTermsModal}
+                className="w-full neumorphic-subtle hover:neumorphic-pressed py-3 px-4 rounded-xl text-gray-700 font-medium transition-all duration-200 text-left"
               >
-                {isSubmitting ? t('user.registration.terms.submitting') : t('user.registration.terms.submit')}
+                📄 {t('user.registration.terms.checkbox')}
               </button>
               
-              <div className="button-container" style={{ marginTop: '20px', justifyContent: 'center' }}>
-                <button
-                  className="back-button"
-                  onClick={handleBack}
-                  disabled={isSubmitting}
-                >
-                  ← Back
-                </button>
-              </div>
+              {errors.current && (
+                <div className="mt-2 text-red-500 text-sm text-center">{errors.current}</div>
+              )}
+            </div>
+            
+            <div className="flex gap-3">
+              <button
+                className="flex-1 neumorphic-subtle hover:neumorphic-pressed py-3 px-4 rounded-xl text-gray-700 font-medium transition-all duration-200"
+                onClick={handleBack}
+                disabled={isSubmitting}
+              >
+                <ArrowLeft className="w-5 h-5 inline mr-2" />
+                {t('common.back')}
+              </button>
+              
+              <button
+                className="flex-1 neumorphic-subtle hover:neumorphic-pressed py-3 px-4 rounded-xl text-gray-700 font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={handleNext}
+                disabled={!acceptTerms || isSubmitting}
+              >
+                {isSubmitting ? t('user.registration.terms.submitting') : t('user.registration.terms.submit')}
+                <ArrowRight className="w-5 h-5 inline ml-2" />
+              </button>
             </div>
           </div>
         )}
       </div>
+
+      {/* Terms Modal */}
+      {showTermsModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="neumorphic rounded-2xl p-6 max-w-md w-full max-h-[80vh] flex flex-col">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold text-gray-800">
+                {i18n.language === 'ar' ? 'الشروط والأحكام' : 'Terms and Conditions'}
+              </h3>
+              <button
+                onClick={closeTermsModal}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                ✕
+              </button>
+            </div>
+            
+            <div 
+              ref={termsModalRef}
+              className="flex-1 overflow-y-auto mb-4 p-4 neumorphic-pressed rounded-lg text-sm text-gray-700 leading-relaxed"
+              onScroll={handleTermsScroll}
+            >
+              <div className="space-y-4">
+                <h4 className="font-bold text-lg">1. Acceptance of Terms</h4>
+                <p>By accessing and using the LUDUS platform, you accept and agree to be bound by the terms and provision of this agreement.</p>
+                
+                <h4 className="font-bold text-lg">2. User Account</h4>
+                <p>You are responsible for maintaining the confidentiality of your account and password. You agree to accept responsibility for all activities that occur under your account.</p>
+                
+                <h4 className="font-bold text-lg">3. Privacy Policy</h4>
+                <p>Your privacy is important to us. Please review our Privacy Policy, which also governs your use of the Service, to understand our practices.</p>
+                
+                <h4 className="font-bold text-lg">4. User Conduct</h4>
+                <p>You agree not to use the service to transmit any material that is defamatory, offensive, or otherwise objectionable.</p>
+                
+                <h4 className="font-bold text-lg">5. Booking and Cancellation</h4>
+                <p>All bookings are subject to the vendor's cancellation policy. Please review individual activity terms before booking.</p>
+                
+                <h4 className="font-bold text-lg">6. Payment Terms</h4>
+                <p>Payment is processed securely through our payment partners. All prices are in SAR unless otherwise stated.</p>
+                
+                <h4 className="font-bold text-lg">7. Limitation of Liability</h4>
+                <p>LUDUS is not liable for any damages arising from the use of our platform or participation in activities.</p>
+                
+                <h4 className="font-bold text-lg">8. Changes to Terms</h4>
+                <p>We reserve the right to modify these terms at any time. Continued use of the platform constitutes acceptance of new terms.</p>
+                
+                <h4 className="font-bold text-lg">9. Contact Information</h4>
+                <p>For questions about these terms, please contact us at support@letsludus.com</p>
+                
+                <div className="text-center py-4">
+                  <p className="text-xs text-gray-500">
+                    Last updated: {new Date().toLocaleDateString()}
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-3 mb-4">
+              <input
+                type="checkbox"
+                id="modalAcceptTerms"
+                className="w-5 h-5 text-orange-500 rounded focus:ring-orange-500"
+                checked={acceptTerms}
+                onChange={(e) => setAcceptTerms(e.target.checked)}
+                disabled={!hasScrolledToBottom}
+              />
+              <label htmlFor="modalAcceptTerms" className="text-sm text-gray-700">
+                {hasScrolledToBottom 
+                  ? (i18n.language === 'ar' ? 'أوافق على الشروط والأحكام' : 'I agree to the Terms and Conditions')
+                  : (i18n.language === 'ar' ? 'يرجى التمرير للأسفل لقراءة الشروط' : 'Please scroll down to read all terms')
+                }
+              </label>
+            </div>
+            
+            <button
+              onClick={closeTermsModal}
+              className="w-full neumorphic-subtle hover:neumorphic-pressed py-3 px-4 rounded-xl text-gray-700 font-medium transition-all duration-200"
+            >
+              {i18n.language === 'ar' ? 'إغلاق' : 'Close'}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

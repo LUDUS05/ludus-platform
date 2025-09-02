@@ -399,5 +399,71 @@
         "contact": "للأسئلة حول هذه الشروط، اتصل بنا على partners@letsludus.com"
       }
     }
+  },
+  "user": {
+    "registration": {
+      "title": "انضم إلى لودوس",
+      "subtitle": "اكتشف أنشطة وتجارب مذهلة في مدينتك",
+      "alreadyHaveAccount": "لديك حساب بالفعل؟",
+      "getStarted": "ابدأ الآن",
+      "questions": {
+        "firstName": {
+          "question": "ما اسمك الأول؟",
+          "placeholder": "أدخل اسمك الأول",
+          "buttonText": "متابعة"
+        },
+        "lastName": {
+          "question": "واسم العائلة، {{name}}؟",
+          "placeholder": "أدخل اسم العائلة",
+          "buttonText": "متابعة"
+        },
+        "email": {
+          "question": "ما عنوان بريدك الإلكتروني، {{name}}؟",
+          "placeholder": "أدخل بريدك الإلكتروني",
+          "buttonText": "متابعة"
+        },
+        "password": {
+          "question": "أنشئ كلمة مرور آمنة",
+          "placeholder": "أدخل كلمة المرور",
+          "buttonText": "متابعة"
+        },
+        "confirmPassword": {
+          "question": "أكد كلمة المرور",
+          "placeholder": "أعد إدخال كلمة المرور",
+          "buttonText": "متابعة"
+        },
+        "phone": {
+          "question": "رقم الهاتف (اختياري)",
+          "placeholder": "أدخل رقم الهاتف",
+          "buttonText": "متابعة"
+        },
+        "dateOfBirth": {
+          "question": "تاريخ الميلاد (اختياري)",
+          "placeholder": "اختر تاريخ الميلاد",
+          "buttonText": "متابعة"
+        }
+      },
+      "validation": {
+        "required": "هذا الحقل مطلوب",
+        "invalidEmail": "يرجى إدخال عنوان بريد إلكتروني صحيح",
+        "passwordTooShort": "كلمة المرور يجب أن تكون 8 أحرف على الأقل",
+        "passwordMismatch": "كلمات المرور غير متطابقة",
+        "invalidPhone": "يرجى إدخال رقم هاتف صحيح",
+        "nameTooShort": "الاسم يجب أن يكون حرفين على الأقل",
+        "termsRequired": "يجب عليك قبول الشروط والأحكام",
+        "submissionError": "حدث خطأ ما. يرجى المحاولة مرة أخرى."
+      },
+      "terms": {
+        "title": "اقتربت من النهاية، {{name}}!",
+        "checkbox": "أوافق على الشروط والأحكام وسياسة الخصوصية",
+        "submitting": "إنشاء الحساب...",
+        "submit": "إنشاء الحساب"
+      },
+      "success": {
+        "title": "مرحباً بك في لودوس!",
+        "message": "تم إنشاء حسابك بنجاح، {{name}}. استعد لاكتشاف أنشطة مذهلة!",
+        "redirecting": "جاري توجيهك إلى لوحة التحكم..."
+      }
+    }
   }
 }

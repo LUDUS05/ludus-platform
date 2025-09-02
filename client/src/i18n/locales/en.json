@@ -47,12 +47,12 @@
           "buttonText": "Continue"
         },
         "lastName": {
-          "question": "And your last name{{name}}?",
+          "question": "And your last name, {{name}}?",
           "placeholder": "Enter your last name",
           "buttonText": "Continue"
         },
         "email": {
-          "question": "What's your email address{{name}}?",
+          "question": "What's your email address, {{name}}?",
           "placeholder": "Enter your email",
           "buttonText": "Continue"
         },
