@@ -608,6 +608,42 @@ const getUsers = async (req, res) => {
   }
 };
 
+// @desc    Update user status
+// @route   PUT /api/admin/users/:id/status
+// @access  Private (Admin only)
+const updateUserStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { isActive } = req.body;
+
+    const user = await User.findByIdAndUpdate(
+      id,
+      { isActive },
+      { new: true, runValidators: true }
+    ).select('-password -refreshToken');
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: `User ${isActive ? 'activated' : 'deactivated'} successfully`,
+      data: { user }
+    });
+
+  } catch (error) {
+    console.error('Update user status error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to update user status'
+    });
+  }
+};
+
 // @desc    Get single activity for admin
 // @route   GET /api/admin/activities/:id
 // @access  Private (Admin only)
@@ -652,5 +688,6 @@ module.exports = {
   getBookings,
   updateBookingStatus,
   getUsers,
+  updateUserStatus,
   getActivity
 };

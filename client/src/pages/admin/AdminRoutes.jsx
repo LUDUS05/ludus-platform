@@ -13,12 +13,14 @@ import PaymentManagement from '../../components/admin/PaymentManagement';
 import CategoryManagement from '../../components/admin/CategoryManagement';
 import TranslationManagement from '../../components/admin/TranslationManagement';
 import SystemSettings from '../../components/admin/SystemSettings';
+import UserManagement from '../../components/admin/UserManagement';
 
 const AdminRoutes = () => {
   return (
     <AdminLayout>
       <Routes>
         <Route path="/" element={<AdminDashboard />} />
+        <Route path="/users" element={<UserManagement />} />
         <Route path="/vendors" element={<VendorManagement />} />
         <Route path="/vendors/new" element={<EnhancedVendorForm />} />
         <Route path="/vendors/edit/:id" element={<EnhancedVendorForm />} />

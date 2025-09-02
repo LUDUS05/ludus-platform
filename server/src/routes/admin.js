@@ -14,7 +14,8 @@ const {
   deleteActivity,
   getBookings,
   updateBookingStatus,
-  getUsers
+  getUsers,
+  updateUserStatus
 } = require('../controllers/adminController');
 
 const {
@@ -85,6 +86,7 @@ const userRoutes = express.Router();
 userRoutes.use(authorize('admin'));
 
 userRoutes.get('/', getUsers);
+userRoutes.put('/:id/status', validateObjectId, updateUserStatus);
 
 router.use('/users', userRoutes);
 
