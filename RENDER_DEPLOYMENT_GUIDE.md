@@ -34,7 +34,7 @@ JWT_REFRESH_SECRET=ludus-super-secret-refresh-jwt-key-development-2024
 MOYASAR_SECRET_KEY=sk_test_your_moyasar_secret_key
 MOYASAR_PUBLISHABLE_KEY=pk_test_your_moyasar_publishable_key
 MOYASAR_WEBHOOK_SECRET=your_moyasar_webhook_secret
-CLIENT_URL=https://ludus-frontend.onrender.com
+CLIENT_URL=https://ludus-frontend-gf1g.onrender.com
 ```
 
 ### **Step 4: Deploy Frontend**
@@ -46,13 +46,13 @@ CLIENT_URL=https://ludus-frontend.onrender.com
 
 ### **Step 5: Update Frontend Environment Variables**
 ```
-REACT_APP_API_URL=https://ludus-backend.onrender.com/api
+REACT_APP_API_URL=https://ludus-backend-gf1g.onrender.com/api
 ```
 
 ## 🔗 **Your URLs After Deployment**
-- **Frontend**: `https://ludus-frontend.onrender.com`
-- **Backend**: `https://ludus-backend.onrender.com`
-- **API Endpoints**: `https://ludus-backend.onrender.com/api/*`
+- **Frontend**: `https://ludus-frontend-gf1g.onrender.com`
+- **Backend**: `https://ludus-backend-gf1g.onrender.com`
+- **API Endpoints**: `https://ludus-backend-gf1g.onrender.com/api/*`
 
 ## ✅ **Benefits of This Setup**
 1. **🎯 Simple**: One platform, one dashboard
