@@ -41,3 +41,8 @@ services:
       - path: /static/*
         name: Cache-Control
         value: "public, max-age=31536000, immutable"
+    # Alternative SPA routing method
+    redirects:
+      - source: "/*"
+        destination: "/index.html"
+        type: rewrite
