@@ -89,7 +89,7 @@ const AppRoutes = () => {
 
       {/* Neumorphic demo routes */}
       <Route path="/neo" element={<NeoLayout />}>
-        <Route path="test-home" element={<TestHomePage />} />
+        <Route path="test-page" element={<TestHomePage />} />
         <Route path="home" element={<NeoHome />} />
         <Route path="search" element={<NeoSearch />} />
         <Route path="activity-details" element={<NeoActivityDetails />} />

@@ -31,9 +31,10 @@
   background: linear-gradient(135deg, #f0f2f5 0%, #e0e5ec 100%);
   position: relative;
   display: flex;
-  align-items: flex-start;
-  gap: 2rem;
-  padding: 1rem;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  padding: 2rem;
   max-width: 1400px;
   margin: 0 auto;
 }
@@ -47,7 +48,7 @@
 .neo-content {
   flex: 1;
   padding: 1rem;
-  max-width: 1200px;
+  max-width: 1000px;
   width: 100%;
 }
 
@@ -55,7 +56,9 @@
   .neo-container {
     flex-direction: column;
     gap: 1rem;
-    padding: 0.75rem;
+    padding: 1rem;
+    align-items: stretch;
+    justify-content: flex-start;
   }
   
   .neo-content {
@@ -152,10 +155,12 @@
 /* Compact Vertical Navigation Bar - Positioned next to content */
 .neo-nav-vertical {
   position: sticky;
-  top: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
   width: 100px;
   flex-shrink: 0;
   z-index: 100;
+  align-self: center;
 }
 
 @media (max-width: 768px) {
