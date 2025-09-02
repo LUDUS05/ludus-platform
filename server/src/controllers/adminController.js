@@ -608,6 +608,37 @@ const getUsers = async (req, res) => {
   }
 };
 
+// @desc    Get single activity for admin
+// @route   GET /api/admin/activities/:id
+// @access  Private (Admin only)
+const getActivity = async (req, res) => {
+  try {
+    const activity = await Activity.findById(req.params.id)
+      .populate('vendor', 'businessName location.city location.state rating')
+      .populate('createdBy', 'firstName lastName email')
+      .lean();
+
+    if (!activity) {
+      return res.status(404).json({
+        success: false,
+        message: 'Activity not found'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: { activity }
+    });
+
+  } catch (error) {
+    console.error('Get activity error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch activity'
+    });
+  }
+};
+
 module.exports = {
   getDashboardStats,
   getVendors,
@@ -620,5 +651,6 @@ module.exports = {
   deleteActivity,
   getBookings,
   updateBookingStatus,
-  getUsers
+  getUsers,
+  getActivity
 };

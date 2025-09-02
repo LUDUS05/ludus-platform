@@ -108,6 +108,7 @@ const activityRoutes = express.Router();
 activityRoutes.use(authorize('admin'));
 
 activityRoutes.get('/', getActivities);
+activityRoutes.get('/:id', validateObjectId, getActivity); // Add this line
 activityRoutes.post('/', validateActivityCreation, createActivity);
 activityRoutes.put('/:id', validateObjectId, updateActivity);
 activityRoutes.delete('/:id', validateObjectId, deleteActivity);

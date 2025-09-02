@@ -101,30 +101,17 @@ const PageManagement = () => {
         alert('Page created successfully!');
       }
       
-      resetForm();
       fetchPages();
+      resetForm();
+      
     } catch (error) {
       console.error('Error saving page:', error);
-      console.error('Error details:', error.response?.data || error);
-      console.error('Error status:', error.response?.status);
-      console.error('Error config:', error.config);
+      console.error('Save error details:', error.response?.data || error);
+      console.error('Save error status:', error.response?.status);
       
       let errorMessage = 'Unknown error occurred';
-      // Handle uniqueness / slug conflict errors more flexibly
-      const serverMessage = error.response?.data?.message || '';
-      const serverMessageLower = serverMessage.toLowerCase();
-      if (error.response?.status === 400 && (
-        serverMessageLower.includes('url') ||
-        serverMessageLower.includes('slug') ||
-        serverMessageLower.includes('already exists')
-      )) {
-        const currentSlug = formData.slug || '';
-        const timestamp = Date.now();
-        errorMessage = `A page with the URL "${currentSlug}" already exists. Please use a different URL slug (e.g., "${currentSlug}-${timestamp}" or "${currentSlug}-new").`;
-      } else if (serverMessage) {
+      if (error.response?.data?.message) {
         errorMessage = error.response.data.message;
-      } else if (error.response?.data?.errors) {
-        errorMessage = `Validation error: ${JSON.stringify(error.response.data.errors)}`;
       } else if (error.message) {
         errorMessage = error.message;
       }
