@@ -64,15 +64,20 @@ export default function HomePage() {
 
   if (showOnboarding) {
     return (
-      <div className="max-w-md mx-auto px-2">
-        <div className="text-center mb-10">
-          <div className="neo-empty-icon mb-6">
-            <Sparkles className="w-12 h-12 text-purple-600" />
+      <div className="neo-onboarding-container">
+        <div className="neo-onboarding-header">
+          <div className="neo-logo-container">
+            <div className="neo-logo-graphic">
+              <div className="neo-logo-bar neo-logo-bar-left"></div>
+              <div className="neo-logo-bar neo-logo-bar-right"></div>
+              <div className="neo-logo-bar neo-logo-bar-bottom"></div>
+            </div>
+            <h1 className="neo-logo-text">LUDUS</h1>
           </div>
-          <h1 className="text-3xl font-black text-gray-800 mb-3">
+          <h2 className="neo-welcome-title">
             مرحباً بك في لودس!
-          </h1>
-          <p className="text-lg text-gray-700 leading-relaxed">
+          </h2>
+          <p className="neo-welcome-subtitle">
             دعنا نخصص تجربتك. ما الذي يثير اهتمامك؟
           </p>
         </div>
@@ -82,7 +87,7 @@ export default function HomePage() {
           onInterestsChange={setSelectedInterests}
         />
 
-        <div className="mt-10">
+        <div className="neo-onboarding-actions">
           <button
             onClick={handleOnboardingComplete}
             disabled={selectedInterests.length === 0}
