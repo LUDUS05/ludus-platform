@@ -30,7 +30,7 @@ export default function Layout() {
       {/* Language Switcher */}
       <div className="neo-language-switcher">
         <div className="neo-language-container">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <Globe className="w-5 h-5 text-gray-700" />
             <span className="text-sm text-gray-700 font-medium">
               {i18n.language === 'ar' ? 'اللغة' : 'Language'}
@@ -39,6 +39,7 @@ export default function Layout() {
           <button
             onClick={toggleLanguage}
             className="neo-language-button"
+            type="button"
           >
             {getCurrentLanguageText()}
           </button>

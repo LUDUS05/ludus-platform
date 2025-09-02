@@ -31,16 +31,16 @@ export default function InterestSelector({ selectedInterests = [], onInterestsCh
             onClick={() => toggleInterest(interest.id)}
             className={`neo-interest-item ${isSelected ? 'selected' : ''}`}
           >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <span className="text-2xl">{interest.emoji}</span>
-                <span className="font-medium text-neumorphic">
+            <div className="flex items-center justify-between h-full">
+              <div className="flex items-center space-x-4">
+                <span className="text-3xl">{interest.emoji}</span>
+                <span className="font-semibold text-neumorphic text-lg">
                   {interest.name}
                 </span>
               </div>
               {isSelected && (
                 <div className="neo-interest-check">
-                  <Check className="w-4 h-4 text-blue-600" />
+                  <Check className="w-5 h-5 text-blue-600" />
                 </div>
               )}
             </div>

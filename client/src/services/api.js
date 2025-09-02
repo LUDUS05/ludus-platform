@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-// Environment-aware API configuration
+// Simplified API configuration for Render deployment
 const getApiBaseUrl = () => {
-  // Production: Use environment variable or default to production URL
+  // Production: Use Render backend URL
   if (process.env.NODE_ENV === 'production') {
-    return process.env.REACT_APP_API_URL || 'https://app.letsludus.com/api';
+    return process.env.REACT_APP_API_URL || 'https://ludus-backend.onrender.com/api';
   }
   
   // Development: Use local backend

@@ -1,4 +1,5 @@
 services:
+  # Backend Service (Node.js API)
   - type: web
     name: ludus-backend
     env: node
@@ -8,8 +9,6 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: 5000
       - key: MONGODB_URI
         sync: false # Set in Render dashboard
       - key: JWT_SECRET
@@ -23,8 +22,9 @@ services:
       - key: MOYASAR_WEBHOOK_SECRET
         sync: false # Set in Render dashboard
       - key: CLIENT_URL
-        value: https://ludus-platform.vercel.app
+        value: https://ludus-frontend.onrender.com
 
+  # Frontend Service (Static React App)
   - type: web
     name: ludus-frontend
     env: static

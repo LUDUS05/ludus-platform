@@ -135,9 +135,9 @@ export default function ActivityDetailsPage() {
 
   if (!activity) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="neumorphic rounded-full w-16 h-16 flex items-center justify-center">
-          <div className="animate-spin w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full"></div>
+      <div className="neo-loading">
+        <div className="neo-spinner">
+          <div className="neo-spinner-inner"></div>
         </div>
       </div>
     );
@@ -149,22 +149,22 @@ export default function ActivityDetailsPage() {
       <div className="flex items-center justify-between mb-6">
         <button
           onClick={() => navigate(-1)}
-          className="neumorphic rounded-full p-3 hover:neumorphic-pressed transition-all duration-200"
+          className="neo-category-badge rounded-full p-3 hover:neo-filter-pill active transition-all duration-200"
         >
           <ArrowLeft className="w-5 h-5 text-gray-700" />
         </button>
         <div className="flex gap-2">
           <button
             onClick={() => setIsLiked(!isLiked)}
-            className={`neumorphic rounded-full p-3 transition-all duration-200 ${
-              isLiked ? 'neumorphic-pressed' : 'hover:neumorphic-pressed'
+            className={`neo-category-badge rounded-full p-3 transition-all duration-200 ${
+              isLiked ? 'neo-filter-pill active' : 'hover:neo-filter-pill active'
             }`}
           >
             <Heart className={`w-5 h-5 ${isLiked ? 'text-red-500 fill-current' : 'text-gray-700'}`} />
           </button>
           <button 
             onClick={() => setShowShareModal(true)}
-            className="neumorphic rounded-full p-3 hover:neumorphic-pressed transition-all duration-200"
+            className="neo-category-badge rounded-full p-3 hover:neo-filter-pill active transition-all duration-200"
           >
             <Share className="w-5 h-5 text-gray-700" />
           </button>
@@ -172,7 +172,7 @@ export default function ActivityDetailsPage() {
       </div>
 
       {/* Activity Image */}
-      <div className="neumorphic rounded-2xl p-2 mb-6">
+      <div className="neo-activity-card p-2 mb-6">
         <img 
           src={activity.image_url} 
           alt={activity.title}
@@ -185,7 +185,7 @@ export default function ActivityDetailsPage() {
         {/* Title and Category */}
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <div className="neumorphic-subtle rounded-full px-3 py-1">
+            <div className="neo-category-badge px-3 py-1">
               <span className="text-xs font-semibold text-gray-600 uppercase">
                 {activity.category}
               </span>
@@ -207,7 +207,7 @@ export default function ActivityDetailsPage() {
 
         {/* Details Grid */}
         <div className="grid grid-cols-2 gap-4">
-          <div className="neumorphic rounded-xl p-4">
+          <div className="neo-activity-card p-4">
             <div className="flex items-center gap-2 mb-2">
               <MapPin className="w-4 h-4 text-gray-500" />
               <span className="text-sm font-medium text-gray-700">الموقع</span>
@@ -215,7 +215,7 @@ export default function ActivityDetailsPage() {
             <p className="text-sm text-gray-600">{activity.location}</p>
           </div>
 
-          <div className="neumorphic rounded-xl p-4">
+          <div className="neo-activity-card p-4">
             <div className="flex items-center gap-2 mb-2">
               <Clock className="w-4 h-4 text-gray-500" />
               <span className="text-sm font-medium text-gray-700">المدة</span>
@@ -223,7 +223,7 @@ export default function ActivityDetailsPage() {
             <p className="text-sm text-gray-600">{activity.duration || '2h'}</p>
           </div>
 
-          <div className="neumorphic rounded-xl p-4">
+          <div className="neo-activity-card p-4">
             <div className="flex items-center gap-2 mb-2">
               <Calendar className="w-4 h-4 text-gray-500" />
               <span className="text-sm font-medium text-gray-700">التاريخ</span>
@@ -233,7 +233,7 @@ export default function ActivityDetailsPage() {
             </p>
           </div>
 
-          <div className="neumorphic rounded-xl p-4">
+          <div className="neo-activity-card p-4">
             <div className="flex items-center gap-2 mb-2">
               <Users className="w-4 h-4 text-gray-500" />
               <span className="text-sm font-medium text-gray-700">السعة</span>
@@ -245,19 +245,19 @@ export default function ActivityDetailsPage() {
         </div>
 
         {/* Booking Controls */}
-        <div className="neumorphic rounded-2xl p-4">
+        <div className="neo-activity-card p-4">
           <div className="flex items-center justify-between mb-4">
             <span className="text-neumorphic font-bold text-lg">ر.س {activity.price} للشخص</span>
             <div className="flex items-center">
               <button
-                className="neumorphic rounded-full w-8 h-8 flex items-center justify-center"
+                className="neo-category-badge rounded-full w-8 h-8 flex items-center justify-center"
                 onClick={() => setParticipants(Math.max(1, participants - 1))}
               >
                 -
               </button>
               <span className="mx-4 font-semibold">{participants}</span>
               <button
-                className="neumorphic rounded-full w-8 h-8 flex items-center justify-center"
+                className="neo-category-badge rounded-full w-8 h-8 flex items-center justify-center"
                 onClick={() => setParticipants((participants + 1))}
               >
                 +
@@ -277,12 +277,12 @@ export default function ActivityDetailsPage() {
       {/* Share Modal */}
       {showShareModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="neumorphic rounded-2xl p-6 max-w-sm w-full mx-4">
+          <div className="neo-activity-card p-6 max-w-sm w-full mx-4">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-800">مشاركة النشاط</h3>
               <button
                 onClick={() => setShowShareModal(false)}
-                className="neumorphic-pressed rounded-full p-2"
+                className="neo-filter-pill active rounded-full p-2"
               >
                 <X className="w-5 h-5 text-gray-700" />
               </button>
@@ -291,7 +291,7 @@ export default function ActivityDetailsPage() {
             <div className="space-y-3 mb-4">
               <button
                 onClick={() => handleShare('link')}
-                className="w-full flex items-center gap-3 p-3 neumorphic-subtle hover:neumorphic-pressed rounded-lg transition-all duration-200"
+                className="w-full flex items-center gap-3 p-3 neo-category-badge hover:neo-filter-pill active rounded-lg transition-all duration-200"
               >
                 <Link className="w-5 h-5 text-blue-600" />
                 <span className="text-gray-700">نسخ رابط الإحالة</span>
@@ -299,7 +299,7 @@ export default function ActivityDetailsPage() {
               
               <button
                 onClick={() => handleShare('sms')}
-                className="w-full flex items-center gap-3 p-3 neumorphic-subtle hover:neumorphic-pressed rounded-lg transition-all duration-200"
+                className="w-full flex items-center gap-3 p-3 neo-category-badge hover:neo-filter-pill active rounded-lg transition-all duration-200"
               >
                 <MessageCircle className="w-5 h-5 text-green-600" />
                 <span className="text-gray-700">مشاركة عبر الرسائل</span>
@@ -307,7 +307,7 @@ export default function ActivityDetailsPage() {
               
               <button
                 onClick={() => handleShare('whatsapp')}
-                className="w-full flex items-center gap-3 p-3 neumorphic-subtle hover:neumorphic-pressed rounded-lg transition-all duration-200"
+                className="w-full flex items-center gap-3 p-3 neo-category-badge hover:neo-filter-pill active rounded-lg transition-all duration-200"
               >
                 <MessageCircle className="w-5 h-5 text-green-500" />
                 <span className="text-gray-700">مشاركة عبر واتساب</span>
@@ -315,7 +315,7 @@ export default function ActivityDetailsPage() {
               
               <button
                 onClick={() => handleShare('facebook')}
-                className="w-full flex items-center gap-3 p-3 neumorphic-subtle hover:neumorphic-pressed rounded-lg transition-all duration-200"
+                className="w-full flex items-center gap-3 p-3 neo-category-badge hover:neo-filter-pill active rounded-lg transition-all duration-200"
               >
                 <Facebook className="w-5 h-5 text-blue-600" />
                 <span className="text-gray-700">مشاركة عبر فيسبوك</span>

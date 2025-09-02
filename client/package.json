@@ -31,11 +31,10 @@
     "tailwindcss": "^3.3.5"
   },
   "scripts": {
-  "start": "react-scripts start",
-  "build": "cross-env SKIP_PREFLIGHT_CHECK=true CI=false react-scripts build",
+    "start": "react-scripts start",
+    "build": "cross-env SKIP_PREFLIGHT_CHECK=true CI=false react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "build:vercel": "SKIP_PREFLIGHT_CHECK=true CI=false react-scripts build"
+    "eject": "react-scripts eject"
   },
   "engines": {
     "node": ">=18.0.0",

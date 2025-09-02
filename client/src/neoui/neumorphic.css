@@ -31,12 +31,12 @@
 }
 
 .neo-content {
-  padding-bottom: 6rem;
+  padding-bottom: 8rem; /* Increased from 6rem to prevent nav overlap */
 }
 
 .neo-nav {
   position: fixed;
-  bottom: 1rem;
+  bottom: 1.5rem; /* Increased from 1rem for better spacing */
   left: 0;
   right: 0;
   z-index: 50;
@@ -49,32 +49,45 @@
 
 .neo-nav-bar {
   background-color: #e0e0e0;
-  border-radius: 1rem;
-  padding: 0.75rem;
+  border-radius: 1.5rem; /* Increased from 1rem for softer look */
+  padding: 1rem; /* Increased from 0.75rem for better spacing */
   box-shadow: 8px 8px 16px #bebebe, -8px -8px 16px #ffffff;
+  backdrop-filter: blur(10px);
 }
 
 .neo-nav-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.25rem;
-  padding: 0.5rem 1rem;
-  border-radius: 0.75rem;
-  transition: all 0.2s;
+  gap: 0.5rem; /* Increased from 0.25rem for better spacing */
+  padding: 0.75rem 1rem; /* Increased padding for better touch targets */
+  border-radius: 1rem; /* Increased from 0.75rem for softer look */
+  transition: all 0.3s ease; /* Smoother transition */
   text-decoration: none;
   color: #374151;
+  min-height: 3.5rem; /* Ensure consistent height */
 }
 
 .neo-nav-item:hover {
   box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #ffffff;
+  transform: translateY(-2px); /* Subtle lift effect */
 }
 
 .neo-nav-item.active {
   box-shadow: inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff;
+  background-color: rgba(37, 99, 235, 0.1); /* Subtle blue tint for active state */
 }
 
-/* Language switcher styles */
+.neo-nav-item.active svg {
+  color: #2563eb; /* Blue color for active icons */
+}
+
+.neo-nav-item.active span {
+  color: #2563eb; /* Blue color for active text */
+  font-weight: 600;
+}
+
+/* Enhanced Language Switcher */
 .neo-language-switcher {
   max-width: 28rem;
   margin: 0 auto;
@@ -83,124 +96,167 @@
 
 .neo-language-container {
   background-color: #e0e0e0;
-  border-radius: 0.75rem;
-  padding: 0.75rem;
+  border-radius: 1rem; /* Increased from 0.75rem */
+  padding: 1.25rem; /* Increased from 0.75rem */
   box-shadow: 8px 8px 16px #bebebe, -8px -8px 16px #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle border */
 }
 
-.neo-language-button {
-  background-color: #e0e0e0;
-  border-radius: 0.5rem;
-  padding: 0.5rem 1rem;
-  box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #ffffff;
-  transition: all 0.2s;
+.neo-language-container .flex {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem; /* Increased gap */
+}
+
+.neo-language-container .text-sm {
+  font-size: 0.875rem;
   font-weight: 500;
   color: #374151;
 }
 
+.neo-language-button {
+  background-color: #e0e0e0;
+  border-radius: 0.75rem; /* Increased from 0.5rem */
+  padding: 0.75rem 1.5rem; /* Increased padding */
+  box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #ffffff;
+  transition: all 0.3s ease;
+  font-weight: 600; /* Increased from 500 */
+  color: #374151;
+  border: none;
+  cursor: pointer;
+  font-size: 0.875rem;
+  min-width: 5rem; /* Ensure consistent button width */
+}
+
 .neo-language-button:hover {
   box-shadow: inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff;
+  transform: translateY(-1px); /* Subtle lift effect */
+  color: #2563eb; /* Blue color on hover */
+}
+
+.neo-language-button:active {
+  transform: translateY(0);
+  box-shadow: inset 6px 6px 12px #bebebe, inset -6px -6px 12px #ffffff;
 }
 
 /* Activity card styles */
 .neo-activity-card {
   background-color: #e0e0e0;
-  border-radius: 1rem;
-  padding: 1rem;
-  margin-bottom: 1rem;
+  border-radius: 1.25rem; /* Increased from 1rem for softer look */
+  padding: 1.25rem; /* Increased from 1rem for better spacing */
+  margin-bottom: 1.25rem; /* Increased from 1rem */
   box-shadow: 8px 8px 16px #bebebe, -8px -8px 16px #ffffff;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
   cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border */
 }
 
 .neo-activity-card:hover {
   box-shadow: inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff;
+  transform: translateY(-2px); /* Subtle lift effect */
 }
 
 .neo-activity-image {
   width: 100%;
   height: 12rem;
   object-fit: cover;
-  border-radius: 0.75rem;
+  border-radius: 1rem; /* Increased from 0.75rem */
 }
 
 .neo-price-badge {
   position: absolute;
-  top: 0.75rem;
-  left: 0.75rem;
+  top: 1rem; /* Increased from 0.75rem */
+  left: 1rem; /* Increased from 0.75rem */
   background-color: #e0e0e0;
   border-radius: 9999px;
-  padding: 0.25rem 0.75rem;
+  padding: 0.5rem 1rem; /* Increased padding */
   box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .neo-category-badge {
   background-color: #e0e0e0;
   border-radius: 9999px;
-  padding: 0.25rem 0.75rem;
+  padding: 0.5rem 1rem; /* Increased padding */
   box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* Interest selector styles */
 .neo-interest-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 0.75rem;
+  gap: 1rem; /* Increased from 0.75rem */
 }
 
 .neo-interest-item {
-  padding: 1rem;
-  border-radius: 0.75rem;
+  padding: 1.25rem; /* Increased from 1rem */
+  border-radius: 1rem; /* Increased from 0.75rem */
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
   background-color: #e0e0e0;
   box-shadow: 8px 8px 16px #bebebe, -8px -8px 16px #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  min-height: 4rem; /* Ensure consistent height */
 }
 
 .neo-interest-item:hover {
   box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #ffffff;
+  transform: translateY(-2px);
 }
 
 .neo-interest-item.selected {
   box-shadow: inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff;
+  background-color: rgba(37, 99, 235, 0.1);
+  border-color: rgba(37, 99, 235, 0.3);
 }
 
 .neo-interest-check {
   background-color: #e0e0e0;
   border-radius: 9999px;
-  padding: 0.25rem;
+  padding: 0.5rem; /* Increased from 0.25rem */
   box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #ffffff;
 }
 
 /* Filter pills styles */
 .neo-filter-container {
   display: flex;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
+  gap: 1rem; /* Increased from 0.75rem */
+  margin-bottom: 2rem; /* Increased from 1.5rem */
   overflow-x: auto;
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.75rem; /* Increased from 0.5rem */
 }
 
 .neo-filter-pill {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  border-radius: 0.75rem;
+  gap: 0.75rem; /* Increased from 0.5rem */
+  padding: 0.75rem 1.5rem; /* Increased padding */
+  border-radius: 1rem; /* Increased from 0.75rem */
   white-space: nowrap;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
   background-color: #e0e0e0;
   box-shadow: 8px 8px 16px #bebebe, -8px -8px 16px #ffffff;
   color: #1f2937;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-weight: 500;
+  min-height: 2.75rem; /* Ensure consistent height */
 }
 
 .neo-filter-pill:hover {
   box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #ffffff;
+  transform: translateY(-1px);
 }
 
 .neo-filter-pill.active {
   box-shadow: inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff;
   color: #2563eb;
+  background-color: rgba(37, 99, 235, 0.1);
+  border-color: rgba(37, 99, 235, 0.3);
 }
 
 .neo-filter-pill.active svg {
@@ -210,13 +266,15 @@
 /* Button styles */
 .neo-button {
   width: 100%;
-  padding: 1rem;
-  border-radius: 0.75rem;
+  padding: 1.25rem; /* Increased from 1rem */
+  border-radius: 1rem; /* Increased from 0.75rem */
   font-weight: 700;
   color: white;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
   border: none;
   cursor: pointer;
+  font-size: 1rem;
+  min-height: 3.5rem; /* Ensure consistent height */
 }
 
 .neo-button.primary {
@@ -226,11 +284,15 @@
 
 .neo-button.primary:hover {
   background-color: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 12px 12px 20px #bebebe, -12px -12px 20px #ffffff;
 }
 
 .neo-button.primary:disabled {
   background-color: #9ca3af;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #ffffff;
 }
 
 /* Loading spinner */
@@ -238,14 +300,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 16rem;
+  height: 20rem; /* Increased from 16rem */
 }
 
 .neo-spinner {
   background-color: #e0e0e0;
   border-radius: 9999px;
-  width: 4rem;
-  height: 4rem;
+  width: 5rem; /* Increased from 4rem */
+  height: 5rem; /* Increased from 4rem */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -253,8 +315,8 @@
 }
 
 .neo-spinner-inner {
-  width: 2rem;
-  height: 2rem;
+  width: 2.5rem; /* Increased from 2rem */
+  height: 2.5rem; /* Increased from 2rem */
   border: 2px solid #2563eb;
   border-top: 2px solid transparent;
   border-radius: 9999px;
@@ -269,15 +331,15 @@
 /* Empty state */
 .neo-empty-state {
   text-align: center;
-  padding: 3rem 0;
+  padding: 4rem 0; /* Increased from 3rem */
 }
 
 .neo-empty-icon {
   background-color: #e0e0e0;
   border-radius: 9999px;
-  width: 5rem;
-  height: 5rem;
-  margin: 0 auto 1rem;
+  width: 6rem; /* Increased from 5rem */
+  height: 6rem; /* Increased from 5rem */
+  margin: 0 auto 1.5rem; /* Increased margin */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -291,6 +353,14 @@
   }
   
   .neo-language-switcher {
-    padding: 1rem 0.75rem 0.5rem;
+    padding: 1.25rem 0.75rem 0.75rem; /* Adjusted padding */
+  }
+  
+  .neo-content {
+    padding-bottom: 7.5rem; /* Slightly reduced for smaller screens */
+  }
+  
+  .neo-nav {
+    bottom: 1rem; /* Reduced for smaller screens */
   }
 }

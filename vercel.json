@@ -1,7 +1,0 @@
-{
-  "framework": "create-react-app",
-  "installCommand": "npm ci --prefix client",
-  "buildCommand": "npm ci --prefix client && npm run build --prefix client",
-  "outputDirectory": "client/build"
-}
-

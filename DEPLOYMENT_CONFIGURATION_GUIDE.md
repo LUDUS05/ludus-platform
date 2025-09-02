@@ -53,17 +53,13 @@ const getApiBaseUrl = () => {
 
 ## 🎯 **Current Deployment Strategy**
 
-### **Frontend (Vercel)**
-- **URL**: https://app.letsludus.com
-- **Build Command**: `npm run build`
+### **Frontend + Backend (Render) - RECOMMENDED**
+- **URL**: https://ludus-frontend.onrender.com (Frontend)
+- **URL**: https://ludus-backend.onrender.com (Backend)
+- **Build Command**: `npm run build` (Frontend), `npm start` (Backend)
 - **Environment**: Production
-- **API Endpoint**: https://app.letsludus.com/api
-
-### **Backend (Render)**
-- **URL**: https://ludus-backend.onrender.com
-- **Port**: 5000 (production)
-- **Environment**: Production
-- **Database**: MongoDB Atlas (Production)
+- **API Endpoint**: https://ludus-backend.onrender.com/api
+- **Cost**: FREE (both services on free tier)
 
 ### **Local Development**
 - **Frontend**: http://localhost:3000
