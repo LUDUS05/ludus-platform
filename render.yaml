@@ -34,6 +34,18 @@ services:
       - type: rewrite
         source: "/*"
         destination: "/index.html"
+      - type: rewrite
+        source: "/neo/*"
+        destination: "/index.html"
+      - type: rewrite
+        source: "/admin/*"
+        destination: "/index.html"
+      - type: rewrite
+        source: "/register"
+        destination: "/index.html"
+      - type: rewrite
+        source: "/partner-registration"
+        destination: "/index.html"
     headers:
       - path: /*
         name: Cache-Control
