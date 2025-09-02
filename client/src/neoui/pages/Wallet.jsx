@@ -93,7 +93,7 @@ export default function NeoWallet() {
       </div>
 
       {/* Balance Card */}
-      <div className="neumorphic rounded-2xl p-6 text-center">
+      <div className="neo-activity-card p-6 text-center">
         <div className="flex items-center justify-center mb-4">
           <Wallet className="w-8 h-8 text-blue-600" />
         </div>
@@ -105,7 +105,7 @@ export default function NeoWallet() {
         </div>
         <button
           onClick={() => setShowTopUpModal(true)}
-          className="neumorphic-subtle hover:neumorphic-pressed px-6 py-3 rounded-xl transition-all duration-200 flex items-center gap-2 mx-auto"
+          className="neo-filter-pill hover:neo-filter-pill active px-6 py-3 transition-all duration-200 flex items-center gap-2 mx-auto"
         >
           <Plus className="w-5 h-5" />
           <span>{isRTL ? 'إضافة رصيد' : 'Add Balance'}</span>
@@ -114,14 +114,14 @@ export default function NeoWallet() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 gap-4">
-        <div className="neumorphic rounded-xl p-4 text-center">
+        <div className="neo-activity-card p-4 text-center">
           <Gift className="w-6 h-6 text-blue-600 mx-auto mb-2" />
           <div className="text-lg font-bold text-gray-800">{walletData.rewards}</div>
           <div className="text-sm text-gray-600">
             {isRTL ? 'نقاط المكافآت' : 'Reward Points'}
           </div>
         </div>
-        <div className="neumorphic rounded-xl p-4 text-center">
+        <div className="neo-activity-card p-4 text-center">
           <Gift className="w-6 h-6 text-purple-600 mx-auto mb-2" />
           <div className="text-lg font-bold text-gray-800">{formatCurrency(walletData.referralEarnings)}</div>
           <div className="text-sm text-gray-600">
@@ -131,14 +131,14 @@ export default function NeoWallet() {
       </div>
 
       {/* Tabs */}
-      <div className="neumorphic rounded-xl p-1">
+      <div className="neo-activity-card p-1">
         <div className="flex">
           <button
             onClick={() => setActiveTab('overview')}
             className={`flex-1 py-3 px-4 rounded-lg transition-all duration-200 text-sm font-medium ${
               activeTab === 'overview'
-                ? 'neumorphic-pressed text-blue-600'
-                : 'text-gray-600 hover:neumorphic-subtle'
+                ? 'neo-filter-pill active'
+                : 'text-gray-600 hover:neo-filter-pill'
             }`}
           >
             {isRTL ? 'نظرة عامة' : 'Overview'}
@@ -147,8 +147,8 @@ export default function NeoWallet() {
             onClick={() => setActiveTab('history')}
             className={`flex-1 py-3 px-4 rounded-lg transition-all duration-200 text-sm font-medium ${
               activeTab === 'history'
-                ? 'neumorphic-pressed text-blue-600'
-                : 'text-gray-600 hover:neumorphic-subtle'
+                ? 'neo-filter-pill active'
+                : 'text-gray-600 hover:neo-filter-pill'
             }`}
           >
             {isRTL ? 'التاريخ' : 'History'}
@@ -159,7 +159,7 @@ export default function NeoWallet() {
       {/* Tab Content */}
       {activeTab === 'overview' && (
         <div className="space-y-4">
-          <div className="neumorphic rounded-xl p-4">
+          <div className="neo-activity-card p-4">
             <h3 className="font-semibold text-gray-800 mb-3">
               {isRTL ? 'المعاملات الأخيرة' : 'Recent Transactions'}
             </h3>
@@ -185,7 +185,7 @@ export default function NeoWallet() {
 
       {activeTab === 'history' && (
         <div className="space-y-4">
-          <div className="neumorphic rounded-xl p-4">
+          <div className="neo-activity-card p-4">
             <h3 className="font-semibold text-gray-800 mb-3">
               {isRTL ? 'سجل المعاملات' : 'Transaction History'}
             </h3>
@@ -212,7 +212,7 @@ export default function NeoWallet() {
       {/* Top-up Modal */}
       {showTopUpModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="neumorphic rounded-2xl p-6 max-w-sm w-full mx-4">
+          <div className="neo-activity-card p-6 max-w-sm w-full mx-4">
             <h3 className="text-lg font-semibold text-gray-800 mb-4 text-center">
               {isRTL ? 'إضافة رصيد' : 'Add Balance'}
             </h3>
