@@ -1,1 +1,10 @@
+# SPA Routing - Serve index.html for all routes
 /*    /index.html   200
+
+# Specific routes that should work
+/neo/*    /index.html   200
+/admin/*    /index.html   200
+/profile/*    /index.html   200
+/wallet/*    /index.html   200
+/search/*    /index.html   200
+/activities/*    /index.html   200
