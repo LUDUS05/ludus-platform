@@ -80,6 +80,7 @@ const AdminDashboard = () => {
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message || 'Failed to load dashboard overview';
       console.error('Failed to load dashboard overview:', errorMessage);
+      console.error('Full error object:', error);
       console.error('Error details:', {
         message: error.message,
         response: error.response?.data,
