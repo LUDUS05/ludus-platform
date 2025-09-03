@@ -30,13 +30,18 @@ services:
     env: static
     buildCommand: cd client && npm install && npm run build
     staticPublishPath: client/build
-    # Enable Render's built-in SPA support
+    # Enable Render's built-in SPA support (testing alternative approach)
     spa: true
+    # Alternative SPA routing configuration
     routes:
       # Ensure API calls go to backend
       - type: rewrite
         source: "/api/*"
         destination: "https://ludus-backend-gf1g.onrender.com/api/*"
+      # Force SPA routing for all non-API routes
+      - type: rewrite
+        source: "/*"
+        destination: "/index.html"
     headers:
       - path: /*
         name: Cache-Control
