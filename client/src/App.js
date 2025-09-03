@@ -4,28 +4,6 @@ import './index.css';
 import AppRoutes from './routes/AppRoutes';
 import { AuthProvider } from './context/AuthContext';
 
-// Debug component to show current route info (can be removed in production)
-function RouteDebugger() {
-  const location = useLocation();
-  
-  return (
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      right: 0,
-      background: 'rgba(0,0,0,0.8)',
-      color: 'white',
-      padding: '10px',
-      fontSize: '12px',
-      zIndex: 9999
-    }}>
-      <div>Path: {location.pathname}</div>
-      <div>Search: {location.search}</div>
-      <div>Hash: {location.hash}</div>
-    </div>
-  );
-}
-
 // Fallback redirect handler for SPA routing
 function FallbackHandler() {
   const location = useLocation();
@@ -38,7 +16,6 @@ function FallbackHandler() {
     if (spaRedirect) {
       // Decode the original path and navigate to it
       const decodedPath = decodeURIComponent(spaRedirect);
-      console.log('SPA Redirect: Navigating to', decodedPath);
       
       // Navigate to the original path and replace the current history entry
       // This will clean up the URL parameters
@@ -53,7 +30,6 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <RouteDebugger />
         <FallbackHandler />
         <AppRoutes />
       </Router>
