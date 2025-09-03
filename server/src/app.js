@@ -37,9 +37,9 @@ app.use(cors({
   origin: [
     'http://localhost:3000',
     'https://app.letsludus.com', 
-    'https://ludus-platform.vercel.app',
-    'https://ludus-platform-git-new-main-ludus05s-projects.vercel.app',
-    'https://ludus-platform-md55yra7v-ludus05s-projects.vercel.app',
+    'https://ludus-frontend.onrender.com',
+    'https://ludus-platform.onrender.com',
+    /https:\/\/.*\.onrender\.com$/,
     /https:\/\/.*\.vercel\.app$/
   ],
   credentials: true

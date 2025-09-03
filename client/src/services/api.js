@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-// Simplified API configuration for Render deployment with custom domain
+// Simplified API configuration for Render deployment
 const getApiBaseUrl = () => {
   // Production: Use Render backend URL
   if (process.env.NODE_ENV === 'production') {
