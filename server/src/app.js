@@ -37,7 +37,7 @@ app.use(cors({
   origin: [
     'http://localhost:3000',
     'https://app.letsludus.com', 
-    'https://ludus-frontend-crt8.onrender.com',
+    'https://ludus-frontend-og2d.onrender.com',
     'https://ludus-platform.onrender.com',
     /https:\/\/.*\.onrender\.com$/,
     /https:\/\/.*\.vercel\.app$/

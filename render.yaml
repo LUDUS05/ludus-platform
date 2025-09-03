@@ -1,7 +1,7 @@
 services:
   # Backend Service (Node.js API)
   - type: web
-    name: ludus-backend-crt8
+    name: ludus-backend-gf1g
     env: node
     plan: starter
     buildCommand: cd server && npm install
@@ -26,7 +26,7 @@ services:
 
   # Frontend Service (Static React App)
   - type: web
-    name: ludus-frontend-crt8
+    name: ludus-frontend-og2d
     env: static
     buildCommand: cd client && npm install && npm run build
     staticPublishPath: client/build
