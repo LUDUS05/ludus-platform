@@ -95,14 +95,13 @@ app.use('/api/uploads', require('./routes/uploads'));
 app.use('/api/site-settings', require('./routes/siteSettings'));
 app.use('/api/contact', require('./routes/contact'));
 
-
-// 404 handler for unknown routes
-app.use('*', (req, res) => {
-  res.status(404).json({ 
-    success: false,
-    message: 'Route not found' 
-  });
-});
+// Remove the catch-all 404 handler - Render should handle frontend routes
+// app.use('*', (req, res) => {
+//   res.status(404).json({ 
+//     success: false,
+//     message: 'Route not found' 
+//   });
+// });
 
 // Global error handler (must be last middleware)
 app.use(require('./middleware/errorHandler'));
