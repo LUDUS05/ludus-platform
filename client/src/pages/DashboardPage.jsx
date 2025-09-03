@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { userService } from '../services/userService';
-import Button from '../components/ui/Button';
-import Card from '../components/ui/Card';
+import { Button } from '../components/ui/Button';
+import { Card } from '../components/ui/Card';
 import useTranslationWithFallback from '../hooks/useTranslationWithFallback';
 
 const DashboardPage = () => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import ContactForm from '../components/forms/ContactForm';
-import Card from '../components/ui/Card';
+import { Card } from '../components/ui/Card';
 import { cn } from '../utils/cn';
 import { 
   MapPin, 

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../services/api';
 import { adminService } from '../../services/adminService';
-import Card from '../ui/Card';
+import { Card } from '../ui/Card';
 import Alert from '../ui/Alert';
 import NotificationCenter from './NotificationCenter';
 import { Shield, Users, Building, FileText, BarChart3 } from 'lucide-react';

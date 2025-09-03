@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { walletService } from '../../services/walletService';
-import Button from '../ui/Button';
-import Card from '../ui/Card';
+import { Button } from '../ui/Button';
+import { Card } from '../ui/Card';
 
 const WalletPaymentOption = ({ 
   amount, 

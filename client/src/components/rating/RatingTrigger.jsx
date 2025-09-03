@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ratingService } from '../../services/ratingService';
 import PostEventRatingModal from './PostEventRatingModal';
-import Button from '../ui/Button';
+import { Button } from '../ui/Button';
 
 const RatingTrigger = ({ event, onRatingCompleted }) => {
   const [showModal, setShowModal] = useState(false);

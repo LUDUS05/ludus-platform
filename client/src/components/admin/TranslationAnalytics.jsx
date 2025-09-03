@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Card from '../ui/Card';
-import Button from '../ui/Button';
+import { Card } from '../ui/Card';
+import { Button } from '../ui/Button';
 import Alert from '../ui/Alert';
 import { getGlobalTranslationStats, clearTranslationStats } from '../../hooks/useTranslationWithFallback';
 import { validateTranslations, checkTranslationIssues } from '../../utils/translationValidator';

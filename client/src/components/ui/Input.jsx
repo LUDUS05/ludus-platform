@@ -1,43 +1,19 @@
-import React from 'react';
-import { cn } from '../../utils/cn';
+import * as React from "react"
+import { cn } from "../../lib/utils"
 
-const Input = ({ 
-  label, 
-  error, 
-  icon: Icon,
-  className,
-  ...props 
-}) => {
-  const inputClasses = cn(
-    'w-full px-4 py-3 rounded-xl border-2 bg-white text-charcoal placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-ludus-orange/20 transition-colors duration-200',
-    error 
-      ? 'border-error-red focus:border-error-red focus:ring-error-red/20' 
-      : 'border-warm focus:border-ludus-orange',
-    Icon && 'pl-12',
-    className
-  );
-
+const Input = React.forwardRef(({ className, type, ...props }, ref) => {
   return (
-    <div className="space-y-2">
-      {label && (
-        <label className="block text-sm font-medium text-charcoal">
-          {label}
-        </label>
+    <input
+      type={type}
+      className={cn(
+        "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+        className
       )}
-      <div className="relative">
-        {Icon && (
-          <Icon className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-        )}
-        <input
-          className={inputClasses}
-          {...props}
-        />
-      </div>
-      {error && (
-        <p className="text-sm text-error-red">{error}</p>
-      )}
-    </div>
-  );
-};
+      ref={ref}
+      {...props}
+    />
+  )
+})
+Input.displayName = "Input"
 
-export default Input;
+export { Input }

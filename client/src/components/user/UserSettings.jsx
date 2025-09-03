@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
-import Button from '../ui/Button';
-import Card from '../ui/Card';
+import { Button } from '../ui/button';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../ui/card';
+import { Input } from '../ui/input';
 import SocialLogin from '../auth/SocialLogin';
 
 const UserSettings = () => {
@@ -229,62 +230,61 @@ const UserSettings = () => {
       {/* Profile Information Tab */}
       {activeTab === 'profile' && (
         <Card>
-          <div className="p-6">
-            <h2 className="text-xl font-semibold mb-4">Profile Information</h2>
+          <CardHeader>
+            <CardTitle>Profile Information</CardTitle>
+            <CardDescription>Update your personal information and contact details</CardDescription>
+          </CardHeader>
+          <CardContent>
             <form onSubmit={handleProfileSubmit} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-foreground mb-2">
                     First Name
                   </label>
-                  <input
+                  <Input
                     type="text"
                     name="firstName"
                     value={profileData.firstName}
                     onChange={handleProfileChange}
-                    className="input-field"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-foreground mb-2">
                     Last Name
                   </label>
-                  <input
+                  <Input
                     type="text"
                     name="lastName"
                     value={profileData.lastName}
                     onChange={handleProfileChange}
-                    className="input-field"
                     required
                   />
                 </div>
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   Email
                 </label>
-                <input
+                <Input
                   type="email"
                   name="email"
                   value={profileData.email}
                   onChange={handleProfileChange}
-                  className="input-field"
                   required
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   Phone
                 </label>
-                <input
+                <Input
                   type="tel"
                   name="phone"
                   value={profileData.phone}
                   onChange={handleProfileChange}
-                  className="input-field"
                 />
               </div>
 
@@ -292,30 +292,34 @@ const UserSettings = () => {
                 type="submit" 
                 disabled={loading}
                 className="w-full"
+                variant="ludus"
               >
                 {loading ? 'Updating...' : 'Update Profile'}
               </Button>
             </form>
-          </div>
+          </CardContent>
         </Card>
       )}
 
       {/* Preferences Tab */}
       {activeTab === 'preferences' && (
         <Card>
-          <div className="p-6">
-            <h2 className="text-xl font-semibold mb-4">Your Preferences</h2>
+          <CardHeader>
+            <CardTitle>Your Preferences</CardTitle>
+            <CardDescription>Customize your activity discovery and booking experience</CardDescription>
+          </CardHeader>
+          <CardContent>
             <form onSubmit={handlePreferencesSubmit} className="space-y-6">
               
               {/* Language Preference */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   Preferred Language
                 </label>
                 <select
                   value={preferencesData.language}
                   onChange={(e) => handlePreferenceChange('language', e.target.value)}
-                  className="input-field"
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 >
                   <option value="en">English</option>
                   <option value="ar">العربية</option>
@@ -324,13 +328,13 @@ const UserSettings = () => {
 
               {/* Participant Gender Mix */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   Participant Gender Mix Preference
                 </label>
                 <select
                   value={preferencesData.participantGenderMix}
                   onChange={(e) => handlePreferenceChange('participantGenderMix', e.target.value)}
-                  className="input-field"
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 >
                   <option value="no-preference">No Preference</option>
                   <option value="mixed">Mixed Groups</option>
@@ -340,19 +344,19 @@ const UserSettings = () => {
 
               {/* Preferred Times */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   Preferred Times
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   {timeOptions.map((option) => (
-                    <label key={option.value} className="flex items-center">
+                    <label key={option.value} className="flex items-center space-x-2">
                       <input
                         type="checkbox"
                         checked={preferencesData.preferredTimes.includes(option.value)}
                         onChange={() => handleArrayPreferenceToggle('preferredTimes', option.value)}
-                        className="mr-2"
+                        className="h-4 w-4 rounded border-gray-300 text-ludus-orange focus:ring-ludus-orange"
                       />
-                      {option.label}
+                      <span className="text-sm text-foreground">{option.label}</span>
                     </label>
                   ))}
                 </div>
@@ -360,19 +364,19 @@ const UserSettings = () => {
 
               {/* Activity Types */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   Preferred Activity Types
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   {activityTypeOptions.map((option) => (
-                    <label key={option.value} className="flex items-center">
+                    <label key={option.value} className="flex items-center space-x-2">
                       <input
                         type="checkbox"
                         checked={preferencesData.activityTypes.includes(option.value)}
                         onChange={() => handleArrayPreferenceToggle('activityTypes', option.value)}
-                        className="mr-2"
+                        className="h-4 w-4 rounded border-gray-300 text-ludus-orange focus:ring-ludus-orange"
                       />
-                      {option.label}
+                      <span className="text-sm text-foreground">{option.label}</span>
                     </label>
                   ))}
                 </div>
@@ -380,19 +384,19 @@ const UserSettings = () => {
 
               {/* Categories */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   Preferred Categories
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   {categoryOptions.map((option) => (
-                    <label key={option.value} className="flex items-center">
+                    <label key={option.value} className="flex items-center space-x-2">
                       <input
                         type="checkbox"
                         checked={preferencesData.categories.includes(option.value)}
                         onChange={() => handleArrayPreferenceToggle('categories', option.value)}
-                        className="mr-2"
+                        className="h-4 w-4 rounded border-gray-300 text-ludus-orange focus:ring-ludus-orange"
                       />
-                      {option.label}
+                      <span className="text-sm text-foreground">{option.label}</span>
                     </label>
                   ))}
                 </div>
@@ -400,12 +404,12 @@ const UserSettings = () => {
 
               {/* Price Range */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   Price Range (SAR)
                 </label>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <input
+                    <Input
                       type="number"
                       placeholder="Min"
                       value={preferencesData.priceRange.min}
@@ -413,11 +417,10 @@ const UserSettings = () => {
                         ...preferencesData.priceRange,
                         min: parseInt(e.target.value) || 0
                       })}
-                      className="input-field"
                     />
                   </div>
                   <div>
-                    <input
+                    <Input
                       type="number"
                       placeholder="Max"
                       value={preferencesData.priceRange.max}
@@ -425,21 +428,39 @@ const UserSettings = () => {
                         ...preferencesData.priceRange,
                         max: parseInt(e.target.value) || 500
                       })}
-                      className="input-field"
                     />
                   </div>
                 </div>
+              </div>
+
+              {/* Search Radius */}
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">
+                  Search Radius (km)
+                </label>
+                <Input
+                  type="number"
+                  placeholder="25"
+                  value={preferencesData.radius}
+                  onChange={(e) => handlePreferenceChange('radius', parseInt(e.target.value) || 25)}
+                  min="1"
+                  max="100"
+                />
+                <p className="text-xs text-muted-foreground mt-1">
+                  How far from your location to search for activities
+                </p>
               </div>
 
               <Button 
                 type="submit" 
                 disabled={loading}
                 className="w-full"
+                variant="ludus"
               >
                 {loading ? 'Updating...' : 'Update Preferences'}
               </Button>
             </form>
-          </div>
+          </CardContent>
         </Card>
       )}
 

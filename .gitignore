@@ -70,3 +70,6 @@ server/dist/
 # OS files
 .DS_Store
 Thumbs.db
+
+*storybook.log
+storybook-static

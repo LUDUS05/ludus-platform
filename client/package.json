@@ -5,12 +5,19 @@
   "dependencies": {
     "@googlemaps/js-api-loader": "^1.16.10",
     "@heroicons/react": "^2.2.0",
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-dropdown-menu": "^2.1.16",
+    "@radix-ui/react-select": "^2.2.6",
+    "@radix-ui/react-slot": "^1.2.3",
+    "@radix-ui/react-tabs": "^1.1.13",
+    "@radix-ui/react-toast": "^1.2.15",
     "@sentry/react": "^10.1.0",
     "@sentry/tracing": "^7.120.4",
     "@tailwindcss/forms": "^0.5.10",
     "autoprefixer": "^10.4.21",
     "axios": "^1.11.0",
     "blurhash": "^2.0.5",
+    "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cross-env": "^7.0.3",
     "framer-motion": "^12.23.12",
@@ -34,7 +41,9 @@
     "start": "react-scripts start",
     "build": "cross-env SKIP_PREFLIGHT_CHECK=true CI=false react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "engines": {
     "node": ">=18.0.0",
@@ -47,7 +56,15 @@
     ]
   },
   "devDependencies": {
-    "ajv": "^8.17.1"
+    "@storybook/addon-docs": "^9.1.4",
+    "@storybook/addon-onboarding": "^9.1.4",
+    "@storybook/preset-create-react-app": "^9.1.4",
+    "@storybook/react-webpack5": "^9.1.4",
+    "ajv": "^8.17.1",
+    "eslint-plugin-storybook": "^9.1.4",
+    "prop-types": "^15.8.1",
+    "storybook": "^9.1.4",
+    "webpack": "^5.101.3"
   },
   "browserslist": {
     "production": [

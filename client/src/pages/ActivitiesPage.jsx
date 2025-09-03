@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import api from '../services/api';
-import Card from '../components/ui/Card';
-import Input from '../components/ui/Input';
-import Button from '../components/ui/Button';
+import { Card } from '../components/ui/Card';
+import { Input } from '../components/ui/Input';
+import { Button } from '../components/ui/Button';
 import Alert from '../components/ui/Alert';
 import ProgressiveImage from '../components/ui/ProgressiveImage';
 import useTranslationWithFallback from '../hooks/useTranslationWithFallback';

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { paymentService } from '../services/paymentService';
-import Button from '../components/ui/Button';
-import Card from '../components/ui/Card';
+import { Button } from '../components/ui/Button';
+import { Card } from '../components/ui/Card';
 
 const PaymentSuccessPage = () => {
   const { paymentId } = useParams();

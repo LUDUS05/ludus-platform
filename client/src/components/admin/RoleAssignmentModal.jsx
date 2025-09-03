@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { adminService } from '../../services/adminService';
 import api from '../../services/api';
-import Button from '../ui/Button';
+import { Button } from '../ui/Button';
 import Alert from '../ui/Alert';
 import { Shield, Users, Search, X } from 'lucide-react';
 
