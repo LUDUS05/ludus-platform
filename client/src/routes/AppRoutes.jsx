@@ -108,8 +108,8 @@ const AppRoutes = () => {
         </ProtectedRoute>
       } />
       
-      {/* Catch all route - redirect to 404 page instead of home */}
-      <Route path="*" element={<ComingSoonPage />} />
+      {/* Remove catch-all route to allow SPA routing to work */}
+      {/* SPA routing will handle unknown routes by serving index.html */}
     </Routes>
   );
 };
