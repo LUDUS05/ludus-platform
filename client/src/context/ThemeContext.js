@@ -1,6 +1,6 @@
 /**
  * LUDUS Platform - Theme Context
- * Manages light/dark theme state across the application
+ * Light theme only - Dark mode disabled
  */
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
@@ -20,46 +20,34 @@ export const ThemeProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check for saved theme preference or default to system preference
-    const savedTheme = localStorage.getItem('ludus-theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
-    const shouldUseDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
-    setIsDark(shouldUseDark);
-    updateTheme(shouldUseDark);
+    // Always use light theme - dark mode disabled
+    setIsDark(false);
+    updateTheme(false);
     setIsLoading(false);
   }, []);
 
   const updateTheme = (useDark) => {
-    if (useDark) {
-      document.documentElement.classList.add('dark');
-      document.documentElement.style.colorScheme = 'dark';
-    } else {
-      document.documentElement.classList.remove('dark');
-      document.documentElement.style.colorScheme = 'light';
-    }
+    // Force light theme - dark mode disabled
+    document.documentElement.classList.remove('dark');
+    document.documentElement.style.colorScheme = 'light';
   };
 
   const toggleTheme = () => {
-    const newTheme = !isDark;
-    setIsDark(newTheme);
-    updateTheme(newTheme);
-    localStorage.setItem('ludus-theme', newTheme ? 'dark' : 'light');
+    // Disabled - always stays in light mode
+    return;
   };
 
   const setTheme = (theme) => {
-    const useDark = theme === 'dark';
-    setIsDark(useDark);
-    updateTheme(useDark);
-    localStorage.setItem('ludus-theme', theme);
+    // Disabled - always stays in light mode
+    return;
   };
 
   const value = {
-    isDark,
+    isDark: false, // Always false
     isLoading,
     toggleTheme,
     setTheme,
-    theme: isDark ? 'dark' : 'light'
+    theme: 'light' // Always light
   };
 
   return (

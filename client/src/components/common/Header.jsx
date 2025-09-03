@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../LanguageSwitcher';
-import ThemeToggle from '../ui/ThemeToggle';
 import Logo from './Logo';
 import useMenuPages from '../../hooks/useMenuPages';
 
@@ -82,7 +81,6 @@ const Header = () => {
 
           {/* User Actions */}
           <div className="hidden md:flex items-center space-x-4">
-            <ThemeToggle />
             <LanguageSwitcher />
             {isAuthenticated ? (
               <div className="relative">
@@ -244,7 +242,6 @@ const Header = () => {
               )}
               <div className="pt-4 border-t border-warm dark:border-dark-border-secondary flex items-center justify-between">
                 <LanguageSwitcher />
-                <ThemeToggle className="scale-90" />
               </div>
             </nav>
           </div>

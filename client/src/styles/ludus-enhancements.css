@@ -16,19 +16,10 @@ html {
   outline-offset: 2px;
 }
 
-.dark *:focus {
-  outline-color: theme(colors.dark.ludus.orange);
-}
-
 /* Enhanced text selection */
 ::selection {
   background-color: theme(colors.ludus.orange / 0.2);
   color: theme(colors.charcoal.DEFAULT);
-}
-
-.dark ::selection {
-  background-color: theme(colors.dark.ludus.orange / 0.2);
-  color: theme(colors.dark.text.primary);
 }
 
 /* Scrollbar styling */
@@ -41,10 +32,6 @@ html {
   background: theme(colors.warm.light);
 }
 
-.dark ::-webkit-scrollbar-track {
-  background: theme(colors.dark.bg.secondary);
-}
-
 ::-webkit-scrollbar-thumb {
   background: theme(colors.ludus.orange / 0.3);
   border-radius: 4px;
@@ -52,14 +39,6 @@ html {
 
 ::-webkit-scrollbar-thumb:hover {
   background: theme(colors.ludus.orange / 0.5);
-}
-
-.dark ::-webkit-scrollbar-thumb {
-  background: theme(colors.dark.ludus.orange / 0.3);
-}
-
-.dark ::-webkit-scrollbar-thumb:hover {
-  background: theme(colors.dark.ludus.orange / 0.5);
 }
 
 /* Enhanced animations for reduced motion users */
@@ -83,10 +62,6 @@ html {
   .glass {
     background: rgba(255, 255, 255, 0.95) !important;
     border: 2px solid currentColor !important;
-  }
-  
-  .dark .glass {
-    background: rgba(0, 0, 0, 0.95) !important;
   }
   
   /* Ensure all interactive elements have strong borders */
@@ -149,15 +124,6 @@ html {
   animation: shimmer 1.5s infinite;
 }
 
-.dark .shimmer {
-  background: linear-gradient(90deg, 
-    theme(colors.dark.bg.tertiary) 25%, 
-    theme(colors.dark.bg.quaternary) 50%, 
-    theme(colors.dark.bg.tertiary) 75%
-  );
-  background-size: 200% 100%;
-}
-
 /* Enhanced glass morphism variants */
 .glass-warm {
   background: rgba(238, 238, 238, 0.1);
@@ -180,12 +146,6 @@ html {
   -webkit-backdrop-filter: blur(20px) saturate(1.8);
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-}
-
-.dark .nav-glass {
-  background: rgba(15, 15, 15, 0.8);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
 /* Enhanced button variants */
@@ -225,18 +185,14 @@ html {
 
 /* Enhanced card styles */
 .card-ludus {
-  @apply bg-white dark:bg-dark-bg-secondary rounded-2xl shadow-lg;
-  @apply border border-transparent dark:border-dark-border-secondary;
+  @apply bg-white rounded-2xl shadow-lg;
+  @apply border border-transparent;
   @apply transition-all duration-300 ease-out;
 }
 
 .card-ludus:hover {
   @apply shadow-2xl -translate-y-1;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-}
-
-.dark .card-ludus:hover {
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
 /* Interactive hover glow effects */
@@ -275,26 +231,15 @@ html {
   background-clip: text;
 }
 
-.dark .text-gradient-ludus {
-  background: linear-gradient(135deg, 
-    theme(colors.dark.ludus.orange), 
-    theme(colors.dark.ludus.orange-light)
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
 /* Enhanced input styles */
 .input-ludus {
   @apply w-full px-4 py-3 rounded-xl border-2;
-  @apply bg-white dark:bg-dark-bg-secondary;
-  @apply text-charcoal dark:text-dark-text-primary;
-  @apply placeholder-gray-400 dark:placeholder-dark-text-tertiary;
-  @apply border-warm dark:border-dark-border-secondary;
-  @apply focus:border-ludus-orange dark:focus:border-dark-ludus-orange;
+  @apply bg-white;
+  @apply text-charcoal;
+  @apply placeholder-gray-400;
+  @apply border-warm;
+  @apply focus:border-ludus-orange;
   @apply focus:outline-none focus:ring-2 focus:ring-ludus-orange/20;
-  @apply dark:focus:ring-dark-ludus-orange/20;
   @apply transition-all duration-200;
 }
 
@@ -302,34 +247,30 @@ html {
   box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.1);
 }
 
-.dark .input-ludus:focus {
-  box-shadow: 0 0 0 3px rgba(255, 122, 26, 0.1);
-}
-
 /* Loading skeleton styles */
 .skeleton {
-  @apply bg-warm dark:bg-dark-bg-tertiary rounded animate-pulse;
+  @apply bg-warm rounded animate-pulse;
 }
 
 .skeleton-text {
-  @apply h-4 bg-warm dark:bg-dark-bg-tertiary rounded;
+  @apply h-4 bg-warm rounded;
 }
 
 .skeleton-avatar {
-  @apply w-10 h-10 bg-warm dark:bg-dark-bg-tertiary rounded-full;
+  @apply w-10 h-10 bg-warm rounded-full;
 }
 
 /* Enhanced dropdown styles */
 .dropdown-ludus {
-  @apply bg-white dark:bg-dark-bg-tertiary;
-  @apply border border-warm dark:border-dark-border-secondary;
+  @apply bg-white;
+  @apply border border-warm;
   @apply rounded-xl shadow-xl;
   @apply backdrop-blur-sm;
 }
 
 .dropdown-item {
-  @apply px-4 py-2 text-charcoal dark:text-dark-text-primary;
-  @apply hover:bg-warm-light dark:hover:bg-dark-bg-quaternary;
+  @apply px-4 py-2 text-charcoal;
+  @apply hover:bg-warm-light;
   @apply transition-colors duration-200 rounded-lg mx-2;
 }
 
@@ -339,7 +280,7 @@ html {
 }
 
 .status-offline {
-  @apply bg-gray-400 dark:bg-gray-600;
+  @apply bg-gray-400;
 }
 
 .status-busy {
@@ -353,8 +294,8 @@ html {
 /* Enhanced badge styles */
 .badge-ludus {
   @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
-  @apply bg-ludus-orange/10 dark:bg-dark-ludus-orange/10;
-  @apply text-ludus-orange dark:text-dark-ludus-orange;
+  @apply bg-ludus-orange/10;
+  @apply text-ludus-orange;
 }
 
 .badge-success {

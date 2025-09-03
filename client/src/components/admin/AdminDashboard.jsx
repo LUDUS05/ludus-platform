@@ -79,7 +79,8 @@ const AdminDashboard = () => {
       setDashboardData(response.data);
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message || 'Failed to load dashboard overview';
-      console.error('Failed to load dashboard overview:', {
+      console.error('Failed to load dashboard overview:', errorMessage);
+      console.error('Error details:', {
         message: error.message,
         response: error.response?.data,
         status: error.response?.status,
@@ -87,6 +88,7 @@ const AdminDashboard = () => {
         user: user?.id || user?._id,
         role: user?.role
       });
+      setError(errorMessage);
     }
   };
 
@@ -138,10 +140,10 @@ const AdminDashboard = () => {
 
   const getColorClasses = (color) => {
     const colors = {
-      'ludus-orange': 'bg-ludus-orange/10 text-ludus-orange dark:bg-dark-ludus-orange/10 dark:text-dark-ludus-orange',
-      'success': 'bg-success/10 text-success dark:bg-dark-success/10 dark:text-dark-success',
-      'info': 'bg-info/10 text-info dark:bg-dark-info/10 dark:text-dark-info',
-      'warning': 'bg-warning/10 text-warning dark:bg-dark-warning/10 dark:text-dark-warning'
+      'ludus-orange': 'bg-ludus-orange/10 text-ludus-orange',
+      'success': 'bg-success/10 text-success',
+      'info': 'bg-info/10 text-info',
+      'warning': 'bg-warning/10 text-warning'
     };
     return colors[color] || colors['ludus-orange'];
   };
@@ -206,7 +208,7 @@ const AdminDashboard = () => {
     <div className="space-y-6">
       {/* Welcome Message & Live Updates */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        <div className="lg:col-span-3 bg-gradient-to-r from-ludus-orange to-ludus-orange-dark dark:from-dark-ludus-orange dark:to-dark-ludus-orange-dark rounded-xl p-6 text-white">
+        <div className="lg:col-span-3 bg-gradient-to-r from-ludus-orange to-ludus-orange-dark rounded-xl p-6 text-white">
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center space-x-3 mb-3">
@@ -241,17 +243,17 @@ const AdminDashboard = () => {
         {/* Quick Stats */}
         <Card className="p-6">
           <div className="text-center">
-            <div className="w-16 h-16 bg-success/10 dark:bg-dark-success/10 rounded-2xl flex items-center justify-center mx-auto mb-3">
+            <div className="w-16 h-16 bg-success/10 rounded-2xl flex items-center justify-center mx-auto mb-3">
               <span className="text-2xl">📈</span>
             </div>
-            <h3 className="text-body-lg font-bold text-charcoal dark:dark-text-primary mb-1">
+            <h3 className="text-body-lg font-bold text-charcoal mb-1">
               +24%
             </h3>
-            <p className="text-body-sm text-charcoal-light dark:dark-text-secondary mb-2">
+            <p className="text-body-sm text-charcoal-light mb-2">
               Growth this month
             </p>
-            <div className="w-full bg-warm dark:bg-dark-bg-tertiary rounded-full h-2">
-              <div className="bg-success dark:bg-dark-success h-2 rounded-full" style={{ width: '74%' }}></div>
+            <div className="w-full bg-warm rounded-full h-2">
+              <div className="bg-success h-2 rounded-full" style={{ width: '74%' }}></div>
             </div>
           </div>
         </Card>
@@ -461,8 +463,8 @@ const AdminDashboard = () => {
 
         {/* Activities by Category */}
         <Card>
-          <div className="px-6 py-4 border-b border-warm dark:border-dark-border-secondary">
-            <h3 className="text-body-lg font-semibold text-charcoal dark:dark-text-primary">Activities by Category</h3>
+          <div className="px-6 py-4 border-b border-warm">
+            <h3 className="text-body-lg font-semibold text-charcoal">Activities by Category</h3>
           </div>
           <div className="p-6">
             {stats?.stats?.activitiesByCategory?.length > 0 ? (
@@ -486,18 +488,18 @@ const AdminDashboard = () => {
                   return (
                     <div key={item._id} className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-ludus-orange/10 dark:bg-dark-ludus-orange/10 rounded-lg flex items-center justify-center">
+                        <div className="w-8 h-8 bg-ludus-orange/10 rounded-lg flex items-center justify-center">
                           <span className="text-sm">{getCategoryIcon(item._id)}</span>
                         </div>
-                        <span className="text-body-sm font-medium text-charcoal dark:dark-text-primary capitalize">
+                        <span className="text-body-sm font-medium text-charcoal capitalize">
                           {item._id}
                         </span>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <span className="text-body-xs text-charcoal-light dark:dark-text-secondary">
+                        <span className="text-body-xs text-charcoal-light">
                           {percentage}%
                         </span>
-                        <span className="px-2 py-1 rounded-full text-xs font-semibold bg-ludus-orange/10 text-ludus-orange dark:bg-dark-ludus-orange/10 dark:text-dark-ludus-orange">
+                        <span className="px-2 py-1 rounded-full text-xs font-semibold bg-ludus-orange/10 text-ludus-orange">
                           {item.count}
                         </span>
                       </div>
@@ -506,7 +508,7 @@ const AdminDashboard = () => {
                 })}
               </div>
             ) : (
-              <p className="text-charcoal-light dark:dark-text-secondary text-center py-8">No activity data available</p>
+              <p className="text-charcoal-light text-center py-8">No activity data available</p>
             )}
           </div>
         </Card>
@@ -516,8 +518,8 @@ const AdminDashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Monthly Revenue Trend */}
         <Card className="lg:col-span-2">
-          <div className="px-6 py-4 border-b border-warm dark:border-dark-border-secondary">
-            <h3 className="text-body-lg font-semibold text-charcoal dark:dark-text-primary">Monthly Revenue Trend</h3>
+          <div className="px-6 py-4 border-b border-warm">
+            <h3 className="text-body-lg font-semibold text-charcoal">Monthly Revenue Trend</h3>
           </div>
           <div className="p-6">
             <div className="space-y-4">
@@ -536,13 +538,13 @@ const AdminDashboard = () => {
                 
                 return (
                   <div key={item.month} className="flex items-center space-x-4">
-                    <div className="w-12 text-body-sm font-medium text-charcoal dark:dark-text-primary">
+                    <div className="w-12 text-body-sm font-medium text-charcoal">
                       {item.month}
                     </div>
                     <div className="flex-1">
-                      <div className="relative h-8 bg-warm dark:bg-dark-bg-tertiary rounded-lg overflow-hidden">
+                      <div className="relative h-8 bg-warm rounded-lg overflow-hidden">
                         <div 
-                          className="h-full bg-gradient-to-r from-ludus-orange to-ludus-orange-dark dark:from-dark-ludus-orange dark:to-dark-ludus-orange-dark rounded-lg transition-all duration-500"
+                          className="h-full bg-gradient-to-r from-ludus-orange to-ludus-orange-dark rounded-lg transition-all duration-500"
                           style={{ width: `${widthPercentage}%` }}
                         />
                         <div className="absolute inset-0 flex items-center px-3">
@@ -554,8 +556,8 @@ const AdminDashboard = () => {
                     </div>
                     <div className={`text-body-xs font-semibold px-2 py-1 rounded-full ${
                       isPositive 
-                        ? 'bg-success/10 text-success dark:bg-dark-success/10 dark:text-dark-success' 
-                        : 'bg-error/10 text-error dark:bg-dark-error/10 dark:text-dark-error'
+                        ? 'bg-success/10 text-success' 
+                        : 'bg-error/10 text-error'
                     }`}>
                       {item.growth}
                     </div>
@@ -568,8 +570,8 @@ const AdminDashboard = () => {
 
         {/* Top Performing Activities */}
         <Card>
-          <div className="px-6 py-4 border-b border-warm dark:border-dark-border-secondary">
-            <h3 className="text-body-lg font-semibold text-charcoal dark:dark-text-primary">Top Activities</h3>
+          <div className="px-6 py-4 border-b border-warm">
+            <h3 className="text-body-lg font-semibold text-charcoal">Top Activities</h3>
           </div>
           <div className="p-6">
             <div className="space-y-4">
@@ -585,22 +587,22 @@ const AdminDashboard = () => {
                   <div className="flex items-center space-x-3">
                     <div className={`w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-bold ${
                       index === 0 ? 'bg-warning' : 
-                      index === 1 ? 'bg-ludus-orange dark:bg-dark-ludus-orange' : 
-                      'bg-charcoal-light dark:bg-dark-text-secondary'
+                      index === 1 ? 'bg-ludus-orange' : 
+                      'bg-charcoal-light'
                     }`}>
                       {index + 1}
                     </div>
                     <div>
-                      <p className="text-body-sm font-medium text-charcoal dark:dark-text-primary line-clamp-1">
+                      <p className="text-body-sm font-medium text-charcoal line-clamp-1">
                         {activity.name}
                       </p>
-                      <p className="text-body-xs text-charcoal-light dark:dark-text-secondary">
+                      <p className="text-body-xs text-charcoal-light">
                         {activity.bookings} bookings
                       </p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-body-sm font-semibold text-ludus-orange dark:text-dark-ludus-orange">
+                    <p className="text-body-sm font-semibold text-ludus-orange">
                       {formatCurrency(activity.revenue)}
                     </p>
                   </div>
@@ -617,23 +619,23 @@ const AdminDashboard = () => {
       {/* Admin Permissions Summary */}
       {dashboardData?.permissions && (
         <Card>
-          <div className="px-6 py-4 border-b border-warm dark:border-dark-border-secondary">
-            <h3 className="text-body-lg font-semibold text-charcoal dark:dark-text-primary">Your Permissions</h3>
+          <div className="px-6 py-4 border-b border-warm">
+            <h3 className="text-body-lg font-semibold text-charcoal">Your Permissions</h3>
           </div>
           <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {dashboardData.permissions.map((permission, index) => (
                 <div key={index} className="flex items-center space-x-2">
-                  <div className="flex-shrink-0 w-2 h-2 bg-success dark:bg-dark-success rounded-full"></div>
-                  <span className="text-body-sm text-charcoal dark:dark-text-primary capitalize">
+                  <div className="flex-shrink-0 w-2 h-2 bg-success rounded-full"></div>
+                  <span className="text-body-sm text-charcoal capitalize">
                     {permission.actions.includes('manage') ? 'Manage' : permission.actions.join(', ')} {permission.resource}
                   </span>
                 </div>
               ))}
             </div>
             {dashboardData.userRole === 'PSM' || dashboardData.userRole === 'PSA' ? (
-              <div className="mt-4 p-4 bg-info/10 dark:bg-dark-info/10 rounded-lg">
-                <p className="text-body-sm text-info dark:text-dark-info">
+              <div className="mt-4 p-4 bg-info/10 rounded-lg">
+                <p className="text-body-sm text-info">
                   <strong>Assigned Partners:</strong> You have access to {dashboardData.assignedPartners || 0} partner accounts.
                 </p>
               </div>
@@ -644,8 +646,8 @@ const AdminDashboard = () => {
 
       {/* System Status */}
       <Card>
-        <div className="px-6 py-4 border-b border-warm dark:border-dark-border-secondary">
-          <h3 className="text-body-lg font-semibold text-charcoal dark:dark-text-primary">System Health</h3>
+        <div className="px-6 py-4 border-b border-warm">
+          <h3 className="text-body-lg font-semibold text-charcoal">System Health</h3>
         </div>
         <div className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -657,23 +659,23 @@ const AdminDashboard = () => {
             ].map((item) => (
               <div key={item.label} className="text-center">
                 <div className={`w-12 h-12 mx-auto mb-2 rounded-full flex items-center justify-center ${
-                  item.color === 'success' ? 'bg-success/10 dark:bg-dark-success/10' :
-                  item.color === 'warning' ? 'bg-warning/10 dark:bg-dark-warning/10' :
-                  'bg-error/10 dark:bg-dark-error/10'
+                  item.color === 'success' ? 'bg-success/10' :
+                  item.color === 'warning' ? 'bg-warning/10' :
+                  'bg-error/10'
                 }`}>
                   <div className={`w-3 h-3 rounded-full ${
-                    item.color === 'success' ? 'bg-success dark:bg-dark-success' :
-                    item.color === 'warning' ? 'bg-warning dark:bg-dark-warning' :
-                    'bg-error dark:bg-dark-error'
+                    item.color === 'success' ? 'bg-success' :
+                    item.color === 'warning' ? 'bg-warning' :
+                    'bg-error'
                   }`} />
                 </div>
-                <p className="text-body-sm font-medium text-charcoal dark:dark-text-primary">
+                <p className="text-body-sm font-medium text-charcoal">
                   {item.label}
                 </p>
                 <p className={`text-body-xs font-semibold ${
-                  item.color === 'success' ? 'text-success dark:text-dark-success' :
-                  item.color === 'warning' ? 'text-warning dark:text-dark-warning' :
-                  'text-error dark:text-dark-error'
+                  item.color === 'success' ? 'text-success' :
+                  item.color === 'warning' ? 'text-warning' :
+                  'text-error'
                 }`}>
                   {item.status}
                 </p>
