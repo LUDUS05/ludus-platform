@@ -28,7 +28,7 @@ services:
   - type: web
     name: ludus-frontend-og2d
     env: static
-    buildCommand: cd client && npm install && npm run build
+    buildCommand: cd client && npm ci --include=dev && npm run build
     staticPublishPath: client/build
     routes:
       - type: rewrite
