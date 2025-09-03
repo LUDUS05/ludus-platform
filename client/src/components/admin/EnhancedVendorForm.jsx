@@ -1,10 +1,11 @@
+import Alert from "../ui/Alert";
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
-import Alert from '../ui/Alert';
+
 import api from '../../services/api';
 
 const EnhancedVendorForm = () => {
@@ -649,7 +650,7 @@ const EnhancedVendorForm = () => {
                           onClick={() => document.getElementById(`upload-${docType.key}`).click()}
                           disabled={uploading}
                         >
-                          {uploading ? 'Uploading...' : '📤 Upload Document'}
+                          {uploading ? t('common.loading') : '�� Upload Document'}
                         </Button>
                         <p className="text-xs text-ludus-gray-500 mt-2">
                           Supported formats: PDF, JPG, PNG (Max 10MB)

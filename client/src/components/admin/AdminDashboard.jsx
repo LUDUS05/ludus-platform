@@ -1,10 +1,11 @@
+import Alert from "../ui/Alert";
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../services/api';
 import { adminService } from '../../services/adminService';
 import { Card } from '../ui/Card';
-import Alert from '../ui/Alert';
+
 import NotificationCenter from './NotificationCenter';
 import { Shield, Users, Building, FileText, BarChart3 } from 'lucide-react';
 
@@ -136,6 +137,20 @@ const AdminDashboard = () => {
       icon: '💰',
       color: 'indigo',
       link: '/admin/payments'
+    },
+    {
+      title: 'Total Referrals',
+      value: stats?.overview?.totalReferrals || 0,
+      icon: '🎁',
+      color: 'purple',
+      link: '/admin/referrals'
+    },
+    {
+      title: 'Referral Rewards',
+      value: formatCurrency(stats?.overview?.totalReferralRewards || 0),
+      icon: '🏆',
+      color: 'emerald',
+      link: '/admin/referrals'
     }
   ];
 
@@ -144,7 +159,10 @@ const AdminDashboard = () => {
       'ludus-orange': 'bg-ludus-orange/10 text-ludus-orange',
       'success': 'bg-success/10 text-success',
       'info': 'bg-info/10 text-info',
-      'warning': 'bg-warning/10 text-warning'
+      'warning': 'bg-warning/10 text-warning',
+      'indigo': 'bg-indigo-100 text-indigo-700',
+      'purple': 'bg-purple-100 text-purple-700',
+      'emerald': 'bg-emerald-100 text-emerald-700'
     };
     return colors[color] || colors['ludus-orange'];
   };

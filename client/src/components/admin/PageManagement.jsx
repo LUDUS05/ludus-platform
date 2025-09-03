@@ -46,7 +46,7 @@ const PageManagement = () => {
         ...filters
       });
       
-      const response = await api.get(`/admin/pages?${params}`);
+      const response = await api.get(`/api/admin/pages?${params}`);
       
       setPages(Array.isArray(response.data.data) ? response.data.data : []);
       setPagination(prev => ({

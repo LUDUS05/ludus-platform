@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
-import { Alert } from '../ui/Alert';
+import Alert from '../ui/Alert';
 import axios from 'axios';
 
 const SiteSettingsManagement = () => {

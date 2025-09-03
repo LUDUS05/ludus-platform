@@ -1,7 +1,8 @@
+import Alert from "../ui/Alert";
 import React, { useState, useEffect } from 'react';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
-import Alert from '../ui/Alert';
+
 import { getGlobalTranslationStats, clearTranslationStats } from '../../hooks/useTranslationWithFallback';
 import { validateTranslations, checkTranslationIssues } from '../../utils/translationValidator';
 import enTranslations from '../../i18n/locales/en.json';

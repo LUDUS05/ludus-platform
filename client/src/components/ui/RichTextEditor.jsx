@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import Button from './Button';
-import Input from './Input';
+import { Button } from './Button';
+import { Input } from './Input';
 import Alert from './Alert';
 
 // Block types with their configurations
