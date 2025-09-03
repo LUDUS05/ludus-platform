@@ -278,7 +278,7 @@ const PartnerRegistrationPage = () => {
 
     try {
       // Send vendor registration to backend
-      const response = await api.post('/vendors', {
+      const response = await api.post('/api/vendors', {
         contactName: formData.contactName,
         companyName: formData.companyName,
         email: formData.email,

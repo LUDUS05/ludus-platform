@@ -19,9 +19,9 @@ const WalletDashboard = () => {
     try {
       setLoading(true);
       const [walletRes, transactionsRes, statsRes] = await Promise.all([
-        api.get('/wallet'),
-        api.get('/wallet/transactions?limit=10'),
-        api.get('/wallet/stats')
+        api.get('/api/wallet'),
+        api.get('/api/wallet/transactions?limit=10'),
+        api.get('/api/wallet/stats')
       ]);
 
       setWallet(walletRes.data.data.wallet);
@@ -232,7 +232,7 @@ const DepositFunds = ({ wallet, onSuccess }) => {
 
     try {
       setLoading(true);
-      const response = await api.post('/wallet/deposit', {
+      const response = await api.post('/api/wallet/deposit', {
         amount: parseFloat(amount),
         description: description || `Wallet deposit - ${amount} SAR`
       });
@@ -310,7 +310,7 @@ const WithdrawFunds = ({ wallet, onSuccess }) => {
 
     try {
       setLoading(true);
-      await api.post('/wallet/withdraw', {
+      await api.post('/api/wallet/withdraw', {
         amount: parseFloat(amount),
         description: description || `Wallet withdrawal - ${amount} SAR`
       });

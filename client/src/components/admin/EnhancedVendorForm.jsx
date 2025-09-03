@@ -302,7 +302,7 @@ const EnhancedVendorForm = () => {
       formData.append('vendorId', id);
 
       // In real implementation, you would upload to cloud storage
-      const response = await api.post('/uploads/vendor-document', formData, {
+      const response = await api.post('/api/uploads/vendor-document', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
 
