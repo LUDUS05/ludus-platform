@@ -30,15 +30,9 @@ services:
     env: static
     buildCommand: cd client && npm install && npm run build
     staticPublishPath: client/build
+    # Enable Render's built-in SPA support
+    spa: true
     routes:
-      # SPA routing - fallback to index.html for all routes
-      - type: fallback
-        source: "/*"
-        destination: "/index.html"
-      # Ensure static assets are served correctly
-      - type: rewrite
-        source: "/static/*"
-        destination: "/static/*"
       # Ensure API calls go to backend
       - type: rewrite
         source: "/api/*"

@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import './index.css';
 
 // Debug component to show current route info
@@ -24,12 +24,51 @@ function RouteDebugger() {
   );
 }
 
+// Fallback redirect handler
+function FallbackHandler() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const isFallback = params.get('spa-fallback');
+    const originalPath = params.get('original-path');
+    
+    if (isFallback && originalPath) {
+      // Remove the fallback parameters and navigate to the original path
+      navigate(originalPath, { replace: true });
+    }
+  }, [location, navigate]);
+  
+  return null;
+}
+
 // Simple test components
 function HomePage() {
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const isFallback = params.get('spa-fallback');
+  const originalPath = params.get('original-path');
+  
   return (
     <div style={{ padding: '20px', textAlign: 'center' }}>
       <h1>🏠 LUDUS Home - SPA Routing Test</h1>
       <p>✅ Home page loaded successfully!</p>
+      
+      {isFallback && (
+        <div style={{ 
+          background: '#fff3cd', 
+          border: '1px solid #ffeaa7', 
+          padding: '10px', 
+          margin: '20px 0',
+          borderRadius: '5px'
+        }}>
+          <p><strong>🔄 SPA Fallback Detected!</strong></p>
+          <p>Original path: <code>{originalPath}</code></p>
+          <p>Redirecting to React Router...</p>
+        </div>
+      )}
+      
       <nav style={{ marginTop: '20px' }}>
         <a href="/register" style={{ margin: '0 10px', color: 'blue' }}>Register</a>
         <a href="/login" style={{ margin: '0 10px', color: 'blue' }}>Login</a>
@@ -105,6 +144,7 @@ function App() {
   return (
     <Router>
       <RouteDebugger />
+      <FallbackHandler />
       
       <Routes>
         {/* Test Route */}
