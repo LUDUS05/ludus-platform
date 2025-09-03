@@ -70,6 +70,3 @@ server/dist/
 # OS files
 .DS_Store
 Thumbs.db
-
-# Deployment
-.vercel

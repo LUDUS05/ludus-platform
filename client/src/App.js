@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { SpeedInsights } from '@vercel/speed-insights/react';
 import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import AppRoutes from './routes/AppRoutes';
@@ -14,7 +13,6 @@ const App = () => {
           <div className="App">
             <AppRoutes />
           </div>
-          <SpeedInsights />
         </Router>
       </AuthProvider>
     </ThemeProvider>

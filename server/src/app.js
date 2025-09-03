@@ -39,8 +39,7 @@ app.use(cors({
     'https://app.letsludus.com', 
     'https://ludus-frontend-og2d.onrender.com',
     'https://ludus-platform.onrender.com',
-    /https:\/\/.*\.onrender\.com$/,
-    /https:\/\/.*\.vercel\.app$/
+    /https:\/\/.*\.onrender\.com$/
   ],
   credentials: true
 }));
