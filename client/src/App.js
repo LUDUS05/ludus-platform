@@ -40,13 +40,21 @@ function FallbackHandler() {
       const decodedPath = decodeURIComponent(originalPath);
       console.log('SPA Fallback: Redirecting to', decodedPath);
       
-      // Navigate to the original path and replace the current history entry
-      // This will clean up the URL parameters
+      // Use a more aggressive approach to clean up the URL
+      // First, replace the current history entry
+      window.history.replaceState(null, '', decodedPath);
+      
+      // Then navigate to the original path
       navigate(decodedPath, { replace: true });
       
-      // Force a clean URL by updating the browser location
-      // This ensures the fallback parameters are completely removed
-      window.history.replaceState(null, '', decodedPath);
+      // Force a page refresh to ensure clean URL (fallback option)
+      // This will only happen if the URL still contains fallback parameters
+      setTimeout(() => {
+        if (window.location.search.includes('spa-fallback')) {
+          console.log('Force refreshing to clean URL');
+          window.location.href = decodedPath;
+        }
+      }, 100);
     }
   }, [location, navigate]);
   
