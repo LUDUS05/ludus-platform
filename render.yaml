@@ -31,8 +31,8 @@ services:
     buildCommand: cd client && npm install && npm run build
     staticPublishPath: client/build
     routes:
-      # SPA routing - serve index.html for all routes
-      - type: rewrite
+      # SPA routing - fallback to index.html for all routes
+      - type: fallback
         source: "/*"
         destination: "/index.html"
       # Ensure static assets are served correctly
