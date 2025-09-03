@@ -50,7 +50,7 @@ const ActivityManagement = () => {
 
   const fetchVendors = async () => {
     try {
-      const response = await api.get('/admin/vendors?limit=100');
+      const response = await api.get('/api/admin/vendors?limit=100');
       setVendors(response.data.data.vendors);
     } catch (error) {
       console.error('Failed to fetch vendors:', error);

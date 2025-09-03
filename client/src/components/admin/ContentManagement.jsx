@@ -99,7 +99,7 @@ const ContentManagement = () => {
         includeContent: false
       };
 
-      const response = await api.get('/admin/pages', { params });
+      const response = await api.get('/api/admin/pages', { params });
       
       if (response.data.success) {
         setPages(response.data.data || []);

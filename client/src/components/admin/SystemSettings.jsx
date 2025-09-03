@@ -77,7 +77,7 @@ const SystemSettings = () => {
   const fetchSettings = async () => {
     try {
       setLoading(true);
-      const response = await api.get('/admin/settings');
+      const response = await api.get('/api/admin/settings');
       setSettings(response.data.data);
     } catch (error) {
       console.error('Failed to fetch settings:', error);

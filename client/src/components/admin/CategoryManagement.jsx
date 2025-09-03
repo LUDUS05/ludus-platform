@@ -41,7 +41,7 @@ const CategoryManagement = () => {
   const fetchCategories = async () => {
     try {
       setLoading(true);
-      const response = await api.get('/admin/categories');
+      const response = await api.get('/api/admin/categories');
       setCategories(response.data.data);
     } catch (error) {
       console.error('Failed to fetch categories:', error);

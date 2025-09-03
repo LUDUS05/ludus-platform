@@ -41,7 +41,7 @@ const RoleAssignmentModal = ({ isOpen, onClose, selectedUser, adminRoles, onSucc
 
   const loadPartners = async () => {
     try {
-      const response = await api.get('/admin/vendors');
+      const response = await api.get('/api/admin/vendors');
       setPartners(response.data.data.vendors || []);
     } catch (error) {
       console.error('Failed to load partners:', error);
