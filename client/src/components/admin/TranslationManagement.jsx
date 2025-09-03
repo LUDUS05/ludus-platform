@@ -39,7 +39,7 @@ const TranslationManagement = () => {
   const fetchTranslations = async () => {
     try {
       setLoading(true);
-      const response = await api.get(`/admin/translations/${selectedLanguage}/${selectedNamespace}`);
+      const response = await api.get(`/api/admin/translations/${selectedLanguage}/${selectedNamespace}`);
       setTranslations(response.data.data);
     } catch (error) {
       console.error('Failed to fetch translations:', error);
@@ -52,7 +52,7 @@ const TranslationManagement = () => {
   const saveTranslations = async () => {
     try {
       setSaving(true);
-      await api.put(`/admin/translations/${selectedLanguage}/${selectedNamespace}`, {
+      await api.put(`/api/admin/translations/${selectedLanguage}/${selectedNamespace}`, {
         translations
       });
       setMessage({ type: 'success', text: 'Translations saved successfully' });
