@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-// API configuration for full Vercel deployment
+// API configuration for Render deployment
 const getApiBaseUrl = () => {
-  // Production: Use Vercel backend
+  // Production: Use Render backend URL
   if (process.env.NODE_ENV === 'production') {
-    return process.env.REACT_APP_API_URL || 'https://api.letsludus.com/api';
+    return process.env.REACT_APP_API_URL || 'https://ludus-backend-crt8.onrender.com/api';
   }
   
   // Development: Use local backend
