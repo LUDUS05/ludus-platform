@@ -32,7 +32,7 @@ const Header = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden md:flex items-center space-x-8 rtl:space-x-reverse">
             <Link
               to="/activities"
               className="text-charcoal dark:text-dark-text-secondary hover:text-ludus-orange dark:hover:text-dark-ludus-orange font-medium transition-colors duration-200"
@@ -80,7 +80,7 @@ const Header = () => {
           </nav>
 
           {/* User Actions */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-4 rtl:space-x-reverse">
             <LanguageSwitcher />
             {isAuthenticated ? (
               <div className="relative">
@@ -164,7 +164,7 @@ const Header = () => {
         {/* Mobile Menu */}
         {isMenuOpen && (
           <div className="md:hidden border-t border-warm dark:border-dark-border-secondary py-4 bg-white/95 dark:bg-dark-bg-secondary/95 backdrop-blur-sm">
-            <nav className="flex flex-col space-y-4">
+            <nav className="flex flex-col space-y-4 rtl:space-y-reverse">
               <Link
                 to="/activities"
                 className="text-charcoal dark:text-dark-text-secondary hover:text-ludus-orange dark:hover:text-dark-ludus-orange font-medium transition-colors duration-200"
@@ -223,7 +223,7 @@ const Header = () => {
                   </button>
                 </>
               ) : (
-                <div className="flex flex-col space-y-3 pt-4 border-t border-warm dark:border-dark-border-secondary">
+                <div className="flex flex-col space-y-3 pt-4 border-t border-warm dark:border-dark-border-secondary rtl:space-y-reverse">
                   <Link
                     to="/login"
                     className="text-charcoal dark:text-dark-text-secondary hover:text-ludus-orange dark:hover:text-dark-ludus-orange font-medium transition-colors duration-200"
