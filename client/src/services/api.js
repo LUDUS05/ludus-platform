@@ -4,7 +4,7 @@ import axios from 'axios';
 const getApiBaseUrl = () => {
   // Production: Use Render backend URL
   if (process.env.NODE_ENV === 'production') {
-    return process.env.REACT_APP_API_URL || 'https://ludus-backend.onrender.com/api';
+    return process.env.REACT_APP_API_URL || 'https://ludus-backend-crt8.onrender.com/api';
   }
   
   // Development: Use local backend
