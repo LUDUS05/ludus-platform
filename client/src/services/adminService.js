@@ -62,10 +62,10 @@ export const adminService = {
   async getDashboardOverview() {
     try {
       const api = createAuthAxios();
-      console.log('AdminService: Making request to:', `${API_BASE_URL}/admin/dashboard/overview`);
+      console.log('AdminService: Making request to:', `${API_BASE_URL}/api/admin/dashboard/overview`);
       console.log('AdminService: Auth token present:', !!localStorage.getItem('accessToken'));
       
-      const response = await api.get('/admin/dashboard/overview');
+      const response = await api.get('/api/admin/dashboard/overview');
       console.log('AdminService: Response received:', response.data);
       return response.data;
     } catch (error) {

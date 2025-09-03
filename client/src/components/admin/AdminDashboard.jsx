@@ -52,14 +52,14 @@ const AdminDashboard = () => {
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message || 'Failed to load dashboard statistics';
       setError(errorMessage);
-      console.error('Failed to fetch dashboard stats:', {
+      console.error('Failed to fetch dashboard stats:', JSON.stringify({
         message: error.message,
         response: error.response?.data,
         status: error.response?.status,
         statusText: error.response?.statusText,
         user: user?.id || user?._id,
         role: user?.role
-      });
+      }, null, 2));
     } finally {
       setLoading(false);
     }
@@ -81,14 +81,14 @@ const AdminDashboard = () => {
       const errorMessage = error.response?.data?.message || error.message || 'Failed to load dashboard overview';
       console.error('Failed to load dashboard overview:', errorMessage);
       console.error('Full error object:', error);
-      console.error('Error details:', {
+      console.error('Error details:', JSON.stringify({
         message: error.message,
         response: error.response?.data,
         status: error.response?.status,
         statusText: error.response?.statusText,
         user: user?.id || user?._id,
         role: user?.role
-      });
+      }, null, 2));
       setError(errorMessage);
     }
   };
