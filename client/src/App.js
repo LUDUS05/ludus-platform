@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter as Router, useLocation, useNavigate } from 'react-router-dom';
 import './index.css';
 import AppRoutes from './routes/AppRoutes';
+import { AuthProvider } from './context/AuthContext';
 
 // Debug component to show current route info (can be removed in production)
 function RouteDebugger() {
@@ -50,11 +51,13 @@ function FallbackHandler() {
 
 function App() {
   return (
-    <Router>
-      <RouteDebugger />
-      <FallbackHandler />
-      <AppRoutes />
-    </Router>
+    <AuthProvider>
+      <Router>
+        <RouteDebugger />
+        <FallbackHandler />
+        <AppRoutes />
+      </Router>
+    </AuthProvider>
   );
 }
 
