@@ -88,10 +88,18 @@ referralSchema.statics.getUserReferrals = function(userId) {
 
 // Static method to get user's total earnings
 referralSchema.statics.getUserEarnings = function(userId) {
-  return this.aggregate([
-    { $match: { referrerId: mongoose.Types.ObjectId(userId), status: 'completed' } },
-    { $group: { _id: null, totalEarnings: { $sum: '$rewardAmount' } } }
-  ]);
+  try {
+    // Ensure userId is a valid ObjectId
+    const objectId = new mongoose.Types.ObjectId(userId);
+    return this.aggregate([
+      { $match: { referrerId: objectId, status: 'completed' } },
+      { $group: { _id: null, totalEarnings: { $sum: '$rewardAmount' } } }
+    ]);
+  } catch (error) {
+    // If userId is invalid, return empty result
+    console.error('Invalid userId for getUserEarnings:', userId, error);
+    return [];
+  }
 };
 
 module.exports = mongoose.model('Referral', referralSchema);

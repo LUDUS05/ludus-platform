@@ -16,6 +16,7 @@
     "test:monitoring": "node src/tests/test-monitoring-system.js",
     "test:performance": "node src/tests/test-performance-optimization.js",
     "test:integration": "node src/tests/test-system-integration.js",
+    "migrate:referral-stats": "node scripts/migrate-referral-stats.js",
     "lint": "eslint src --ext .js",
     "format": "prettier --write \"**/*.{js,json,md}\"",
     "seed": "cross-env NODE_ENV=development node src/seeds/index.js",

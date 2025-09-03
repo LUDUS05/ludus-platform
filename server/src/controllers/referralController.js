@@ -341,11 +341,18 @@ const getReferralStats = async (req, res) => {
     const earningsResult = await Referral.getUserEarnings(userId);
     const totalEarnings = earningsResult[0]?.totalEarnings || 0;
     
+    // Handle case where referralStats might not exist for existing users
+    const referralStats = user.referralStats || {
+      totalReferrals: 0,
+      totalEarnings: 0,
+      firstBookingCompleted: false
+    };
+    
     res.status(200).json({
       success: true,
       data: {
         referralCode: user.referralCode,
-        totalReferrals: user.referralStats.totalReferrals,
+        totalReferrals: referralStats.totalReferrals,
         totalEarnings: totalEarnings,
         referralHistory: referrals,
         codeDetails: referralCode ? {
