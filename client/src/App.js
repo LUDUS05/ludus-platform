@@ -32,16 +32,15 @@ function FallbackHandler() {
   
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const isFallback = params.get('spa-fallback');
-    const originalPath = params.get('original-path');
+    const spaRedirect = params.get('spa-redirect');
     
-    if (isFallback && originalPath) {
+    if (spaRedirect) {
       // Decode the original path and navigate to it
-      const decodedPath = decodeURIComponent(originalPath);
-      console.log('SPA Fallback: Redirecting to', decodedPath);
+      const decodedPath = decodeURIComponent(spaRedirect);
+      console.log('SPA Redirect: Navigating to', decodedPath);
       
-      // Simple approach: just navigate with replace: true
-      // This was working in the previous version
+      // Navigate to the original path and replace the current history entry
+      // This will clean up the URL parameters
       navigate(decodedPath, { replace: true });
     }
   }, [location, navigate]);
