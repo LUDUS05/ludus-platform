@@ -41,7 +41,12 @@ function FallbackHandler() {
       console.log('SPA Fallback: Redirecting to', decodedPath);
       
       // Navigate to the original path and replace the current history entry
+      // This will clean up the URL parameters
       navigate(decodedPath, { replace: true });
+      
+      // Force a clean URL by updating the browser location
+      // This ensures the fallback parameters are completely removed
+      window.history.replaceState(null, '', decodedPath);
     }
   }, [location, navigate]);
   
