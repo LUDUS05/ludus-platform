@@ -4,6 +4,7 @@ import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import referralService from '../services/referralService';
 import { Globe, ArrowLeft, ArrowRight, Check, Eye, EyeOff } from 'lucide-react';
+import Logo from '../components/common/Logo';
 
 const UserRegistrationPage = () => {
   const { t, i18n } = useTranslation();
@@ -302,8 +303,8 @@ const UserRegistrationPage = () => {
     return (
       <div className="min-h-screen bg-[#e0e0e0] flex items-center justify-center p-4" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'} lang={i18n.language}>
         <div className="neumorphic rounded-2xl p-8 text-center max-w-md">
-          <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Check className="w-8 h-8 text-white" />
+          <div className="flex justify-center mb-4">
+            <Logo className="h-16 w-auto" />
           </div>
           <h1 className="text-2xl font-bold text-gray-800 mb-4">
             {t('user.registration.success.title')}
@@ -363,17 +364,11 @@ const UserRegistrationPage = () => {
         {/* Welcome Screen */}
         {currentStep === -1 && (
           <div className="neumorphic rounded-2xl p-8 text-center">
-            <div className="w-20 h-20 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-6">
-              <span className="text-3xl font-bold text-white">L</span>
+            <div className="flex justify-center mb-6">
+              <Logo className="h-20 w-auto" />
             </div>
             
-            {/* Debug info - remove this after confirming translations work */}
-            <div className="mb-4 p-2 bg-gray-100 rounded text-xs text-gray-600">
-              <div>Current Language: {i18n.language}</div>
-              <div>Translation Ready: {i18n.isInitialized ? 'Yes' : 'No'}</div>
-              <div>Raw Key: user.registration.title</div>
-              <div>Translated: {t('user.registration.title')}</div>
-            </div>
+
             
             <h1 className="text-3xl font-bold text-gray-800 mb-4">
               {t('user.registration.title')}

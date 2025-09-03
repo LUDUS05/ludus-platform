@@ -5,6 +5,7 @@ import { useAuth } from '../../context/AuthContext';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
 import SocialLogin from './SocialLogin';
+import Logo from '../common/Logo';
 
 const LoginForm = () => {
   const { t } = useTranslation();
@@ -53,8 +54,8 @@ const LoginForm = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
-          <div className="mx-auto h-12 w-12 bg-ludus-orange rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-xl">L</span>
+          <div className="flex justify-center">
+            <Logo className="h-12 w-auto" />
           </div>
           <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
             {t('auth.signInToAccount')}

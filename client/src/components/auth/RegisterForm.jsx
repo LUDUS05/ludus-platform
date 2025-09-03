@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
+import Logo from '../common/Logo';
 
 const RegisterForm = () => {
   const { t } = useTranslation();
@@ -66,9 +67,7 @@ const RegisterForm = () => {
       <div className="max-w-md w-full space-y-8">
         <div>
           <div className="flex justify-center">
-            <div className="w-12 h-12 bg-ludus-orange rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl">L</span>
-            </div>
+            <Logo className="h-12 w-auto" />
           </div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             {t('auth.register')}

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001/api';
 
 // Create axios instance with auth token
 const createAuthAxios = () => {
@@ -60,9 +60,28 @@ export const adminService = {
 
   // Dashboard overview
   async getDashboardOverview() {
-    const api = createAuthAxios();
-    const response = await api.get('/dashboard/overview');
-    return response.data;
+    try {
+      const api = createAuthAxios();
+      console.log('AdminService: Making request to:', `${API_BASE_URL}/admin/dashboard/overview`);
+      console.log('AdminService: Auth token present:', !!localStorage.getItem('accessToken'));
+      
+      const response = await api.get('/dashboard/overview');
+      console.log('AdminService: Response received:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('AdminService: Error in getDashboardOverview:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        config: {
+          baseURL: error.config?.baseURL,
+          url: error.config?.url,
+          headers: error.config?.headers
+        }
+      });
+      throw error;
+    }
   },
 
   // Permission helpers

@@ -30,8 +30,14 @@ const WalletDashboard = () => {
       setTransactions(transactionsRes.data.data.transactions);
       setStats(statsRes.data.data);
     } catch (err) {
-      setError('Failed to load wallet data');
-      console.error('Wallet data fetch error:', err);
+      const errorMessage = err.response?.data?.message || err.message || 'Failed to load wallet data';
+      setError(errorMessage);
+      console.error('Wallet data fetch error:', {
+        message: err.message,
+        response: err.response?.data,
+        status: err.response?.status,
+        statusText: err.response?.statusText
+      });
     } finally {
       setLoading(false);
     }

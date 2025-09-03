@@ -9,25 +9,57 @@ import NotificationCenter from './NotificationCenter';
 import { Shield, Users, Building, FileText, BarChart3 } from 'lucide-react';
 
 const AdminDashboard = () => {
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const [stats, setStats] = useState(null);
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    // Check if user is authenticated and has admin role
+    if (!isAuthenticated) {
+      setError('Please log in to access admin dashboard');
+      setLoading(false);
+      return;
+    }
+
+    if (!user || user.role !== 'admin') {
+      setError('Access denied. Admin privileges required.');
+      setLoading(false);
+      return;
+    }
+
     fetchDashboardStats();
     loadDashboardOverview();
-  }, []);
+  }, [user, isAuthenticated]);
 
   const fetchDashboardStats = async () => {
     try {
       setLoading(true);
+      setError(null);
+      
+      // Debug: Log the request details
+      console.log('Fetching dashboard stats...', {
+        user: user?.id || user?._id,
+        role: user?.role,
+        isAuthenticated,
+        apiUrl: process.env.REACT_APP_API_URL || 'http://localhost:5001/api'
+      });
+      
       const response = await api.get('/admin/dashboard/stats');
+      console.log('Dashboard stats response:', response.data);
       setStats(response.data.data);
     } catch (error) {
-      console.error('Failed to fetch dashboard stats:', error);
-      setError('Failed to load dashboard statistics');
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to load dashboard statistics';
+      setError(errorMessage);
+      console.error('Failed to fetch dashboard stats:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        user: user?.id || user?._id,
+        role: user?.role
+      });
     } finally {
       setLoading(false);
     }
@@ -35,10 +67,26 @@ const AdminDashboard = () => {
 
   const loadDashboardOverview = async () => {
     try {
+      // Debug: Log the request details
+      console.log('Loading dashboard overview...', {
+        user: user?.id || user?._id,
+        role: user?.role,
+        isAuthenticated
+      });
+      
       const response = await adminService.getDashboardOverview();
+      console.log('Dashboard overview response:', response.data);
       setDashboardData(response.data);
     } catch (error) {
-      console.error('Failed to load dashboard overview:', error);
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to load dashboard overview';
+      console.error('Failed to load dashboard overview:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        user: user?.id || user?._id,
+        role: user?.role
+      });
     }
   };
 
@@ -108,17 +156,49 @@ const AdminDashboard = () => {
 
   if (error) {
     return (
-      <Alert variant="error">
-        <div className="flex flex-col gap-2">
-          <p>{error}</p>
-          <button
-            onClick={fetchDashboardStats}
-            className="text-sm underline hover:no-underline"
-          >
-            Try again
-          </button>
-        </div>
-      </Alert>
+      <div className="space-y-4">
+        <Alert variant="error">
+          <div className="flex flex-col gap-4">
+            <div>
+              <h3 className="font-semibold text-lg mb-2">Dashboard Error</h3>
+              <p className="text-red-700 mb-2">{error}</p>
+              {user && (
+                <div className="text-sm text-gray-600 mb-2">
+                  <strong>User Role:</strong> {user.role || 'Unknown'}
+                  <br />
+                  <strong>User ID:</strong> {user.id || user._id || 'Unknown'}
+                </div>
+              )}
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={fetchDashboardStats}
+                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
+              >
+                Try Again
+              </button>
+              <button
+                onClick={() => window.location.reload()}
+                className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-red-700 transition-colors"
+              >
+                Reload Page
+              </button>
+            </div>
+          </div>
+        </Alert>
+        
+        {/* Debug Information */}
+        <Card className="p-4 bg-gray-50">
+          <h4 className="font-semibold text-gray-700 mb-2">Debug Information</h4>
+          <div className="text-sm text-gray-600 space-y-1">
+            <div><strong>Authentication Status:</strong> {isAuthenticated ? '✅ Authenticated' : '❌ Not Authenticated'}</div>
+            <div><strong>User Object:</strong> {user ? '✅ Present' : '❌ Missing'}</div>
+            <div><strong>User Role:</strong> {user?.role || 'None'}</div>
+            <div><strong>API Base URL:</strong> {process.env.REACT_APP_API_URL || 'http://localhost:5001/api'}</div>
+            <div><strong>Environment:</strong> {process.env.NODE_ENV}</div>
+          </div>
+        </Card>
+      </div>
     );
   }
 

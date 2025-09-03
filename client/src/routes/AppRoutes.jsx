@@ -32,7 +32,6 @@ import NeoProfile from '../neoui/pages/Profile';
 import NeoDashboard from '../neoui/pages/Dashboard';
 import NeoWallet from '../neoui/pages/Wallet';
 import TestHomePage from '../neoui/pages/TestHomePage';
-import RegistrationPage from '../neoui/pages/RegistrationPage';
 
 const AppRoutes = () => {
   return (
@@ -97,7 +96,6 @@ const AppRoutes = () => {
         <Route path="profile" element={<NeoProfile />} />
         <Route path="dashboard" element={<NeoDashboard />} />
         <Route path="wallet" element={<NeoWallet />} />
-        <Route path="register" element={<RegistrationPage />} />
         <Route index element={<Navigate to="home" replace />} />
       </Route>
       
