@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-// API configuration for Vercel deployment
+// API configuration for full Vercel deployment
 const getApiBaseUrl = () => {
-  // Production: Use custom domain API
+  // Production: Use Vercel backend
   if (process.env.NODE_ENV === 'production') {
     return process.env.REACT_APP_API_URL || 'https://api.letsludus.com/api';
   }
