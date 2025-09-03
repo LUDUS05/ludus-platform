@@ -188,7 +188,35 @@ const userSchema = new mongoose.Schema({
   passwordResetToken: String,
   passwordResetExpires: Date,
   emailVerificationToken: String,
-  emailVerificationExpires: Date
+  emailVerificationExpires: Date,
+  // Referral system fields
+  referralCode: {
+    type: String,
+    unique: true,
+    sparse: true,
+    index: true
+  },
+  referredBy: {
+    type: String, // Referral code used during registration
+    index: true
+  },
+  referralStats: {
+    totalReferrals: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
+    totalEarnings: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
+    firstBookingCompleted: {
+      type: Boolean,
+      default: false
+    },
+    lastReferralAt: Date
+  }
 }, {
   timestamps: true
 });

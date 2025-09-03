@@ -8,6 +8,14 @@
     "smoke": "node scripts/smoke.js",
     "dev": "cross-env NODE_ENV=development nodemon src/app.js",
     "test": "jest --runInBand",
+    "test:referral": "node src/tests/run-tests.js",
+    "test:referral:all": "node src/tests/run-tests.js --continue-on-failure",
+    "test:referral:system": "node src/tests/test-complete-referral-system.js",
+    "test:referral:rewards": "node src/tests/test-reward-system.js",
+    "test:referral:analytics": "node src/tests/test-analytics-system.js",
+    "test:monitoring": "node src/tests/test-monitoring-system.js",
+    "test:performance": "node src/tests/test-performance-optimization.js",
+    "test:integration": "node src/tests/test-system-integration.js",
     "lint": "eslint src --ext .js",
     "format": "prettier --write \"**/*.{js,json,md}\"",
     "seed": "cross-env NODE_ENV=development node src/seeds/index.js",
@@ -34,7 +42,12 @@
     "nodemailer": "^6.9.7",
     "passport": "^0.7.0",
     "passport-facebook": "^3.0.0",
-    "passport-google-oauth20": "^2.0.0"
+    "passport-google-oauth20": "^2.0.0",
+    "ioredis": "^5.3.2",
+    "qrcode": "^1.5.3",
+    "exceljs": "^4.3.0",
+    "pdfkit": "^0.13.0",
+    "csv-writer": "^1.6.0"
   },
   "engines": {
     "node": ">=18.0.0",

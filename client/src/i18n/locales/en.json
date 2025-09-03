@@ -34,72 +34,6 @@
     "signInHere": "Sign in here",
     "share": "Share"
   },
-  "user": {
-    "registration": {
-      "title": "Join LUDUS",
-      "subtitle": "Discover amazing activities and experiences in your city",
-      "alreadyHaveAccount": "Already have an account?",
-      "getStarted": "Get Started",
-      "questions": {
-        "firstName": {
-          "question": "What's your first name?",
-          "placeholder": "Enter your first name",
-          "buttonText": "Continue"
-        },
-        "lastName": {
-          "question": "And your last name, {{name}}?",
-          "placeholder": "Enter your last name",
-          "buttonText": "Continue"
-        },
-        "email": {
-          "question": "What's your email address, {{name}}?",
-          "placeholder": "Enter your email",
-          "buttonText": "Continue"
-        },
-        "password": {
-          "question": "Create a secure password",
-          "placeholder": "Enter your password",
-          "buttonText": "Continue"
-        },
-        "confirmPassword": {
-          "question": "Confirm your password",
-          "placeholder": "Re-enter your password",
-          "buttonText": "Continue"
-        },
-        "phone": {
-          "question": "Phone number (optional)",
-          "placeholder": "Enter your phone number",
-          "buttonText": "Continue"
-        },
-        "dateOfBirth": {
-          "question": "Date of birth (optional)",
-          "placeholder": "Select your date of birth",
-          "buttonText": "Continue"
-        }
-      },
-      "validation": {
-        "required": "This field is required",
-        "invalidEmail": "Please enter a valid email address",
-        "passwordTooShort": "Password must be at least 8 characters",
-        "passwordMismatch": "Passwords do not match",
-        "invalidPhone": "Please enter a valid phone number",
-        "nameTooShort": "Name must be at least 2 characters",
-        "termsRequired": "You must accept the terms and conditions",
-        "submissionError": "Something went wrong. Please try again."
-      },
-      "terms": {
-        "title": "Almost there, {{name}}!",
-        "checkbox": "I agree to the Terms and Conditions and Privacy Policy",
-        "submitting": "Creating Account...",
-        "submit": "Create Account"
-      },
-      "success": {
-        "title": "Welcome to LUDUS!",
-        "message": "Your account has been created successfully, {{name}}. Get ready to discover amazing activities!",
-        "redirecting": "Redirecting you to your dashboard..."
-      }
-    }
-  },
   "navigation": {
     "home": "Home",
     "activities": "Activities",
@@ -109,7 +43,8 @@
     "about": "About",
     "contact": "Contact",
     "map": "Map",
-    "howItWorks": "How It Works"
+    "howItWorks": "How It Works",
+    "wallet": "Wallet"
   },
   "profile": {
     "manageAccount": "Manage your account settings and personal information",
@@ -254,6 +189,48 @@
     "english": "English",
     "arabic": "العربية",
     "switchLanguage": "Switch Language"
+  },
+  "map": {
+    "title": "Discover Activities Near You",
+    "subtitle": "Explore local activities and events on the map",
+    "searchLocation": "Search Location",
+    "searchLocationPlaceholder": "Search for a location...",
+    "searchActivitiesPlaceholder": "Search activities...",
+    "activitiesFound": "{{count}} activities found",
+    "loading": "Loading...",
+    "noActivitiesFound": "No activities found"
+  },
+  "wallet": {
+    "title": "My Wallet",
+    "balance": "Balance",
+    "availableBalance": "Available Balance",
+    "addFunds": "Add Funds to Wallet",
+    "withdrawFunds": "Withdraw Funds",
+    "walletSettings": "Wallet Settings",
+    "walletUnavailable": "Wallet Unavailable",
+    "tryAgain": "Try Again",
+    "deposit": "Deposit",
+    "withdrawal": "Withdrawal",
+    "transactions": "Transactions",
+    "recentTransactions": "Recent Transactions",
+    "transactionHistory": "Transaction History",
+    "amount": "Amount",
+    "description": "Description",
+    "date": "Date",
+    "status": "Status",
+    "type": "Type",
+    "processing": "Processing...",
+    "addFundsTitle": "Add Funds to Wallet",
+    "withdrawFundsTitle": "Withdraw Funds",
+    "enterAmount": "Enter amount",
+    "enterDescription": "Enter description (optional)",
+    "insufficientBalance": "Insufficient balance",
+    "addFundsToWallet": "Add funds to wallet",
+    "walletPaymentBenefits": "Wallet Payment Benefits",
+    "instantPayment": "Instant payment",
+    "noFees": "No additional fees",
+    "easyRefunds": "Easy refunds to wallet",
+    "secureTransactions": "Secure transactions"
   },
   "howItWorks": {
     "title": "How LUDUS Works",
@@ -423,6 +400,72 @@
           "content": "Either party may terminate this agreement with 30 days written notice."
         },
         "contact": "For questions about these terms, contact us at partners@letsludus.com"
+      }
+    }
+  },
+  "user": {
+    "registration": {
+      "title": "Join LUDUS",
+      "subtitle": "Discover amazing activities and experiences in your city",
+      "alreadyHaveAccount": "Already have an account?",
+      "getStarted": "Get Started",
+      "questions": {
+        "firstName": {
+          "question": "What's your first name?",
+          "placeholder": "Enter your first name",
+          "buttonText": "Continue"
+        },
+        "lastName": {
+          "question": "And your last name, {{name}}?",
+          "placeholder": "Enter your last name",
+          "buttonText": "Continue"
+        },
+        "email": {
+          "question": "What's your email address, {{name}}?",
+          "placeholder": "Enter your email",
+          "buttonText": "Continue"
+        },
+        "password": {
+          "question": "Create a secure password",
+          "placeholder": "Enter your password",
+          "buttonText": "Continue"
+        },
+        "confirmPassword": {
+          "question": "Confirm your password",
+          "placeholder": "Re-enter your password",
+          "buttonText": "Continue"
+        },
+        "phone": {
+          "question": "Phone number (optional)",
+          "placeholder": "Enter your phone number",
+          "buttonText": "Continue"
+        },
+        "dateOfBirth": {
+          "question": "Date of birth (optional)",
+          "placeholder": "Select your date of birth",
+          "buttonText": "Continue"
+        }
+      },
+      "validation": {
+        "required": "This field is required",
+        "invalidEmail": "Please enter a valid email address",
+        "passwordTooShort": "Password must be at least 8 characters",
+        "passwordMismatch": "Passwords do not match",
+        "invalidPhone": "Please enter a valid phone number",
+        "nameTooShort": "Name must be at least 2 characters",
+        "termsRequired": "You must accept the terms and conditions",
+        "submissionError": "Something went wrong. Please try again."
+      },
+      "terms": {
+        "title": "Almost there, {{name}}!",
+        "checkbox": "I agree to the Terms and Conditions and Privacy Policy",
+        "submitting": "Creating Account...",
+        "submit": "Create Account"
+      },
+      "success": {
+        "title": "Welcome to LUDUS!",
+        "message": "Your account has been created successfully, {{name}}. Get ready to discover amazing activities!",
+        "redirecting": "Redirecting you to your dashboard..."
       }
     }
   }

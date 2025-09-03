@@ -22,6 +22,7 @@ import ComingSoonPage from '../pages/ComingSoonPage';
 import MaintenancePage from '../pages/MaintenancePage';
 import MapPage from '../pages/MapPage';
 import WalletPage from '../pages/WalletPage';
+import ReferralDashboard from '../pages/ReferralDashboard';
 import ContactPage from '../pages/ContactPage';
 import DynamicPage from '../components/pages/DynamicPage';
 import NeoLayout from '../neoui/Layout';
@@ -80,6 +81,11 @@ const AppRoutes = () => {
         <Route path="wallet" element={
           <ProtectedRoute>
             <WalletPage />
+          </ProtectedRoute>
+        } />
+        <Route path="referrals" element={
+          <ProtectedRoute>
+            <ReferralDashboard />
           </ProtectedRoute>
         } />
         

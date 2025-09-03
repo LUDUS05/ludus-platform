@@ -14,6 +14,7 @@ import CategoryManagement from '../../components/admin/CategoryManagement';
 import TranslationManagement from '../../components/admin/TranslationManagement';
 import SystemSettings from '../../components/admin/SystemSettings';
 import UserManagement from '../../components/admin/UserManagement';
+import ReferralManagement from '../../components/admin/ReferralManagement';
 
 const AdminRoutes = () => {
   return (
@@ -30,6 +31,7 @@ const AdminRoutes = () => {
         <Route path="/activities/edit/:id" element={<ActivityForm />} />
         <Route path="/bookings" element={<BookingManagement />} />
         <Route path="/payments" element={<PaymentManagement />} />
+        <Route path="/referrals" element={<ReferralManagement />} />
         <Route path="/categories" element={<CategoryManagement />} />
         <Route path="/content" element={<PageManagement />} />
         <Route path="/content/new" element={<PageForm />} />

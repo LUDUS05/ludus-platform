@@ -50,58 +50,41 @@ export default function ActivityDetailsPage() {
   };
 
   const handleShare = async (platform) => {
+    if (!referralCode) {
+      alert('Please generate a referral code first!');
+      return;
+    }
+
     const referralLink = generateReferralLink();
     const activityTitle = activity?.title || 'Amazing Activity';
     const shareText = `Check out this amazing activity: ${activityTitle}`;
     
-    let shareUrl = '';
-    
-    switch (platform) {
-      case 'link':
-        // Copy to clipboard
+    try {
+      // Use the enhanced referral service for sharing
+      const result = await referralService.shareReferralLink(referralCode, platform, activityTitle);
+      
+      // Track the sharing activity for analytics
+      if (user && platform !== 'copy') {
         try {
-          await navigator.clipboard.writeText(referralLink);
-          alert('Referral link copied to clipboard!');
-        } catch (err) {
-          // Fallback for older browsers
-          const textArea = document.createElement('textarea');
-          textArea.value = referralLink;
-          document.body.appendChild(textArea);
-          textArea.select();
-          document.execCommand('copy');
-          document.body.removeChild(textArea);
-          alert('Referral link copied to clipboard!');
+          await referralService.trackReferralClick(referralCode, 'activity-share', platform);
+        } catch (error) {
+          console.error('Failed to track referral click:', error);
         }
-        break;
-        
-      case 'sms':
-        shareUrl = `sms:?body=${encodeURIComponent(shareText + ' ' + referralLink)}`;
-        window.open(shareUrl);
-        break;
-        
-      case 'whatsapp':
-        shareUrl = `https://wa.me/?text=${encodeURIComponent(shareText + ' ' + referralLink)}`;
-        window.open(shareUrl);
-        break;
-        
-      case 'facebook':
-        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(referralLink)}&quote=${encodeURIComponent(shareText)}`;
-        window.open(shareUrl);
-        break;
-        
-      default:
-        break;
-    }
-    
-    // Award referral points for sharing (mock)
-    if (user && platform !== 'link') {
-      try {
-        // TODO: Replace with actual API call to award sharing points
-        console.log('Awarding sharing points for:', platform);
-        // Mock API call would go here
-      } catch (error) {
-        console.error('Failed to award sharing points:', error);
       }
+      
+      // Show success message
+      if (result.success) {
+        // For copy action, show a different message
+        if (platform === 'copy') {
+          alert('Referral link copied to clipboard!');
+        } else {
+          // For social sharing, the referral service handles the window opening
+          console.log('Shared successfully on:', platform);
+        }
+      }
+    } catch (error) {
+      console.error('Sharing failed:', error);
+      alert(`Failed to share on ${platform}. Please try again.`);
     }
     
     setShowShareModal(false);
@@ -290,36 +273,64 @@ export default function ActivityDetailsPage() {
             
             <div className="space-y-3 mb-4">
               <button
-                onClick={() => handleShare('link')}
+                onClick={() => handleShare('copy')}
                 className="w-full flex items-center gap-3 p-3 neo-category-badge hover:neo-filter-pill active rounded-lg transition-all duration-200"
               >
                 <Link className="w-5 h-5 text-blue-600" />
                 <span className="text-gray-700">نسخ رابط الإحالة</span>
               </button>
               
-              <button
-                onClick={() => handleShare('sms')}
-                className="w-full flex items-center gap-3 p-3 neo-category-badge hover:neo-filter-pill active rounded-lg transition-all duration-200"
-              >
-                <MessageCircle className="w-5 h-5 text-green-600" />
-                <span className="text-gray-700">مشاركة عبر الرسائل</span>
-              </button>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  onClick={() => handleShare('whatsapp')}
+                  className="flex items-center gap-2 p-3 neo-category-badge hover:neo-filter-pill active rounded-lg transition-all duration-200"
+                >
+                  <span className="text-lg">📱</span>
+                  <span className="text-gray-700 text-sm">واتساب</span>
+                </button>
+                
+                <button
+                  onClick={() => handleShare('facebook')}
+                  className="flex items-center gap-2 p-3 neo-category-badge hover:neo-filter-pill active rounded-lg transition-all duration-200"
+                >
+                  <span className="text-lg">📘</span>
+                  <span className="text-gray-700 text-sm">فيسبوك</span>
+                </button>
+                
+                <button
+                  onClick={() => handleShare('twitter')}
+                  className="flex items-center gap-2 p-3 neo-category-badge hover:neo-filter-pill active rounded-lg transition-all duration-200"
+                >
+                  <span className="text-lg">🐦</span>
+                  <span className="text-gray-700 text-sm">تويتر</span>
+                </button>
+                
+                <button
+                  onClick={() => handleShare('telegram')}
+                  className="flex items-center gap-2 p-3 neo-category-badge hover:neo-filter-pill active rounded-lg transition-all duration-200"
+                >
+                  <span className="text-lg">📬</span>
+                  <span className="text-gray-700 text-sm">تلغرام</span>
+                </button>
+              </div>
               
-              <button
-                onClick={() => handleShare('whatsapp')}
-                className="w-full flex items-center gap-3 p-3 neo-category-badge hover:neo-filter-pill active rounded-lg transition-all duration-200"
-              >
-                <MessageCircle className="w-5 h-5 text-green-500" />
-                <span className="text-gray-700">مشاركة عبر واتساب</span>
-              </button>
-              
-              <button
-                onClick={() => handleShare('facebook')}
-                className="w-full flex items-center gap-3 p-3 neo-category-badge hover:neo-filter-pill active rounded-lg transition-all duration-200"
-              >
-                <Facebook className="w-5 h-5 text-blue-600" />
-                <span className="text-gray-700">مشاركة عبر فيسبوك</span>
-              </button>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  onClick={() => handleShare('email')}
+                  className="flex items-center gap-2 p-3 neo-category-badge hover:neo-filter-pill active rounded-lg transition-all duration-200"
+                >
+                  <span className="text-lg">📧</span>
+                  <span className="text-gray-700 text-sm">البريد الإلكتروني</span>
+                </button>
+                
+                <button
+                  onClick={() => handleShare('sms')}
+                  className="flex items-center gap-2 p-3 neo-category-badge hover:neo-filter-pill active rounded-lg transition-all duration-200"
+                >
+                  <span className="text-lg">💬</span>
+                  <span className="text-gray-700 text-sm">الرسائل</span>
+                </button>
+              </div>
             </div>
             
             {referralCode && (

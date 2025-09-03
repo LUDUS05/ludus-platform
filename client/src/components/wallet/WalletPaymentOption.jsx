@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { walletService } from '../../services/walletService';
-import { Button } from '../ui/Button';
-import { Card } from '../ui/Card';
 
-const WalletPaymentOption = ({ 
-  amount, 
-  bookingId, 
+const WalletPaymentOption = ({
+  amount,
+  bookingId,
   description,
-  onPaymentSuccess, 
-  onPaymentError,
-  className = ''
+  onSuccess,
+  onError
 }) => {
+  const { t } = useTranslation();
   const [wallet, setWallet] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [processing, setProcessing] = useState(false);
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     fetchWalletData();
@@ -22,26 +20,25 @@ const WalletPaymentOption = ({
 
   const fetchWalletData = async () => {
     try {
-      setLoading(true);
       const response = await walletService.getWallet();
       setWallet(response.data.wallet);
     } catch (err) {
       console.error('Failed to fetch wallet data:', err);
-      setError('Failed to load wallet information');
-    } finally {
-      setLoading(false);
+      setError(t('wallet.walletUnavailable'));
     }
   };
 
   const handleWalletPayment = async () => {
-    try {
-      setProcessing(true);
-      setError(null);
+    setLoading(true);
+    setError('');
 
-      // Check balance first
+    try {
+      // Check if user has sufficient balance
       const balanceCheck = await walletService.checkBalance(amount);
-      if (!balanceCheck.hasSufficientBalance) {
-        setError(`Insufficient balance. You need ${walletService.formatCurrency(balanceCheck.shortfall)} more.`);
+      
+      if (!balanceCheck.sufficient) {
+        setError(t('wallet.insufficientBalance') + '. ' + t('wallet.addFundsToWallet'));
+        setLoading(false);
         return;
       }
 
@@ -49,145 +46,121 @@ const WalletPaymentOption = ({
       const response = await walletService.payWithWallet(amount, bookingId, description);
       
       if (response.success) {
-        onPaymentSuccess?.(response.data);
+        onSuccess(response.data);
       } else {
-        throw new Error(response.message || 'Payment failed');
+        setError(response.message || t('common.error'));
       }
     } catch (err) {
-      const errorMessage = err.response?.data?.message || err.message || 'Payment failed';
-      setError(errorMessage);
-      onPaymentError?.(errorMessage);
-    } finally {
-      setProcessing(false);
+      console.error('Wallet payment error:', err);
+      setError(err.response?.data?.message || t('common.error'));
     }
-  };
 
-  if (loading) {
-    return (
-      <Card className={`p-4 ${className}`}>
-        <div className="animate-pulse">
-          <div className="h-6 bg-gray-200 rounded mb-2"></div>
-          <div className="h-4 bg-gray-200 rounded mb-4 w-3/4"></div>
-          <div className="h-10 bg-gray-200 rounded"></div>
-        </div>
-      </Card>
-    );
-  }
+    setLoading(false);
+  };
 
   const hasSufficientBalance = wallet && wallet.availableBalance >= amount;
   const shortfall = wallet ? amount - wallet.availableBalance : amount;
 
   return (
-    <Card className={`p-4 ${className}`}>
-      <div className="flex items-start space-x-3">
-        {/* Wallet Icon */}
-        <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-ludus-orange to-ludus-orange-dark rounded-lg flex items-center justify-center">
-          <span className="text-white text-xl">💳</span>
+    <div className="bg-white rounded-lg border border-gray-200 p-6">
+      {/* Wallet Icon */}
+      <div className="flex items-center mb-4">
+        <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+          <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+          </svg>
         </div>
-
-        {/* Content */}
-        <div className="flex-1">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="font-semibold text-gray-900">Pay with Wallet</h3>
-            {wallet && (
-              <span className="text-sm font-medium text-gray-600">
-                Balance: {walletService.formatCurrency(wallet.availableBalance)}
-              </span>
-            )}
-          </div>
-
-          <p className="text-sm text-gray-600 mb-3">
-            Use your wallet balance for instant payment
-          </p>
-
-          {/* Payment Amount */}
-          <div className="flex items-center justify-between mb-4 p-3 bg-gray-50 rounded-lg">
-            <span className="text-sm font-medium text-gray-700">Payment Amount:</span>
-            <span className="text-lg font-bold text-gray-900">
-              {walletService.formatCurrency(amount)}
-            </span>
-          </div>
-
-          {/* Error Message */}
-          {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-sm text-red-700">{error}</p>
-            </div>
+        <div>
+          <h3 className="font-semibold text-gray-900">{t('wallet.addFundsTitle')}</h3>
+          {wallet && (
+            <p className="text-sm text-gray-600">
+              {t('wallet.balance')}: {walletService.formatCurrency(wallet.availableBalance)}
+            </p>
           )}
-
-          {/* Balance Status */}
-          {!hasSufficientBalance && wallet && (
-            <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-              <div className="flex items-center text-yellow-700">
-                <span className="text-lg mr-2">⚠️</span>
-                <div>
-                  <p className="text-sm font-medium">Insufficient Balance</p>
-                  <p className="text-xs">
-                    You need {walletService.formatCurrency(shortfall)} more. 
-                    <a href="/wallet" className="text-yellow-600 hover:text-yellow-800 underline ml-1">
-                      Add funds to wallet
-                    </a>
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Action Button */}
-          <div className="space-y-2">
-            <Button
-              onClick={handleWalletPayment}
-              disabled={processing || !hasSufficientBalance}
-              className={`w-full ${
-                hasSufficientBalance 
-                  ? 'bg-gradient-to-r from-ludus-orange to-ludus-orange-dark hover:from-ludus-orange-dark hover:to-ludus-orange' 
-                  : 'bg-gray-300 cursor-not-allowed'
-              }`}
-            >
-              {processing ? (
-                <div className="flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
-                  Processing...
-                </div>
-              ) : hasSufficientBalance ? (
-                `Pay ${walletService.formatCurrency(amount)} with Wallet`
-              ) : (
-                'Insufficient Balance'
-              )}
-            </Button>
-
-            {!hasSufficientBalance && wallet && (
-              <Button
-                variant="outline"
-                onClick={() => window.open('/wallet', '_blank')}
-                className="w-full"
-              >
-                Add Funds to Wallet
-              </Button>
-            )}
-          </div>
-
-          {/* Benefits */}
-          <div className="mt-4 pt-4 border-t border-gray-200">
-            <p className="text-xs font-medium text-gray-700 mb-2">Wallet Payment Benefits:</p>
-            <ul className="text-xs text-gray-600 space-y-1">
-              <li className="flex items-center">
-                <span className="text-green-500 mr-2">✓</span>
-                Instant payment confirmation
-              </li>
-              <li className="flex items-center">
-                <span className="text-green-500 mr-2">✓</span>
-                No payment processing fees
-              </li>
-              <li className="flex items-center">
-                <span className="text-green-500 mr-2">✓</span>
-                Easy refunds to wallet
-              </li>
-            </ul>
-          </div>
         </div>
       </div>
-    </Card>
+
+      {/* Description */}
+      <p className="text-gray-600 mb-4">
+        {t('wallet.instantPayment')}
+      </p>
+
+      {/* Payment Amount */}
+      <div className="bg-gray-50 rounded-lg p-4 mb-4">
+        <div className="flex justify-between items-center">
+          <span className="text-gray-600">{t('payment.totalPrice')}:</span>
+          <span className="text-lg font-semibold text-gray-900">
+            {walletService.formatCurrency(amount)}
+          </span>
+        </div>
+      </div>
+
+      {/* Insufficient Balance Warning */}
+      {!hasSufficientBalance && wallet && (
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <p className="text-sm text-yellow-800">
+                {t('wallet.insufficientBalance')}. {t('wallet.addFundsToWallet')}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Payment Button */}
+      <button
+        onClick={handleWalletPayment}
+        disabled={loading || !hasSufficientBalance}
+        className={`w-full py-3 px-4 rounded-lg font-medium transition-colors duration-200 ${
+          hasSufficientBalance
+            ? 'bg-blue-600 text-white hover:bg-blue-700 disabled:bg-blue-400'
+            : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+        }`}
+        title={
+          hasSufficientBalance
+            ? t('wallet.payNow', { amount: walletService.formatCurrency(amount) })
+            : t('wallet.insufficientBalance')
+        }
+      >
+        {loading ? t('wallet.processing') : t('wallet.payNow', { amount: walletService.formatCurrency(amount) })}
+      </button>
+
+      {/* Add Funds Button for Insufficient Balance */}
+      {!hasSufficientBalance && wallet && (
+        <div className="mt-4">
+          <button
+            onClick={() => window.open('/wallet', '_blank')}
+            className="w-full py-2 px-4 border border-blue-600 text-blue-600 rounded-lg font-medium hover:bg-blue-50 transition-colors duration-200"
+          >
+            {t('wallet.addFunds')}
+          </button>
+        </div>
+      )}
+
+      {/* Benefits */}
+      <div className="mt-6 pt-6 border-t border-gray-200">
+        <p className="text-xs font-medium text-gray-700 mb-2">{t('wallet.walletPaymentBenefits')}:</p>
+        <ul className="text-xs text-gray-600 space-y-1">
+          <li>• {t('wallet.instantPayment')}</li>
+          <li>• {t('wallet.noFees')}</li>
+          <li>• {t('wallet.easyRefunds')}</li>
+          <li>• {t('wallet.secureTransactions')}</li>
+        </ul>
+      </div>
+
+      {/* Error Display */}
+      {error && (
+        <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+          <p className="text-sm text-red-800">{error}</p>
+        </div>
+      )}
+    </div>
   );
 };
 

@@ -48,6 +48,15 @@ const {
 } = require('../controllers/adminManagementController');
 
 const {
+  getReferralStats,
+  getTopInviters,
+  getReferralRewards,
+  updateReferralRewards,
+  getReferralAnalytics,
+  exportReferralData
+} = require('../controllers/adminReferralController');
+
+const {
   getPages,
   getPage,
   createPage,
@@ -199,5 +208,20 @@ teamRoutes.put('/:userId', updateAdminUser);
 teamRoutes.delete('/:userId', removeAdminRole);
 
 router.use('/team', teamRoutes);
+
+// ==============================================
+// REFERRAL MANAGEMENT ROUTES
+// ==============================================
+const referralRoutes = express.Router();
+referralRoutes.use(authorize('admin'));
+
+referralRoutes.get('/stats', getReferralStats);
+referralRoutes.get('/top-inviters', getTopInviters);
+referralRoutes.get('/rewards', getReferralRewards);
+referralRoutes.put('/rewards', updateReferralRewards);
+referralRoutes.get('/analytics', getReferralAnalytics);
+referralRoutes.get('/export', exportReferralData);
+
+router.use('/referrals', referralRoutes);
 
 module.exports = router;

@@ -73,7 +73,7 @@ const Header = () => {
                   to="/wallet"
                   className="text-charcoal dark:text-dark-text-secondary hover:text-ludus-orange dark:hover:text-dark-ludus-orange font-medium transition-colors duration-200"
                 >
-                  Wallet
+                  {t('navigation.wallet')}
                 </Link>
               </>
             )}

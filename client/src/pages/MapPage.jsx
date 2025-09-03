@@ -121,14 +121,14 @@ const MapPage = () => {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">
-                {t('map.title', 'Discover Activities Near You')}
+                {t('map.title')}
               </h1>
               <p className="text-gray-600 mt-1">
-                {t('map.subtitle', 'Explore local activities and events on the map')}
+                {t('map.subtitle')}
               </p>
             </div>
             <div className="text-sm text-gray-500">
-              {loading ? 'Loading...' : `${activities.length} activities found`}
+              {loading ? t('map.loading') : t('map.activitiesFound', { count: activities.length })}
             </div>
           </div>
         </div>
@@ -155,11 +155,11 @@ const MapPage = () => {
                 {/* Location Search */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Search Location
+                    {t('map.searchLocation')}
                   </label>
                   <LocationSearch
                     onPlaceSelect={handleLocationSelect}
-                    placeholder="Search for a location..."
+                    placeholder={t('map.searchLocationPlaceholder')}
                     className="w-full"
                   />
                 </div>
@@ -171,7 +171,7 @@ const MapPage = () => {
                   </label>
                   <input
                     type="text"
-                    placeholder="Search activities..."
+                    placeholder={t('map.searchActivitiesPlaceholder')}
                     value={filters.search}
                     onChange={(e) => handleFilterChange('search', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-ludus-orange focus:border-ludus-orange"
@@ -181,7 +181,7 @@ const MapPage = () => {
                 {/* Category */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Category
+                    {t('activities.category')}
                   </label>
                   <select
                     value={filters.category}
@@ -199,7 +199,7 @@ const MapPage = () => {
                 {/* City */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    City
+                    {t('activities.city')}
                   </label>
                   <select
                     value={filters.city}
@@ -217,7 +217,7 @@ const MapPage = () => {
                 {/* Price Range */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Price Range (SAR)
+                    {t('activities.priceRange')}
                   </label>
                   <div className="grid grid-cols-2 gap-2">
                     <input

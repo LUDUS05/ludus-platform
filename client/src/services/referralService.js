@@ -1,164 +1,414 @@
-// Mock referral service - TODO: Replace with actual API calls
+import api from './api';
+
 class ReferralService {
   constructor() {
-    this.referralReward = 50; // SAR - admin adjustable
-    this.verificationBonus = 25; // SAR - bonus after verification
+    this.baseUrl = '/api/referrals';
   }
 
-  // Generate referral code for a user
-  generateReferralCode(userId) {
-    // Simple hash-based code generation
-    const hash = this.hashCode(userId.toString());
-    return `REF${hash.toString(36).toUpperCase().substring(0, 6)}`;
-  }
-
-  // Hash function for generating referral codes
-  hashCode(str) {
-    let hash = 0;
-    if (str.length === 0) return hash;
-    for (let i = 0; i < str.length; i++) {
-      const char = str.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
-      hash = hash & hash; // Convert to 32bit integer
+  // Generate unique referral code for user
+  async generateReferralCode() {
+    try {
+      const response = await api.post(`${this.baseUrl}/generate-code`);
+      return response.data;
+    } catch (error) {
+      console.error('Error generating referral code:', error);
+      throw new Error(error.response?.data?.message || 'Failed to generate referral code');
     }
-    return Math.abs(hash);
+  }
+
+  // Process referral during user registration
+  async processReferralRegistration(referralCode, newUserId, metadata = {}) {
+    try {
+      const response = await api.post(`${this.baseUrl}/process-registration`, {
+        referralCode,
+        newUserId,
+        source: metadata.source || 'direct-link',
+        platform: metadata.platform || 'unknown',
+        userAgent: metadata.userAgent || navigator.userAgent,
+        ipAddress: metadata.ipAddress || ''
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error processing referral registration:', error);
+      throw new Error(error.response?.data?.message || 'Failed to process referral');
+    }
+  }
+
+  // Process referral reward for first booking
+  async processReferralBooking(userId) {
+    try {
+      const response = await api.post(`${this.baseUrl}/process-booking`, { userId });
+      return response.data;
+    } catch (error) {
+      console.error('Error processing referral booking:', error);
+      throw new Error(error.response?.data?.message || 'Failed to process referral booking');
+    }
+  }
+
+  // Get referral statistics for user
+  async getReferralStats(userId) {
+    try {
+      const response = await api.get(`${this.baseUrl}/stats/${userId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error getting referral stats:', error);
+      throw new Error(error.response?.data?.message || 'Failed to get referral statistics');
+    }
+  }
+
+  // Get referral history for user
+  async getReferralHistory(userId, page = 1, limit = 10) {
+    try {
+      const response = await api.get(`${this.baseUrl}/history/${userId}`, {
+        params: { page, limit }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error getting referral history:', error);
+      throw new Error(error.response?.data?.message || 'Failed to get referral history');
+    }
+  }
+
+  // Generate QR code for referral link
+  generateQRCode(referralCode) {
+    const baseUrl = window.location.origin;
+    const referralLink = `${baseUrl}/register?ref=${referralCode}`;
+    
+    // Use Google Charts API for QR code generation
+    return `https://chart.googleapis.com/chart?chs=200x200&chld=L|0&cht=qr&chl=${encodeURIComponent(referralLink)}`;
+  }
+
+  // Generate referral link
+  generateReferralLink(referralCode) {
+    const baseUrl = window.location.origin;
+    return `${baseUrl}/register?ref=${referralCode}`;
+  }
+
+  // Share referral link on social platforms
+  async shareReferralLink(referralCode, platform, activityTitle = '') {
+    const referralLink = this.generateReferralLink(referralCode);
+    const shareText = activityTitle 
+      ? `Check out this amazing activity: ${activityTitle}`
+      : 'Join me on Ludus and discover amazing activities!';
+    
+    let shareUrl = '';
+    
+    switch (platform) {
+      case 'whatsapp':
+        shareUrl = `https://wa.me/?text=${encodeURIComponent(shareText + ' ' + referralLink)}`;
+        break;
+      case 'facebook':
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(referralLink)}&quote=${encodeURIComponent(shareText)}`;
+        break;
+      case 'twitter':
+        shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(referralLink)}`;
+        break;
+      case 'telegram':
+        shareUrl = `https://t.me/share/url?url=${encodeURIComponent(referralLink)}&text=${encodeURIComponent(shareText)}`;
+        break;
+      case 'email':
+        shareUrl = `mailto:?subject=${encodeURIComponent('Join me on Ludus!')}&body=${encodeURIComponent(shareText + '\n\n' + referralLink)}`;
+        break;
+      case 'sms':
+        shareUrl = `sms:?body=${encodeURIComponent(shareText + ' ' + referralLink)}`;
+        break;
+      case 'copy':
+        try {
+          await navigator.clipboard.writeText(referralLink);
+          return { success: true, message: 'Referral link copied to clipboard!' };
+        } catch (err) {
+          // Fallback for older browsers
+          const textArea = document.createElement('textarea');
+          textArea.value = referralLink;
+          document.body.appendChild(textArea);
+          textArea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textArea);
+          return { success: true, message: 'Referral link copied to clipboard!' };
+        }
+      default:
+        throw new Error('Unsupported platform');
+    }
+    
+    if (shareUrl && platform !== 'copy') {
+      window.open(shareUrl, '_blank', 'width=600,height=400');
+      return { success: true, message: `Shared on ${platform}!` };
+    }
+    
+    return { success: true, message: 'Link shared successfully!' };
+  }
+
+  // Download QR code
+  downloadQRCode(referralCode, filename = 'referral-qr-code.png') {
+    const qrCodeUrl = this.generateQRCode(referralCode);
+    
+    // Create a temporary link to download the QR code
+    const link = document.createElement('a');
+    link.href = qrCodeUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 
   // Validate referral code format
   validateReferralCode(code) {
-    return /^REF[A-Z0-9]{6}$/.test(code);
+    // Referral codes are now 8-character hex strings
+    return /^[A-F0-9]{8}$/.test(code);
   }
 
-  // Process referral signup
-  async processReferralSignup(referralCode, newUserId) {
+  // Get referral analytics for admin
+  async getReferralAnalytics(period = '30d') {
     try {
-      // TODO: Replace with actual API call
-      console.log('Processing referral:', { referralCode, newUserId });
-      
-      // Mock API call
-      const response = await this.mockApiCall('/referrals/process', {
-        referralCode,
-        newUserId,
-        reward: this.referralReward
+      const response = await api.get('/api/admin/referrals/analytics', {
+        params: { period }
       });
-
-      return {
-        success: true,
-        referrerId: response.referrerId,
-        reward: this.referralReward,
-        message: 'Referral processed successfully'
-      };
+      return response.data;
     } catch (error) {
-      console.error('Referral processing error:', error);
-      return {
-        success: false,
-        error: 'Failed to process referral'
-      };
+      console.error('Error getting referral analytics:', error);
+      throw new Error(error.response?.data?.message || 'Failed to get referral analytics');
     }
   }
 
-  // Credit wallet after verification
-  async creditWalletAfterVerification(userId, referralCode) {
+  // Get top inviters for admin
+  async getTopInviters(limit = 10) {
     try {
-      // TODO: Replace with actual API call
-      console.log('Crediting wallet after verification:', { userId, referralCode });
-      
-      const response = await this.mockApiCall('/referrals/verify', {
-        userId,
-        referralCode,
-        bonus: this.verificationBonus
+      const response = await api.get('/api/admin/referrals/top-inviters', {
+        params: { limit }
       });
-
-      return {
-        success: true,
-        bonus: this.verificationBonus,
-        message: 'Verification bonus credited to wallet'
-      };
+      return response.data;
     } catch (error) {
-      console.error('Wallet credit error:', error);
-      return {
-        success: false,
-        error: 'Failed to credit wallet'
-      };
+      console.error('Error getting top inviters:', error);
+      throw new Error(error.response?.data?.message || 'Failed to get top inviters');
     }
   }
 
-  // Get referral statistics
-  async getReferralStats(userId) {
+  // Update referral rewards (admin only)
+  async updateReferralRewards(rewards) {
     try {
-      // TODO: Replace with actual API call
-      const response = await this.mockApiCall('/referrals/stats', { userId });
-      
-      return {
-        totalReferrals: response.totalReferrals || 0,
-        totalEarnings: response.totalEarnings || 0,
-        pendingVerifications: response.pendingVerifications || 0,
-        referralCode: response.referralCode || this.generateReferralCode(userId)
-      };
+      const response = await api.put('/api/admin/referrals/rewards', rewards);
+      return response.data;
     } catch (error) {
-      console.error('Referral stats error:', error);
-      return {
-        totalReferrals: 0,
-        totalEarnings: 0,
-        pendingVerifications: 0,
-        referralCode: this.generateReferralCode(userId)
-      };
+      console.error('Error updating referral rewards:', error);
+      throw new Error(error.response?.data?.message || 'Failed to update referral rewards');
     }
   }
 
-  // Update referral reward (admin function)
-  async updateReferralReward(newReward) {
+  // Export referral data (admin only)
+  async exportReferralData(format = 'csv', period = 'all') {
     try {
-      // TODO: Replace with actual API call
-      const response = await this.mockApiCall('/admin/referral-reward', {
-        newReward
+      const response = await api.get('/api/admin/referrals/export', {
+        params: { format, period },
+        responseType: 'blob'
       });
-
-      this.referralReward = newReward;
-      return {
-        success: true,
-        newReward,
-        message: 'Referral reward updated successfully'
-      };
+      
+      // Create download link
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `referral-data-${new Date().toISOString().split('T')[0]}.${format}`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+      
+      return { success: true, message: 'Data exported successfully!' };
     } catch (error) {
-      console.error('Referral reward update error:', error);
-      return {
-        success: false,
-        error: 'Failed to update referral reward'
-      };
+      console.error('Error exporting referral data:', error);
+      throw new Error(error.response?.data?.message || 'Failed to export referral data');
     }
   }
 
-  // Mock API call function
-  async mockApiCall(endpoint, data) {
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
-    // Mock responses based on endpoint
-    switch (endpoint) {
-      case '/referrals/process':
-        return {
-          referrerId: 'mock-referrer-123',
-          success: true
-        };
-      case '/referrals/verify':
-        return {
-          success: true,
-          bonus: this.verificationBonus
-        };
-      case '/referrals/stats':
-        return {
-          totalReferrals: Math.floor(Math.random() * 10),
-          totalEarnings: Math.floor(Math.random() * 500),
-          pendingVerifications: Math.floor(Math.random() * 3)
-        };
-      case '/admin/referral-reward':
-        return {
-          success: true,
-          newReward: data.newReward
-        };
-      default:
-        throw new Error('Unknown endpoint');
+  // Track referral click (for analytics)
+  async trackReferralClick(referralCode, source = 'unknown', platform = 'unknown') {
+    try {
+      // This could be sent to an analytics endpoint
+      console.log('Referral click tracked:', { referralCode, source, platform, timestamp: new Date() });
+      
+      // In the future, this could send data to analytics service
+      // await api.post('/api/analytics/referral-click', { referralCode, source, platform });
+      
+      return { success: true };
+    } catch (error) {
+      console.error('Error tracking referral click:', error);
+      // Don't throw error for analytics tracking
+      return { success: false };
+    }
+  }
+
+  // Create invitation for tracking
+  async createInvitation(invitationData) {
+    try {
+      const response = await api.post('/api/invitations', invitationData);
+      return response.data;
+    } catch (error) {
+      console.error('Error creating invitation:', error);
+      throw new Error(error.response?.data?.message || 'Failed to create invitation');
+    }
+  }
+
+  // Track invitation click
+  async trackInvitationClick(invitationId, metadata = {}) {
+    try {
+      const response = await api.post(`/api/invitations/${invitationId}/click`, metadata);
+      return response.data;
+    } catch (error) {
+      console.error('Error tracking invitation click:', error);
+      throw new Error(error.response?.data?.message || 'Failed to track invitation click');
+    }
+  }
+
+  // Get invitation statistics
+  async getInvitationStats(period = '30d') {
+    try {
+      const response = await api.get('/api/invitations/stats', {
+        params: { period }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error getting invitation stats:', error);
+      throw new Error(error.response?.data?.message || 'Failed to get invitation statistics');
+    }
+  }
+
+  // Get invitation history
+  async getInvitationHistory(page = 1, limit = 10, filters = {}) {
+    try {
+      const response = await api.get('/api/invitations/history', {
+        params: { page, limit, ...filters }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error getting invitation history:', error);
+      throw new Error(error.response?.data?.message || 'Failed to get invitation history');
+    }
+  }
+
+  // Get invitation analytics
+  async getInvitationAnalytics(period = '30d') {
+    try {
+      const response = await api.get('/api/invitations/analytics', {
+        params: { period }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error getting invitation analytics:', error);
+      throw new Error(error.response?.data?.message || 'Failed to get invitation analytics');
+    }
+  }
+
+  // Get referral rewards configuration
+  async getReferralRewards() {
+    try {
+      const response = await api.get('/api/admin/referrals/rewards');
+      return response.data;
+    } catch (error) {
+      console.error('Error getting referral rewards:', error);
+      throw new Error(error.response?.data?.message || 'Failed to get referral rewards');
+    }
+  }
+
+  // ===== ANALYTICS METHODS =====
+
+  // Get comprehensive referral analytics
+  async getReferralAnalytics(period = '30d', filters = {}) {
+    try {
+      const response = await api.get('/api/analytics/referrals', {
+        params: { period, ...filters }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching referral analytics:', error);
+      throw new Error(error.response?.data?.message || 'Failed to get referral analytics');
+    }
+  }
+
+  // Get referral funnel analysis
+  async getReferralFunnel(period = '30d', referrerId = null) {
+    try {
+      const response = await api.get('/api/analytics/funnel', {
+        params: { period, referrerId }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching referral funnel:', error);
+      throw new Error(error.response?.data?.message || 'Failed to get referral funnel');
+    }
+  }
+
+  // Get geographic analytics
+  async getGeographicAnalytics(period = '30d', referrerId = null) {
+    try {
+      const response = await api.get('/api/analytics/geographic', {
+        params: { period, referrerId }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching geographic analytics:', error);
+      throw new Error(error.response?.data?.message || 'Failed to get geographic analytics');
+    }
+  }
+
+  // Get source performance analytics
+  async getSourcePerformance(period = '30d', referrerId = null) {
+    try {
+      const response = await api.get('/api/analytics/sources', {
+        params: { period, referrerId }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching source performance:', error);
+      throw new Error(error.response?.data?.message || 'Failed to get source performance');
+    }
+  }
+
+  // Get ROI analytics
+  async getROIAnalytics(period = '30d', referrerId = null) {
+    try {
+      const response = await api.get('/api/analytics/roi', {
+        params: { period, referrerId }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching ROI analytics:', error);
+      throw new Error(error.response?.data?.message || 'Failed to get ROI analytics');
+    }
+  }
+
+  // ===== REPORTING METHODS =====
+
+  // Get available report templates
+  async getReportTemplates() {
+    try {
+      const response = await api.get('/api/reports/templates');
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching report templates:', error);
+      throw new Error(error.response?.data?.message || 'Failed to get report templates');
+    }
+  }
+
+  // Generate referral report
+  async generateReferralReport(reportConfig) {
+    try {
+      const response = await api.post('/api/reports/generate', reportConfig);
+      return response.data;
+    } catch (error) {
+      console.error('Error generating referral report:', error);
+      throw new Error(error.response?.data?.message || 'Failed to generate referral report');
+    }
+  }
+
+  // Export referral data
+  async exportReferralData(exportConfig) {
+    try {
+      const response = await api.post('/api/reports/export', exportConfig, {
+        responseType: exportConfig.format === 'json' ? 'json' : 'blob'
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error exporting referral data:', error);
+      throw new Error(error.response?.data?.message || 'Failed to export referral data');
     }
   }
 }

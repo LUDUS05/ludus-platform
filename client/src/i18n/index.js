@@ -18,11 +18,13 @@ i18n
       }
     },
     fallbackLng: 'ar',
+    lng: 'ar', // Set Arabic as default
     debug: false,
     
     detection: {
       order: ['localStorage', 'navigator', 'htmlTag'],
-      caches: ['localStorage']
+      caches: ['localStorage'],
+      lookupLocalStorage: 'preferred-language'
     },
 
     interpolation: {
@@ -34,7 +36,6 @@ i18n
     contextSeparator: '_',
     
     // Custom plural rule for Arabic
-    lng: 'ar',
     pluralRules: {
       ar: {
         plurals: function(n) {
@@ -51,7 +52,7 @@ i18n
 
 // Auto-setup document attributes on initialization
 i18n.on('initialized', (options) => {
-  const currentLang = i18n.language;
+  const currentLang = i18n.language || 'ar';
   setupDocumentAttributes(currentLang);
 });
 

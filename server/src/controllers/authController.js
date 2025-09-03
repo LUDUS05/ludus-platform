@@ -5,6 +5,9 @@ const { verifySocialToken } = require('../services/socialAuthService');
 const emailService = require('../services/emailService');
 const crypto = require('crypto');
 
+// Import referral processing function
+const { processReferralRegistration } = require('./referralController');
+
 // @desc    Register user
 // @route   POST /api/auth/register
 // @access  Public
@@ -28,6 +31,32 @@ const register = async (req, res, next) => {
       email,
       password
     });
+
+    // Process referral if provided
+    let referralProcessed = false;
+    if (req.body.referralCode) {
+      try {
+        // Process referral registration
+        const referralResult = await processReferralRegistration({
+          body: {
+            referralCode: req.body.referralCode,
+            newUserId: user._id,
+            source: req.body.referralSource || 'direct-link',
+            platform: req.body.referralPlatform || 'unknown',
+            userAgent: req.headers['user-agent'],
+            ipAddress: req.ip || req.connection.remoteAddress
+          }
+        }, res);
+        
+        if (referralResult) {
+          referralProcessed = true;
+          console.log(`✅ Referral processed for user ${user._id} with code ${req.body.referralCode}`);
+        }
+      } catch (referralError) {
+        console.error('Failed to process referral during registration:', referralError);
+        // Don't fail registration if referral processing fails
+      }
+    }
 
     // Generate tokens
     const { accessToken, refreshToken } = generateTokens(user._id, user.role);
@@ -54,18 +83,19 @@ const register = async (req, res, next) => {
     res.status(201).json({
       success: true,
       message: 'User registered successfully',
-      data: {
-        user: {
-          id: user._id,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          role: user.role,
-          isEmailVerified: user.isEmailVerified
-        },
-        accessToken
-        // refreshToken no longer sent in response body for security
-      }
+              data: {
+          user: {
+            id: user._id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            role: user.role,
+            isEmailVerified: user.isEmailVerified
+          },
+          accessToken,
+          referralProcessed
+          // refreshToken no longer sent in response body for security
+        }
     });
   } catch (error) {
     next(error);

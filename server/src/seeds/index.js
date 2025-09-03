@@ -6,6 +6,7 @@ const seedAdmin = require('./seedAdmin');
 const seedVendors = require('./seedVendors');
 const seedActivities = require('./seedActivities');
 const seedPages = require('./pages');
+const seedReferralRewards = require('./referralRewards');
 
 const runAllSeeds = async () => {
   try {
@@ -35,6 +36,10 @@ const runAllSeeds = async () => {
     await seedPages();
     console.log('✅ Page seeding completed\n');
     
+    console.log('5️⃣  Seeding referral rewards...');
+    await seedReferralRewards();
+    console.log('✅ Referral rewards seeding completed\n');
+    
     console.log('🎉 All seeding completed successfully!');
     console.log('\n📊 Database Summary:');
     console.log('   👤 Admin user created');
@@ -43,6 +48,7 @@ const runAllSeeds = async () => {
     console.log('   📄 6 default pages created (About, Contact, Privacy, Terms, Partner)');
     console.log('   💰 All activities priced in Saudi Riyals (SAR)');
     console.log('   📍 All locations in Riyadh area');
+    console.log('   🎁 Referral rewards configured (50 SAR registration, 100 SAR first booking)');
     
   } catch (error) {
     console.error('💥 Seeding failed:', error.message);

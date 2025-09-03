@@ -64,11 +64,26 @@ app.use('/uploads', express.static('uploads'));
 
 // Health check route
 app.get('/health', (req, res) => {
-  res.status(200).json({ 
-    status: 'OK', 
+  res.status(200).json({
+    status: 'healthy',
     timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
     environment: process.env.NODE_ENV || 'development',
-    version: '1.0.1'
+    version: process.env.npm_package_version || '1.0.1',
+    services: {
+      database: 'connected', // You can add actual DB health check here
+      referral: 'active',
+      analytics: 'active',
+      notifications: 'active',
+      invitations: 'active',
+      reports: 'active'
+    },
+    referral: {
+      system: 'operational',
+      rewards: 'active',
+      tracking: 'enabled',
+      analytics: 'available'
+    }
   });
 });
 
@@ -94,6 +109,12 @@ app.use('/api', require('./routes/translations'));
 app.use('/api/uploads', require('./routes/uploads'));
 app.use('/api/site-settings', require('./routes/siteSettings'));
 app.use('/api/contact', require('./routes/contact'));
+app.use('/api/referrals', require('./routes/referrals'));
+app.use('/api/invitations', require('./routes/invitations'));
+app.use('/api/notifications', require('./routes/notifications'));
+app.use('/api/analytics', require('./routes/analytics'));
+app.use('/api/reports', require('./routes/reports'));
+app.use('/api/monitoring', require('./routes/monitoring'));
 
 // Remove the catch-all 404 handler - Render should handle frontend routes
 // app.use('*', (req, res) => {

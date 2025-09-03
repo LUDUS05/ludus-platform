@@ -1,0 +1,22 @@
+# Render monitoring configuration
+services:
+  - name: ludus-backend
+    type: web
+    healthCheckPath: /health
+    autoDeploy: true
+    
+  - name: ludus-frontend
+    type: web
+    healthCheckPath: /
+    autoDeploy: true
+
+alerts:
+  - name: backend-down
+    condition: health_check_failed
+    service: ludus-backend
+    action: notify
+    
+  - name: frontend-down
+    condition: health_check_failed
+    service: ludus-frontend
+    action: notify
