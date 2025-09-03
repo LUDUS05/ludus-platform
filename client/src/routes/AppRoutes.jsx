@@ -44,7 +44,7 @@ const AppRoutes = () => {
       
       {/* Routes with main layout */}
       <Route path="/" element={<MainLayout />}>
-        <Route index element={<Navigate to="/neo/home" replace />} />
+        <Route index element={<HomePage />} />
         <Route path="login" element={<LoginForm />} />
         <Route path="register-form" element={<RegisterForm />} />
         <Route path="activities" element={<ActivitiesPageComponent />} />
@@ -106,8 +106,8 @@ const AppRoutes = () => {
         </ProtectedRoute>
       } />
       
-      {/* Catch all route */}
-      <Route path="*" element={<Navigate to="/" replace />} />
+      {/* Catch all route - redirect to 404 page instead of home */}
+      <Route path="*" element={<ComingSoonPage />} />
     </Routes>
   );
 };
