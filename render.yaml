@@ -25,15 +25,24 @@ services:
         value: https://app.letsludus.com
 
   # Frontend Service (Static React App)
-  - type: web
+  - type: static
     name: ludus-frontend-og2d
     env: static
     buildCommand: cd client && npm install && npm run build
     staticPublishPath: client/build
     routes:
+      # SPA routing - serve index.html for all routes
       - type: rewrite
         source: "/*"
         destination: "/index.html"
+      # Ensure static assets are served correctly
+      - type: rewrite
+        source: "/static/*"
+        destination: "/static/*"
+      # Ensure API calls go to backend
+      - type: rewrite
+        source: "/api/*"
+        destination: "https://ludus-backend-gf1g.onrender.com/api/*"
     headers:
       - path: /*
         name: Cache-Control
@@ -41,3 +50,7 @@ services:
       - path: /static/*
         name: Cache-Control
         value: "public, max-age=31536000, immutable"
+      # Add CORS headers for SPA routing
+      - path: /*
+        name: Access-Control-Allow-Origin
+        value: "*"
