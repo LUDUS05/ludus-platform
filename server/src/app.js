@@ -32,15 +32,15 @@ if (process.env.NODE_ENV === 'production') {
 
 // Security middleware
 app.use(helmet());
-// Simple CORS - allow all Render deployments and specific domains
+// CORS configuration for Vercel deployment
 app.use(cors({
   origin: [
     'http://localhost:3000',
     'https://app.letsludus.com', 
-    'https://ludus-frontend-crt8.onrender.com',
-    'https://ludus-platform.onrender.com',
-    /https:\/\/.*\.onrender\.com$/,
-    /https:\/\/.*\.vercel\.app$/
+    'https://api.letsludus.com',
+    'https://ludus-platform.vercel.app',
+    /https:\/\/.*\.vercel\.app$/,
+    /https:\/\/.*\.onrender\.com$/
   ],
   credentials: true
 }));
