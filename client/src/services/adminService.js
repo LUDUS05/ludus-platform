@@ -6,7 +6,7 @@ const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001/api
 const createAuthAxios = () => {
   const token = localStorage.getItem('accessToken'); // Fixed: use correct token key
   return axios.create({
-    baseURL: `${API_BASE_URL}/admin`,
+    baseURL: API_BASE_URL, // Remove /admin since routes are already mounted at /api/admin
     headers: {
       'Authorization': token ? `Bearer ${token}` : '',
       'Content-Type': 'application/json'
