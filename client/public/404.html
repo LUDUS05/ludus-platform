@@ -2,20 +2,26 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>LUDUS - Page Not Found</title>
+    <title>LUDUS - Loading...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/logo192.png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/static/css/main.a0569968.css">
+</head>
+<body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root">
+        <div style="padding: 40px; text-align: center; font-family: Arial, sans-serif;">
+            <h1>🔄 Loading LUDUS...</h1>
+            <p>Redirecting to React app...</p>
+        </div>
+    </div>
+    
     <script>
-        // SPA Fallback: Redirect to React app and let React Router handle routing
+        // SPA Fallback: Serve the React app directly
         // This ensures SPA routing works even if Render's SPA config fails
         window.location.href = '/?spa-fallback=true&original-path=' + encodeURIComponent(window.location.pathname);
     </script>
-</head>
-<body>
-    <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif;">
-        <h1>LUDUS</h1>
-        <p>Page Not Found</p>
-        <p>The page you're looking for doesn't exist.</p>
-        <p><a href="/">Return to Home</a></p>
-        <p><small>Redirecting to React app...</small></p>
-    </div>
 </body>
 </html>
