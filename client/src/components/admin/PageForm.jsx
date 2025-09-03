@@ -93,7 +93,7 @@ const PageForm = () => {
         await api.put(`/admin/pages/${id}`, formData);
         setMessage({ type: 'success', text: 'Page updated successfully' });
       } else {
-        await api.post('/admin/pages', formData);
+        await api.post('/api/admin/pages', formData);
         setMessage({ type: 'success', text: 'Page created successfully' });
       }
       

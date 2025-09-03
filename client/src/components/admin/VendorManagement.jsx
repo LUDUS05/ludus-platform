@@ -31,7 +31,7 @@ const VendorManagement = () => {
         ...filters
       });
 
-      const response = await api.get(`/admin/vendors?${params}`);
+      const response = await api.get(`/api/admin/vendors?${params}`);
       setVendors(response.data.data.vendors);
       setPagination(prev => ({
         ...prev,
@@ -56,7 +56,7 @@ const VendorManagement = () => {
     }
 
     try {
-      await api.delete(`/admin/vendors/${vendorId}`);
+      await api.delete(`/api/admin/vendors/${vendorId}`);
       fetchVendors();
       alert('Vendor deleted successfully');
     } catch (error) {
@@ -77,7 +77,7 @@ const VendorManagement = () => {
         admin: 'Current Admin'
       };
 
-      await api.put(`/admin/vendors/${vendorId}`, {
+      await api.put(`/api/admin/vendors/${vendorId}`, {
         isActive: !currentStatus,
         $push: { statusHistory: statusEntry }
       });

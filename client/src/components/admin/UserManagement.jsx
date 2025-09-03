@@ -32,7 +32,7 @@ const UserManagement = () => {
         ...filters
       });
 
-      const response = await api.get(`/admin/users?${params}`);
+      const response = await api.get(`/api/admin/users?${params}`);
       setUsers(response.data.data.users || []);
       setPagination(prev => ({
         ...prev,
@@ -53,7 +53,7 @@ const UserManagement = () => {
 
   const handleStatusToggle = async (userId, currentStatus) => {
     try {
-      await api.put(`/admin/users/${userId}/status`, {
+      await api.put(`/api/admin/users/${userId}/status`, {
         isActive: !currentStatus
       });
       fetchUsers();

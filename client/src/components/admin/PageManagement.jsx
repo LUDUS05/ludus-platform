@@ -97,7 +97,7 @@ const PageManagement = () => {
         await api.put(`/admin/pages/${editingPage._id}`, pageData);
         alert('Page updated successfully!');
       } else {
-        await api.post('/admin/pages', pageData);
+        await api.post('/api/admin/pages', pageData);
         alert('Page created successfully!');
       }
       

@@ -34,7 +34,7 @@ const ActivityManagement = () => {
         ...filters
       });
 
-      const response = await api.get(`/admin/activities?${params}`);
+      const response = await api.get(`/api/admin/activities?${params}`);
       setActivities(response.data.data.activities);
       setPagination(prev => ({
         ...prev,
@@ -68,7 +68,7 @@ const ActivityManagement = () => {
     }
 
     try {
-      await api.delete(`/admin/activities/${activityId}`);
+      await api.delete(`/api/admin/activities/${activityId}`);
       fetchActivities();
       alert('Activity deleted successfully');
     } catch (error) {
@@ -79,7 +79,7 @@ const ActivityManagement = () => {
 
   const toggleActivityStatus = async (activityId, currentStatus) => {
     try {
-      await api.put(`/admin/activities/${activityId}`, {
+      await api.put(`/api/admin/activities/${activityId}`, {
         isActive: !currentStatus
       });
       fetchActivities();

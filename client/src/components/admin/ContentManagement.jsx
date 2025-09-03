@@ -133,7 +133,7 @@ const ContentManagement = () => {
       if (editingPage) {
         response = await api.put(`/admin/pages/${editingPage._id}`, pageData);
       } else {
-        response = await api.post('/admin/pages', pageData);
+        response = await api.post('/api/admin/pages', pageData);
       }
 
       if (response.data.success) {

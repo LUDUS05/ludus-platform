@@ -183,7 +183,7 @@ const VendorForm = () => {
         await api.put(`/admin/vendors/${id}`, formData);
         setMessage({ type: 'success', text: 'Vendor updated successfully' });
       } else {
-        await api.post('/admin/vendors', formData);
+        await api.post('/api/admin/vendors', formData);
         setMessage({ type: 'success', text: 'Vendor created successfully' });
       }
       

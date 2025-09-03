@@ -58,7 +58,7 @@ const CategoryManagement = () => {
         await api.put(`/admin/categories/${editingCategory._id}`, categoryData);
         setMessage({ type: 'success', text: 'Category updated successfully' });
       } else {
-        await api.post('/admin/categories', categoryData);
+        await api.post('/api/admin/categories', categoryData);
         setMessage({ type: 'success', text: 'Category created successfully' });
       }
       
@@ -135,7 +135,7 @@ const CategoryManagement = () => {
 
   const reorderCategories = async (draggedId, targetId) => {
     try {
-      await api.put('/admin/categories/reorder', {
+      await api.put('/api/admin/categories/reorder', {
         draggedId,
         targetId
       });

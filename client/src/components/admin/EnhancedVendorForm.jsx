@@ -343,7 +343,7 @@ const EnhancedVendorForm = () => {
         await api.put(`/admin/vendors/${id}`, submitData);
         setMessage({ type: 'success', text: 'Vendor updated successfully' });
       } else {
-        await api.post('/admin/vendors', submitData);
+        await api.post('/api/admin/vendors', submitData);
         setMessage({ type: 'success', text: 'Vendor created successfully' });
       }
       
