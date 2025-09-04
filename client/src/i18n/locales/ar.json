@@ -32,7 +32,10 @@
     "noAccount": "ليس لديك حساب؟",
     "haveAccount": "لديك حساب بالفعل؟",
     "signInHere": "سجل الدخول هنا",
-    "share": "مشاركة"
+    "share": "مشاركة",
+    "copyReferralLink": "نسخ رابط الإحالة",
+    "referralQRCode": "رمز QR للإحالة",
+    "yourReferralQRCode": "رمز QR للإحالة الخاص بك"
   },
   "navigation": {
     "home": "الرئيسية",
@@ -218,7 +221,21 @@
     "getStarted": "ابدأ الآن",
     "exploreActivities": "استكشف الأنشطة",
     "popularCategories": "الفئات الشائعة",
-    "featuredActivities": "الأنشطة المميزة"
+    "featuredActivities": "الأنشطة المميزة",
+    "welcomeTitle": "مرحباً بك في لودوس",
+    "welcomeSubtitle": "اكتشف الأنشطة والفعاليات المحلية المذهلة",
+    "whyChooseLudus": "لماذا تختار لودوس؟",
+    "whyChooseSubtitle": "اكتشف تجارب فريدة وتواصل مع مقدمي الأنشطة المحلية في جميع أنحاء المملكة العربية السعودية",
+    "curatedExperiences": "تجارب مختارة بعناية",
+    "curatedExperiencesDesc": "أنشطة مختارة بعناية من مقدمي خدمات محليين موثوقين لضمان الجودة والأصالة",
+    "securePayments": "مدفوعات آمنة",
+    "securePaymentsDesc": "حجز آمن ومضمون مع دعم طرق الدفع المحلية بما في ذلك مدى وSTC Pay",
+    "mobileOptimized": "محسن للهواتف المحمولة",
+    "mobileOptimizedDesc": "احجز وأدر أنشطتك بسلاسة على أي جهاز، في أي مكان، في أي وقت",
+    "readyToStartAdventure": "مستعد لبدء مغامرتك؟",
+    "readyToStartDesc": "انضم إلى آلاف المستكشفين الذين يكتشفون تجارب مذهلة في جميع أنحاء المملكة العربية السعودية",
+    "browseActivities": "تصفح الأنشطة",
+    "becomePartner": "كن شريكاً"
   },
   "user": {
     "title": "المستخدم",

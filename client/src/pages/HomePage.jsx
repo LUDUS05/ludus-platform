@@ -31,10 +31,10 @@ const HomePage = () => {
         <div className="max-w-7xl mx-auto container-padding">
           <div className="text-center mb-16">
             <h2 className="text-display-lg font-bold text-charcoal dark:dark-text-primary mb-4">
-              Why Choose LUDUS?
+              {t('home.whyChooseLudus')}
             </h2>
             <p className="text-body-md text-charcoal-light dark:dark-text-secondary max-w-2xl mx-auto">
-              Discover unique experiences and connect with local activity providers across Saudi Arabia
+              {t('home.whyChooseSubtitle')}
             </p>
           </div>
           
@@ -45,10 +45,10 @@ const HomePage = () => {
                 <span className="text-3xl">🎯</span>
               </div>
               <h3 className="text-body-lg font-semibold text-charcoal dark:dark-text-primary mb-3">
-                Curated Experiences
+                {t('home.curatedExperiences')}
               </h3>
               <p className="text-body-md text-charcoal-light dark:dark-text-secondary">
-                Handpicked activities from trusted local providers to ensure quality and authenticity
+                {t('home.curatedExperiencesDesc')}
               </p>
             </div>
 
@@ -58,10 +58,10 @@ const HomePage = () => {
                 <span className="text-3xl">💳</span>
               </div>
               <h3 className="text-body-lg font-semibold text-charcoal dark:dark-text-primary mb-3">
-                Secure Payments
+                {t('home.securePayments')}
               </h3>
               <p className="text-body-md text-charcoal-light dark:dark-text-secondary">
-                Safe and secure booking with support for local payment methods including MADA and STC Pay
+                {t('home.securePaymentsDesc')}
               </p>
             </div>
 
@@ -71,10 +71,10 @@ const HomePage = () => {
                 <span className="text-3xl">📱</span>
               </div>
               <h3 className="text-body-lg font-semibold text-charcoal dark:dark-text-primary mb-3">
-                Mobile Optimized
+                {t('home.mobileOptimized')}
               </h3>
               <p className="text-body-md text-charcoal-light dark:dark-text-secondary">
-                Seamlessly book and manage your activities on any device, anywhere, anytime
+                {t('home.mobileOptimizedDesc')}
               </p>
             </div>
           </div>
@@ -85,17 +85,17 @@ const HomePage = () => {
       <div className="bg-ludus-orange dark:bg-dark-ludus-orange py-20">
         <div className="max-w-7xl mx-auto container-padding text-center">
           <h2 className="text-display-lg font-bold text-white mb-6">
-            Ready to Start Your Adventure?
+            {t('home.readyToStartAdventure')}
           </h2>
           <p className="text-body-lg text-white/90 mb-8 max-w-2xl mx-auto">
-            Join thousands of explorers discovering amazing experiences across Saudi Arabia
+            {t('home.readyToStartDesc')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <a href="/activities" className="btn-secondary btn-lg bg-white text-ludus-orange hover:bg-warm">
-              Browse Activities
+              {t('home.browseActivities')}
             </a>
             <a href="/partner-registration" className="btn-outline btn-lg border-white text-white hover:bg-white hover:text-ludus-orange">
-              Become a Partner
+              {t('home.becomePartner')}
             </a>
           </div>
         </div>

@@ -32,7 +32,10 @@
     "noAccount": "Don't have an account?",
     "haveAccount": "Already have an account?",
     "signInHere": "Sign in here",
-    "share": "Share"
+    "share": "Share",
+    "copyReferralLink": "Copy referral link",
+    "referralQRCode": "Referral QR Code",
+    "yourReferralQRCode": "Your Referral QR Code"
   },
   "navigation": {
     "home": "Home",
@@ -198,7 +201,21 @@
     "getStarted": "Get Started",
     "exploreActivities": "Explore Activities",
     "popularCategories": "Popular Categories",
-    "featuredActivities": "Featured Activities"
+    "featuredActivities": "Featured Activities",
+    "welcomeTitle": "Welcome to LUDUS",
+    "welcomeSubtitle": "Discover amazing local activities and experiences",
+    "whyChooseLudus": "Why Choose LUDUS?",
+    "whyChooseSubtitle": "Discover unique experiences and connect with local activity providers across Saudi Arabia",
+    "curatedExperiences": "Curated Experiences",
+    "curatedExperiencesDesc": "Handpicked activities from trusted local providers to ensure quality and authenticity",
+    "securePayments": "Secure Payments",
+    "securePaymentsDesc": "Safe and secure booking with support for local payment methods including MADA and STC Pay",
+    "mobileOptimized": "Mobile Optimized",
+    "mobileOptimizedDesc": "Seamlessly book and manage your activities on any device, anywhere, anytime",
+    "readyToStartAdventure": "Ready to Start Your Adventure?",
+    "readyToStartDesc": "Join thousands of explorers discovering amazing experiences across Saudi Arabia",
+    "browseActivities": "Browse Activities",
+    "becomePartner": "Become a Partner"
   },
   "user": {
     "title": "User",

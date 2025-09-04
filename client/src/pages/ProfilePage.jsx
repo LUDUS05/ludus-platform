@@ -249,7 +249,7 @@ const ProfilePage = () => {
                     <button
                       onClick={copyReferralLink}
                       className="p-2 rounded-lg hover:bg-gray-200 transition-colors"
-                      title="Copy referral link"
+                      title={t('common.copyReferralLink')}
                     >
                       {copied ? <Check className="w-5 h-5 text-green-600" /> : <Copy className="w-5 h-5 text-gray-600" />}
                     </button>
@@ -283,7 +283,7 @@ const ProfilePage = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg max-w-sm w-full mx-4">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Your Referral QR Code</h3>
+              <h3 className="text-lg font-semibold text-gray-900">{t('common.yourReferralQRCode')}</h3>
               <button
                 onClick={() => setShowQRModal(false)}
                 className="text-gray-400 hover:text-gray-600"
@@ -295,7 +295,7 @@ const ProfilePage = () => {
             <div className="text-center">
               <img 
                 src={referralService.generateQRCode(referralStats.referralCode)} 
-                alt="Referral QR Code" 
+                alt={t('common.referralQRCode')} 
                 className="mx-auto mb-4 rounded-lg"
               />
               <p className="text-sm text-gray-600 mb-3">

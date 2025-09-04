@@ -183,7 +183,7 @@ const VendorProfilePage = () => {
               to="/activities"
               className="bg-ludus-orange text-white px-6 py-2 rounded-md hover:bg-ludus-orange-dark transition-colors"
             >
-              Browse Activities
+              {t('home.browseActivities')}
             </Link>
           </div>
         </div>
