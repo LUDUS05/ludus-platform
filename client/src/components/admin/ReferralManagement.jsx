@@ -41,9 +41,9 @@ const ReferralManagement = () => {
 
       // Fetch all referral data in parallel
       const [statsResponse, invitersResponse, rewardsResponse] = await Promise.all([
-        api.get('/api/admin/referrals/stats'),
-        api.get('/api/admin/referrals/top-inviters'),
-        api.get('/api/admin/referrals/rewards')
+        api.get('/admin/referrals/stats'),
+        api.get('/admin/referrals/top-inviters'),
+        api.get('/admin/referrals/rewards')
       ]);
 
       setReferralStats(statsResponse.data.data);
@@ -69,7 +69,7 @@ const ReferralManagement = () => {
     try {
       setLoading(true);
       
-      const response = await api.put('/api/admin/referrals/rewards', {
+      const response = await api.put('/admin/referrals/rewards', {
         registration: { amount: parseInt(rewardForm.registration) },
         firstBooking: { amount: parseInt(rewardForm.firstBooking) }
       });
@@ -91,7 +91,7 @@ const ReferralManagement = () => {
 
   const exportReferralData = async () => {
     try {
-      const response = await api.get('/api/admin/referrals/export', {
+      const response = await api.get('/admin/referrals/export', {
         responseType: 'blob'
       });
       

@@ -100,7 +100,7 @@ const ContentManagement = () => {
         includeContent: false
       };
 
-      const response = await api.get('/api/admin/pages', { params });
+      const response = await api.get('/admin/pages', { params });
       
       if (response.data.success) {
         setPages(response.data.data || []);
@@ -134,7 +134,7 @@ const ContentManagement = () => {
       if (editingPage) {
         response = await api.put(`/admin/pages/${editingPage._id}`, pageData);
       } else {
-        response = await api.post('/api/admin/pages', pageData);
+        response = await api.post('/admin/pages', pageData);
       }
 
       if (response.data.success) {

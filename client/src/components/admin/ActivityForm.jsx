@@ -156,7 +156,7 @@ const ActivityForm = () => {
         await api.put(`/admin/activities/${id}`, formData);
         setMessage({ type: 'success', text: 'Activity updated successfully' });
       } else {
-        await api.post('/api/admin/activities', formData);
+        await api.post('/admin/activities', formData);
         setMessage({ type: 'success', text: 'Activity created successfully' });
       }
       

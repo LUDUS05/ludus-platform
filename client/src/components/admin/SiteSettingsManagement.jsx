@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import Alert from '../ui/Alert';
-import axios from 'axios';
+import { siteSettingsService } from '../../services/siteSettingsService';
 
 const SiteSettingsManagement = () => {
   const { t } = useTranslation();
@@ -29,16 +29,16 @@ const SiteSettingsManagement = () => {
   const fetchSettings = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('/api/site-settings');
-      setSettings(response.data);
+      const response = await siteSettingsService.getSettings();
+      setSettings(response);
       setFormData({
-        comingSoonMode: response.data.comingSoonMode || false,
-        maintenanceMode: response.data.maintenanceMode || false,
-        comingSoonTitle: response.data.comingSoonTitle || 'LUDUS is Coming Soon',
-        comingSoonMessage: response.data.comingSoonMessage || 'We\'re building something amazing. Get ready to discover incredible activities and experiences!',
-        maintenanceTitle: response.data.maintenanceTitle || 'Under Maintenance',
-        maintenanceMessage: response.data.maintenanceMessage || 'We\'re currently updating our platform to serve you better. We\'ll be back shortly!',
-        estimatedReturnTime: response.data.estimatedReturnTime ? new Date(response.data.estimatedReturnTime).toISOString().slice(0, 16) : ''
+        comingSoonMode: response.comingSoonMode || false,
+        maintenanceMode: response.maintenanceMode || false,
+        comingSoonTitle: response.comingSoonTitle || 'LUDUS is Coming Soon',
+        comingSoonMessage: response.comingSoonMessage || 'We\'re building something amazing. Get ready to discover incredible activities and experiences!',
+        maintenanceTitle: response.maintenanceTitle || 'Under Maintenance',
+        maintenanceMessage: response.maintenanceMessage || 'We\'re currently updating our platform to serve you better. We\'ll be back shortly!',
+        estimatedReturnTime: response.estimatedReturnTime ? new Date(response.estimatedReturnTime).toISOString().slice(0, 16) : ''
       });
     } catch (error) {
       console.error('Error fetching settings:', error);
@@ -68,7 +68,7 @@ const SiteSettingsManagement = () => {
         submitData.estimatedReturnTime = new Date(submitData.estimatedReturnTime).toISOString();
       }
 
-      await axios.put('/api/site-settings', submitData);
+      await siteSettingsService.updateSettings(submitData);
       setSuccess('Site settings updated successfully');
       fetchSettings();
     } catch (error) {
@@ -86,10 +86,10 @@ const SiteSettingsManagement = () => {
       setSuccess('');
 
       if (mode === 'comingSoon') {
-        await axios.post('/api/site-settings/toggle-coming-soon');
+        await siteSettingsService.toggleComingSoon();
         setSuccess(`Coming soon mode ${!formData.comingSoonMode ? 'enabled' : 'disabled'}`);
       } else if (mode === 'maintenance') {
-        await axios.post('/api/site-settings/toggle-maintenance');
+        await siteSettingsService.toggleMaintenance();
         setSuccess(`Maintenance mode ${!formData.maintenanceMode ? 'enabled' : 'disabled'}`);
       }
 

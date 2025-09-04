@@ -200,7 +200,7 @@ const BookingPage = () => {
         waiverSignedAt: new Date()
       };
 
-      const response = await api.post('/api/bookings', bookingPayload);
+      const response = await api.post('/bookings', bookingPayload);
       
       if (response.data.success) {
         setCreatedBooking(response.data.data.booking);

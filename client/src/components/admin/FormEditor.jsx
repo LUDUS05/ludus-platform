@@ -136,10 +136,10 @@ const FormEditor = ({ form, onSave, onCancel }) => {
 
     try {
       if (form) {
-        await api.put(`/api/admin/forms/${form._id}`, formData);
+        await api.put(`/admin/forms/${form._id}`, formData);
         setSuccess('Form updated successfully');
       } else {
-        await api.post('/api/admin/forms', formData);
+        await api.post('/admin/forms', formData);
         setSuccess('Form created successfully');
       }
       

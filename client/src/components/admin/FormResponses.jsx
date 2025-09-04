@@ -34,7 +34,7 @@ const FormResponses = () => {
 
   const fetchFormData = async () => {
     try {
-      const response = await api.get(`/api/admin/forms/${formId}`);
+      const response = await api.get(`/admin/forms/${formId}`);
       setForm(response.data.data.form);
     } catch (err) {
       setError('Failed to fetch form data');
@@ -53,7 +53,7 @@ const FormResponses = () => {
       if (dateFrom) params.append('dateFrom', dateFrom);
       if (dateTo) params.append('dateTo', dateTo);
       
-      const response = await api.get(`/api/admin/forms/${formId}/responses?${params.toString()}`);
+      const response = await api.get(`/admin/forms/${formId}/responses?${params.toString()}`);
       setResponses(response.data.data.responses);
       setTotalPages(response.data.data.pagination.pages);
     } catch (err) {
@@ -65,7 +65,7 @@ const FormResponses = () => {
 
   const fetchStats = async () => {
     try {
-      const response = await api.get(`/api/admin/forms/${formId}/stats`);
+      const response = await api.get(`/admin/forms/${formId}/stats`);
       setStats(response.data.data.stats);
     } catch (err) {
       console.error('Failed to fetch stats:', err);
@@ -74,7 +74,7 @@ const FormResponses = () => {
 
   const handleStatusUpdate = async (responseId, newStatus, reviewNotes = '') => {
     try {
-      await api.put(`/api/admin/forms/responses/${responseId}`, {
+      await api.put(`/admin/forms/responses/${responseId}`, {
         status: newStatus,
         reviewNotes
       });
@@ -93,7 +93,7 @@ const FormResponses = () => {
       if (dateFrom) params.append('dateFrom', dateFrom);
       if (dateTo) params.append('dateTo', dateTo);
       
-      const response = await api.get(`/api/admin/forms/${formId}/export?${params.toString()}`, {
+      const response = await api.get(`/admin/forms/${formId}/export?${params.toString()}`, {
         responseType: format === 'csv' ? 'blob' : 'json'
       });
       

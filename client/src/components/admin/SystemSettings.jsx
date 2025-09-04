@@ -91,7 +91,7 @@ const SystemSettings = () => {
   const fetchSettings = async () => {
     try {
       setLoading(true);
-      const response = await api.get('/api/admin/settings');
+      const response = await api.get('/admin/settings');
       setSettings(response.data.data);
     } catch (error) {
       console.error('Failed to fetch settings:', error);
@@ -104,7 +104,7 @@ const SystemSettings = () => {
   const saveSettings = async () => {
     try {
       setSaving(true);
-      await api.put('/api/admin/settings', settings);
+      await api.put('/admin/settings', settings);
       setMessage({ type: 'success', text: 'Settings saved successfully' });
     } catch (error) {
       console.error('Failed to save settings:', error);
@@ -171,7 +171,7 @@ const SystemSettings = () => {
   const testEmailConfiguration = async () => {
     try {
       setMessage({ type: 'info', text: 'Sending test email...' });
-      await api.post('/api/admin/settings/test-email');
+      await api.post('/admin/settings/test-email');
       setMessage({ type: 'success', text: 'Test email sent successfully' });
     } catch (error) {
       console.error('Test email failed:', error);
@@ -182,7 +182,7 @@ const SystemSettings = () => {
   const clearCache = async () => {
     try {
       setMessage({ type: 'info', text: 'Clearing cache...' });
-      await api.post('/api/admin/settings/clear-cache');
+      await api.post('/admin/settings/clear-cache');
       setMessage({ type: 'success', text: 'Cache cleared successfully' });
     } catch (error) {
       console.error('Clear cache failed:', error);

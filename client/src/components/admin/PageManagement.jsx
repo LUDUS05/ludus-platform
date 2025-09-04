@@ -46,7 +46,7 @@ const PageManagement = () => {
         ...filters
       });
       
-      const response = await api.get(`/api/admin/pages?${params}`);
+      const response = await api.get(`/admin/pages?${params}`);
       
       setPages(Array.isArray(response.data.data) ? response.data.data : []);
       setPagination(prev => ({
@@ -94,10 +94,10 @@ const PageManagement = () => {
       };
       
       if (editingPage) {
-        await api.put(`/api/admin/pages/${editingPage._id}`, pageData);
+        await api.put(`/admin/pages/${editingPage._id}`, pageData);
         alert('Page updated successfully!');
       } else {
-        await api.post('/api/admin/pages', pageData);
+        await api.post('/admin/pages', pageData);
         alert('Page created successfully!');
       }
       

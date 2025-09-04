@@ -28,7 +28,7 @@ const FormDisplay = () => {
   const fetchForm = async () => {
     try {
       setLoading(true);
-      const response = await api.get(`/api/forms/${slug}`);
+      const response = await api.get(`/forms/${slug}`);
       setForm(response.data.data.form);
     } catch (err) {
       setError('Form not found or not available');
@@ -92,7 +92,7 @@ const FormDisplay = () => {
       
       const submissionTime = Math.round((Date.now() - startTime) / 1000);
       
-      const response = await api.post(`/api/forms/${slug}/submit`, {
+      const response = await api.post(`/forms/${slug}/submit`, {
         responses: Object.entries(responses).map(([fieldId, data]) => ({
           fieldId,
           value: data.value,

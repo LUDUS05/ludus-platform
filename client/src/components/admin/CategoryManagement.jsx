@@ -42,7 +42,7 @@ const CategoryManagement = () => {
   const fetchCategories = async () => {
     try {
       setLoading(true);
-      const response = await api.get('/api/admin/categories');
+      const response = await api.get('/admin/categories');
       setCategories(response.data.data);
     } catch (error) {
       console.error('Failed to fetch categories:', error);
@@ -59,7 +59,7 @@ const CategoryManagement = () => {
         await api.put(`/admin/categories/${editingCategory._id}`, categoryData);
         setMessage({ type: 'success', text: 'Category updated successfully' });
       } else {
-        await api.post('/api/admin/categories', categoryData);
+        await api.post('/admin/categories', categoryData);
         setMessage({ type: 'success', text: 'Category created successfully' });
       }
       
@@ -136,7 +136,7 @@ const CategoryManagement = () => {
 
   const reorderCategories = async (draggedId, targetId) => {
     try {
-      await api.put('/api/admin/categories/reorder', {
+      await api.put('/admin/categories/reorder', {
         draggedId,
         targetId
       });
