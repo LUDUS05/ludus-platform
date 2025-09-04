@@ -35,7 +35,13 @@
     "share": "مشاركة",
     "copyReferralLink": "نسخ رابط الإحالة",
     "referralQRCode": "رمز QR للإحالة",
-    "yourReferralQRCode": "رمز QR للإحالة الخاص بك"
+    "yourReferralQRCode": "رمز QR للإحالة الخاص بك",
+    "viewAll": "عرض الكل",
+    "contactInformation": "معلومات الاتصال",
+    "about": "حول",
+    "contact": "اتصل بنا",
+    "nextSteps": "الخطوات التالية",
+    "contactVendor": "اتصل بالبائع مباشرة إذا كان لديك أي أسئلة"
   },
   "language": {
     "arabic": "العربية",
@@ -267,7 +273,24 @@
     "refreshData": "تحديث البيانات",
     "somethingWentWrong": "حدث خطأ ما",
     "failedToLoad": "فشل في التحميل",
-    "loadingReferralData": "جاري تحميل بيانات الإحالة"
+    "loadingReferralData": "جاري تحميل بيانات الإحالة",
+    "shareAndEarn": "شارك واكسب",
+    "shareReferralLink": "شارك رابط الإحالة الخاص بك مع الأصدقاء واكسب المكافآت عند انضمامهم إلى لودوس!",
+    "whatsapp": "واتساب",
+    "facebook": "فيسبوك",
+    "twitter": "تويتر",
+    "telegram": "تيليجرام",
+    "howReferralsWork": "كيف تعمل الإحالات",
+    "shareYourLink": "شارك رابطك",
+    "shareYourLinkDesc": "شارك رابط الإحالة الفريد الخاص بك مع الأصدقاء عبر وسائل التواصل الاجتماعي أو البريد الإلكتروني أو الرسائل",
+    "friendsJoin": "انضمام الأصدقاء",
+    "friendsJoinDesc": "عندما يسجل الأصدقاء باستخدام رابطك، تكسب مكافأة التسجيل",
+    "earnMore": "اكسب المزيد",
+    "earnMoreDesc": "اكسب مكافآت إضافية عندما يقوم أصدقاؤك بأول حجز لهم",
+    "loadingQRCode": "جاري تحميل رمز QR...",
+    "shareQRCodeWithFriends": "شارك رمز QR هذا مع الأصدقاء لكسب المكافآت!",
+    "downloadQRCode": "تحميل رمز QR",
+    "copyReferralLink": "نسخ رابط الإحالة"
   },
   "user": {
     "title": "المستخدم",

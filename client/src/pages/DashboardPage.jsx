@@ -296,7 +296,7 @@ const DashboardPage = () => {
                       onClick={() => setActiveTab('bookings')}
                       className="text-sm text-ludus-orange hover:text-ludus-orange-dark"
                     >
-                      View all
+                      {t('common.viewAll')}
                     </Link>
                   </div>
                 </div>

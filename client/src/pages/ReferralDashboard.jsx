@@ -237,7 +237,7 @@ const ReferralDashboard = () => {
                 <button
                   onClick={copyReferralLink}
                   className="p-2 rounded-lg hover:bg-gray-200 transition-colors"
-                  title="Copy Referral Link"
+                  title={t('referral.copyReferralLink')}
                 >
                   {copied ? <Check className="h-5 w-5 text-green-600" /> : <Copy className="h-5 w-5 text-gray-600" />}
                 </button>
@@ -285,11 +285,11 @@ const ReferralDashboard = () => {
 
         {/* Social Sharing */}
         <Card className="p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">Share & Earn</h2>
+          <h2 className="text-xl font-semibold text-gray-900 mb-6">{t('referral.shareAndEarn')}</h2>
           
           <div className="space-y-3">
             <p className="text-sm text-gray-600 mb-4">
-              Share your referral link with friends and earn rewards when they join Ludus!
+              {t('referral.shareReferralLink')}
             </p>
 
             {/* Social Sharing Buttons */}
@@ -300,7 +300,7 @@ const ReferralDashboard = () => {
                 className="flex items-center justify-center gap-2 p-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
               >
                 <span className="text-lg">📱</span>
-                WhatsApp
+                {t('referral.whatsapp')}
               </button>
               
               <button
@@ -309,7 +309,7 @@ const ReferralDashboard = () => {
                 className="flex items-center justify-center gap-2 p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
               >
                 <span className="text-lg">📘</span>
-                Facebook
+                {t('referral.facebook')}
               </button>
               
               <button
@@ -318,7 +318,7 @@ const ReferralDashboard = () => {
                 className="flex items-center justify-center gap-2 p-3 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition-colors disabled:opacity-50"
               >
                 <span className="text-lg">🐦</span>
-                Twitter
+                {t('referral.twitter')}
               </button>
               
               <button
@@ -327,7 +327,7 @@ const ReferralDashboard = () => {
                 className="flex items-center justify-center gap-2 p-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50"
               >
                 <span className="text-lg">📬</span>
-                Telegram
+                {t('referral.telegram')}
               </button>
             </div>
 
@@ -415,16 +415,16 @@ const ReferralDashboard = () => {
 
       {/* How It Works */}
       <Card className="p-6 mt-8">
-        <h2 className="text-xl font-semibold text-gray-900 mb-6">How Referrals Work</h2>
+        <h2 className="text-xl font-semibold text-gray-900 mb-6">{t('referral.howReferralsWork')}</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="text-center">
             <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <span className="text-2xl">1️⃣</span>
             </div>
-            <h3 className="font-medium text-gray-900 mb-2">Share Your Link</h3>
+            <h3 className="font-medium text-gray-900 mb-2">{t('referral.shareYourLink')}</h3>
             <p className="text-sm text-gray-600">
-              Share your unique referral link with friends via social media, email, or messaging
+              {t('referral.shareYourLinkDesc')}
             </p>
           </div>
           
@@ -432,9 +432,9 @@ const ReferralDashboard = () => {
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <span className="text-2xl">2️⃣</span>
             </div>
-            <h3 className="font-medium text-gray-900 mb-2">Friends Join</h3>
+            <h3 className="font-medium text-gray-900 mb-2">{t('referral.friendsJoin')}</h3>
             <p className="text-sm text-gray-600">
-              When friends register using your link, you earn a registration reward
+              {t('referral.friendsJoinDesc')}
             </p>
           </div>
           
@@ -442,9 +442,9 @@ const ReferralDashboard = () => {
             <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <span className="text-2xl">3️⃣</span>
             </div>
-            <h3 className="font-medium text-gray-900 mb-2">Earn More</h3>
+            <h3 className="font-medium text-gray-900 mb-2">{t('referral.earnMore')}</h3>
             <p className="text-sm text-gray-600">
-              Earn additional rewards when your friends make their first booking
+              {t('referral.earnMoreDesc')}
             </p>
           </div>
         </div>
@@ -455,7 +455,7 @@ const ReferralDashboard = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg max-w-sm w-full mx-4">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Your Referral QR Code</h3>
+              <h3 className="text-lg font-semibold text-gray-900">{t('common.yourReferralQRCode')}</h3>
               <button
                 onClick={() => setShowQRModal(false)}
                 className="text-gray-400 hover:text-gray-600"
@@ -468,7 +468,7 @@ const ReferralDashboard = () => {
               {qrCodeDataURL ? (
                 <img 
                   src={qrCodeDataURL} 
-                  alt="Referral QR Code" 
+                  alt={t('common.referralQRCode')} 
                   className="mx-auto mb-4 rounded-lg"
                   onError={(e) => {
                     console.error('QR code image failed to load:', e);
@@ -477,17 +477,17 @@ const ReferralDashboard = () => {
                 />
               ) : (
                 <div className="w-48 h-48 bg-gray-100 rounded-lg mx-auto mb-4 flex items-center justify-center">
-                  <div className="text-gray-400">Loading QR Code...</div>
+                  <div className="text-gray-400">{t('referral.loadingQRCode')}</div>
                 </div>
               )}
               <p className="text-sm text-gray-600 mb-3">
-                Share this QR code with friends to earn rewards!
+                {t('referral.shareQRCodeWithFriends')}
               </p>
               <button
                 onClick={downloadQRCode}
                 className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
-                Download QR Code
+                {t('referral.downloadQRCode')}
               </button>
             </div>
           </div>
