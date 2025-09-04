@@ -4,7 +4,11 @@ import axios from 'axios';
 const getApiBaseUrl = () => {
   // Production: Use Render backend URL
   if (process.env.NODE_ENV === 'production') {
-    // Always use the correct API URL with /api
+    const envUrl = process.env.REACT_APP_API_URL;
+    // Use environment URL if provided, otherwise use default
+    if (envUrl) {
+      return envUrl;
+    }
     return 'https://ludus-backend-gf1g.onrender.com/api';
   }
   
