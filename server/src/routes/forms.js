@@ -13,7 +13,7 @@ const {
   submitFormResponse,
   getPublishedForm
 } = require('../controllers/formController');
-const { authenticate, requireAdmin } = require('../middleware/auth');
+const { authenticate, authorize } = require('../middleware/auth');
 const { body, param } = require('express-validator');
 
 // Validation middleware
@@ -38,39 +38,42 @@ const validateResponseStatus = [
 router.get('/:slug', getPublishedForm);
 router.post('/:slug/submit', submitFormResponse);
 
-// Admin routes (protected)
-router.use(authenticate);
-router.use(requireAdmin);
+// Admin routes (protected) - these will be accessible via /api/admin/forms
+// Create a separate router for admin routes
+const adminRouter = express.Router();
+adminRouter.use(authenticate);
+adminRouter.use(authorize('admin'));
 
 // Form management routes
-router.get('/', getAllForms);
-router.get('/:id', [
+adminRouter.get('/', getAllForms);
+adminRouter.get('/:id', [
   param('id').isMongoId().withMessage('Invalid form ID')
 ], getForm);
-router.post('/', validateForm, createForm);
-router.put('/:id', [
+adminRouter.post('/', validateForm, createForm);
+adminRouter.put('/:id', [
   param('id').isMongoId().withMessage('Invalid form ID'),
   ...validateForm
 ], updateForm);
-router.delete('/:id', [
+adminRouter.delete('/:id', [
   param('id').isMongoId().withMessage('Invalid form ID')
 ], deleteForm);
 
 // Response management routes
-router.get('/:id/responses', [
+adminRouter.get('/:id/responses', [
   param('id').isMongoId().withMessage('Invalid form ID')
 ], getFormResponses);
-router.get('/:id/stats', [
+adminRouter.get('/:id/stats', [
   param('id').isMongoId().withMessage('Invalid form ID')
 ], getFormStats);
-router.get('/:id/export', [
+adminRouter.get('/:id/export', [
   param('id').isMongoId().withMessage('Invalid form ID')
 ], exportFormResponses);
 
 // Response status update
-router.put('/responses/:id', [
+adminRouter.put('/responses/:id', [
   param('id').isMongoId().withMessage('Invalid response ID'),
   ...validateResponseStatus
 ], updateResponseStatus);
 
-module.exports = router;
+// Export the admin router
+module.exports = { publicRouter: router, adminRouter };
