@@ -152,17 +152,25 @@ const getVendors = async (req, res) => {
 // @access  Private (Admin only)
 const getVendor = async (req, res) => {
   try {
+    console.log('Get vendor request:', {
+      vendorId: req.params.id,
+      user: req.user ? { id: req.user.id, role: req.user.role } : 'No user',
+      headers: req.headers.authorization ? 'Authorization present' : 'No authorization'
+    });
+
     const vendor = await Vendor.findById(req.params.id)
       .populate('createdBy', 'firstName lastName email')
       .lean();
 
     if (!vendor) {
+      console.log('Vendor not found:', req.params.id);
       return res.status(404).json({
         success: false,
         message: 'Vendor not found'
       });
     }
 
+    console.log('Vendor found:', vendor._id, vendor.businessName);
     res.status(200).json({
       success: true,
       data: { vendor }
