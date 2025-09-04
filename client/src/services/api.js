@@ -4,14 +4,30 @@ import axios from 'axios';
 const getApiBaseUrl = () => {
   // Production: Use Render backend URL
   if (process.env.NODE_ENV === 'production') {
-    return process.env.REACT_APP_API_URL || 'https://ludus-backend-gf1g.onrender.com/api';
+    const envUrl = process.env.REACT_APP_API_URL;
+    // Ensure the URL always ends with /api
+    if (envUrl) {
+      return envUrl.endsWith('/api') ? envUrl : `${envUrl}/api`;
+    }
+    return 'https://ludus-backend-gf1g.onrender.com/api';
   }
   
   // Development: Use local backend
-  return process.env.REACT_APP_API_URL || 'http://localhost:5001/api';
+  const envUrl = process.env.REACT_APP_API_URL;
+  if (envUrl) {
+    return envUrl.endsWith('/api') ? envUrl : `${envUrl}/api`;
+  }
+  return 'http://localhost:5001/api';
 };
 
 const API_BASE_URL = getApiBaseUrl();
+
+// Debug logging for API configuration
+console.log('API Configuration:', {
+  NODE_ENV: process.env.NODE_ENV,
+  REACT_APP_API_URL: process.env.REACT_APP_API_URL,
+  API_BASE_URL: API_BASE_URL
+});
 
 // Create axios instance
 const api = axios.create({
