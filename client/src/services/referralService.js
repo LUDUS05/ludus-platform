@@ -11,7 +11,11 @@ class ReferralService {
       const response = await api.post(`${this.baseUrl}/generate-code`);
       return response.data;
     } catch (error) {
+      // Log the entire error object for more details
       console.error('Error generating referral code:', error);
+      console.error('Error response:', error.response);
+      console.error('Error status:', error.response?.status);
+      console.error('Error data:', error.response?.data);
       throw new Error(error.response?.data?.message || 'Failed to generate referral code');
     }
   }

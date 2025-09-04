@@ -23,6 +23,7 @@ import MaintenancePage from '../pages/MaintenancePage';
 import MapPage from '../pages/MapPage';
 import WalletPage from '../pages/WalletPage';
 import ReferralDashboard from '../pages/ReferralDashboard';
+import ReferralTestPage from '../pages/ReferralTestPage';
 import ContactPage from '../pages/ContactPage';
 import DynamicPage from '../components/pages/DynamicPage';
 import NeoLayout from '../neoui/Layout';
@@ -86,6 +87,11 @@ const AppRoutes = () => {
         <Route path="referrals" element={
           <ProtectedRoute>
             <ReferralDashboard />
+          </ProtectedRoute>
+        } />
+        <Route path="referral-test" element={
+          <ProtectedRoute>
+            <ReferralTestPage />
           </ProtectedRoute>
         } />
         
