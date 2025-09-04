@@ -107,11 +107,11 @@ const ActivitiesPage = () => {
   };
 
   const sortOptions = [
-    { value: 'createdAt', label: 'Latest' },
-    { value: 'pricing.basePrice', label: 'Price: Low to High' },
-    { value: '-pricing.basePrice', label: 'Price: High to Low' },
-    { value: 'title', label: 'Name A-Z' },
-    { value: '-totalBookings', label: 'Most Popular' }
+    { value: 'createdAt', label: t('common.latest') },
+    { value: 'pricing.basePrice', label: t('common.priceLowToHigh') },
+    { value: '-pricing.basePrice', label: t('common.priceHighToLow') },
+    { value: 'title', label: t('common.nameAZ') },
+    { value: '-totalBookings', label: t('common.mostPopular') }
   ];
 
   if (loading && activities.length === 0) {
@@ -194,7 +194,7 @@ const ActivitiesPage = () => {
             {/* Price Range */}
             <div>
               <Input
-                label="Min Price (SAR)"
+                label={t('common.minPrice')}
                 type="number"
                 placeholder="0"
                 value={filters.minPrice}
@@ -205,7 +205,7 @@ const ActivitiesPage = () => {
             {/* Sort */}
             <div>
               <label className="block text-label font-medium text-charcoal dark:dark-text-primary mb-2">
-                Sort By
+                {t('common.sortBy')}
               </label>
               <select
                 value={filters.sortBy}
@@ -224,14 +224,14 @@ const ActivitiesPage = () => {
           {/* Filter Actions */}
           <div className="mt-4 flex items-center justify-between">
             <div className="text-body-sm text-charcoal-light dark:dark-text-secondary">
-              {pagination.totalActivities} activities found
+              {pagination.totalActivities} {t('common.activitiesFound')}
             </div>
             <Button
               variant="ghost"
               size="sm"
               onClick={resetFilters}
             >
-              Reset Filters
+              {t('common.resetFilters')}
             </Button>
           </div>
         </Card>
@@ -303,7 +303,7 @@ const ActivitiesPage = () => {
                       className="text-body-sm text-charcoal-light dark:dark-text-secondary hover:text-ludus-orange dark:hover:text-dark-ludus-orange transition-colors"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      by {activity.vendor?.businessName}
+                      {t('common.by')} {activity.vendor?.businessName}
                     </Link>
                   </div>
                 </div>
@@ -316,12 +316,12 @@ const ActivitiesPage = () => {
         {activities.length === 0 && !loading && (
           <div className="text-center py-12">
             <div className="text-6xl mb-4">🎯</div>
-            <h3 className="text-body-lg font-semibold text-charcoal dark:dark-text-primary mb-2">No activities found</h3>
+            <h3 className="text-body-lg font-semibold text-charcoal dark:dark-text-primary mb-2">{t('common.noActivitiesFound')}</h3>
             <p className="text-body-md text-charcoal-light dark:dark-text-secondary mb-6">
-              Try adjusting your search filters or browse all activities
+              {t('common.tryAdjustingSearch')}
             </p>
             <Button onClick={resetFilters} variant="primary">
-              Show All Activities
+              {t('common.showAllActivities')}
             </Button>
           </div>
         )}
@@ -334,7 +334,7 @@ const ActivitiesPage = () => {
               onClick={() => setPagination(prev => ({ ...prev, page: prev.page - 1 }))}
               disabled={pagination.page === 1}
             >
-              Previous
+              {t('common.previous')}
             </Button>
             
             <div className="flex items-center space-x-1">
@@ -358,7 +358,7 @@ const ActivitiesPage = () => {
               onClick={() => setPagination(prev => ({ ...prev, page: prev.page + 1 }))}
               disabled={pagination.page === pagination.totalPages}
             >
-              Next
+              {t('common.next')}
             </Button>
           </div>
         )}

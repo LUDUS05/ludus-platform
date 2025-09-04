@@ -202,12 +202,12 @@ const ProfilePage = () => {
           {referralStats && (
             <div className="px-6 py-4 border-t border-gray-200">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-gray-900">Referral Program</h2>
+                <h2 className="text-lg font-semibold text-gray-900">{t('common.referralProgram')}</h2>
                 <Link
                   to="/referrals"
                   className="text-blue-600 hover:text-blue-700 text-sm font-medium"
                 >
-                  View Full Dashboard →
+                  {t('common.viewFullDashboard')} →
                 </Link>
               </div>
               
