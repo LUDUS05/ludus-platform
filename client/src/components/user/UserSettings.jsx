@@ -490,7 +490,8 @@ const UserSettings = () => {
                         <span className="text-green-600 text-sm">✓ Linked</span>
                       </div>
                     )}
-                    {user.social.facebook && (
+                    {/* Temporarily disabled Facebook display */}
+                    {/* {user.social.facebook && (
                       <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
                         <div className="flex items-center">
                           <svg className="w-5 h-5 mr-2" fill="#1877F2" viewBox="0 0 24 24">
@@ -500,16 +501,19 @@ const UserSettings = () => {
                         </div>
                         <span className="text-green-600 text-sm">✓ Linked</span>
                       </div>
-                    )}
+                    )} */}
                   </div>
                 ) : (
                   <p className="text-gray-500">No social accounts connected</p>
                 )}
               </div>
 
-              {/* Link New Accounts */}
+              {/* Link Google Account */}
               <div className="border rounded-lg p-4">
-                <h3 className="font-medium mb-2">Link Additional Accounts</h3>
+                <h3 className="font-medium mb-2">Link Google Account</h3>
+                <p className="text-sm text-gray-600 mb-4">
+                  Connect your Google account for quick and secure sign-in.
+                </p>
                 <SocialLogin 
                   onSuccess={handleSocialLinkSuccess}
                   onError={handleSocialLinkError}

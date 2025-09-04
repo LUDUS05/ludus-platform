@@ -35,12 +35,12 @@ const RegisterForm = () => {
     
     // Validation
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError(t('auth.passwordsDoNotMatch'));
       return;
     }
     
     if (formData.password.length < 6) {
-      setError('Password must be at least 6 characters');
+      setError(t('auth.passwordMinLength'));
       return;
     }
 
@@ -56,7 +56,7 @@ const RegisterForm = () => {
       });
       navigate('/dashboard');
     } catch (error) {
-      setError(error.response?.data?.message || 'Registration failed');
+      setError(error.response?.data?.message || t('auth.registrationFailed'));
     } finally {
       setLoading(false);
     }
@@ -148,7 +148,7 @@ const RegisterForm = () => {
                 className="input-field mt-1"
                 value={formData.phone}
                 onChange={handleChange}
-                placeholder="+966 XX XXX XXXX"
+                placeholder={t('auth.phonePlaceholder')}
               />
             </div>
             

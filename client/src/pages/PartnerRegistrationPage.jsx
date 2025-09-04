@@ -857,14 +857,14 @@ const PartnerRegistrationPage = () => {
                   onClick={handleBack}
                   disabled={currentStep === 0}
                 >
-                  ← Back
+                  ← {t('common.back')}
                 </button>
                 
                 <button
                   className="next-button"
                   onClick={handleNext}
                 >
-                  {getCurrentQuestion()?.buttonText || 'Continue'}
+                  {getCurrentQuestion()?.buttonText || t('common.continue')}
                 </button>
               </div>
             </div>
@@ -928,7 +928,7 @@ const PartnerRegistrationPage = () => {
                   onClick={handleBack}
                   disabled={isSubmitting}
                 >
-                  ← Back
+                  ← {t('common.back')}
                 </button>
               </div>
             </div>

@@ -62,7 +62,9 @@
     "showAllActivities": "عرض جميع الأنشطة",
     "previous": "السابق",
     "next": "التالي",
-    "by": "بواسطة"
+    "by": "بواسطة",
+    "back": "رجوع",
+    "continue": "متابعة"
   },
   "language": {
     "arabic": "العربية",
@@ -114,7 +116,26 @@
     "confirmNewPassword": "تأكيد كلمة المرور الجديدة",
     "enterFirstName": "أدخل اسمك الأول",
     "enterLastName": "أدخل اسم العائلة",
-    "enterPhoneNumber": "أدخل رقم الهاتف"
+    "enterPhoneNumber": "أدخل رقم الهاتف",
+    "passwordsDoNotMatch": "كلمات المرور غير متطابقة",
+    "passwordMinLength": "يجب أن تكون كلمة المرور 6 أحرف على الأقل",
+    "registrationFailed": "فشل في التسجيل",
+    "phonePlaceholder": "+966 XX XXX XXXX",
+    "language": "اللغة",
+    "termsAndConditions": "الشروط والأحكام",
+    "acceptanceOfTerms": "قبول الشروط",
+    "userAccount": "حساب المستخدم",
+    "privacyPolicy": "سياسة الخصوصية",
+    "userConduct": "سلوك المستخدم",
+    "bookingAndCancellation": "الحجز والإلغاء",
+    "paymentTerms": "شروط الدفع",
+    "limitationOfLiability": "تحديد المسؤولية",
+    "changesToTerms": "تغييرات الشروط",
+    "contactInformation": "معلومات الاتصال",
+    "lastUpdated": "آخر تحديث",
+    "agreeToTerms": "أوافق على الشروط والأحكام",
+    "scrollToReadTerms": "يرجى التمرير للأسفل لقراءة الشروط",
+    "close": "إغلاق"
   },
   "activities": {
     "title": "الأنشطة",
@@ -333,9 +354,109 @@
   },
   "partner": {
     "title": "الشريك",
-    "registration": "تسجيل الشريك",
     "becomePartner": "كن شريكاً",
-    "partnerBenefits": "مزايا الشراكة"
+    "partnerBenefits": "مزايا الشراكة",
+    "registration": {
+      "title": "انضم إلى لودوس كشريك",
+      "subtitle": "شارك تجاربك الفريدة مع آلاف المستخدمين في المملكة العربية السعودية",
+      "getStarted": "ابدأ الآن",
+      "questions": {
+        "contactName": {
+          "question": "ما اسمك؟",
+          "placeholder": "أدخل اسمك الكامل",
+          "buttonText": "متابعة"
+        },
+        "companyName": {
+          "question": "ما اسم شركتك{{name}}؟",
+          "placeholder": "أدخل اسم الشركة أو المؤسسة",
+          "buttonText": "متابعة"
+        },
+        "email": {
+          "question": "ما بريدك الإلكتروني{{name}}؟",
+          "placeholder": "example@company.com",
+          "buttonText": "متابعة"
+        },
+        "phone": {
+          "question": "ما رقم هاتفك؟",
+          "placeholder": "+966 XX XXX XXXX",
+          "buttonText": "متابعة"
+        },
+        "website": {
+          "question": "هل لديك موقع ويب لـ {{company}}؟",
+          "placeholder": "https://www.example.com",
+          "buttonText": "متابعة"
+        },
+        "description": {
+          "question": "أخبرنا عن {{company}} والأنشطة التي تقدمها",
+          "placeholder": "صف الأنشطة والخدمات التي تقدمها...",
+          "buttonText": "متابعة"
+        }
+      },
+      "validation": {
+        "required": "هذا الحقل مطلوب",
+        "invalidEmail": "يرجى إدخال بريد إلكتروني صحيح",
+        "invalidWebsite": "يرجى إدخال رابط موقع ويب صحيح",
+        "invalidPhone": "يرجى إدخال رقم هاتف صحيح",
+        "descriptionTooShort": "يرجى كتابة وصف أطول (20 حرف على الأقل)",
+        "termsRequired": "يجب الموافقة على الشروط والأحكام",
+        "submissionError": "حدث خطأ أثناء إرسال الطلب"
+      },
+      "terms": {
+        "title": "شروط وأحكام الشراكة، {{name}}",
+        "checkbox": "أوافق على شروط وأحكام الشراكة",
+        "link": "شروط وأحكام الشراكة",
+        "submit": "إرسال الطلب",
+        "submitting": "جاري الإرسال...",
+        "modalTitle": "شروط وأحكام الشراكة",
+        "loading": "جاري تحميل الشروط...",
+        "close": "إغلاق",
+        "accept": "موافقة"
+      },
+      "success": {
+        "title": "تم إرسال طلب الشراكة بنجاح!",
+        "message": "شكراً لك {{name}}! لقد تلقينا طلب شراكة {{company}} وسنتواصل معك قريباً.",
+        "nextSteps": {
+          "title": "الخطوات التالية:",
+          "step1": "سنراجع طلبك خلال 2-3 أيام عمل",
+          "step2": "سنتواصل معك على {{email}}",
+          "step3": "سنقوم بإعداد حساب الشريك الخاص بك",
+          "step4": "ستتمكن من إضافة أنشطتك وبدء الحصول على الحجوزات"
+        }
+      },
+      "defaultTerms": {
+        "title": "شروط وأحكام الشراكة",
+        "lastUpdated": "آخر تحديث: {{date}}",
+        "section1": {
+          "title": "1. قبول الشروط",
+          "content": "بالتسجيل كشريك في منصة لودوس، فإنك توافق على الالتزام بشروط وأحكام هذه الاتفاقية."
+        },
+        "section2": {
+          "title": "2. حساب الشريك",
+          "content": "أنت مسؤول عن الحفاظ على سرية حسابك وكلمة المرور. توافق على قبول المسؤولية عن جميع الأنشطة التي تحدث تحت حسابك."
+        },
+        "section3": {
+          "title": "3. سياسة الخصوصية",
+          "content": "خصوصيتك مهمة بالنسبة لنا. يرجى مراجعة سياسة الخصوصية الخاصة بنا، والتي تحكم أيضاً استخدامك للخدمة."
+        },
+        "section4": {
+          "title": "4. سلوك الشريك",
+          "content": "توافق على عدم استخدام الخدمة لنقل أي مادة مسيئة أو غير مقبولة."
+        },
+        "section5": {
+          "title": "5. الحجز والإلغاء",
+          "content": "جميع الحجوزات تخضع لسياسة الإلغاء الخاصة بالشريك. يرجى مراجعة شروط النشاط الفردية قبل الحجز."
+        },
+        "section6": {
+          "title": "6. شروط الدفع",
+          "content": "يتم معالجة المدفوعات بأمان من خلال شركاء الدفع لدينا. جميع الأسعار بالريال السعودي ما لم يُذكر خلاف ذلك."
+        },
+        "section7": {
+          "title": "7. تحديد المسؤولية",
+          "content": "لودوس غير مسؤولة عن أي أضرار ناشئة عن استخدام منصتنا أو المشاركة في الأنشطة."
+        },
+        "contact": "للاستفسارات حول هذه الشروط، يرجى التواصل معنا على support@letsludus.com"
+      }
+    }
   },
   "uiShowcase": {
     "title": "عرض واجهة المستخدم",

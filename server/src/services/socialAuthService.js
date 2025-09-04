@@ -68,9 +68,11 @@ const verifySocialToken = async (provider, token) => {
     case 'google':
       return await verifyGoogleToken(token);
     case 'facebook':
-      return await verifyFacebookToken(token);
+      // Temporarily disabled Facebook login
+      throw new Error('Facebook login is temporarily disabled. Please use Google login instead.');
     case 'apple':
-      return await verifyAppleToken(token);
+      // Temporarily disabled Apple login
+      throw new Error('Apple login is temporarily disabled. Please use Google login instead.');
     default:
       throw new Error(`Unsupported social provider: ${provider}`);
   }

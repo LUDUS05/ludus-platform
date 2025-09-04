@@ -348,7 +348,7 @@ const UserRegistrationPage = () => {
           <div className="flex items-center gap-2">
             <Globe className="w-5 h-5 text-gray-700" />
             <span className="text-sm text-gray-700 font-medium">
-              {i18n.language === 'ar' ? 'اللغة' : 'Language'}
+              {t('auth.language')}
             </span>
           </div>
           <button
@@ -518,7 +518,7 @@ const UserRegistrationPage = () => {
           <div className="neumorphic rounded-2xl p-6 max-w-md w-full max-h-[80vh] flex flex-col">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-bold text-gray-800">
-                {i18n.language === 'ar' ? 'الشروط والأحكام' : 'Terms and Conditions'}
+                {t('auth.termsAndConditions')}
               </h3>
               <button
                 onClick={closeTermsModal}
@@ -534,31 +534,31 @@ const UserRegistrationPage = () => {
               onScroll={handleTermsScroll}
             >
               <div className="space-y-4">
-                <h4 className="font-bold text-lg">1. Acceptance of Terms</h4>
+                <h4 className="font-bold text-lg">1. {t('auth.acceptanceOfTerms')}</h4>
                 <p>By accessing and using the LUDUS platform, you accept and agree to be bound by the terms and provision of this agreement.</p>
                 
-                <h4 className="font-bold text-lg">2. User Account</h4>
+                <h4 className="font-bold text-lg">2. {t('auth.userAccount')}</h4>
                 <p>You are responsible for maintaining the confidentiality of your account and password. You agree to accept responsibility for all activities that occur under your account.</p>
                 
-                <h4 className="font-bold text-lg">3. Privacy Policy</h4>
+                <h4 className="font-bold text-lg">3. {t('auth.privacyPolicy')}</h4>
                 <p>Your privacy is important to us. Please review our Privacy Policy, which also governs your use of the Service, to understand our practices.</p>
                 
-                <h4 className="font-bold text-lg">4. User Conduct</h4>
+                <h4 className="font-bold text-lg">4. {t('auth.userConduct')}</h4>
                 <p>You agree not to use the service to transmit any material that is defamatory, offensive, or otherwise objectionable.</p>
                 
-                <h4 className="font-bold text-lg">5. Booking and Cancellation</h4>
+                <h4 className="font-bold text-lg">5. {t('auth.bookingAndCancellation')}</h4>
                 <p>All bookings are subject to the vendor's cancellation policy. Please review individual activity terms before booking.</p>
                 
-                <h4 className="font-bold text-lg">6. Payment Terms</h4>
+                <h4 className="font-bold text-lg">6. {t('auth.paymentTerms')}</h4>
                 <p>Payment is processed securely through our payment partners. All prices are in SAR unless otherwise stated.</p>
                 
-                <h4 className="font-bold text-lg">7. Limitation of Liability</h4>
+                <h4 className="font-bold text-lg">7. {t('auth.limitationOfLiability')}</h4>
                 <p>LUDUS is not liable for any damages arising from the use of our platform or participation in activities.</p>
                 
-                <h4 className="font-bold text-lg">8. Changes to Terms</h4>
+                <h4 className="font-bold text-lg">8. {t('auth.changesToTerms')}</h4>
                 <p>We reserve the right to modify these terms at any time. Continued use of the platform constitutes acceptance of new terms.</p>
                 
-                <h4 className="font-bold text-lg">9. Contact Information</h4>
+                <h4 className="font-bold text-lg">9. {t('auth.contactInformation')}</h4>
                 <p>For questions about these terms, please contact us at support@letsludus.com</p>
                 
                 <div className="text-center py-4">

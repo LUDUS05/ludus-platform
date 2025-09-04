@@ -87,7 +87,26 @@
     "confirmNewPassword": "Confirm new password",
     "enterFirstName": "Enter your first name",
     "enterLastName": "Enter your last name",
-    "enterPhoneNumber": "Enter phone number"
+    "enterPhoneNumber": "Enter phone number",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "passwordMinLength": "Password must be at least 6 characters",
+    "registrationFailed": "Registration failed",
+    "phonePlaceholder": "+966 XX XXX XXXX",
+    "language": "Language",
+    "termsAndConditions": "Terms and Conditions",
+    "acceptanceOfTerms": "Acceptance of Terms",
+    "userAccount": "User Account",
+    "privacyPolicy": "Privacy Policy",
+    "userConduct": "User Conduct",
+    "bookingAndCancellation": "Booking and Cancellation",
+    "paymentTerms": "Payment Terms",
+    "limitationOfLiability": "Limitation of Liability",
+    "changesToTerms": "Changes to Terms",
+    "contactInformation": "Contact Information",
+    "lastUpdated": "Last updated",
+    "agreeToTerms": "I agree to the Terms and Conditions",
+    "scrollToReadTerms": "Please scroll down to read all terms",
+    "close": "Close"
   },
   "activities": {
     "title": "Activities",
@@ -291,7 +310,9 @@
     "showAllActivities": "Show All Activities",
     "previous": "Previous",
     "next": "Next",
-    "by": "by"
+    "by": "by",
+    "back": "Back",
+    "continue": "Continue"
   },
   "user": {
     "title": "User",
@@ -313,9 +334,109 @@
   },
   "partner": {
     "title": "Partner",
-    "registration": "Partner Registration",
     "becomePartner": "Become a Partner",
-    "partnerBenefits": "Partner Benefits"
+    "partnerBenefits": "Partner Benefits",
+    "registration": {
+      "title": "Join LUDUS as a Partner",
+      "subtitle": "Share your unique experiences with thousands of users in Saudi Arabia",
+      "getStarted": "Get Started",
+      "questions": {
+        "contactName": {
+          "question": "What's your name?",
+          "placeholder": "Enter your full name",
+          "buttonText": "Continue"
+        },
+        "companyName": {
+          "question": "What's your company name{{name}}?",
+          "placeholder": "Enter company or organization name",
+          "buttonText": "Continue"
+        },
+        "email": {
+          "question": "What's your email{{name}}?",
+          "placeholder": "example@company.com",
+          "buttonText": "Continue"
+        },
+        "phone": {
+          "question": "What's your phone number?",
+          "placeholder": "+966 XX XXX XXXX",
+          "buttonText": "Continue"
+        },
+        "website": {
+          "question": "Do you have a website for {{company}}?",
+          "placeholder": "https://www.example.com",
+          "buttonText": "Continue"
+        },
+        "description": {
+          "question": "Tell us about {{company}} and the activities you offer",
+          "placeholder": "Describe the activities and services you provide...",
+          "buttonText": "Continue"
+        }
+      },
+      "validation": {
+        "required": "This field is required",
+        "invalidEmail": "Please enter a valid email address",
+        "invalidWebsite": "Please enter a valid website URL",
+        "invalidPhone": "Please enter a valid phone number",
+        "descriptionTooShort": "Please write a longer description (at least 20 characters)",
+        "termsRequired": "You must agree to the terms and conditions",
+        "submissionError": "An error occurred while submitting the request"
+      },
+      "terms": {
+        "title": "Partnership Terms and Conditions, {{name}}",
+        "checkbox": "I agree to the partnership terms and conditions",
+        "link": "partnership terms and conditions",
+        "submit": "Submit Application",
+        "submitting": "Submitting...",
+        "modalTitle": "Partnership Terms and Conditions",
+        "loading": "Loading terms...",
+        "close": "Close",
+        "accept": "Accept"
+      },
+      "success": {
+        "title": "Partnership Application Submitted Successfully!",
+        "message": "Thank you {{name}}! We've received your partnership application for {{company}} and will contact you soon.",
+        "nextSteps": {
+          "title": "Next Steps:",
+          "step1": "We'll review your application within 2-3 business days",
+          "step2": "We'll contact you at {{email}}",
+          "step3": "We'll set up your partner account",
+          "step4": "You'll be able to add your activities and start receiving bookings"
+        }
+      },
+      "defaultTerms": {
+        "title": "Partnership Terms and Conditions",
+        "lastUpdated": "Last updated: {{date}}",
+        "section1": {
+          "title": "1. Acceptance of Terms",
+          "content": "By registering as a partner on the LUDUS platform, you agree to be bound by the terms and provisions of this agreement."
+        },
+        "section2": {
+          "title": "2. Partner Account",
+          "content": "You are responsible for maintaining the confidentiality of your account and password. You agree to accept responsibility for all activities that occur under your account."
+        },
+        "section3": {
+          "title": "3. Privacy Policy",
+          "content": "Your privacy is important to us. Please review our Privacy Policy, which also governs your use of the Service."
+        },
+        "section4": {
+          "title": "4. Partner Conduct",
+          "content": "You agree not to use the service to transmit any material that is defamatory, offensive, or otherwise objectionable."
+        },
+        "section5": {
+          "title": "5. Booking and Cancellation",
+          "content": "All bookings are subject to the partner's cancellation policy. Please review individual activity terms before booking."
+        },
+        "section6": {
+          "title": "6. Payment Terms",
+          "content": "Payment is processed securely through our payment partners. All prices are in SAR unless otherwise stated."
+        },
+        "section7": {
+          "title": "7. Limitation of Liability",
+          "content": "LUDUS is not liable for any damages arising from the use of our platform or participation in activities."
+        },
+        "contact": "For questions about these terms, please contact us at support@letsludus.com"
+      }
+    }
   },
   "uiShowcase": {
     "title": "UI Showcase",
