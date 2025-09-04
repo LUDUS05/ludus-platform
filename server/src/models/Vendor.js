@@ -16,7 +16,8 @@ const vendorSchema = new mongoose.Schema({
   description: {
     type: String,
     required: true,
-    maxlength: 1000
+    minlength: 5,
+    maxlength: 500
   },
   contactInfo: {
     email: {
@@ -27,7 +28,7 @@ const vendorSchema = new mongoose.Schema({
     },
     phone: {
       type: String,
-      required: true,
+      required: false,
       trim: true
     },
     website: String,
@@ -41,23 +42,19 @@ const vendorSchema = new mongoose.Schema({
   location: {
     address: {
       type: String,
-      required: true
+      required: false
     },
     city: {
       type: String,
-      required: true
+      required: false
     },
     state: {
       type: String,
-      required: true
-    },
-    zipCode: {
-      type: String,
-      required: true
+      required: false
     },
     coordinates: {
       type: [Number], // [longitude, latitude]
-      required: true,
+      required: false,
       index: '2dsphere'
     }
   },

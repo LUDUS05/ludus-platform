@@ -341,7 +341,7 @@ const EnhancedVendorForm = () => {
         categories: [formData.category], // Convert single category to array
         contactInfo: {
           email: formData.contactInfo.email,
-          phone: formData.contactInfo.phone,
+          phone: formData.contactInfo.phone || '',
           website: formData.contactInfo.website,
           socialMedia: {
             facebook: formData.socialMedia.facebook,
@@ -351,10 +351,9 @@ const EnhancedVendorForm = () => {
           }
         },
         location: {
-          address: formData.address.street,
-          city: formData.address.city,
-          state: formData.address.governorate,
-          zipCode: formData.address.postalCode,
+          address: formData.address.street || '',
+          city: formData.address.city || '',
+          state: formData.address.governorate || '',
           coordinates: [formData.address.coordinates.longitude, formData.address.coordinates.latitude]
         },
         businessHours: Object.entries(formData.businessHours).map(([day, hours]) => ({
@@ -513,16 +512,21 @@ const EnhancedVendorForm = () => {
               <textarea
                 value={formData.description}
                 onChange={(e) => handleInputChange('description', e.target.value)}
-                placeholder="Describe your business and what makes it unique... (Minimum 50 characters)"
+                placeholder="Describe your business and what makes it unique... (5-500 characters)"
                 className="w-full px-3 py-2 border border-ludus-gray-300 rounded-md resize-none h-24"
                 required
-                minLength={50}
-                maxLength={1000}
+                minLength={5}
+                maxLength={500}
                 disabled={isViewing}
               />
-              {formData.description && formData.description.length < 50 && (
+              {formData.description && formData.description.length < 5 && (
                 <p className="text-sm text-red-600 mt-1">
-                  Description must be at least 50 characters ({formData.description.length}/50)
+                  Description must be at least 5 characters ({formData.description.length}/5)
+                </p>
+              )}
+              {formData.description && formData.description.length > 500 && (
+                <p className="text-sm text-red-600 mt-1">
+                  Description must be no more than 500 characters ({formData.description.length}/500)
                 </p>
               )}
             </div>
@@ -582,14 +586,13 @@ const EnhancedVendorForm = () => {
 
             <div>
               <label className="block text-label-sm font-medium text-ludus-dark mb-2">
-                Phone Number *
+                Phone Number
               </label>
               <Input
                 type="tel"
                 value={formData.contactInfo.phone}
                 onChange={(e) => handleNestedInputChange('contactInfo', 'phone', e.target.value)}
                 placeholder="+966 50 123 4567"
-                required
                 disabled={isViewing}
               />
             </div>
@@ -629,55 +632,40 @@ const EnhancedVendorForm = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="md:col-span-2">
               <label className="block text-label-sm font-medium text-ludus-dark mb-2">
-                Street Address *
+                Street Address
               </label>
               <Input
                 value={formData.address.street}
                 onChange={(e) => handleNestedInputChange('address', 'street', e.target.value)}
                 placeholder="123 King Fahd Road, Al Olaya District"
-                required
                 disabled={isViewing}
               />
             </div>
 
             <div>
               <label className="block text-label-sm font-medium text-ludus-dark mb-2">
-                City *
+                City
               </label>
               <Input
                 value={formData.address.city}
                 onChange={(e) => handleNestedInputChange('address', 'city', e.target.value)}
                 placeholder="Riyadh"
-                required
                 disabled={isViewing}
               />
             </div>
 
             <div>
               <label className="block text-label-sm font-medium text-ludus-dark mb-2">
-                State/Province *
+                State/Province
               </label>
               <Input
                 value={formData.address.governorate}
                 onChange={(e) => handleNestedInputChange('address', 'governorate', e.target.value)}
                 placeholder="Riyadh Province"
-                required
                 disabled={isViewing}
               />
             </div>
 
-            <div>
-              <label className="block text-label-sm font-medium text-ludus-dark mb-2">
-                Postal Code *
-              </label>
-              <Input
-                value={formData.address.postalCode}
-                onChange={(e) => handleNestedInputChange('address', 'postalCode', e.target.value)}
-                placeholder="12345"
-                required
-                disabled={isViewing}
-              />
-            </div>
 
             <div>
               <label className="block text-label-sm font-medium text-ludus-dark mb-2">
