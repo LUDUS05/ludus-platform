@@ -535,35 +535,35 @@ const UserRegistrationPage = () => {
             >
               <div className="space-y-4">
                 <h4 className="font-bold text-lg">1. {t('auth.acceptanceOfTerms')}</h4>
-                <p>By accessing and using the LUDUS platform, you accept and agree to be bound by the terms and provision of this agreement.</p>
+                <p>{t('user.registration.terms.content.section1')}</p>
                 
                 <h4 className="font-bold text-lg">2. {t('auth.userAccount')}</h4>
-                <p>You are responsible for maintaining the confidentiality of your account and password. You agree to accept responsibility for all activities that occur under your account.</p>
+                <p>{t('user.registration.terms.content.section2')}</p>
                 
                 <h4 className="font-bold text-lg">3. {t('auth.privacyPolicy')}</h4>
-                <p>Your privacy is important to us. Please review our Privacy Policy, which also governs your use of the Service, to understand our practices.</p>
+                <p>{t('user.registration.terms.content.section3')}</p>
                 
                 <h4 className="font-bold text-lg">4. {t('auth.userConduct')}</h4>
-                <p>You agree not to use the service to transmit any material that is defamatory, offensive, or otherwise objectionable.</p>
+                <p>{t('user.registration.terms.content.section4')}</p>
                 
                 <h4 className="font-bold text-lg">5. {t('auth.bookingAndCancellation')}</h4>
-                <p>All bookings are subject to the vendor's cancellation policy. Please review individual activity terms before booking.</p>
+                <p>{t('user.registration.terms.content.section5')}</p>
                 
                 <h4 className="font-bold text-lg">6. {t('auth.paymentTerms')}</h4>
-                <p>Payment is processed securely through our payment partners. All prices are in SAR unless otherwise stated.</p>
+                <p>{t('user.registration.terms.content.section6')}</p>
                 
                 <h4 className="font-bold text-lg">7. {t('auth.limitationOfLiability')}</h4>
-                <p>LUDUS is not liable for any damages arising from the use of our platform or participation in activities.</p>
+                <p>{t('user.registration.terms.content.section7')}</p>
                 
                 <h4 className="font-bold text-lg">8. {t('auth.changesToTerms')}</h4>
-                <p>We reserve the right to modify these terms at any time. Continued use of the platform constitutes acceptance of new terms.</p>
+                <p>{t('user.registration.terms.content.section8')}</p>
                 
                 <h4 className="font-bold text-lg">9. {t('auth.contactInformation')}</h4>
-                <p>For questions about these terms, please contact us at support@letsludus.com</p>
+                <p>{t('user.registration.terms.content.section9')}</p>
                 
                 <div className="text-center py-4">
                   <p className="text-xs text-gray-500">
-                    Last updated: {new Date().toLocaleDateString()}
+                    {t('auth.lastUpdated')}: {new Date().toLocaleDateString()}
                   </p>
                 </div>
               </div>
@@ -580,8 +580,8 @@ const UserRegistrationPage = () => {
               />
               <label htmlFor="modalAcceptTerms" className="text-sm text-gray-700">
                 {hasScrolledToBottom 
-                  ? (i18n.language === 'ar' ? 'أوافق على الشروط والأحكام' : 'I agree to the Terms and Conditions')
-                  : (i18n.language === 'ar' ? 'يرجى التمرير للأسفل لقراءة الشروط' : 'Please scroll down to read all terms')
+                  ? t('auth.agreeToTerms')
+                  : t('auth.scrollToReadTerms')
                 }
               </label>
             </div>
@@ -590,7 +590,7 @@ const UserRegistrationPage = () => {
               onClick={closeTermsModal}
               className="w-full neumorphic-subtle hover:neumorphic-pressed py-3 px-4 rounded-xl text-gray-700 font-medium transition-all duration-200"
             >
-              {i18n.language === 'ar' ? 'إغلاق' : 'Close'}
+              {t('auth.close')}
             </button>
           </div>
         </div>

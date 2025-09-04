@@ -321,14 +321,77 @@
     "bookings": "Bookings",
     "favorites": "Favorites",
     "registration": {
-      "title": "User Registration",
+      "title": "Join LUDUS",
+      "subtitle": "Discover amazing activities and enjoy unforgettable experiences in Saudi Arabia",
+      "getStarted": "Get Started",
+      "alreadyHaveAccount": "Already have an account?",
       "questions": {
         "firstName": {
-          "question": "What is your first name?"
+          "question": "What's your first name?",
+          "placeholder": "Enter your first name",
+          "buttonText": "Continue"
         },
         "lastName": {
-          "question": "What is your family name, {{name}}?"
+          "question": "What's your family name, {{name}}?",
+          "placeholder": "Enter your family name",
+          "buttonText": "Continue"
+        },
+        "email": {
+          "question": "What's your email, {{name}}?",
+          "placeholder": "example@email.com",
+          "buttonText": "Continue"
+        },
+        "password": {
+          "question": "Choose a strong password",
+          "placeholder": "Enter your password",
+          "buttonText": "Continue"
+        },
+        "confirmPassword": {
+          "question": "Confirm your password",
+          "placeholder": "Re-enter your password",
+          "buttonText": "Continue"
+        },
+        "phone": {
+          "question": "What's your phone number? (optional)",
+          "placeholder": "+966 XX XXX XXXX",
+          "buttonText": "Continue"
+        },
+        "dateOfBirth": {
+          "question": "What's your date of birth? (optional)",
+          "placeholder": "Select date",
+          "buttonText": "Continue"
         }
+      },
+      "validation": {
+        "required": "This field is required",
+        "invalidEmail": "Please enter a valid email address",
+        "passwordTooShort": "Password must be at least 8 characters",
+        "passwordMismatch": "Passwords do not match",
+        "invalidPhone": "Please enter a valid phone number",
+        "termsRequired": "You must agree to the terms and conditions",
+        "submissionError": "An error occurred during registration"
+      },
+      "terms": {
+        "title": "Terms and Conditions, {{name}}",
+        "checkbox": "Read Terms and Conditions",
+        "submit": "Create Account",
+        "submitting": "Creating Account...",
+        "content": {
+          "section1": "By accessing and using the LUDUS platform, you accept and agree to be bound by the terms and provision of this agreement.",
+          "section2": "You are responsible for maintaining the confidentiality of your account and password. You agree to accept responsibility for all activities that occur under your account.",
+          "section3": "Your privacy is important to us. Please review our Privacy Policy, which also governs your use of the Service, to understand our practices.",
+          "section4": "You agree not to use the service to transmit any material that is defamatory, offensive, or otherwise objectionable.",
+          "section5": "All bookings are subject to the vendor's cancellation policy. Please review individual activity terms before booking.",
+          "section6": "Payment is processed securely through our payment partners. All prices are in SAR unless otherwise stated.",
+          "section7": "LUDUS is not liable for any damages arising from the use of our platform or participation in activities.",
+          "section8": "We reserve the right to modify these terms at any time. Continued use of the platform constitutes acceptance of new terms.",
+          "section9": "For questions about these terms, please contact us at support@letsludus.com"
+        }
+      },
+      "success": {
+        "title": "Welcome to LUDUS!",
+        "message": "Your account has been created successfully, {{name}}! Get ready to discover amazing activities.",
+        "redirecting": "Redirecting you to dashboard..."
       }
     }
   },
