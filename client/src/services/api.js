@@ -5,9 +5,9 @@ const getApiBaseUrl = () => {
   // Production: Use Render backend URL
   if (process.env.NODE_ENV === 'production') {
     const envUrl = process.env.REACT_APP_API_URL;
-    // Use environment URL if provided, otherwise use default
+    // Ensure the URL always ends with /api
     if (envUrl) {
-      return envUrl;
+      return envUrl.endsWith('/api') ? envUrl : `${envUrl}/api`;
     }
     return 'https://ludus-backend-gf1g.onrender.com/api';
   }
@@ -15,7 +15,7 @@ const getApiBaseUrl = () => {
   // Development: Use local backend
   const envUrl = process.env.REACT_APP_API_URL;
   if (envUrl) {
-    return envUrl;
+    return envUrl.endsWith('/api') ? envUrl : `${envUrl}/api`;
   }
   return 'http://localhost:5001/api';
 };
