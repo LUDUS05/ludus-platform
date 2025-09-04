@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import referralService from '../services/referralService';
+import onboardingService from '../services/onboardingService';
 import { Globe, ArrowLeft, ArrowRight, Check, Eye, EyeOff } from 'lucide-react';
 import Logo from '../components/common/Logo';
 
@@ -119,6 +120,26 @@ const UserRegistrationPage = () => {
       setFormData(prev => ({ ...prev, referralCode: refCode }));
     }
   }, [searchParams]);
+
+  // Check if onboarding is enabled and redirect
+  useEffect(() => {
+    const checkOnboardingStatus = async () => {
+      try {
+        const config = await onboardingService.getConfig();
+        if (config.onboardingEnabled) {
+          // Redirect to onboarding with referral code if present
+          const refCode = searchParams.get('ref');
+          const onboardingUrl = refCode ? `/onboarding?ref=${refCode}` : '/onboarding';
+          navigate(onboardingUrl, { replace: true });
+        }
+      } catch (error) {
+        console.error('Error checking onboarding status:', error);
+        // If there's an error, continue with regular registration
+      }
+    };
+
+    checkOnboardingStatus();
+  }, [navigate, searchParams]);
 
   const getCurrentQuestion = () => {
     if (currentStep < 0 || currentStep >= conversationSteps.length) return null;

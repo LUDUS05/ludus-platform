@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import onboardingService from '../../services/onboardingService';
 
@@ -16,6 +17,7 @@ export const useOnboarding = () => {
 export const OnboardingProvider = ({ children }) => {
   const { t, i18n } = useTranslation();
   const { user, login, register } = useAuth();
+  const [searchParams] = useSearchParams();
   const [config, setConfig] = useState(null);
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({});
@@ -26,6 +28,14 @@ export const OnboardingProvider = ({ children }) => {
   useEffect(() => {
     initializeOnboarding();
   }, []);
+
+  // Handle referral code from URL parameters
+  useEffect(() => {
+    const refCode = searchParams.get('ref');
+    if (refCode) {
+      setFormData(prev => ({ ...prev, referralCode: refCode }));
+    }
+  }, [searchParams]);
 
   const initializeOnboarding = async () => {
     try {
