@@ -16,7 +16,12 @@ const {
   reviewRating,
   getFlaggedRatings,
   processMonthlyBonuses,
-  getRatingSystemHealth
+  getRatingSystemHealth,
+  generateAdvancedRatingAssignments,
+  recalculateWithAdvancedEngine,
+  batchRecalculateUsers,
+  getCalculationStatistics,
+  selectOptimalStrategy
 } = require('../controllers/enhancedRatingController');
 const { authenticate, authorize } = require('../middleware/auth');
 
@@ -63,5 +68,12 @@ router.post('/ratings/:ratingId/review', reviewRating);
 
 // System maintenance
 router.post('/process-bonuses', processMonthlyBonuses);
+
+// Advanced algorithm routes
+router.post('/assignments/advanced/:eventId', authenticate, authorize('admin'), generateAdvancedRatingAssignments);
+router.post('/recalculate/:userId', authenticate, authorize('admin'), recalculateWithAdvancedEngine);
+router.post('/batch-recalculate', authenticate, authorize('admin'), batchRecalculateUsers);
+router.get('/statistics/calculation', authenticate, authorize('admin'), getCalculationStatistics);
+router.post('/strategy/select', authenticate, authorize('admin'), selectOptimalStrategy);
 
 module.exports = router;

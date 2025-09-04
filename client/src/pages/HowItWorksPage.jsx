@@ -341,14 +341,14 @@ const HowItWorksPage = () => {
             
             {/* Trust indicators */}
             <div className="mt-12 pt-8 border-t border-warm/30">
-              <p className="text-sm text-soft-gray mb-4">Trusted by 1000+ adventurers</p>
+              <p className="text-sm text-soft-gray mb-4">{t('howItWorks.trustedBy')}</p>
               <div className="flex justify-center items-center space-x-6 opacity-60">
                 <div className="flex space-x-1">
                   {[...Array(5)].map((_, i) => (
                     <span key={i} className="text-yellow-400 text-lg">⭐</span>
                   ))}
                 </div>
-                <span className="text-sm text-soft-gray">4.9/5 rating</span>
+                <span className="text-sm text-soft-gray">{t('howItWorks.rating')}</span>
               </div>
             </div>
           </div>

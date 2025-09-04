@@ -168,5 +168,193 @@ export const ratingService = {
     };
 
     return texts[context]?.[Math.round(rating)] || 'No rating';
+  },
+
+  // Enhanced Rating System Methods
+  // Get rating system configuration
+  getRatingSystemConfig: async () => {
+    const response = await api.get('/rating-system/config');
+    return response.data;
+  },
+
+  // Update rating system configuration (admin only)
+  updateRatingSystemConfig: async (configData) => {
+    const response = await api.put('/rating-system/config', configData);
+    return response.data;
+  },
+
+  // Get user rating profile
+  getUserRatingProfile: async (userId) => {
+    const response = await api.get(`/rating-system/profile/${userId}`);
+    return response.data;
+  },
+
+  // Get user rating assignments
+  getUserRatingAssignments: async (userId) => {
+    const response = await api.get(`/rating-system/assignments/user/${userId}`);
+    return response.data;
+  },
+
+  // Get specific rating assignment
+  getRatingAssignment: async (assignmentId) => {
+    const response = await api.get(`/rating-system/assignments/${assignmentId}`);
+    return response.data;
+  },
+
+  // Submit enhanced rating
+  submitEnhancedRating: async (ratingData) => {
+    const response = await api.post('/rating-system/ratings', ratingData);
+    return response.data;
+  },
+
+  // Get user ratings (enhanced)
+  getUserRatings: async (userId, params = {}) => {
+    const queryParams = new URLSearchParams(params);
+    const response = await api.get(`/rating-system/ratings/user/${userId}?${queryParams.toString()}`);
+    return response.data;
+  },
+
+  // Get ratings by user (what others rated this user)
+  getRatingsByUser: async (userId, params = {}) => {
+    const queryParams = new URLSearchParams(params);
+    const response = await api.get(`/rating-system/ratings/by-user/${userId}?${queryParams.toString()}`);
+    return response.data;
+  },
+
+  // Get rating statistics
+  getRatingStatistics: async (params = {}) => {
+    const queryParams = new URLSearchParams(params);
+    const response = await api.get(`/rating-system/statistics?${queryParams.toString()}`);
+    return response.data;
+  },
+
+  // Get top rated users
+  getTopRatedUsers: async (params = {}) => {
+    const queryParams = new URLSearchParams(params);
+    const response = await api.get(`/rating-system/top-users?${queryParams.toString()}`);
+    return response.data;
+  },
+
+  // Flag a rating
+  flagRating: async (ratingId, reason) => {
+    const response = await api.post(`/rating-system/ratings/${ratingId}/flag`, { reason });
+    return response.data;
+  },
+
+  // Review a flagged rating (admin only)
+  reviewRating: async (ratingId, decision, notes) => {
+    const response = await api.post(`/rating-system/ratings/${ratingId}/review`, { decision, notes });
+    return response.data;
+  },
+
+  // Get flagged ratings (admin only)
+  getFlaggedRatings: async (params = {}) => {
+    const queryParams = new URLSearchParams(params);
+    const response = await api.get(`/rating-system/ratings/flagged?${queryParams.toString()}`);
+    return response.data;
+  },
+
+  // Process monthly bonuses (admin only)
+  processMonthlyBonuses: async () => {
+    const response = await api.post('/rating-system/process-bonuses');
+    return response.data;
+  },
+
+  // Get rating system health (admin only)
+  getRatingSystemHealth: async () => {
+    const response = await api.get('/rating-system/health');
+    return response.data;
+  },
+
+  // Advanced Algorithm Methods
+  // Generate advanced rating assignments
+  generateAdvancedRatingAssignments: async (eventId, options = {}) => {
+    const response = await api.post(`/rating-system/assignments/advanced/${eventId}`, options);
+    return response.data;
+  },
+
+  // Recalculate user rating with advanced engine
+  recalculateWithAdvancedEngine: async (userId, options = {}) => {
+    const response = await api.post(`/rating-system/recalculate/${userId}`, options);
+    return response.data;
+  },
+
+  // Batch recalculate multiple users
+  batchRecalculateUsers: async (userIds, options = {}) => {
+    const response = await api.post('/rating-system/batch-recalculate', { userIds, options });
+    return response.data;
+  },
+
+  // Get calculation statistics
+  getCalculationStatistics: async (options = {}) => {
+    const queryParams = new URLSearchParams(options);
+    const response = await api.get(`/rating-system/statistics/calculation?${queryParams.toString()}`);
+    return response.data;
+  },
+
+  // Select optimal algorithm strategy
+  selectOptimalStrategy: async (participants, options = {}) => {
+    const response = await api.post('/rating-system/strategy/select', { participants, options });
+    return response.data;
+  },
+
+  // Enhanced helper functions
+  getTierColor: (tier) => {
+    const tierColors = {
+      bronze: 'text-amber-600',
+      silver: 'text-gray-400',
+      gold: 'text-yellow-500',
+      platinum: 'text-purple-500'
+    };
+    return tierColors[tier] || tierColors.bronze;
+  },
+
+  getTierName: (tier) => {
+    const tierNames = {
+      bronze: 'Bronze',
+      silver: 'Silver',
+      gold: 'Gold',
+      platinum: 'Platinum'
+    };
+    return tierNames[tier] || 'Bronze';
+  },
+
+  getTrendIcon: (trend) => {
+    const trendIcons = {
+      improving: '↗️',
+      declining: '↘️',
+      stable: '→'
+    };
+    return trendIcons[trend] || '→';
+  },
+
+  getTrendColor: (trend) => {
+    const trendColors = {
+      improving: 'text-green-600',
+      declining: 'text-red-600',
+      stable: 'text-gray-600'
+    };
+    return trendColors[trend] || 'text-gray-600';
+  },
+
+  formatTimeSpent: (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+  },
+
+  calculateTierProgress: (currentScore, tier) => {
+    const tierThresholds = {
+      bronze: { min: 0, max: 2.5 },
+      silver: { min: 2.5, max: 3.5 },
+      gold: { min: 3.5, max: 4.5 },
+      platinum: { min: 4.5, max: 5.0 }
+    };
+    
+    const threshold = tierThresholds[tier];
+    if (!threshold) return 0;
+    
+    const progress = ((currentScore - threshold.min) / (threshold.max - threshold.min)) * 100;
+    return Math.min(100, Math.max(0, progress));
   }
 };

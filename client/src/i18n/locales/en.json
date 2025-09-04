@@ -53,7 +53,54 @@
     "about": "About",
     "contact": "Contact",
     "map": "Map",
-    "howItWorks": "How It Works",
+    "howItWorks": {
+      "title": "How LUDUS Works",
+      "subtitle": "Discover how you can easily find, book, and enjoy amazing activities across Saudi Arabia",
+      "gettingStarted": "Get Started",
+      "whyChoose": "Why Choose LUDUS?",
+      "readyToStart": "Ready to Start?",
+      "joinAdventurers": "Join thousands of adventurers who trust us to discover unforgettable experiences",
+      "browseActivities": "Browse Activities",
+      "signUpNow": "Sign Up Now",
+      "steps": {
+        "browse": {
+          "title": "Browse Activities",
+          "description": "Discover a wide range of exciting activities across Saudi Arabia"
+        },
+        "choose": {
+          "title": "Choose & Book",
+          "description": "Select your favorite activity and pick the date and time that works for you"
+        },
+        "pay": {
+          "title": "Pay Securely",
+          "description": "Enjoy secure and fast payment processing with money-back guarantee"
+        },
+        "enjoy": {
+          "title": "Enjoy the Experience",
+          "description": "Attend the activity and enjoy an unforgettable experience with memories that last a lifetime"
+        }
+      },
+      "features": {
+        "verified": {
+          "title": "Verified Providers",
+          "description": "All our service providers are certified and verified to ensure high quality"
+        },
+        "instant": {
+          "title": "Instant Booking",
+          "description": "Get instant confirmation for your booking with free cancellation options"
+        },
+        "secure": {
+          "title": "Secure Payment",
+          "description": "Safe and encrypted payment processing to protect your financial information"
+        },
+        "support": {
+          "title": "24/7 Support",
+          "description": "Round-the-clock support team available to help you anytime"
+        }
+      },
+      "trustedBy": "Trusted by 1000+ adventurers",
+      "rating": "4.9/5 rating"
+    },
     "wallet": "Wallet"
   },
   "profile": {

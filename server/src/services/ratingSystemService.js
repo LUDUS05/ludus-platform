@@ -5,6 +5,8 @@ const RatingRecord = require('../models/RatingRecord');
 const User = require('../models/User');
 const Activity = require('../models/Activity');
 const Booking = require('../models/Booking');
+const ratingAssignmentAlgorithm = require('./ratingAssignmentAlgorithm');
+const ratingCalculationEngine = require('./ratingCalculationEngine');
 
 class RatingSystemService {
   constructor() {
@@ -167,9 +169,16 @@ class RatingSystemService {
         expiresAt: new Date(Date.now() + (config.systemSettings.ratingWindowDays * 24 * 60 * 60 * 1000))
       });
 
-      // Generate rating assignments using intelligent distribution
-      const assignments = await this.generateRatingAssignments(participants, event.vendor, config);
-      assignment.assignments = assignments;
+      // Generate rating assignments using advanced algorithm
+      const algorithmResult = await ratingAssignmentAlgorithm.generateRatingAssignments(
+        participants, 
+        event.vendor, 
+        config,
+        { strategy: 'balanced' }
+      );
+      assignment.assignments = algorithmResult.assignments;
+      assignment.algorithmVersion = algorithmResult.algorithmVersion;
+      assignment.assignmentStrategy = algorithmResult.strategy;
 
       // Calculate distribution metrics
       assignment.calculateDistributionMetrics();
@@ -190,107 +199,15 @@ class RatingSystemService {
     }
   }
 
-  // Generate intelligent rating assignments
+  // Legacy method - now handled by ratingAssignmentAlgorithm
   async generateRatingAssignments(participants, vendor, config) {
-    const assignments = [];
-    const maxRatingsPerUser = config.systemSettings.maxRatingsPerUser;
-    
-    // Create a copy of participants for assignment tracking
-    const availableParticipants = [...participants];
-    const participantRatingCounts = {};
-    
-    // Initialize rating counts
-    participants.forEach(p => {
-      participantRatingCounts[p.id.toString()] = 0;
-    });
-
-    // Generate assignments for each participant
-    for (const participant of participants) {
-      const assignment = {
-        raterId: participant.id,
-        raterName: participant.name,
-        raterTier: participant.tier,
-        toRate: [],
-        completed: [],
-        pending: [],
-        notificationsSent: 0,
-        expiresAt: new Date(Date.now() + (config.systemSettings.ratingWindowDays * 24 * 60 * 60 * 1000)),
-        isCompleted: false,
-        completionRate: 0
-      };
-
-      // Add vendor rating (mandatory)
-      assignment.toRate.push({
-        id: vendor._id,
-        name: vendor.name,
-        type: 'vendor',
-        assignmentReason: 'mandatory',
-        priority: 1
-      });
-
-      // Add peer ratings
-      const peerRatingsNeeded = Math.min(maxRatingsPerUser - 1, availableParticipants.length - 1);
-      const selectedPeers = this.selectPeersForRating(
-        participant,
-        availableParticipants.filter(p => p.id.toString() !== participant.id.toString()),
-        peerRatingsNeeded,
-        participantRatingCounts
-      );
-
-      selectedPeers.forEach(peer => {
-        assignment.toRate.push({
-          id: peer.id,
-          name: peer.name,
-          type: 'peer',
-          assignmentReason: 'random_selection',
-          priority: 2
-        });
-        
-        // Update rating counts
-        participantRatingCounts[peer.id.toString()]++;
-        assignment.pending.push(peer.id);
-      });
-
-      assignments.push(assignment);
-    }
-
-    return assignments;
-  }
-
-  // Select peers for rating with intelligent distribution
-  selectPeersForRating(rater, availablePeers, countNeeded, ratingCounts) {
-    // Sort peers by rating count (prefer those with fewer ratings)
-    const sortedPeers = availablePeers.sort((a, b) => {
-      const countA = ratingCounts[a.id.toString()] || 0;
-      const countB = ratingCounts[b.id.toString()] || 0;
-      return countA - countB;
-    });
-
-    // Select peers ensuring good distribution
-    const selected = [];
-    const used = new Set();
-
-    // First pass: select peers with lowest rating counts
-    for (const peer of sortedPeers) {
-      if (selected.length >= countNeeded) break;
-      if (!used.has(peer.id.toString())) {
-        selected.push(peer);
-        used.add(peer.id.toString());
-      }
-    }
-
-    // Second pass: fill remaining slots if needed
-    if (selected.length < countNeeded) {
-      for (const peer of sortedPeers) {
-        if (selected.length >= countNeeded) break;
-        if (!used.has(peer.id.toString())) {
-          selected.push(peer);
-          used.add(peer.id.toString());
-        }
-      }
-    }
-
-    return selected;
+    const algorithmResult = await ratingAssignmentAlgorithm.generateRatingAssignments(
+      participants, 
+      vendor, 
+      config,
+      { strategy: 'balanced' }
+    );
+    return algorithmResult.assignments;
   }
 
   // Submit a rating
@@ -390,8 +307,11 @@ class RatingSystemService {
       // Update rating assignment
       await this.updateRatingAssignment(eventId, raterId, targetUserId, ratingRecord);
 
-      // Recalculate target user's rating profile
-      await this.recalculateUserRating(targetUserId);
+      // Recalculate target user's rating profile using advanced calculation engine
+      await ratingCalculationEngine.recalculateUserRating(targetUserId, {
+        calculationType: 'weighted_average',
+        excludeFlagged: true
+      });
 
       // Update rater's statistics
       await this.updateRaterStatistics(raterId);
@@ -481,83 +401,9 @@ class RatingSystemService {
     }
   }
 
-  // Recalculate user rating profile
-  async recalculateUserRating(userId) {
-    try {
-      const config = await this.ensureConfig();
-      const profile = await this.getUserRatingProfile(userId);
-
-      // Get all ratings for this user
-      const ratings = await RatingRecord.find({
-        targetUserId: userId,
-        status: { $ne: 'flagged' }
-      });
-
-      if (ratings.length === 0) {
-        return profile;
-      }
-
-      // Calculate criteria scores
-      const criteriaTotals = {};
-      const criteriaCounts = {};
-
-      config.ratingCriteria.forEach(criterion => {
-        criteriaTotals[criterion.id] = 0;
-        criteriaCounts[criterion.id] = 0;
-      });
-
-      ratings.forEach(rating => {
-        config.ratingCriteria.forEach(criterion => {
-          if (rating.criteria[criterion.id]) {
-            criteriaTotals[criterion.id] += rating.criteria[criterion.id].score;
-            criteriaCounts[criterion.id]++;
-          }
-        });
-      });
-
-      // Update criteria scores
-      config.ratingCriteria.forEach(criterion => {
-        if (criteriaCounts[criterion.id] > 0) {
-          profile.criteria[criterion.id].score = criteriaTotals[criterion.id] / criteriaCounts[criterion.id];
-          profile.criteria[criterion.id].count = criteriaCounts[criterion.id];
-          profile.criteria[criterion.id].lastUpdated = new Date();
-        }
-      });
-
-      // Calculate overall score
-      const newOverallScore = profile.calculateOverallScore(config);
-      const previousScore = profile.overall.currentScore;
-
-      profile.overall.currentScore = newOverallScore;
-      profile.overall.baseScore = newOverallScore;
-      profile.overall.totalRatings = ratings.length;
-      profile.overall.lastCalculated = new Date();
-
-      // Determine trend
-      if (newOverallScore > previousScore + 0.1) {
-        profile.overall.trend = 'improving';
-      } else if (newOverallScore < previousScore - 0.1) {
-        profile.overall.trend = 'declining';
-      } else {
-        profile.overall.trend = 'stable';
-      }
-
-      // Update tier
-      const tierChanged = profile.updateTier(config);
-      if (tierChanged) {
-        console.log(`User ${userId} tier changed to ${profile.tier.current}`);
-      }
-
-      // Calculate next tier progress
-      profile.tier.nextTierProgress = profile.calculateNextTierProgress(config);
-
-      await profile.save();
-
-      return profile;
-    } catch (error) {
-      console.error('Error recalculating user rating:', error);
-      throw error;
-    }
+  // Legacy method - now handled by ratingCalculationEngine
+  async recalculateUserRating(userId, options = {}) {
+    return await ratingCalculationEngine.recalculateUserRating(userId, options);
   }
 
   // Update rater statistics
@@ -680,6 +526,104 @@ class RatingSystemService {
       return processedCount;
     } catch (error) {
       console.error('Error processing monthly bonuses:', error);
+      throw error;
+    }
+  }
+
+  // Advanced algorithm methods
+  async generateAdvancedRatingAssignments(eventId, options = {}) {
+    try {
+      const config = await this.ensureConfig();
+      
+      // Get event details
+      const event = await Activity.findById(eventId).populate('vendor');
+      if (!event) {
+        throw new Error('Event not found');
+      }
+
+      // Get confirmed participants
+      const bookings = await Booking.find({
+        activity: eventId,
+        status: { $in: ['confirmed', 'completed'] }
+      }).populate('user');
+
+      const participants = bookings.map(booking => ({
+        id: booking.user._id,
+        name: `${booking.user.firstName} ${booking.user.lastName}`,
+        joined: booking.createdAt,
+        tier: 'bronze' // Will be enhanced by algorithm
+      }));
+
+      // Check minimum participants requirement
+      if (participants.length < config.systemSettings.minParticipantsForRating) {
+        console.log(`Not enough participants for rating (${participants.length} < ${config.systemSettings.minParticipantsForRating})`);
+        return null;
+      }
+
+      // Use advanced algorithm
+      const algorithmResult = await ratingAssignmentAlgorithm.generateRatingAssignments(
+        participants,
+        event.vendor,
+        config,
+        options
+      );
+
+      return {
+        eventId,
+        activityTitle: event.title,
+        vendorId: event.vendor._id,
+        vendorName: event.vendor.name,
+        activityDate: event.date,
+        activityCategory: event.category,
+        participants,
+        assignments: algorithmResult.assignments,
+        distributionMetrics: algorithmResult.metrics,
+        status: 'pending',
+        algorithmVersion: algorithmResult.algorithmVersion,
+        assignmentStrategy: algorithmResult.strategy,
+        expiresAt: new Date(Date.now() + (config.systemSettings.ratingWindowDays * 24 * 60 * 60 * 1000))
+      };
+    } catch (error) {
+      console.error('Error generating advanced rating assignments:', error);
+      throw error;
+    }
+  }
+
+  // Advanced calculation methods
+  async recalculateWithAdvancedEngine(userId, options = {}) {
+    try {
+      return await ratingCalculationEngine.recalculateUserRating(userId, options);
+    } catch (error) {
+      console.error('Error with advanced calculation engine:', error);
+      throw error;
+    }
+  }
+
+  async batchRecalculateUsers(userIds, options = {}) {
+    try {
+      return await ratingCalculationEngine.batchRecalculateUsers(userIds, options);
+    } catch (error) {
+      console.error('Error batch recalculating users:', error);
+      throw error;
+    }
+  }
+
+  async getCalculationStatistics(options = {}) {
+    try {
+      return await ratingCalculationEngine.getCalculationStatistics(options);
+    } catch (error) {
+      console.error('Error getting calculation statistics:', error);
+      throw error;
+    }
+  }
+
+  // Algorithm strategy selection
+  async selectOptimalStrategy(participants, options = {}) {
+    try {
+      const config = await this.ensureConfig();
+      return ratingAssignmentAlgorithm.selectOptimalStrategy(participants, config, options);
+    } catch (error) {
+      console.error('Error selecting optimal strategy:', error);
       throw error;
     }
   }

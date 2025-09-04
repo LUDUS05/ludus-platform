@@ -537,6 +537,164 @@ const getRatingSystemHealth = async (req, res) => {
   }
 };
 
+// @desc    Generate advanced rating assignments with algorithm selection
+// @route   POST /api/rating-system/assignments/advanced/:eventId
+// @access  Private (Admin)
+const generateAdvancedRatingAssignments = async (req, res) => {
+  try {
+    const { eventId } = req.params;
+    const { strategy, options } = req.body;
+    
+    const result = await ratingSystemService.generateAdvancedRatingAssignments(eventId, {
+      strategy,
+      ...options
+    });
+    
+    if (!result) {
+      return res.status(400).json({
+        success: false,
+        message: 'Insufficient participants for rating assignments'
+      });
+    }
+    
+    res.json({
+      success: true,
+      message: 'Advanced rating assignments generated successfully',
+      data: result
+    });
+  } catch (error) {
+    console.error('Error generating advanced rating assignments:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to generate advanced rating assignments',
+      error: error.message
+    });
+  }
+};
+
+// @desc    Recalculate user rating with advanced engine
+// @route   POST /api/rating-system/recalculate/:userId
+// @access  Private (Admin)
+const recalculateWithAdvancedEngine = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { calculationType, options } = req.body;
+    
+    const result = await ratingSystemService.recalculateWithAdvancedEngine(userId, {
+      calculationType,
+      ...options
+    });
+    
+    res.json({
+      success: true,
+      message: 'User rating recalculated successfully',
+      data: result
+    });
+  } catch (error) {
+    console.error('Error recalculating with advanced engine:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to recalculate user rating',
+      error: error.message
+    });
+  }
+};
+
+// @desc    Batch recalculate multiple users
+// @route   POST /api/rating-system/batch-recalculate
+// @access  Private (Admin)
+const batchRecalculateUsers = async (req, res) => {
+  try {
+    const { userIds, options } = req.body;
+    
+    if (!userIds || !Array.isArray(userIds)) {
+      return res.status(400).json({
+        success: false,
+        message: 'User IDs array is required'
+      });
+    }
+    
+    const result = await ratingSystemService.batchRecalculateUsers(userIds, options);
+    
+    res.json({
+      success: true,
+      message: 'Batch recalculation completed',
+      data: result
+    });
+  } catch (error) {
+    console.error('Error batch recalculating users:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to batch recalculate users',
+      error: error.message
+    });
+  }
+};
+
+// @desc    Get calculation statistics
+// @route   GET /api/rating-system/statistics
+// @access  Private (Admin)
+const getCalculationStatistics = async (req, res) => {
+  try {
+    const { options } = req.query;
+    const parsedOptions = options ? JSON.parse(options) : {};
+    
+    const statistics = await ratingSystemService.getCalculationStatistics(parsedOptions);
+    
+    res.json({
+      success: true,
+      data: statistics
+    });
+  } catch (error) {
+    console.error('Error getting calculation statistics:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to get calculation statistics',
+      error: error.message
+    });
+  }
+};
+
+// @desc    Select optimal algorithm strategy
+// @route   POST /api/rating-system/strategy/select
+// @access  Private (Admin)
+const selectOptimalStrategy = async (req, res) => {
+  try {
+    const { participants, options } = req.body;
+    
+    if (!participants || !Array.isArray(participants)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Participants array is required'
+      });
+    }
+    
+    const strategy = await ratingSystemService.selectOptimalStrategy(participants, options);
+    
+    res.json({
+      success: true,
+      data: {
+        recommendedStrategy: strategy,
+        participants: participants.length,
+        analysis: {
+          participantCount: participants.length,
+          tierDistribution: participants.reduce((acc, p) => {
+            acc[p.tier] = (acc[p.tier] || 0) + 1;
+            return acc;
+          }, {})
+        }
+      }
+    });
+  } catch (error) {
+    console.error('Error selecting optimal strategy:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to select optimal strategy',
+      error: error.message
+    });
+  }
+};
+
 module.exports = {
   getRatingSystemConfig,
   updateRatingSystemConfig,
@@ -553,5 +711,10 @@ module.exports = {
   reviewRating,
   getFlaggedRatings,
   processMonthlyBonuses,
-  getRatingSystemHealth
+  getRatingSystemHealth,
+  generateAdvancedRatingAssignments,
+  recalculateWithAdvancedEngine,
+  batchRecalculateUsers,
+  getCalculationStatistics,
+  selectOptimalStrategy
 };

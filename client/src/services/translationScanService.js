@@ -107,7 +107,7 @@ class TranslationScanService {
         {
           file: 'client/src/components/admin/FormEditor.jsx',
           line: 322,
-          text: 'No fields added yet. Click "Add Field" to get started.',
+          text: 'No fields added yet. Click "Add Field" to get started.', // This is example data, not hardcoded UI text
           type: 'text',
           severity: 'high',
           suggestion: 'Use t(\'common.noFieldsAdded\')'
