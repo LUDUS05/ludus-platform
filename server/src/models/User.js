@@ -122,7 +122,7 @@ const userSchema = new mongoose.Schema({
   profileImage: {
     type: String // Cloudinary URL
   },
-  // Community rating system
+  // Community rating system (legacy - will be migrated to UserRatingProfile)
   communityRating: {
     averageRating: {
       type: Number,
@@ -145,6 +145,13 @@ const userSchema = new mongoose.Schema({
       type: Date,
       default: Date.now
     }
+  },
+  
+  // Enhanced rating system integration
+  ratingProfile: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'UserRatingProfile',
+    default: null
   },
   // Social authentication fields
   social: {

@@ -47,7 +47,7 @@ const AdminDashboard = () => {
         apiUrl: process.env.REACT_APP_API_URL || 'http://localhost:5001/api'
       });
       
-      const response = await api.get('/api/admin/dashboard/stats');
+      const response = await api.get('/admin/dashboard/stats');
       console.log('Dashboard stats response:', response.data);
       setStats(response.data.data);
     } catch (error) {

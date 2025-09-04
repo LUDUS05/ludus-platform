@@ -36,7 +36,7 @@ const UserManagement = () => {
         ...filters
       });
 
-      const response = await api.get(`/api/admin/users?${params}`);
+      const response = await api.get(`/admin/users?${params}`);
       setUsers(response.data.data.users || []);
       setPagination(prev => ({
         ...prev,
@@ -57,7 +57,7 @@ const UserManagement = () => {
 
   const handleStatusToggle = async (userId, currentStatus) => {
     try {
-      await api.put(`/api/admin/users/${userId}/status`, {
+      await api.put(`/admin/users/${userId}/status`, {
         isActive: !currentStatus
       });
       fetchUsers();
@@ -139,19 +139,19 @@ const UserManagement = () => {
     try {
       switch (bulkAction) {
         case 'activate':
-          await api.put('/api/admin/users/bulk', {
+          await api.put('/admin/users/bulk', {
             ids: selectedUsers,
             action: 'activate'
           });
           break;
         case 'deactivate':
-          await api.put('/api/admin/users/bulk', {
+          await api.put('/admin/users/bulk', {
             ids: selectedUsers,
             action: 'deactivate'
           });
           break;
         case 'delete':
-          await api.delete('/api/admin/users/bulk', {
+          await api.delete('/admin/users/bulk', {
             data: { ids: selectedUsers }
           });
           break;

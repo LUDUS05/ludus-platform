@@ -77,7 +77,7 @@ const FormManagement = () => {
       if (statusFilter) params.append('status', statusFilter);
       if (searchTerm) params.append('search', searchTerm);
       
-      const response = await api.get(`/api/admin/forms?${params.toString()}`);
+      const response = await api.get(`/admin/forms?${params.toString()}`);
       setForms(response.data.data.forms);
       setTotalPages(response.data.data.pagination.pages);
     } catch (err) {
@@ -94,7 +94,7 @@ const FormManagement = () => {
     }
 
     try {
-      await api.delete(`/api/admin/forms/${formId}`);
+      await api.delete(`/admin/forms/${formId}`);
       setSuccess('Form deleted successfully');
       fetchForms();
     } catch (err) {
@@ -104,7 +104,7 @@ const FormManagement = () => {
 
   const handleStatusChange = async (formId, newStatus) => {
     try {
-      await api.put(`/api/admin/forms/${formId}`, { status: newStatus });
+      await api.put(`/admin/forms/${formId}`, { status: newStatus });
       setSuccess('Form status updated successfully');
       fetchForms();
     } catch (err) {
