@@ -344,7 +344,7 @@ const EnhancedVendorForm = () => {
         await api.put(`/admin/vendors/${id}`, submitData);
         setMessage({ type: 'success', text: 'Vendor updated successfully' });
       } else {
-        await api.post('/api/admin/vendors', submitData);
+        await api.post('/admin/vendors', submitData);
         setMessage({ type: 'success', text: 'Vendor created successfully' });
       }
       
@@ -354,9 +354,26 @@ const EnhancedVendorForm = () => {
       
     } catch (error) {
       console.error('Failed to save vendor:', error);
+      console.error('Full error details:', error);
+      console.error('Error response:', error.response);
+      console.error('Error response data:', error.response?.data);
+      
+      let errorMessage = 'Failed to save vendor';
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        errorMessage = error.response.data?.message || `Server error: ${error.response.status}`;
+      } else if (error.request) {
+        // The request was made but no response was received
+        errorMessage = 'No response received from server.';
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        errorMessage = `Error setting up request: ${error.message}`;
+      }
+      
       setMessage({ 
         type: 'error', 
-        text: error.response?.data?.message || 'Failed to save vendor' 
+        text: errorMessage
       });
     } finally {
       setSaving(false);
