@@ -59,7 +59,7 @@ const register = async (req, res, next) => {
     }
 
     // Generate tokens
-    const { accessToken, refreshToken } = generateTokens(user._id, user.role);
+    const { accessToken, refreshToken } = generateTokens(user._id, user.role, user.adminRole);
 
     // Save refresh token to user
     user.refreshToken = refreshToken;
@@ -128,7 +128,7 @@ const login = async (req, res, next) => {
     }
 
     // Generate tokens
-    const { accessToken, refreshToken } = generateTokens(user._id, user.role);
+    const { accessToken, refreshToken } = generateTokens(user._id, user.role, user.adminRole);
 
     // Save refresh token to user
     user.refreshToken = refreshToken;
@@ -187,7 +187,7 @@ const refreshToken = async (req, res, _next) => {
     }
 
     // Generate new tokens (includes role to avoid DB lookup in middleware)
-    const { accessToken, refreshToken: newRefreshToken } = generateTokens(user._id, user.role);
+    const { accessToken, refreshToken: newRefreshToken } = generateTokens(user._id, user.role, user.adminRole);
 
     // Update refresh token in database
     user.refreshToken = newRefreshToken;
@@ -594,7 +594,7 @@ const socialLogin = async (req, res, next) => {
     }
 
     // Generate tokens
-    const { accessToken, refreshToken } = generateTokens(user._id, user.role);
+    const { accessToken, refreshToken } = generateTokens(user._id, user.role, user.adminRole);
 
     // Save refresh token
     user.refreshToken = refreshToken;

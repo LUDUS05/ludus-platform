@@ -19,7 +19,8 @@ const authenticate = async (req, res, next) => {
     req.user = {
       id: decoded.userId,
       _id: decoded.userId, // For backward compatibility
-      role: decoded.role || 'user'
+      role: decoded.role || 'user',
+      adminRole: decoded.adminRole || null
     };
     
     next();

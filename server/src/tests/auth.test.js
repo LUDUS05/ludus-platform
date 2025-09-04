@@ -19,7 +19,7 @@ describe('Authentication Controller - Password Security Tests', () => {
     });
 
     // Generate access token for authenticated requests
-    const tokens = generateTokens(testUser._id, testUser.role);
+    const tokens = generateTokens(testUser._id, testUser.role, testUser.adminRole);
     accessToken = tokens.accessToken;
   });
 
