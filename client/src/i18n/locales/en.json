@@ -23,12 +23,12 @@
     "welcome": "Welcome",
     "explore": "Explore",
     "getStarted": "Get Started",
-    "signIn": "Sign in",
-    "signUp": "Sign up",
-    "account": "account",
-    "showPassword": "Show password",
-    "hidePassword": "Hide password",
-    "forgotPasswordLink": "Forgot your password?",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "account": "Account",
+    "showPassword": "Show Password",
+    "hidePassword": "Hide Password",
+    "forgotPasswordLink": "Forgot Password?",
     "noAccount": "Don't have an account?",
     "haveAccount": "Already have an account?",
     "signInHere": "Sign in here",
@@ -57,7 +57,7 @@
     "continueWithFacebook": "Continue with Facebook",
     "continueWithApple": "Continue with Apple",
     "login": "Login",
-    "register": "Register",
+    "register": "Create Account",
     "email": "Email",
     "password": "Password",
     "confirmPassword": "Confirm Password",
@@ -65,7 +65,7 @@
     "lastName": "Last Name",
     "phone": "Phone",
     "forgotPassword": "Forgot Password?",
-    "rememberMe": "Remember Me",
+    "rememberMe": "Remember me",
     "loginSuccess": "Login successful",
     "registerSuccess": "Registration successful",
     "loginError": "Invalid email or password",
@@ -74,10 +74,10 @@
     "createNewAccount": "Create a new account",
     "enterEmail": "Enter your email",
     "enterPassword": "Enter your password",
-    "confirmNewPassword": "Confirm your new password",
+    "confirmNewPassword": "Confirm new password",
     "enterFirstName": "Enter your first name",
     "enterLastName": "Enter your last name",
-    "enterPhoneNumber": "Enter your phone number"
+    "enterPhoneNumber": "Enter phone number"
   },
   "activities": {
     "title": "Activities",
@@ -90,115 +90,65 @@
     "bookNow": "Book Now",
     "viewDetails": "View Details",
     "noActivities": "No activities found",
-    "activity": "{{count}} activity",
-    "activity_plural": "{{count}} activities",
-    "result": "{{count}} result",
-    "result_plural": "{{count}} results",
-    "hour": "{{count}} hour",
-    "hour_plural": "{{count}} hours",
-    "minute": "{{count}} minute",
-    "minute_plural": "{{count}} minutes",
-    "categories": {
-      "adventure": "Adventure",
-      "cultural": "Cultural",
-      "educational": "Educational",
-      "entertainment": "Entertainment",
-      "sports": "Sports",
-      "wellness": "Wellness"
-    }
+    "activity_0": "No activities",
+    "activity_1": "1 activity",
+    "activity_2": "2 activities",
+    "activity_few": "{{count}} activities",
+    "activity_many": "{{count}} activities",
+    "activity_other": "{{count}} activities",
+    "result_0": "No results",
+    "result_1": "1 result",
+    "result_2": "2 results",
+    "result_few": "{{count}} results",
+    "result_many": "{{count}} results",
+    "result_other": "{{count}} results"
   },
   "booking": {
-    "bookActivity": "Book Activity",
+    "title": "Booking",
     "selectDate": "Select Date",
     "selectTime": "Select Time",
-    "participants": "Participants",
-    "participant": "{{count}} participant",
-    "participant_plural": "{{count}} participants",
+    "numberOfPeople": "Number of People",
     "totalPrice": "Total Price",
-    "paymentMethod": "Payment Method",
-    "bookingConfirmed": "Booking Confirmed",
-    "bookingDetails": "Booking Details",
-    "myBookings": "My Bookings",
-    "cancelBooking": "Cancel Booking",
-    "review": "{{count}} review",
-    "review_plural": "{{count}} reviews",
-    "status": {
-      "pending": "Pending",
-      "confirmed": "Confirmed",
-      "cancelled": "Cancelled",
-      "completed": "Completed"
-    }
+    "confirmBooking": "Confirm Booking",
+    "bookingConfirmed": "Booking confirmed successfully",
+    "bookingFailed": "Failed to confirm booking"
   },
   "payment": {
+    "title": "Payment",
     "paymentMethod": "Payment Method",
-    "creditCard": "Credit Card",
-    "mada": "MADA",
-    "applePay": "Apple Pay",
-    "stcPay": "STC Pay",
     "cardNumber": "Card Number",
     "expiryDate": "Expiry Date",
     "cvv": "CVV",
-    "cardholderName": "Cardholder Name",
     "payNow": "Pay Now",
-    "paymentSuccessful": "Payment Successful",
-    "paymentFailed": "Payment Failed"
+    "paymentSuccessful": "Payment successful",
+    "paymentFailed": "Payment failed"
   },
   "dashboard": {
-    "welcome": "Welcome",
+    "title": "Dashboard",
     "overview": "Overview",
     "recentBookings": "Recent Bookings",
-    "favoriteActivities": "Favorite Activities",
-    "statistics": "Statistics",
-    "totalBookings": "Total Bookings",
     "upcomingActivities": "Upcoming Activities",
-    "preferences": "Preferences",
-    "myBookings": "My Bookings"
+    "earnings": "Earnings",
+    "statistics": "Statistics"
   },
   "admin": {
-    "dashboard": "Admin Dashboard",
+    "title": "Admin",
+    "dashboard": "Dashboard",
     "users": "Users",
     "vendors": "Vendors",
     "activities": "Activities",
     "bookings": "Bookings",
-    "statistics": "Statistics",
+    "payments": "Payments",
     "settings": "Settings",
-    "addNew": "Add New",
-    "manage": "Manage",
-    "user": "{{count}} user",
-    "user_plural": "{{count}} users",
-    "vendor": "{{count}} vendor",
-    "vendor_plural": "{{count}} vendors",
-    "item": "{{count}} item",
-    "item_plural": "{{count}} items",
-    "record": "{{count}} record",
-    "record_plural": "{{count}} records"
+    "reports": "Reports"
   },
   "vendor": {
-    "profile": "Vendor Profile",
-    "contact": "Contact",
-    "businessHours": "Business Hours",
-    "location": "Location", 
-    "reviews": "Reviews",
+    "title": "Vendor",
+    "profile": "Profile",
     "activities": "Activities",
-    "about": "About"
-  },
-  "currency": {
-    "sar": "SAR"
-  },
-  "language": {
-    "english": "English",
-    "arabic": "العربية",
-    "switchLanguage": "Switch Language"
-  },
-  "map": {
-    "title": "Discover Activities Near You",
-    "subtitle": "Explore local activities and events on the map",
-    "searchLocation": "Search Location",
-    "searchLocationPlaceholder": "Search for a location...",
-    "searchActivitiesPlaceholder": "Search activities...",
-    "activitiesFound": "{{count}} activities found",
-    "loading": "Loading...",
-    "noActivitiesFound": "No activities found"
+    "reviews": "Reviews",
+    "earnings": "Earnings",
+    "settings": "Settings"
   },
   "wallet": {
     "title": "My Wallet",
@@ -232,241 +182,246 @@
     "easyRefunds": "Easy refunds to wallet",
     "secureTransactions": "Secure transactions"
   },
-  "howItWorks": {
-    "title": "How LUDUS Works",
-    "subtitle": "Discover, book, and enjoy amazing local activities in just a few simple steps.",
-    "gettingStarted": "Getting Started is Easy",
-    "whyChoose": "Why Choose LUDUS?",
-    "readyToStart": "Ready to Start Exploring?",
-    "joinAdventurers": "Join thousands of adventurers who have discovered amazing experiences through LUDUS.",
-    "browseActivities": "Browse Activities",
-    "signUpNow": "Sign Up Now",
-    "steps": {
-      "browse": {
-        "title": "Browse Activities",
-        "description": "Explore our wide selection of local activities and experiences in Saudi Arabia."
-      },
-      "choose": {
-        "title": "Choose & Book",
-        "description": "Select your preferred activity, choose a date and time, and book instantly."
-      },
-      "pay": {
-        "title": "Secure Payment",
-        "description": "Pay safely using MADA, credit cards, Apple Pay, or STC Pay."
-      },
-      "enjoy": {
-        "title": "Enjoy Experience",
-        "description": "Show up and enjoy your amazing local experience with professional guides."
-      }
-    },
-    "features": {
-      "verified": {
-        "title": "Verified Vendors",
-        "description": "All our activity providers are thoroughly vetted and verified."
-      },
-      "instant": {
-        "title": "Instant Booking",
-        "description": "Book activities instantly with real-time availability."
-      },
-      "secure": {
-        "title": "Secure Payments",
-        "description": "Your payments are secure with our trusted payment partners."
-      },
-      "support": {
-        "title": "24/7 Support",
-        "description": "Get help whenever you need it from our customer support team."
-      }
-    }
+  "map": {
+    "title": "Discover Activities Near You",
+    "subtitle": "Explore local activities and events on the map",
+    "searchLocation": "Search Location",
+    "searchLocationPlaceholder": "Search for a location...",
+    "searchActivitiesPlaceholder": "Search activities...",
+    "activitiesFound": "{{count}} activities found",
+    "loading": "Loading...",
+    "noActivitiesFound": "No activities found"
   },
   "home": {
-    "welcomeTitle": "Welcome to LUDUS",
-    "welcomeSubtitle": "Discover amazing local activities and experiences",
+    "title": "Discover Amazing Activities in Your Area",
+    "subtitle": "Book local activities and events easily",
+    "getStarted": "Get Started",
     "exploreActivities": "Explore Activities",
-    "getStarted": "Get Started"
-  },
-  "forgotPassword": {
-    "title": "Forgot Password?",
-    "subtitle": "Enter your email address and we'll send you a link to reset your password.",
-    "sendResetLink": "Send Reset Link",
-    "resetSent": "Password reset instructions have been sent to your email.",
-    "resetFailed": "Failed to send password reset email. Please try again.",
-    "backToLogin": "Back to Login",
-    "enterEmailAddress": "Enter your email address"
-  },
-  "social": {
-    "shareActivity": "Share this Activity",
-    "shareVia": "Share via...",
-    "copyLink": "Copy Link",
-    "linkCopied": "Link Copied!",
-    "shareOn": "Share on {{platform}}"
-  },
-  "partner": {
-    "registration": {
-      "title": "Let's get you set up to host on LUDUS",
-      "subtitle": "Join our community of amazing partners and start connecting with people who love unique experiences.",
-      "getStarted": "Get Started",
-      "questions": {
-        "contactName": {
-          "question": "To start, what's your name?",
-          "placeholder": "Enter your name",
-          "buttonText": "Nice to meet you!"
-        },
-        "companyName": {
-          "question": "Great to meet you{{name}}! What's the name of your business or organization?",
-          "placeholder": "Enter your business name",
-          "buttonText": "Got it"
-        },
-        "email": {
-          "question": "Perfect! What's the best email address for you{{name}}?",
-          "placeholder": "Enter your email address",
-          "buttonText": "Continue"
-        },
-        "phone": {
-          "question": "And what's your phone number?",
-          "placeholder": "Enter your phone number",
-          "buttonText": "Next"
-        },
-        "website": {
-          "question": "Does {{company}} have a website we should know about?",
-          "placeholder": "Enter website URL (optional)",
-          "buttonText": "Continue"
-        },
-        "description": {
-          "question": "Tell us a bit about {{company}}. What makes you special?",
-          "placeholder": "Describe what you do and what makes you unique...",
-          "buttonText": "Almost done!"
-        }
-      },
-      "terms": {
-        "title": "One last thing, {{name}}",
-        "checkbox": "I agree to LUDUS's Terms and Conditions and understand that my application will be reviewed before approval.",
-        "link": "Terms and Conditions",
-        "submit": "Submit Application",
-        "submitting": "Submitting...",
-        "modalTitle": "Terms and Conditions",
-        "close": "Close",
-        "accept": "Accept Terms",
-        "loading": "Loading terms..."
-      },
-      "validation": {
-        "required": "This field is required",
-        "invalidEmail": "Please enter a valid email address",
-        "invalidWebsite": "Please include http:// or https://",
-        "invalidPhone": "Please enter a valid phone number",
-        "descriptionTooShort": "Please tell us a bit more (at least 20 characters)",
-        "termsRequired": "Please accept our Terms and Conditions to continue.",
-        "submissionError": "Something went wrong. Please try again."
-      },
-      "success": {
-        "title": "Welcome to LUDUS!",
-        "message": "Thanks {{name}}! We've received your application and are excited to potentially partner with {{company}}.",
-        "nextSteps": {
-          "title": "What happens next?",
-          "step1": "We'll review your application within 24 hours",
-          "step2": "Our team will reach out to {{email}} with next steps",
-          "step3": "We'll schedule a brief call to verify your account and discuss the partnership",
-          "step4": "Once approved, you'll get access to your partner dashboard"
-        }
-      },
-      "defaultTerms": {
-        "title": "Partner Terms and Conditions",
-        "lastUpdated": "Last updated: {{date}}",
-        "section1": {
-          "title": "1. Agreement to Terms",
-          "content": "By applying to become a LUDUS partner, you agree to be bound by these Terms and Conditions."
-        },
-        "section2": {
-          "title": "2. Eligibility",
-          "content": "You must be a legitimate business entity authorized to provide services in Saudi Arabia."
-        },
-        "section3": {
-          "title": "3. Application Review",
-          "content": "LUDUS reserves the right to approve or reject any partnership application at our discretion."
-        },
-        "section4": {
-          "title": "4. Service Standards",
-          "content": "Partners must maintain high service standards and comply with all applicable laws and regulations."
-        },
-        "section5": {
-          "title": "5. Commission Structure",
-          "content": "Commission rates and payment terms will be discussed and agreed upon during the approval process."
-        },
-        "section6": {
-          "title": "6. Data Protection",
-          "content": "All customer data must be handled in accordance with Saudi data protection laws and LUDUS privacy policies."
-        },
-        "section7": {
-          "title": "7. Termination",
-          "content": "Either party may terminate this agreement with 30 days written notice."
-        },
-        "contact": "For questions about these terms, contact us at partners@letsludus.com"
-      }
-    }
+    "popularCategories": "Popular Categories",
+    "featuredActivities": "Featured Activities"
   },
   "user": {
+    "title": "User",
+    "profile": "Profile",
+    "settings": "Settings",
+    "bookings": "Bookings",
+    "favorites": "Favorites",
     "registration": {
-      "title": "Join LUDUS",
-      "subtitle": "Discover amazing activities and experiences in your city",
-      "alreadyHaveAccount": "Already have an account?",
-      "getStarted": "Get Started",
+      "title": "User Registration",
       "questions": {
         "firstName": {
-          "question": "What's your first name?",
-          "placeholder": "Enter your first name",
-          "buttonText": "Continue"
+          "question": "What is your first name?"
         },
         "lastName": {
-          "question": "And your last name, {{name}}?",
-          "placeholder": "Enter your last name",
-          "buttonText": "Continue"
-        },
-        "email": {
-          "question": "What's your email address, {{name}}?",
-          "placeholder": "Enter your email",
-          "buttonText": "Continue"
-        },
-        "password": {
-          "question": "Create a secure password",
-          "placeholder": "Enter your password",
-          "buttonText": "Continue"
-        },
-        "confirmPassword": {
-          "question": "Confirm your password",
-          "placeholder": "Re-enter your password",
-          "buttonText": "Continue"
-        },
-        "phone": {
-          "question": "Phone number (optional)",
-          "placeholder": "Enter your phone number",
-          "buttonText": "Continue"
-        },
-        "dateOfBirth": {
-          "question": "Date of birth (optional)",
-          "placeholder": "Select your date of birth",
-          "buttonText": "Continue"
+          "question": "What is your family name, {{name}}?"
         }
-      },
-      "validation": {
-        "required": "This field is required",
-        "invalidEmail": "Please enter a valid email address",
-        "passwordTooShort": "Password must be at least 8 characters",
-        "passwordMismatch": "Passwords do not match",
-        "invalidPhone": "Please enter a valid phone number",
-        "nameTooShort": "Name must be at least 2 characters",
-        "termsRequired": "You must accept the terms and conditions",
-        "submissionError": "Something went wrong. Please try again."
-      },
-      "terms": {
-        "title": "Almost there, {{name}}!",
-        "checkbox": "I agree to the Terms and Conditions and Privacy Policy",
-        "submitting": "Creating Account...",
-        "submit": "Create Account"
-      },
-      "success": {
-        "title": "Welcome to LUDUS!",
-        "message": "Your account has been created successfully, {{name}}. Get ready to discover amazing activities!",
-        "redirecting": "Redirecting you to your dashboard..."
       }
     }
+  },
+  "partner": {
+    "title": "Partner",
+    "registration": "Partner Registration",
+    "becomePartner": "Become a Partner",
+    "partnerBenefits": "Partner Benefits"
+  },
+  "uiShowcase": {
+    "title": "UI Showcase",
+    "translationSystemDemo": "Translation System Demo",
+    "commonActions": "Common Actions",
+    "navigation": "Navigation",
+    "languageInformation": "Language Information",
+    "currentLanguage": "Current Language",
+    "textDirection": "Text Direction",
+    "documentLanguage": "Document Language",
+    "documentDirection": "Document Direction",
+    "uiComponentsDemo": "UI Components Demo",
+    "buttons": "Buttons",
+    "inputs": "Inputs",
+    "alerts": "Alerts",
+    "rtlLtrDemo": "RTL/LTR Demo",
+    "layoutBehavior": "Layout Behavior",
+    "ltrEnglish": "LTR (English): Items flow left to right, margins/padding on left",
+    "rtlArabic": "RTL (Arabic): Items flow right to left, margins/padding on right",
+    "spacing": "Spacing: Uses rtl:space-x-reverse for proper spacing",
+    "flexbox": "Flexbox: Uses flex-row-reverse for RTL layouts",
+    "dynamicContentDemo": "Dynamic Content Demo",
+    "pluralization": "Pluralization",
+    "interpolation": "Interpolation",
+    "toggleAlert": "Toggle Alert",
+    "firstItem": "First Item",
+    "secondItem": "Second Item",
+    "thirdItem": "Third Item",
+    "firstItemDesc": "This shows how layout changes with language",
+    "secondItemDesc": "Notice the order and spacing changes",
+    "thirdItemDesc": "RTL languages flow right-to-left"
+  },
+  "workflowBuilder": {
+    "title": "Workflow Builder",
+    "createNewWorkflow": "Create New Workflow",
+    "editWorkflow": "Edit Workflow",
+    "workflowName": "Workflow Name",
+    "workflowNamePlaceholder": "Enter workflow name",
+    "description": "Description",
+    "descriptionPlaceholder": "Describe what this workflow does",
+    "schedule": "Schedule",
+    "priority": "Priority",
+    "triggers": "Triggers",
+    "addTrigger": "Add trigger...",
+    "workflowSteps": "Workflow Steps",
+    "addStep": "Add step...",
+    "saveChanges": "Save Changes",
+    "updateWorkflow": "Update Workflow",
+    "activeWorkflows": "Active Workflows",
+    "allWorkflows": "All Workflows",
+    "activateWorkflow": "Activate Workflow",
+    "deactivateWorkflow": "Deactivate Workflow",
+    "executeWorkflow": "Execute Workflow",
+    "runNow": "Run Now",
+    "stop": "Stop",
+    "deleteWorkflow": "Delete Workflow",
+    "workflowStatus": "Workflow Status",
+    "startedAt": "Started at",
+    "steps": "Steps",
+    "scheduleTypes": {
+      "manual": "Manual - Execute only when manually triggered",
+      "realtime": "Real-time - Monitor and execute automatically",
+      "daily": "Daily - Execute once per day",
+      "weekly": "Weekly - Execute once per week",
+      "monthly": "Monthly - Execute once per month"
+    },
+    "priorities": {
+      "low": "Low - Low priority, can be delayed",
+      "medium": "Medium - Normal priority",
+      "high": "High - High priority, execute quickly",
+      "critical": "Critical - Critical priority, execute immediately"
+    }
+  },
+  "workflowSteps": {
+    "detectNewContent": "Detect New Content",
+    "extractText": "Extract Text",
+    "translateContent": "Translate Content",
+    "validateTranslation": "Validate Translation",
+    "deployUpdates": "Deploy Updates",
+    "collectFeedback": "Collect Feedback",
+    "analyzeIssues": "Analyze Issues",
+    "retrainModels": "Retrain Models",
+    "testImprovements": "Test Improvements",
+    "validateImport": "Validate Import",
+    "batchTranslate": "Batch Translate",
+    "qualityCheck": "Quality Check",
+    "approveTranslations": "Approve Translations",
+    "deployBatch": "Deploy Batch",
+    "trackUsage": "Track Usage",
+    "analyzePatterns": "Analyze Patterns",
+    "updateContextModel": "Update Context Model",
+    "validateImprovements": "Validate Improvements",
+    "deployContextUpdates": "Deploy Context Updates"
+  },
+  "workflowTriggers": {
+    "newContent": "New Content",
+    "contentUpdate": "Content Update",
+    "userFeedback": "User Feedback",
+    "qualityScore": "Quality Score",
+    "scheduled": "Scheduled",
+    "bulkImport": "Bulk Import",
+    "userInteraction": "User Interaction",
+    "translationUsage": "Translation Usage"
+  },
+  "translationManagement": {
+    "title": "Translation Management",
+    "manageAndAutomate": "Manage and automate translations for your website",
+    "export": "Export",
+    "import": "Import",
+    "saveChanges": "Save Changes",
+    "saving": "Saving...",
+    "selectLanguage": "Select Language",
+    "missingTranslationsDetected": "Missing Translations Detected!",
+    "translationKeysMissing": "Translation keys are missing in one or both languages",
+    "autoTranslateMissing": "Auto-Translate Missing",
+    "translating": "Translating...",
+    "searchTranslations": "Search Translations",
+    "searchByKeyOrValue": "Search by key or value...",
+    "filterByCategory": "Filter by Category",
+    "allCategories": "All Categories",
+    "clearFilters": "Clear Filters",
+    "translationEditor": "Translation Editor",
+    "translationKey": "Translation Key",
+    "value": "Value",
+    "enterTranslation": "Enter translation",
+    "translationHistory": "Translation History",
+    "noTranslationHistory": "No translation history yet",
+    "changesSaved": "changes saved",
+    "autoTranslationSettings": "Auto-Translation Settings",
+    "aiPoweredTranslation": "AI-Powered Translation",
+    "automaticallyTranslateMissing": "Automatically translate missing content using AI services",
+    "translationServices": "Translation Services",
+    "googleTranslateAPI": "Google Translate API",
+    "deeplAPI": "DeepL API",
+    "microsoftTranslator": "Microsoft Translator",
+    "qualityFeatures": "Quality Features",
+    "contextAwareTranslation": "Context-aware translation",
+    "pluralizationSupport": "Pluralization support",
+    "culturalAdaptation": "Cultural adaptation"
+  },
+  "automatedWorkflows": {
+    "title": "Automated Workflows",
+    "createAndManage": "Create and manage automated translation workflows",
+    "contentUpdateWorkflow": "Content Update Workflow",
+    "automaticallyDetectAndTranslate": "Automatically detect and translate new content",
+    "qualityImprovementWorkflow": "Quality Improvement Workflow",
+    "continuouslyImproveTranslation": "Continuously improve translation quality using ML",
+    "bulkTranslationWorkflow": "Bulk Translation Workflow",
+    "handleLargeScaleTranslation": "Handle large-scale translation projects",
+    "contextLearningWorkflow": "Context Learning Workflow",
+    "learnFromUserInteractions": "Learn from user interactions to improve context understanding",
+    "activateWorkflow": "Activate Workflow",
+    "deactivateWorkflow": "Deactivate Workflow",
+    "executeNow": "Execute Now",
+    "running": "Running...",
+    "activeWorkflows": "Active Workflows",
+    "allWorkflows": "All Workflows",
+    "workflowStatus": "Workflow Status",
+    "startedAt": "Started at",
+    "steps": "Steps",
+    "schedule": "Schedule",
+    "priority": "Priority"
+  },
+  "machineLearning": {
+    "title": "Machine Learning Models",
+    "translationQualityModel": "Translation Quality Model",
+    "aiModelForAssessing": "AI model for assessing translation quality and accuracy",
+    "contextUnderstandingModel": "Context Understanding Model",
+    "deepLearningModelFor": "Deep learning model for context-aware translation",
+    "culturalAdaptationModel": "Cultural Adaptation Model",
+    "modelForCulturalContext": "Model for cultural context and localization",
+    "pluralizationRulesModel": "Pluralization Rules Model",
+    "specializedModelFor": "Specialized model for Arabic pluralization patterns",
+    "domainSpecializationModel": "Domain Specialization Model",
+    "modelSpecializedFor": "Model specialized for business and activity domains",
+    "startTraining": "Start Training",
+    "retrainModel": "Retrain Model",
+    "training": "Training...",
+    "modelDetails": "Details",
+    "accuracy": "Accuracy",
+    "precision": "Precision",
+    "recall": "Recall",
+    "f1Score": "F1 Score",
+    "trainingData": "Training Data",
+    "lastTrained": "Last Trained",
+    "modelSize": "Model Size",
+    "version": "Version",
+    "performanceMetrics": "Performance Metrics",
+    "overallAccuracy": "Overall Accuracy",
+    "contextUnderstanding": "Context Understanding",
+    "culturalAdaptation": "Cultural Adaptation",
+    "pluralization": "Pluralization",
+    "domainSpecialization": "Domain Specialization",
+    "trainingHistory": "Training History",
+    "trainAgain": "Train Again",
+    "modelStatus": "Model Status",
+    "ready": "Ready",
+    "trained": "Trained",
+    "training": "Training",
+    "failed": "Failed"
   }
 }
