@@ -74,12 +74,9 @@ class ReferralService {
   }
 
   // Generate QR code for referral link
-  generateQRCode(referralCode) {
-    const baseUrl = window.location.origin;
-    const referralLink = `${baseUrl}/register?ref=${referralCode}`;
-    
-    // Use Google Charts API for QR code generation
-    return `https://chart.googleapis.com/chart?chs=200x200&chld=L|0&cht=qr&chl=${encodeURIComponent(referralLink)}`;
+  generateQRCode(referralCode, size = 200) {
+    const baseUrl = process.env.REACT_APP_API_URL || 'https://ludus-backend-gf1g.onrender.com';
+    return `${baseUrl}/api/qr/${referralCode}?size=${size}&format=png`;
   }
 
   // Generate referral link
@@ -144,11 +141,12 @@ class ReferralService {
 
   // Download QR code
   downloadQRCode(referralCode, filename = 'referral-qr-code.png') {
-    const qrCodeUrl = this.generateQRCode(referralCode);
+    const baseUrl = process.env.REACT_APP_API_URL || 'https://ludus-backend-gf1g.onrender.com';
+    const downloadUrl = `${baseUrl}/api/qr/${referralCode}/download?size=300&format=png`;
     
     // Create a temporary link to download the QR code
     const link = document.createElement('a');
-    link.href = qrCodeUrl;
+    link.href = downloadUrl;
     link.download = filename;
     document.body.appendChild(link);
     link.click();
