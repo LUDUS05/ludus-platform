@@ -220,7 +220,6 @@ const ProfileStep = ({ config, stepData, onComplete, onBack, t }) => {
                 onKeyPress={handleKeyPress}
                 placeholder={getFieldPlaceholder(currentField)}
                 className="w-full text-lg py-4 px-4"
-                autoFocus
               />
               
               {/* Error message */}
