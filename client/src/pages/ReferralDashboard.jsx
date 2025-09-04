@@ -29,6 +29,7 @@ const ReferralDashboard = () => {
   const [showQRModal, setShowQRModal] = useState(false);
   const [copied, setCopied] = useState(false);
   const [sharing, setSharing] = useState(false);
+  const [qrCodeDataURL, setQrCodeDataURL] = useState(null);
 
   useEffect(() => {
     if (user) {
@@ -49,6 +50,18 @@ const ReferralDashboard = () => {
 
       setReferralStats(statsResponse.data);
       setReferralHistory(historyResponse.data.referrals || []);
+
+      // Generate QR code data URL if referral code exists
+      if (statsResponse.data?.referralCode) {
+        try {
+          const qrDataURL = await referralService.generateQRCodeDataURL(statsResponse.data.referralCode);
+          setQrCodeDataURL(qrDataURL);
+        } catch (error) {
+          console.error('Error generating QR code data URL:', error);
+          // Fallback to direct URL
+          setQrCodeDataURL(referralService.generateQRCode(statsResponse.data.referralCode));
+        }
+      }
 
     } catch (error) {
       console.error('Error loading referral data:', error);
@@ -452,19 +465,29 @@ const ReferralDashboard = () => {
             </div>
             
             <div className="text-center">
-              <img 
-                src={referralService.generateQRCode(referralStats?.referralCode)} 
-                alt="Referral QR Code" 
-                className="mx-auto mb-4 rounded-lg"
-              />
+              {qrCodeDataURL ? (
+                <img 
+                  src={qrCodeDataURL} 
+                  alt="Referral QR Code" 
+                  className="mx-auto mb-4 rounded-lg"
+                  onError={(e) => {
+                    console.error('QR code image failed to load:', e);
+                    e.target.style.display = 'none';
+                  }}
+                />
+              ) : (
+                <div className="w-48 h-48 bg-gray-100 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                  <div className="text-gray-400">Loading QR Code...</div>
+                </div>
+              )}
               <p className="text-sm text-gray-600 mb-3">
-                {t('referral.shareQRCode')}
+                Share this QR code with friends to earn rewards!
               </p>
               <button
                 onClick={downloadQRCode}
                 className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
-                {t('referral.downloadQRCode')}
+                Download QR Code
               </button>
             </div>
           </div>

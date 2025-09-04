@@ -37,6 +37,9 @@ const generateQRCode = async (req, res) => {
       
       res.setHeader('Content-Type', 'image/svg+xml');
       res.setHeader('Content-Disposition', `inline; filename="referral-qr-${referralCode}.svg"`);
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Methods', 'GET');
+      res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
       res.send(qrCodeData);
     } else {
       // Generate PNG QR code
@@ -52,6 +55,9 @@ const generateQRCode = async (req, res) => {
       
       res.setHeader('Content-Type', 'image/png');
       res.setHeader('Content-Disposition', `inline; filename="referral-qr-${referralCode}.png"`);
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Methods', 'GET');
+      res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
       res.send(qrCodeData);
     }
     
@@ -116,6 +122,9 @@ const downloadQRCode = async (req, res) => {
     
     res.setHeader('Content-Type', contentType);
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET');
+    res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
     res.send(qrCodeData);
     
   } catch (error) {

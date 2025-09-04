@@ -79,6 +79,30 @@ class ReferralService {
     return `${baseUrl}/api/qr/${referralCode}?size=${size}&format=png`;
   }
 
+  // Generate QR code as data URL (for better CORS compatibility)
+  async generateQRCodeDataURL(referralCode, size = 200) {
+    try {
+      const baseUrl = process.env.REACT_APP_API_URL || 'https://ludus-backend-gf1g.onrender.com';
+      const response = await fetch(`${baseUrl}/api/qr/${referralCode}?size=${size}&format=png`);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const blob = await response.blob();
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+    } catch (error) {
+      console.error('Error generating QR code data URL:', error);
+      // Fallback to direct URL
+      return this.generateQRCode(referralCode, size);
+    }
+  }
+
   // Generate referral link
   generateReferralLink(referralCode) {
     const baseUrl = window.location.origin;
