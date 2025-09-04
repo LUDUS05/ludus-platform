@@ -334,6 +334,28 @@ const savePaymentMethod = async (req, res) => {
     const { cardData, isDefault } = req.body;
     const userId = req.user.id;
 
+    // Check if payment methods are enabled in site settings
+    const SiteSettings = require('../models/SiteSettings');
+    const settings = await SiteSettings.getSettings();
+    
+    // Determine payment method type and check if it's enabled
+    let paymentMethodType = 'creditCard'; // Default to credit card
+    if (cardData.brand) {
+      const brand = cardData.brand.toLowerCase();
+      if (brand.includes('mada')) paymentMethodType = 'mada';
+      else if (brand.includes('apple')) paymentMethodType = 'applePay';
+      else if (brand.includes('stc')) paymentMethodType = 'stcPay';
+      else if (brand.includes('sadad')) paymentMethodType = 'sadad';
+    }
+    
+    const methodEnabledKey = `${paymentMethodType}Enabled`;
+    if (!settings.paymentMethodControls?.[methodEnabledKey]) {
+      return res.status(403).json({
+        success: false,
+        message: `${paymentMethodType} payments are currently disabled`
+      });
+    }
+
     // Tokenize card with Moyasar
     const tokenResponse = await moyasarService.tokenizeCard(cardData);
 

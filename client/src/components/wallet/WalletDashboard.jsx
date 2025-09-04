@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../ui/Button';
 import api from '../../services/api';
+import { siteSettingsService } from '../../services/siteSettingsService';
 
 const WalletDashboard = () => {
   const { t } = useTranslation();
@@ -10,6 +11,7 @@ const WalletDashboard = () => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [siteSettings, setSiteSettings] = useState(null);
 
   useEffect(() => {
     fetchWalletData();
@@ -18,15 +20,17 @@ const WalletDashboard = () => {
   const fetchWalletData = async () => {
     try {
       setLoading(true);
-      const [walletRes, transactionsRes, statsRes] = await Promise.all([
+      const [walletRes, transactionsRes, statsRes, settingsRes] = await Promise.all([
         api.get('/api/wallet'),
         api.get('/api/wallet/transactions?limit=10'),
-        api.get('/api/wallet/stats')
+        api.get('/api/wallet/stats'),
+        siteSettingsService.getSettings()
       ]);
 
       setWallet(walletRes.data.data.wallet);
       setTransactions(transactionsRes.data.data.transactions);
       setStats(statsRes.data.data.stats);
+      setSiteSettings(settingsRes);
       setError(null);
     } catch (err) {
       const errorMessage = err.response?.data?.message || err.message || t('wallet.walletUnavailable');
@@ -145,8 +149,12 @@ const WalletDashboard = () => {
       <div className="bg-white rounded-lg shadow p-6 mb-8">
         <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <DepositFunds wallet={wallet} onSuccess={fetchWalletData} />
-          <WithdrawFunds wallet={wallet} onSuccess={fetchWalletData} />
+          {siteSettings?.walletControls?.addFundsEnabled && (
+            <DepositFunds wallet={wallet} onSuccess={fetchWalletData} />
+          )}
+          {siteSettings?.walletControls?.withdrawFundsEnabled && (
+            <WithdrawFunds wallet={wallet} onSuccess={fetchWalletData} />
+          )}
           <WalletSettings wallet={wallet} onUpdate={fetchWalletData} />
         </div>
       </div>

@@ -39,12 +39,13 @@ const Header = () => {
             >
               {t('navigation.activities')}
             </Link>
-            <Link
+            {/* Temporarily disabled map link */}
+            {/* <Link
               to="/map"
               className="text-charcoal dark:text-dark-text-secondary hover:text-ludus-orange dark:hover:text-dark-ludus-orange font-medium transition-colors duration-200"
             >
               {t('navigation.map')}
-            </Link>
+            </Link> */}
             <Link
               to="/how-it-works"
               className="text-charcoal dark:text-dark-text-secondary hover:text-ludus-orange dark:hover:text-dark-ludus-orange font-medium transition-colors duration-200"

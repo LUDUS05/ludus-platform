@@ -280,7 +280,7 @@ const DashboardPage = () => {
                       </div>
                     </div>
                     <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-500">{t('common.totalSpent')}</p>
+                      <p className="text-sm font-medium text-gray-500">Total Spent</p>
                       <p className="text-2xl font-semibold text-gray-900">{formatCurrency(stats.totalSpent)}</p>
                     </div>
                   </div>
@@ -421,18 +421,18 @@ const DashboardPage = () => {
             <div className="space-y-6">
               <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-lg font-semibold text-gray-900">{t('common.referralProgram')}</h2>
+                  <h2 className="text-lg font-semibold text-gray-900">Referral Program</h2>
                   <Link
                     to="/referrals"
                     className="text-sm text-ludus-orange hover:text-ludus-orange-dark font-medium"
                   >
-                    {t('common.viewFullDashboard')} →
+                    View Full Dashboard →
                   </Link>
                 </div>
                 
                 <div className="text-center py-8">
                   <div className="text-4xl mb-4">🎁</div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">{t('common.earnRewardsByReferring')}</h3>
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">Earn Rewards by Referring Friends</h3>
                   <p className="text-gray-600 mb-6">
                     Share your unique referral link with friends and earn rewards when they join Ludus!
                   </p>
@@ -441,7 +441,7 @@ const DashboardPage = () => {
                     className="bg-ludus-orange text-white px-6 py-3 rounded-lg hover:bg-ludus-orange-dark transition-colors inline-flex items-center gap-2"
                   >
                     <span>🎁</span>
-                    {t('common.startReferring')}
+                    Start Referring
                   </Link>
                 </div>
               </div>

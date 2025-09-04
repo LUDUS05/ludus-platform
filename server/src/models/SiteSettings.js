@@ -33,6 +33,40 @@ const siteSettingsSchema = new mongoose.Schema({
     type: [String],
     default: ['/admin', '/api/auth/login', '/api/admin']
   },
+  // Wallet controls
+  walletControls: {
+    addFundsEnabled: {
+      type: Boolean,
+      default: true
+    },
+    withdrawFundsEnabled: {
+      type: Boolean,
+      default: true
+    }
+  },
+  // Payment method controls
+  paymentMethodControls: {
+    creditCardEnabled: {
+      type: Boolean,
+      default: true
+    },
+    madaEnabled: {
+      type: Boolean,
+      default: true
+    },
+    applePayEnabled: {
+      type: Boolean,
+      default: true
+    },
+    stcPayEnabled: {
+      type: Boolean,
+      default: true
+    },
+    sadadEnabled: {
+      type: Boolean,
+      default: true
+    }
+  },
   lastUpdatedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'

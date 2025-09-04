@@ -36,6 +36,17 @@ const SystemSettings = () => {
       moyasarEnabled: true,
       testMode: true,
       supportedMethods: []
+    },
+    walletControls: {
+      addFundsEnabled: true,
+      withdrawFundsEnabled: true
+    },
+    paymentMethodControls: {
+      creditCardEnabled: true,
+      madaEnabled: true,
+      applePayEnabled: true,
+      stcPayEnabled: true,
+      sadadEnabled: true
     }
   });
   
@@ -49,6 +60,8 @@ const SystemSettings = () => {
     { id: 'email', label: 'Email Settings', icon: '📧' },
     { id: 'features', label: 'Features', icon: '⚙️' },
     { id: 'payment', label: 'Payment', icon: '💳' },
+    { id: 'wallet', label: 'Wallet Controls', icon: '💰' },
+    { id: 'paymentMethods', label: 'Payment Methods', icon: '💳' },
     { id: 'maintenance', label: 'Maintenance', icon: '🔧' }
   ];
 
@@ -131,6 +144,26 @@ const SystemSettings = () => {
         supportedMethods: prev.payment.supportedMethods.includes(method)
           ? prev.payment.supportedMethods.filter(m => m !== method)
           : [...prev.payment.supportedMethods, method]
+      }
+    }));
+  };
+
+  const toggleWalletControl = (control) => {
+    setSettings(prev => ({
+      ...prev,
+      walletControls: {
+        ...prev.walletControls,
+        [control]: !prev.walletControls[control]
+      }
+    }));
+  };
+
+  const togglePaymentMethodControl = (method) => {
+    setSettings(prev => ({
+      ...prev,
+      paymentMethodControls: {
+        ...prev.paymentMethodControls,
+        [method]: !prev.paymentMethodControls[method]
       }
     }));
   };
@@ -479,6 +512,88 @@ const SystemSettings = () => {
             </div>
           )}
 
+          {/* Wallet Controls Tab */}
+          {activeTab === 'wallet' && (
+            <div className="space-y-6">
+              <h3 className="text-body-lg font-semibold text-ludus-dark">Wallet Controls</h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Card className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="font-medium text-ludus-dark">Add Funds to Wallet</h4>
+                      <p className="text-sm text-ludus-gray-600">
+                        Allow users to add funds to their wallet
+                      </p>
+                    </div>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={settings.walletControls.addFundsEnabled}
+                        onChange={() => toggleWalletControl('addFundsEnabled')}
+                        className="sr-only peer"
+                      />
+                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-ludus-orange/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-ludus-orange"></div>
+                    </label>
+                  </div>
+                </Card>
+                
+                <Card className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="font-medium text-ludus-dark">Withdraw Funds from Wallet</h4>
+                      <p className="text-sm text-ludus-gray-600">
+                        Allow users to withdraw funds from their wallet
+                      </p>
+                    </div>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={settings.walletControls.withdrawFundsEnabled}
+                        onChange={() => toggleWalletControl('withdrawFundsEnabled')}
+                        className="sr-only peer"
+                      />
+                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-ludus-orange/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-ludus-orange"></div>
+                    </label>
+                  </div>
+                </Card>
+              </div>
+            </div>
+          )}
+
+          {/* Payment Method Controls Tab */}
+          {activeTab === 'paymentMethods' && (
+            <div className="space-y-6">
+              <h3 className="text-body-lg font-semibold text-ludus-dark">Payment Method Controls</h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {Object.entries(settings.paymentMethodControls).map(([method, enabled]) => (
+                  <Card key={method} className="p-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h4 className="font-medium text-ludus-dark capitalize">
+                          {method.replace(/([A-Z])/g, ' $1').replace('Enabled', '').trim()}
+                        </h4>
+                        <p className="text-sm text-ludus-gray-600">
+                          {getPaymentMethodDescription(method)}
+                        </p>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={enabled}
+                          onChange={() => togglePaymentMethodControl(method)}
+                          className="sr-only peer"
+                        />
+                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-ludus-orange/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-ludus-orange"></div>
+                      </label>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Maintenance Tab */}
           {activeTab === 'maintenance' && (
             <div className="space-y-6">
@@ -527,6 +642,17 @@ const getFeatureDescription = (feature) => {
     notifications: 'Send email notifications to users'
   };
   return descriptions[feature] || 'Feature configuration';
+};
+
+const getPaymentMethodDescription = (method) => {
+  const descriptions = {
+    creditCardEnabled: 'Enable credit card payments',
+    madaEnabled: 'Enable MADA card payments',
+    applePayEnabled: 'Enable Apple Pay payments',
+    stcPayEnabled: 'Enable STC Pay payments',
+    sadadEnabled: 'Enable SADAD payments'
+  };
+  return descriptions[method] || 'Payment method configuration';
 };
 
 export default SystemSettings;

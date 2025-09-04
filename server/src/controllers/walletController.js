@@ -91,6 +91,16 @@ const depositFunds = async (req, res, _next) => {
     const userId = req.user.id;
     const { amount, paymentMethodId, description = 'Wallet deposit' } = req.body;
 
+    // Check if add funds is enabled in site settings
+    const SiteSettings = require('../models/SiteSettings');
+    const settings = await SiteSettings.getSettings();
+    if (!settings.walletControls?.addFundsEnabled) {
+      return res.status(403).json({
+        success: false,
+        message: 'Adding funds to wallet is currently disabled'
+      });
+    }
+
     // Validation
     if (!amount || amount <= 0) {
       return res.status(400).json({
@@ -259,6 +269,16 @@ const withdrawFunds = async (req, res, _next) => {
   try {
     const userId = req.user.id;
     const { amount, description = 'Wallet withdrawal' } = req.body;
+
+    // Check if withdraw funds is enabled in site settings
+    const SiteSettings = require('../models/SiteSettings');
+    const settings = await SiteSettings.getSettings();
+    if (!settings.walletControls?.withdrawFundsEnabled) {
+      return res.status(403).json({
+        success: false,
+        message: 'Withdrawing funds from wallet is currently disabled'
+      });
+    }
 
     // Validation
     if (!amount || amount <= 0) {

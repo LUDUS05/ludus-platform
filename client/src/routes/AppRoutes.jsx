@@ -55,7 +55,8 @@ const AppRoutes = () => {
         <Route path="how-it-works" element={<HowItWorksPage />} />
         <Route path="forgot-password" element={<ForgotPasswordPage />} />
         <Route path="ui-showcase" element={<UIShowcasePage />} />
-        <Route path="map" element={<MapPage />} />
+        {/* Temporarily disabled map route - redirect to home */}
+        <Route path="map" element={<Navigate to="/" replace />} />
         <Route path="contact" element={<ContactPage />} />
         
         {/* Protected routes */}
