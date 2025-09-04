@@ -4,11 +4,7 @@ import axios from 'axios';
 const getApiBaseUrl = () => {
   // Production: Use Render backend URL
   if (process.env.NODE_ENV === 'production') {
-    const envUrl = process.env.REACT_APP_API_URL;
-    // Ensure the URL always ends with /api
-    if (envUrl) {
-      return envUrl.endsWith('/api') ? envUrl : `${envUrl}/api`;
-    }
+    // Always use the correct API URL with /api
     return 'https://ludus-backend-gf1g.onrender.com/api';
   }
   
