@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Vendor = require('../models/Vendor');
 const Activity = require('../models/Activity');
 
@@ -38,7 +39,8 @@ const registerVendor = async (req, res) => {
       description,
       contactInfo: {
         email,
-        phone
+        phone,
+        website: website || undefined
       },
       location: {
         address: 'Address to be provided',
@@ -56,7 +58,7 @@ const registerVendor = async (req, res) => {
         timestamp: new Date(),
         admin: 'System' // Default admin value
       }],
-      createdBy: '000000000000000000000000', // Default ObjectId for system creation
+      createdBy: new mongoose.Types.ObjectId(), // Generate a valid ObjectId
       bankingInfo: {
         accountStatus: 'pending'
       }

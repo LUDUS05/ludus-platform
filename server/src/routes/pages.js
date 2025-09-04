@@ -125,7 +125,7 @@ router.get('/slug/:slug', validatePageSlug, async (req, res) => {
 // Legacy route for backward compatibility - Get single page by URL
 router.get('/by-url/*', async (req, res) => {
   try {
-  const url = '/' + req.params[0];
+    const url = '/' + req.params[0];
     
     // Extract slug from URL (assumes format /pages/slug)
     const urlParts = url.split('/');
@@ -138,9 +138,13 @@ router.get('/by-url/*', async (req, res) => {
       });
     }
     
-    // Redirect to new slug-based endpoint
-    req.params.slug = slug;
-    await getPageBySlug(req, res);
+    // Create a new request object with the slug parameter
+    const newReq = {
+      ...req,
+      params: { ...req.params, slug }
+    };
+    
+    await getPageBySlug(newReq, res);
   } catch (error) {
     console.error('Get page by URL error:', error);
     res.status(500).json({ 
