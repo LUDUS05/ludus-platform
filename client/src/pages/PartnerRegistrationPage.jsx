@@ -224,10 +224,12 @@ const PartnerRegistrationPage = () => {
   const fetchTermsContent = useCallback(async () => {
     try {
       setLoadingTerms(true);
-      const response = await axios.get('/api/pages/by-url/partner-terms-and-conditions');
-      setTermsContent(response.data.content || getDefaultTermsContent());
+      const response = await api.get('/pages/by-url/partner-terms-and-conditions');
+      setTermsContent(response.data.data?.content || getDefaultTermsContent());
     } catch (error) {
       console.error('Failed to fetch terms:', error);
+      console.error('Terms fetch error response:', error.response);
+      console.error('Terms fetch error data:', error.response?.data);
       setTermsContent(getDefaultTermsContent());
     } finally {
       setLoadingTerms(false);
@@ -278,7 +280,7 @@ const PartnerRegistrationPage = () => {
 
     try {
       // Send vendor registration to backend
-      const response = await api.post('/api/vendors', {
+      const response = await api.post('/vendors', {
         contactName: formData.contactName,
         companyName: formData.companyName,
         email: formData.email,
@@ -296,6 +298,9 @@ const PartnerRegistrationPage = () => {
 
     } catch (error) {
       console.error('Submission error:', error);
+      console.error('Full error details:', error);
+      console.error('Error response:', error.response);
+      console.error('Error response data:', error.response?.data);
       const errorMessage = error.response?.data?.message || t('partner.registration.validation.submissionError');
       setErrors({ current: errorMessage });
     } finally {
