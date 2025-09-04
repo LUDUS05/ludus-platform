@@ -9,7 +9,7 @@ import { Input } from '../ui/Input';
 import api from '../../services/api';
 
 const ActivityForm = () => {
-  const { t: _ } = useTranslation(); // eslint-disable-line no-unused-vars
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { id } = useParams();
   const isEditing = Boolean(id);
