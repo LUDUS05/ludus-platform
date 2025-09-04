@@ -84,6 +84,10 @@ const siteSettingsSchema = new mongoose.Schema({
     notificationsEnabled: {
       type: Boolean,
       default: true
+    },
+    onboardingEnabled: {
+      type: Boolean,
+      default: true
     }
   },
   lastUpdatedBy: {

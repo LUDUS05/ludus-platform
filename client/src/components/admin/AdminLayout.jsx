@@ -24,6 +24,7 @@ const AdminLayout = ({ children }) => {
     { name: 'Categories', href: '/admin/categories', icon: '📂' },
     { name: 'Content', href: '/admin/content', icon: '📝' },
     { name: 'Translations', href: '/admin/translations', icon: '🌐' },
+    { name: 'Onboarding', href: '/admin/onboarding', icon: '🚀' },
     { name: 'Settings', href: '/admin/settings', icon: '⚙️' },
   ];
 

@@ -984,5 +984,202 @@
       "benefit_many": "{{count}} فائدة",
       "benefit_other": "{{count}} فائدة"
     }
+  },
+  "onboarding": {
+    "title": "مرحباً بك في لودوس",
+    "subtitle": "اكتشف أنشطة رائعة وتواصل مع أشخاص متشابهين في التفكير",
+    "getStarted": "ابدأ الآن",
+    "continue": "متابعة",
+    "back": "رجوع",
+    "skip": "تخطي",
+    "maybeLater": "ربما لاحقاً",
+    "complete": "إكمال الإعداد",
+    "progress": "الخطوة {{current}} من {{total}}",
+    "steps": {
+      "welcome": {
+        "title": "مرحباً بك في لودوس",
+        "subtitle": "اكتشف أنشطة رائعة وتواصل مع أشخاص متشابهين في التفكير",
+        "valuePropositions": {
+          "discover": {
+            "title": "اكتشف",
+            "description": "اعثر على أنشطة رائعة في مدينتك"
+          },
+          "share": {
+            "title": "شارك",
+            "description": "تواصل مع أشخاص متشابهين في التفكير"
+          },
+          "engage": {
+            "title": "تفاعل",
+            "description": "ابن مجتمعات دائمة"
+          }
+        }
+      },
+      "auth": {
+        "title": "دعنا نبدأ",
+        "subtitle": "اختر كيف تريد تسجيل الدخول",
+        "continueWithGoogle": "المتابعة مع جوجل",
+        "createAccount": "إنشاء حساب",
+        "emailSubtitle": "أدخل بياناتك للبدء",
+        "firstName": "الاسم الأول",
+        "lastName": "اسم العائلة",
+        "email": "عنوان البريد الإلكتروني",
+        "password": "كلمة المرور",
+        "socialProof": "انضم إلى أكثر من 10,000 مستخدم يكتشفون الأنشطة",
+        "alreadyHaveAccount": "هل لديك حساب بالفعل؟",
+        "signInHere": "سجل الدخول هنا"
+      },
+      "profile": {
+        "title": "أخبرنا عن نفسك",
+        "questions": {
+          "firstName": {
+            "question": "ماذا نسميك؟",
+            "placeholder": "أدخل اسمك الأول"
+          },
+          "lastName": {
+            "question": "ما هو اسم عائلتك، {{name}}؟",
+            "placeholder": "أدخل اسم العائلة"
+          },
+          "email": {
+            "question": "أين يمكننا الوصول إليك؟",
+            "placeholder": "example@email.com"
+          },
+          "phone": {
+            "question": "رقم هاتفك",
+            "placeholder": "+966 XX XXX XXXX"
+          },
+          "dateOfBirth": {
+            "question": "ما تاريخ ميلادك؟ (اختياري)",
+            "placeholder": "اختر التاريخ"
+          }
+        }
+      },
+      "referral": {
+        "title": "مرحباً بك في لودوس، {{name}}!",
+        "subtitle": "ادع الأصدقاء واكسب المكافآت!",
+        "qrCodeTitle": "رمز QR للإحالة الخاص بك",
+        "sharingOptions": {
+          "whatsapp": "واتساب",
+          "twitter": "تويتر",
+          "instagram": "قصص إنستغرام",
+          "copy": "نسخ الرابط"
+        },
+        "incentiveMessage": "ادع الأصدقاء واكسب المكافآت!",
+        "skipOption": "ربما لاحقاً"
+      },
+      "interests": {
+        "title": "ما الأنشطة التي تهمك؟",
+        "subtitle": "اختر على الأقل {{min}} فئات لتخصيص تجربتك",
+        "selectedCount": "{{count}} من {{total}} مختارة",
+        "categories": {
+          "fitness": {
+            "name": "اللياقة البدنية والرياضة",
+            "icon": "🏃‍♂️"
+          },
+          "arts": {
+            "name": "الفنون والإبداع",
+            "icon": "🎨"
+          },
+          "food": {
+            "name": "الطعام والطبخ",
+            "icon": "🍳"
+          },
+          "gaming": {
+            "name": "الألعاب والتكنولوجيا",
+            "icon": "🎮"
+          },
+          "outdoor": {
+            "name": "مغامرات في الهواء الطلق",
+            "icon": "🏞️"
+          },
+          "learning": {
+            "name": "التعلم وورش العمل",
+            "icon": "📚"
+          },
+          "music": {
+            "name": "الموسيقى والترفيه",
+            "icon": "🎵"
+          },
+          "wellness": {
+            "name": "الصحة واليقظة",
+            "icon": "🧘‍♀️"
+          },
+          "automotive": {
+            "name": "السيارات",
+            "icon": "🚗"
+          },
+          "photography": {
+            "name": "التصوير",
+            "icon": "📸"
+          },
+          "events": {
+            "name": "الفعاليات والمهرجانات",
+            "icon": "🎪"
+          },
+          "networking": {
+            "name": "الشبكات المهنية",
+            "icon": "🧑‍💼"
+          }
+        }
+      },
+      "preferences": {
+        "title": "دعنا نخصص تجربتك",
+        "preferences": {
+          "language": {
+            "label": "اللغة",
+            "description": "اختر لغتك المفضلة",
+            "options": {
+              "ar": "العربية",
+              "en": "English"
+            }
+          },
+          "theme": {
+            "label": "المظهر",
+            "description": "اختر مظهرك المفضل",
+            "options": {
+              "light": "فاتح",
+              "dark": "داكن"
+            }
+          },
+          "locationSharing": {
+            "label": "مشاركة الموقع",
+            "description": "تفعيل للحصول على توصيات أفضل"
+          },
+          "emailNotifications": {
+            "label": "إشعارات البريد الإلكتروني",
+            "description": "توصيات الأنشطة والتحديثات"
+          },
+          "pushNotifications": {
+            "label": "الإشعارات الفورية",
+            "description": "تأكيدات الحجز والتحديثات"
+          },
+          "profileVisibility": {
+            "label": "رؤية الملف الشخصي",
+            "description": "تحكم في من يمكنه رؤية ملفك الشخصي",
+            "options": {
+              "public": "عام",
+              "friends": "الأصدقاء فقط"
+            }
+          }
+        }
+      }
+    },
+    "validation": {
+      "required": "هذا الحقل مطلوب",
+      "invalidEmail": "يرجى إدخال بريد إلكتروني صحيح",
+      "invalidPhone": "يرجى إدخال رقم هاتف صحيح",
+      "minSelections": "يرجى اختيار {{min}} فئات على الأقل",
+      "maxSelections": "يرجى اختيار {{max}} فئات كحد أقصى"
+    },
+    "success": {
+      "title": "مرحباً بك في لودوس!",
+      "message": "تم إعداد حسابك بنجاح. استعد لاكتشاف أنشطة رائعة!",
+      "redirecting": "سيتم توجيهك إلى لوحة التحكم..."
+    },
+    "errors": {
+      "loadConfig": "فشل في تحميل إعدادات التسجيل",
+      "completeStep": "فشل في إكمال الخطوة",
+      "completeOnboarding": "فشل في إكمال التسجيل",
+      "networkError": "خطأ في الشبكة. يرجى المحاولة مرة أخرى."
+    }
   }
 }

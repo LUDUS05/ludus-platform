@@ -26,6 +26,8 @@ import ReferralDashboard from '../pages/ReferralDashboard';
 import ReferralTestPage from '../pages/ReferralTestPage';
 import ContactPage from '../pages/ContactPage';
 import DynamicPage from '../components/pages/DynamicPage';
+import OnboardingWrapper from '../components/onboarding/OnboardingWrapper';
+import OnboardingTest from '../components/onboarding/OnboardingTest';
 import NeoLayout from '../neoui/Layout';
 import NeoHome from '../neoui/pages/Home';
 import NeoSearch from '../neoui/pages/Search';
@@ -43,6 +45,8 @@ const AppRoutes = () => {
       <Route path="/partner-registration" element={<PartnerRegistrationPage />} />
       <Route path="/coming-soon" element={<ComingSoonPage />} />
       <Route path="/maintenance" element={<MaintenancePage />} />
+      <Route path="/onboarding" element={<OnboardingWrapper />} />
+      <Route path="/onboarding-test" element={<OnboardingTest />} />
       
       {/* Routes with main layout */}
       <Route path="/" element={<MainLayout />}>

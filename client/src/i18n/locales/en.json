@@ -955,5 +955,202 @@
       "benefit_1": "One benefit",
       "benefit_other": "{{count}} benefits"
     }
+  },
+  "onboarding": {
+    "title": "Welcome to LUDUS",
+    "subtitle": "Discover amazing activities and connect with like-minded people",
+    "getStarted": "Get Started",
+    "continue": "Continue",
+    "back": "Back",
+    "skip": "Skip",
+    "maybeLater": "Maybe Later",
+    "complete": "Complete Setup",
+    "progress": "Step {{current}} of {{total}}",
+    "steps": {
+      "welcome": {
+        "title": "Welcome to LUDUS",
+        "subtitle": "Discover amazing activities and connect with like-minded people",
+        "valuePropositions": {
+          "discover": {
+            "title": "Discover",
+            "description": "Find amazing activities in your city"
+          },
+          "share": {
+            "title": "Share",
+            "description": "Connect with like-minded people"
+          },
+          "engage": {
+            "title": "Engage",
+            "description": "Build lasting communities"
+          }
+        }
+      },
+      "auth": {
+        "title": "Let's get you started",
+        "subtitle": "Choose how you'd like to sign in",
+        "continueWithGoogle": "Continue with Google",
+        "createAccount": "Create Account",
+        "emailSubtitle": "Enter your details to get started",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "email": "Email Address",
+        "password": "Password",
+        "socialProof": "Join 10,000+ users discovering activities",
+        "alreadyHaveAccount": "Already have an account?",
+        "signInHere": "Sign in here"
+      },
+      "profile": {
+        "title": "Tell us about yourself",
+        "questions": {
+          "firstName": {
+            "question": "What should we call you?",
+            "placeholder": "Enter your first name"
+          },
+          "lastName": {
+            "question": "What's your family name, {{name}}?",
+            "placeholder": "Enter your family name"
+          },
+          "email": {
+            "question": "Where can we reach you?",
+            "placeholder": "example@email.com"
+          },
+          "phone": {
+            "question": "Your phone number",
+            "placeholder": "+966 XX XXX XXXX"
+          },
+          "dateOfBirth": {
+            "question": "What's your date of birth? (optional)",
+            "placeholder": "Select date"
+          }
+        }
+      },
+      "referral": {
+        "title": "Welcome to LUDUS, {{name}}!",
+        "subtitle": "Invite friends and earn rewards!",
+        "qrCodeTitle": "Your Referral QR Code",
+        "sharingOptions": {
+          "whatsapp": "WhatsApp",
+          "twitter": "Twitter",
+          "instagram": "Instagram Stories",
+          "copy": "Copy Link"
+        },
+        "incentiveMessage": "Invite friends and earn rewards!",
+        "skipOption": "Maybe later"
+      },
+      "interests": {
+        "title": "What activities interest you?",
+        "subtitle": "Select at least {{min}} categories to personalize your experience",
+        "selectedCount": "{{count}} of {{total}} selected",
+        "categories": {
+          "fitness": {
+            "name": "Fitness & Sports",
+            "icon": "🏃‍♂️"
+          },
+          "arts": {
+            "name": "Arts & Creativity",
+            "icon": "🎨"
+          },
+          "food": {
+            "name": "Food & Cooking",
+            "icon": "🍳"
+          },
+          "gaming": {
+            "name": "Gaming & Tech",
+            "icon": "🎮"
+          },
+          "outdoor": {
+            "name": "Outdoor Adventures",
+            "icon": "🏞️"
+          },
+          "learning": {
+            "name": "Learning & Workshops",
+            "icon": "📚"
+          },
+          "music": {
+            "name": "Music & Entertainment",
+            "icon": "🎵"
+          },
+          "wellness": {
+            "name": "Wellness & Mindfulness",
+            "icon": "🧘‍♀️"
+          },
+          "automotive": {
+            "name": "Automotive",
+            "icon": "🚗"
+          },
+          "photography": {
+            "name": "Photography",
+            "icon": "📸"
+          },
+          "events": {
+            "name": "Events & Festivals",
+            "icon": "🎪"
+          },
+          "networking": {
+            "name": "Professional Networking",
+            "icon": "🧑‍💼"
+          }
+        }
+      },
+      "preferences": {
+        "title": "Let's personalize your experience",
+        "preferences": {
+          "language": {
+            "label": "Language",
+            "description": "Choose your preferred language",
+            "options": {
+              "ar": "العربية",
+              "en": "English"
+            }
+          },
+          "theme": {
+            "label": "Theme",
+            "description": "Choose your preferred theme",
+            "options": {
+              "light": "Light",
+              "dark": "Dark"
+            }
+          },
+          "locationSharing": {
+            "label": "Location Sharing",
+            "description": "Enable for better recommendations"
+          },
+          "emailNotifications": {
+            "label": "Email Notifications",
+            "description": "Activity recommendations and updates"
+          },
+          "pushNotifications": {
+            "label": "Push Notifications",
+            "description": "Booking confirmations and updates"
+          },
+          "profileVisibility": {
+            "label": "Profile Visibility",
+            "description": "Control who can see your profile",
+            "options": {
+              "public": "Public",
+              "friends": "Friends Only"
+            }
+          }
+        }
+      }
+    },
+    "validation": {
+      "required": "This field is required",
+      "invalidEmail": "Please enter a valid email address",
+      "invalidPhone": "Please enter a valid phone number",
+      "minSelections": "Please select at least {{min}} categories",
+      "maxSelections": "Please select no more than {{max}} categories"
+    },
+    "success": {
+      "title": "Welcome to LUDUS!",
+      "message": "Your account has been set up successfully. Get ready to discover amazing activities!",
+      "redirecting": "Redirecting you to dashboard..."
+    },
+    "errors": {
+      "loadConfig": "Failed to load onboarding configuration",
+      "completeStep": "Failed to complete step",
+      "completeOnboarding": "Failed to complete onboarding",
+      "networkError": "Network error. Please try again."
+    }
   }
 }
