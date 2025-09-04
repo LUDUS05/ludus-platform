@@ -171,6 +171,7 @@ const DashboardPage = () => {
   const tabs = [
     { id: 'overview', label: 'Overview', icon: '📊' },
     { id: 'bookings', label: 'My Bookings', icon: '📅' },
+    { id: 'referrals', label: 'Referrals', icon: '🎁' },
     { id: 'profile', label: 'Profile', icon: '👤' },
     { id: 'preferences', label: 'Preferences', icon: '⚙️' }
   ];
@@ -411,6 +412,38 @@ const DashboardPage = () => {
                     ))}
                   </div>
                 )}
+              </div>
+            </div>
+          )}
+
+          {/* Referrals Tab */}
+          {activeTab === 'referrals' && (
+            <div className="space-y-6">
+              <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-lg font-semibold text-gray-900">Referral Program</h2>
+                  <Link
+                    to="/referrals"
+                    className="text-sm text-ludus-orange hover:text-ludus-orange-dark font-medium"
+                  >
+                    View Full Dashboard →
+                  </Link>
+                </div>
+                
+                <div className="text-center py-8">
+                  <div className="text-4xl mb-4">🎁</div>
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">Earn Rewards by Referring Friends</h3>
+                  <p className="text-gray-600 mb-6">
+                    Share your unique referral link with friends and earn rewards when they join Ludus!
+                  </p>
+                  <Link
+                    to="/referrals"
+                    className="bg-ludus-orange text-white px-6 py-3 rounded-lg hover:bg-ludus-orange-dark transition-colors inline-flex items-center gap-2"
+                  >
+                    <span>🎁</span>
+                    Start Referring
+                  </Link>
+                </div>
               </div>
             </div>
           )}

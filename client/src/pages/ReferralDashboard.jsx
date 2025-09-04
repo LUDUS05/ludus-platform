@@ -293,62 +293,62 @@ const ReferralDashboard = () => {
             </p>
 
             {/* Social Sharing Buttons */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-4 gap-2">
               <button
                 onClick={() => shareOnPlatform('whatsapp')}
                 disabled={sharing || !referralStats?.referralCode}
-                className="flex items-center justify-center gap-2 p-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
+                className="flex items-center justify-center p-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
+                title="WhatsApp"
               >
                 <span className="text-lg">📱</span>
-                {t('referral.whatsapp')}
               </button>
               
               <button
                 onClick={() => shareOnPlatform('facebook')}
                 disabled={sharing || !referralStats?.referralCode}
-                className="flex items-center justify-center gap-2 p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+                className="flex items-center justify-center p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+                title="Facebook"
               >
                 <span className="text-lg">📘</span>
-                {t('referral.facebook')}
               </button>
               
               <button
                 onClick={() => shareOnPlatform('twitter')}
                 disabled={sharing || !referralStats?.referralCode}
-                className="flex items-center justify-center gap-2 p-3 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition-colors disabled:opacity-50"
+                className="flex items-center justify-center p-2 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition-colors disabled:opacity-50"
+                title="Twitter"
               >
                 <span className="text-lg">🐦</span>
-                {t('referral.twitter')}
               </button>
               
               <button
                 onClick={() => shareOnPlatform('telegram')}
                 disabled={sharing || !referralStats?.referralCode}
-                className="flex items-center justify-center gap-2 p-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50"
+                className="flex items-center justify-center p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50"
+                title="Telegram"
               >
                 <span className="text-lg">📬</span>
-                {t('referral.telegram')}
               </button>
             </div>
 
             {/* Other Sharing Options */}
-            <div className="grid grid-cols-2 gap-3 mt-3">
+            <div className="grid grid-cols-2 gap-2 mt-3">
               <button
                 onClick={() => shareOnPlatform('email')}
                 disabled={sharing || !referralStats?.referralCode}
-                className="flex items-center justify-center gap-2 p-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50"
+                className="flex items-center justify-center p-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50"
+                title="Email"
               >
                 <span className="text-lg">📧</span>
-                Email
               </button>
               
               <button
                 onClick={() => shareOnPlatform('sms')}
                 disabled={sharing || !referralStats?.referralCode}
-                className="flex items-center justify-center gap-2 p-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors disabled:opacity-50"
+                className="flex items-center justify-center p-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors disabled:opacity-50"
+                title="SMS"
               >
                 <span className="text-lg">💬</span>
-                SMS
               </button>
             </div>
           </div>

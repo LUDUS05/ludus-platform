@@ -100,18 +100,18 @@ const Header = () => {
                 {isMenuOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-dark-bg-tertiary rounded-xl shadow-xl border border-warm dark:border-dark-border-secondary py-2 z-50 backdrop-blur-sm">
                     <Link
-                      to="/profile"
-                      className="block px-4 py-2 text-charcoal dark:text-dark-text-primary hover:bg-warm-light dark:hover:bg-dark-bg-quaternary transition-colors duration-200 rounded-lg mx-2"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      {t('navigation.profile')}
-                    </Link>
-                    <Link
                       to="/dashboard"
                       className="block px-4 py-2 text-charcoal dark:text-dark-text-primary hover:bg-warm-light dark:hover:bg-dark-bg-quaternary transition-colors duration-200 rounded-lg mx-2"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       {t('dashboard.myBookings')}
+                    </Link>
+                    <Link
+                      to="/profile"
+                      className="block px-4 py-2 text-charcoal dark:text-dark-text-primary hover:bg-warm-light dark:hover:bg-dark-bg-quaternary transition-colors duration-200 rounded-lg mx-2"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {t('navigation.profile')}
                     </Link>
                     {user?.role === 'admin' && (
                       <Link
