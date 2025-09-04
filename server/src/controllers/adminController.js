@@ -147,6 +147,36 @@ const getVendors = async (req, res) => {
   }
 };
 
+// @desc    Get single vendor for admin
+// @route   GET /api/admin/vendors/:id
+// @access  Private (Admin only)
+const getVendor = async (req, res) => {
+  try {
+    const vendor = await Vendor.findById(req.params.id)
+      .populate('createdBy', 'firstName lastName email')
+      .lean();
+
+    if (!vendor) {
+      return res.status(404).json({
+        success: false,
+        message: 'Vendor not found'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: { vendor }
+    });
+
+  } catch (error) {
+    console.error('Get vendor error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch vendor'
+    });
+  }
+};
+
 // @desc    Create new vendor
 // @route   POST /api/admin/vendors
 // @access  Private (Admin only)
@@ -675,9 +705,88 @@ const getActivity = async (req, res) => {
   }
 };
 
+// @desc    Bulk update users
+// @route   PUT /api/admin/users/bulk
+// @access  Private (Admin only)
+const bulkUpdateUsers = async (req, res) => {
+  try {
+    const { ids, action } = req.body;
+
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'User IDs are required'
+      });
+    }
+
+    if (!action || !['activate', 'deactivate'].includes(action)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Valid action is required (activate or deactivate)'
+      });
+    }
+
+    const isActive = action === 'activate';
+    const updateResult = await User.updateMany(
+      { _id: { $in: ids } },
+      { isActive }
+    );
+
+    res.json({
+      success: true,
+      message: `Successfully ${action}d ${updateResult.modifiedCount} users`,
+      data: {
+        modifiedCount: updateResult.modifiedCount,
+        matchedCount: updateResult.matchedCount
+      }
+    });
+
+  } catch (error) {
+    console.error('Bulk update users error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to bulk update users'
+    });
+  }
+};
+
+// @desc    Bulk delete users
+// @route   DELETE /api/admin/users/bulk
+// @access  Private (Admin only)
+const bulkDeleteUsers = async (req, res) => {
+  try {
+    const { ids } = req.body;
+
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'User IDs are required'
+      });
+    }
+
+    const deleteResult = await User.deleteMany({ _id: { $in: ids } });
+
+    res.json({
+      success: true,
+      message: `Successfully deleted ${deleteResult.deletedCount} users`,
+      data: {
+        deletedCount: deleteResult.deletedCount
+      }
+    });
+
+  } catch (error) {
+    console.error('Bulk delete users error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to bulk delete users'
+    });
+  }
+};
+
 module.exports = {
   getDashboardStats,
   getVendors,
+  getVendor,
   createVendor,
   updateVendor,
   deleteVendor,
@@ -689,5 +798,7 @@ module.exports = {
   updateBookingStatus,
   getUsers,
   updateUserStatus,
-  getActivity
+  getActivity,
+  bulkUpdateUsers,
+  bulkDeleteUsers
 };

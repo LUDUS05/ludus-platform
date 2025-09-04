@@ -58,6 +58,7 @@ const AppRoutes = () => {
         {/* Temporarily disabled map route - redirect to home */}
         <Route path="map" element={<Navigate to="/" replace />} />
         <Route path="contact" element={<ContactPage />} />
+        <Route path="forms/:slug" element={<DynamicPage />} />
         
         {/* Protected routes */}
         <Route path="booking/:id" element={

@@ -5,6 +5,7 @@ const { authenticate, authorize } = require('../middleware/auth');
 const {
   getDashboardStats,
   getVendors,
+  getVendor,
   createVendor,
   updateVendor,
   deleteVendor,
@@ -16,8 +17,15 @@ const {
   getBookings,
   updateBookingStatus,
   getUsers,
-  updateUserStatus
+  updateUserStatus,
+  bulkUpdateUsers,
+  bulkDeleteUsers
 } = require('../controllers/adminController');
+
+const {
+  bulkUpdateActivities,
+  bulkDeleteActivities
+} = require('../controllers/activityController');
 
 const {
   // Translation Management
@@ -68,6 +76,7 @@ const {
 
 const { 
   validateVendorCreation,
+  validateVendorUpdate,
   validateActivityCreation,
   validateObjectId
 } = require('../middleware/validation');
@@ -96,7 +105,11 @@ const userRoutes = express.Router();
 userRoutes.use(authorize('admin'));
 
 userRoutes.get('/', getUsers);
-userRoutes.put('/:id/status', validateObjectId, updateUserStatus);
+userRoutes.put('/:id/status', validateObjectId('id'), updateUserStatus);
+
+// Bulk operations
+userRoutes.put('/bulk', bulkUpdateUsers);
+userRoutes.delete('/bulk', bulkDeleteUsers);
 
 router.use('/users', userRoutes);
 
@@ -107,9 +120,10 @@ const vendorRoutes = express.Router();
 vendorRoutes.use(authorize('admin'));
 
 vendorRoutes.get('/', getVendors);
+vendorRoutes.get('/:id', validateObjectId('id'), getVendor);
 vendorRoutes.post('/', validateVendorCreation, createVendor);
-vendorRoutes.put('/:id', validateObjectId, updateVendor);
-vendorRoutes.delete('/:id', validateObjectId, deleteVendor);
+vendorRoutes.put('/:id', validateObjectId('id'), validateVendorUpdate, updateVendor);
+vendorRoutes.delete('/:id', validateObjectId('id'), deleteVendor);
 
 router.use('/vendors', vendorRoutes);
 
@@ -120,10 +134,14 @@ const activityRoutes = express.Router();
 activityRoutes.use(authorize('admin'));
 
 activityRoutes.get('/', getActivities);
-activityRoutes.get('/:id', validateObjectId, getActivity); // Add this line
+activityRoutes.get('/:id', validateObjectId('id'), getActivity); // Add this line
 activityRoutes.post('/', validateActivityCreation, createActivity);
-activityRoutes.put('/:id', validateObjectId, updateActivity);
-activityRoutes.delete('/:id', validateObjectId, deleteActivity);
+activityRoutes.put('/:id', validateObjectId('id'), updateActivity);
+activityRoutes.delete('/:id', validateObjectId('id'), deleteActivity);
+
+// Bulk operations
+activityRoutes.put('/bulk', bulkUpdateActivities);
+activityRoutes.delete('/bulk', bulkDeleteActivities);
 
 router.use('/activities', activityRoutes);
 
@@ -134,7 +152,7 @@ const bookingRoutes = express.Router();
 bookingRoutes.use(authorize('admin'));
 
 bookingRoutes.get('/', getBookings);
-bookingRoutes.put('/:id/status', validateObjectId, updateBookingStatus);
+bookingRoutes.put('/:id/status', validateObjectId('id'), updateBookingStatus);
 
 router.use('/bookings', bookingRoutes);
 
@@ -145,12 +163,12 @@ const pageRoutes = express.Router();
 pageRoutes.use(authorize('admin'));
 
 pageRoutes.get('/', getPages);
-pageRoutes.get('/:id', validateObjectId, getPage);
+pageRoutes.get('/:id', validateObjectId('id'), getPage);
 pageRoutes.post('/', createPage);
-pageRoutes.put('/:id', validateObjectId, updatePage);
-pageRoutes.delete('/:id', validateObjectId, deletePage);
-pageRoutes.post('/:id/duplicate', validateObjectId, duplicatePage);
-pageRoutes.get('/:id/analytics', validateObjectId, getPageAnalytics);
+pageRoutes.put('/:id', validateObjectId('id'), updatePage);
+pageRoutes.delete('/:id', validateObjectId('id'), deletePage);
+pageRoutes.post('/:id/duplicate', validateObjectId('id'), duplicatePage);
+pageRoutes.get('/:id/analytics', validateObjectId('id'), getPageAnalytics);
 
 router.use('/pages', pageRoutes);
 
@@ -173,10 +191,10 @@ categoryRoutes.use(authorize('admin'));
 
 categoryRoutes.get('/', getCategories);
 categoryRoutes.post('/', createCategory);
-categoryRoutes.put('/:id', updateCategory);
-categoryRoutes.delete('/:id', deleteCategory);
+categoryRoutes.put('/:id', validateObjectId('id'), updateCategory);
+categoryRoutes.delete('/:id', validateObjectId('id'), deleteCategory);
 categoryRoutes.put('/reorder', reorderCategories);
-categoryRoutes.put('/:id/status', updateCategoryStatus);
+categoryRoutes.put('/:id/status', validateObjectId('id'), updateCategoryStatus);
 
 router.use('/categories', categoryRoutes);
 
@@ -204,8 +222,8 @@ teamRoutes.post('/roles/initialize', initializeAdminRoles);
 // Admin team management routes
 teamRoutes.get('/', getAdminTeam);
 teamRoutes.post('/assign', assignAdminRole);
-teamRoutes.put('/:userId', updateAdminUser);
-teamRoutes.delete('/:userId', removeAdminRole);
+teamRoutes.put('/:userId', validateObjectId('userId'), updateAdminUser);
+teamRoutes.delete('/:userId', validateObjectId('userId'), removeAdminRole);
 
 router.use('/team', teamRoutes);
 

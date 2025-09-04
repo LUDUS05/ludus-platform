@@ -19,6 +19,10 @@ const ActivityManagement = () => {
     totalPages: 1,
     totalActivities: 0
   });
+  const [selectedActivities, setSelectedActivities] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
+  const [bulkAction, setBulkAction] = useState('');
+  const [showBulkActions, setShowBulkActions] = useState(false);
 
   useEffect(() => {
     fetchActivities();
@@ -87,6 +91,84 @@ const ActivityManagement = () => {
       console.error('Failed to update activity status:', error);
       alert('Failed to update activity status');
     }
+  };
+
+  // Bulk selection functions
+  const handleSelectAll = (checked) => {
+    setSelectAll(checked);
+    if (checked) {
+      setSelectedActivities(activities.map(activity => activity._id));
+    } else {
+      setSelectedActivities([]);
+    }
+  };
+
+  const handleSelectActivity = (activityId, checked) => {
+    if (checked) {
+      setSelectedActivities(prev => [...prev, activityId]);
+    } else {
+      setSelectedActivities(prev => prev.filter(id => id !== activityId));
+      setSelectAll(false);
+    }
+  };
+
+  const handleBulkAction = async () => {
+    if (selectedActivities.length === 0) {
+      alert('Please select at least one activity');
+      return;
+    }
+
+    if (!bulkAction) {
+      alert('Please select an action');
+      return;
+    }
+
+    const confirmMessage = `Are you sure you want to ${bulkAction} ${selectedActivities.length} activities?`;
+    if (!window.confirm(confirmMessage)) {
+      return;
+    }
+
+    try {
+      switch (bulkAction) {
+        case 'activate':
+          await api.put('/api/admin/activities/bulk', {
+            ids: selectedActivities,
+            action: 'activate'
+          });
+          break;
+        case 'deactivate':
+          await api.put('/api/admin/activities/bulk', {
+            ids: selectedActivities,
+            action: 'deactivate'
+          });
+          break;
+        case 'delete':
+          await api.delete('/api/admin/activities/bulk', {
+            data: { ids: selectedActivities }
+          });
+          break;
+        default:
+          alert('Invalid action selected');
+          return;
+      }
+
+      alert(`Successfully ${bulkAction}d ${selectedActivities.length} activities`);
+      setSelectedActivities([]);
+      setSelectAll(false);
+      setBulkAction('');
+      setShowBulkActions(false);
+      fetchActivities();
+    } catch (error) {
+      console.error('Bulk action failed:', error);
+      alert(error.response?.data?.message || `Failed to ${bulkAction} activities`);
+    }
+  };
+
+  const clearSelection = () => {
+    setSelectedActivities([]);
+    setSelectAll(false);
+    setShowBulkActions(false);
+    setBulkAction('');
   };
 
   const formatCurrency = (amount) => {
@@ -223,12 +305,58 @@ const ActivityManagement = () => {
         </div>
       )}
 
+      {/* Bulk Actions Bar */}
+      {selectedActivities.length > 0 && (
+        <div className="bg-blue-50 border border-blue-200 rounded-md p-4 mb-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <span className="text-sm font-medium text-blue-800">
+                {selectedActivities.length} activities selected
+              </span>
+              <button
+                onClick={clearSelection}
+                className="text-sm text-blue-600 hover:text-blue-800 underline"
+              >
+                Clear selection
+              </button>
+            </div>
+            <div className="flex items-center space-x-3">
+              <select
+                value={bulkAction}
+                onChange={(e) => setBulkAction(e.target.value)}
+                className="px-3 py-1 border border-blue-300 rounded-md text-sm focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="">Select action...</option>
+                <option value="activate">Activate</option>
+                <option value="deactivate">Deactivate</option>
+                <option value="delete">Delete</option>
+              </select>
+              <button
+                onClick={handleBulkAction}
+                disabled={!bulkAction}
+                className="px-4 py-1 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+              >
+                Apply
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Activities Table */}
       <div className="bg-white rounded-lg shadow border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <input
+                    type="checkbox"
+                    checked={selectAll}
+                    onChange={(e) => handleSelectAll(e.target.checked)}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Activity
                 </th>
@@ -252,6 +380,14 @@ const ActivityManagement = () => {
             <tbody className="bg-white divide-y divide-gray-200">
               {activities.map((activity) => (
                 <tr key={activity._id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <input
+                      type="checkbox"
+                      checked={selectedActivities.includes(activity._id)}
+                      onChange={(e) => handleSelectActivity(activity._id, e.target.checked)}
+                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    />
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
                       <div className="text-sm font-medium text-gray-900">

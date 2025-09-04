@@ -134,6 +134,63 @@ const validateVendorCreation = [
   handleValidationErrors
 ];
 
+// Vendor update validation (more flexible)
+const validateVendorUpdate = [
+  body('businessName')
+    .optional()
+    .trim()
+    .isLength({ min: 2, max: 100 })
+    .withMessage('Business name must be 2-100 characters'),
+  
+  body('description')
+    .optional()
+    .trim()
+    .isLength({ min: 50, max: 1000 })
+    .withMessage('Description must be 50-1000 characters'),
+  
+  body('contactInfo.email')
+    .optional()
+    .isEmail()
+    .withMessage('Please provide a valid email')
+    .normalizeEmail(),
+  
+  body('contactInfo.phone')
+    .optional()
+    .isMobilePhone()
+    .withMessage('Please provide a valid phone number'),
+  
+  body('location.address')
+    .optional()
+    .trim()
+    .notEmpty()
+    .withMessage('Address cannot be empty'),
+  
+  body('location.city')
+    .optional()
+    .trim()
+    .notEmpty()
+    .withMessage('City cannot be empty'),
+  
+  body('location.state')
+    .optional()
+    .trim()
+    .notEmpty()
+    .withMessage('State cannot be empty'),
+  
+  body('location.zipCode')
+    .optional()
+    .trim()
+    .notEmpty()
+    .withMessage('Zip code cannot be empty'),
+  
+  body('categories')
+    .optional()
+    .isArray({ min: 1 })
+    .withMessage('At least one category is required'),
+  
+  handleValidationErrors
+];
+
 // Activity validation rules
 const validateActivityCreation = [
   body('title')
@@ -392,6 +449,7 @@ module.exports = {
   validateUserLogin,
   validateUserUpdate,
   validateVendorCreation,
+  validateVendorUpdate,
   validateActivityCreation,
   validateBookingCreation,
   validatePayment,

@@ -17,6 +17,10 @@ const VendorManagement = () => {
     totalPages: 1,
     totalVendors: 0
   });
+  const [selectedVendors, setSelectedVendors] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
+  const [bulkAction, setBulkAction] = useState('');
+  const [showBulkActions, setShowBulkActions] = useState(false);
 
   useEffect(() => {
     fetchVendors();
@@ -89,6 +93,84 @@ const VendorManagement = () => {
   };
 
   const categories = ['fitness', 'arts', 'food', 'outdoor', 'unique', 'wellness'];
+
+  // Bulk selection functions
+  const handleSelectAll = (checked) => {
+    setSelectAll(checked);
+    if (checked) {
+      setSelectedVendors(vendors.map(vendor => vendor._id));
+    } else {
+      setSelectedVendors([]);
+    }
+  };
+
+  const handleSelectVendor = (vendorId, checked) => {
+    if (checked) {
+      setSelectedVendors(prev => [...prev, vendorId]);
+    } else {
+      setSelectedVendors(prev => prev.filter(id => id !== vendorId));
+      setSelectAll(false);
+    }
+  };
+
+  const handleBulkAction = async () => {
+    if (selectedVendors.length === 0) {
+      alert('Please select at least one vendor');
+      return;
+    }
+
+    if (!bulkAction) {
+      alert('Please select an action');
+      return;
+    }
+
+    const confirmMessage = `Are you sure you want to ${bulkAction} ${selectedVendors.length} vendors?`;
+    if (!window.confirm(confirmMessage)) {
+      return;
+    }
+
+    try {
+      switch (bulkAction) {
+        case 'activate':
+          await api.put('/api/admin/vendors/bulk', {
+            ids: selectedVendors,
+            action: 'activate'
+          });
+          break;
+        case 'deactivate':
+          await api.put('/api/admin/vendors/bulk', {
+            ids: selectedVendors,
+            action: 'deactivate'
+          });
+          break;
+        case 'delete':
+          await api.delete('/api/admin/vendors/bulk', {
+            data: { ids: selectedVendors }
+          });
+          break;
+        default:
+          alert('Invalid action selected');
+          return;
+      }
+
+      alert(`Successfully ${bulkAction}d ${selectedVendors.length} vendors`);
+      setSelectedVendors([]);
+      setSelectAll(false);
+      setBulkAction('');
+      setShowBulkActions(false);
+      fetchVendors();
+    } catch (error) {
+      console.error('Bulk action failed:', error);
+      alert(error.response?.data?.message || `Failed to ${bulkAction} vendors`);
+    }
+  };
+
+  const clearSelection = () => {
+    setSelectedVendors([]);
+    setSelectAll(false);
+    setShowBulkActions(false);
+    setBulkAction('');
+  };
 
   if (loading && vendors.length === 0) {
     return (
@@ -195,12 +277,58 @@ const VendorManagement = () => {
         </div>
       )}
 
+      {/* Bulk Actions Bar */}
+      {selectedVendors.length > 0 && (
+        <div className="bg-blue-50 border border-blue-200 rounded-md p-4 mb-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <span className="text-sm font-medium text-blue-800">
+                {selectedVendors.length} vendors selected
+              </span>
+              <button
+                onClick={clearSelection}
+                className="text-sm text-blue-600 hover:text-blue-800 underline"
+              >
+                Clear selection
+              </button>
+            </div>
+            <div className="flex items-center space-x-3">
+              <select
+                value={bulkAction}
+                onChange={(e) => setBulkAction(e.target.value)}
+                className="px-3 py-1 border border-blue-300 rounded-md text-sm focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="">Select action...</option>
+                <option value="activate">Activate</option>
+                <option value="deactivate">Deactivate</option>
+                <option value="delete">Delete</option>
+              </select>
+              <button
+                onClick={handleBulkAction}
+                disabled={!bulkAction}
+                className="px-4 py-1 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+              >
+                Apply
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Vendors Table */}
       <div className="bg-white rounded-lg shadow border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <input
+                    type="checkbox"
+                    checked={selectAll}
+                    onChange={(e) => handleSelectAll(e.target.checked)}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Business
                 </th>
@@ -221,6 +349,14 @@ const VendorManagement = () => {
             <tbody className="bg-white divide-y divide-gray-200">
               {vendors.map((vendor) => (
                 <tr key={vendor._id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <input
+                      type="checkbox"
+                      checked={selectedVendors.includes(vendor._id)}
+                      onChange={(e) => handleSelectVendor(vendor._id, e.target.checked)}
+                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    />
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
                       <div className="text-sm font-medium text-gray-900">

@@ -15,6 +15,8 @@ import TranslationManagement from '../../components/admin/TranslationManagement'
 import SystemSettings from '../../components/admin/SystemSettings';
 import UserManagement from '../../components/admin/UserManagement';
 import ReferralManagement from '../../components/admin/ReferralManagement';
+import FormManagement from '../../components/admin/FormManagement';
+import FormResponses from '../../components/admin/FormResponses';
 
 const AdminRoutes = () => {
   return (
@@ -37,6 +39,8 @@ const AdminRoutes = () => {
         <Route path="/content/new" element={<PageForm />} />
         <Route path="/content/edit/:id" element={<PageForm />} />
         <Route path="/translations" element={<TranslationManagement />} />
+        <Route path="/forms" element={<FormManagement />} />
+        <Route path="/forms/:formId/responses" element={<FormResponses />} />
         <Route path="/settings" element={<SystemSettings />} />
       </Routes>
     </AdminLayout>

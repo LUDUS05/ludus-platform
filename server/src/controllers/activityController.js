@@ -1,4 +1,5 @@
 const Activity = require('../models/Activity');
+const { validationResult } = require('express-validator');
 
 // @desc    Get all activities with filters
 // @route   GET /api/activities
@@ -264,10 +265,108 @@ const getActivitiesByCategory = async (req, res) => {
   }
 };
 
+// @desc    Bulk update activities
+// @route   PUT /api/admin/activities/bulk
+// @access  Private (Admin)
+const bulkUpdateActivities = async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        message: 'Validation error',
+        errors: errors.array()
+      });
+    }
+
+    const { ids, action } = req.body;
+
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Activity IDs are required'
+      });
+    }
+
+    if (!action || !['activate', 'deactivate'].includes(action)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Valid action is required (activate or deactivate)'
+      });
+    }
+
+    const isActive = action === 'activate';
+    const updateResult = await Activity.updateMany(
+      { _id: { $in: ids } },
+      { isActive }
+    );
+
+    res.json({
+      success: true,
+      message: `Successfully ${action}d ${updateResult.modifiedCount} activities`,
+      data: {
+        modifiedCount: updateResult.modifiedCount,
+        matchedCount: updateResult.matchedCount
+      }
+    });
+
+  } catch (error) {
+    console.error('Bulk update activities error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to bulk update activities'
+    });
+  }
+};
+
+// @desc    Bulk delete activities
+// @route   DELETE /api/admin/activities/bulk
+// @access  Private (Admin)
+const bulkDeleteActivities = async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        message: 'Validation error',
+        errors: errors.array()
+      });
+    }
+
+    const { ids } = req.body;
+
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Activity IDs are required'
+      });
+    }
+
+    const deleteResult = await Activity.deleteMany({ _id: { $in: ids } });
+
+    res.json({
+      success: true,
+      message: `Successfully deleted ${deleteResult.deletedCount} activities`,
+      data: {
+        deletedCount: deleteResult.deletedCount
+      }
+    });
+
+  } catch (error) {
+    console.error('Bulk delete activities error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to bulk delete activities'
+    });
+  }
+};
+
 module.exports = {
   getActivities,
   getActivityById,
   searchActivities,
   getPopularActivities,
-  getActivitiesByCategory
+  getActivitiesByCategory,
+  bulkUpdateActivities,
+  bulkDeleteActivities
 };

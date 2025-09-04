@@ -6,7 +6,9 @@ const {
   getActivityById,
   searchActivities,
   getPopularActivities,
-  getActivitiesByCategory
+  getActivitiesByCategory,
+  bulkUpdateActivities,
+  bulkDeleteActivities
 } = require('../controllers/activityController');
 
 // @desc    Search activities (must be before /:id route)

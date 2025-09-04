@@ -116,6 +116,8 @@ app.use('/api/analytics', require('./routes/analytics'));
 app.use('/api/reports', require('./routes/reports'));
 app.use('/api/monitoring', require('./routes/monitoring'));
 app.use('/api/qr', require('./routes/qr'));
+app.use('/api/forms', require('./routes/forms'));
+app.use('/api/admin/forms', require('./routes/forms'));
 
 // Remove the catch-all 404 handler - Render should handle frontend routes
 // app.use('*', (req, res) => {

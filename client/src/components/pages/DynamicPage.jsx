@@ -1,17 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import FormDisplay from '../forms/FormDisplay';
 
 const DynamicPage = () => {
   const { url } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [page, setPage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    // Check if this is a form route
+    if (location.pathname.startsWith('/forms/')) {
+      return; // Let FormDisplay handle it
+    }
     fetchPage();
-  }, [url]);
+  }, [url, location.pathname]);
 
   const fetchPage = async () => {
     try {
@@ -32,6 +38,11 @@ const DynamicPage = () => {
       setLoading(false);
     }
   };
+
+  // Handle form routes
+  if (location.pathname.startsWith('/forms/')) {
+    return <FormDisplay />;
+  }
 
   if (loading) {
     return (

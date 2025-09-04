@@ -132,6 +132,13 @@ const AdminDashboard = () => {
       link: '/admin/bookings'
     },
     {
+      title: 'Custom Forms',
+      value: stats?.overview?.totalForms || 0,
+      icon: '📝',
+      color: 'info',
+      link: '/admin/forms'
+    },
+    {
       title: 'Total Revenue',
       value: formatCurrency(stats?.overview?.totalRevenue || 0),
       icon: '💰',

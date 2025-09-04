@@ -18,6 +18,10 @@ const UserManagement = () => {
     totalPages: 1,
     totalUsers: 0
   });
+  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
+  const [bulkAction, setBulkAction] = useState('');
+  const [showBulkActions, setShowBulkActions] = useState(false);
 
   useEffect(() => {
     fetchUsers();
@@ -97,6 +101,84 @@ const UserManagement = () => {
     );
   };
 
+  // Bulk selection functions
+  const handleSelectAll = (checked) => {
+    setSelectAll(checked);
+    if (checked) {
+      setSelectedUsers(users.map(user => user._id));
+    } else {
+      setSelectedUsers([]);
+    }
+  };
+
+  const handleSelectUser = (userId, checked) => {
+    if (checked) {
+      setSelectedUsers(prev => [...prev, userId]);
+    } else {
+      setSelectedUsers(prev => prev.filter(id => id !== userId));
+      setSelectAll(false);
+    }
+  };
+
+  const handleBulkAction = async () => {
+    if (selectedUsers.length === 0) {
+      alert('Please select at least one user');
+      return;
+    }
+
+    if (!bulkAction) {
+      alert('Please select an action');
+      return;
+    }
+
+    const confirmMessage = `Are you sure you want to ${bulkAction} ${selectedUsers.length} users?`;
+    if (!window.confirm(confirmMessage)) {
+      return;
+    }
+
+    try {
+      switch (bulkAction) {
+        case 'activate':
+          await api.put('/api/admin/users/bulk', {
+            ids: selectedUsers,
+            action: 'activate'
+          });
+          break;
+        case 'deactivate':
+          await api.put('/api/admin/users/bulk', {
+            ids: selectedUsers,
+            action: 'deactivate'
+          });
+          break;
+        case 'delete':
+          await api.delete('/api/admin/users/bulk', {
+            data: { ids: selectedUsers }
+          });
+          break;
+        default:
+          alert('Invalid action selected');
+          return;
+      }
+
+      alert(`Successfully ${bulkAction}d ${selectedUsers.length} users`);
+      setSelectedUsers([]);
+      setSelectAll(false);
+      setBulkAction('');
+      setShowBulkActions(false);
+      fetchUsers();
+    } catch (error) {
+      console.error('Bulk action failed:', error);
+      alert(error.response?.data?.message || `Failed to ${bulkAction} users`);
+    }
+  };
+
+  const clearSelection = () => {
+    setSelectedUsers([]);
+    setSelectAll(false);
+    setShowBulkActions(false);
+    setBulkAction('');
+  };
+
   if (loading && users.length === 0) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -171,11 +253,57 @@ const UserManagement = () => {
         </div>
       </div>
 
+      {/* Bulk Actions Bar */}
+      {selectedUsers.length > 0 && (
+        <div className="bg-blue-50 border border-blue-200 rounded-md p-4 mb-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <span className="text-sm font-medium text-blue-800">
+                {selectedUsers.length} users selected
+              </span>
+              <button
+                onClick={clearSelection}
+                className="text-sm text-blue-600 hover:text-blue-800 underline"
+              >
+                Clear selection
+              </button>
+            </div>
+            <div className="flex items-center space-x-3">
+              <select
+                value={bulkAction}
+                onChange={(e) => setBulkAction(e.target.value)}
+                className="px-3 py-1 border border-blue-300 rounded-md text-sm focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="">Select action...</option>
+                <option value="activate">Activate</option>
+                <option value="deactivate">Deactivate</option>
+                <option value="delete">Delete</option>
+              </select>
+              <button
+                onClick={handleBulkAction}
+                disabled={!bulkAction}
+                className="px-4 py-1 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+              >
+                Apply
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Users Table */}
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
           <thead className="bg-gray-50 dark:bg-gray-700">
             <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                <input
+                  type="checkbox"
+                  checked={selectAll}
+                  onChange={(e) => handleSelectAll(e.target.checked)}
+                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                />
+              </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                 User
               </th>
@@ -199,6 +327,14 @@ const UserManagement = () => {
           <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
             {users.map((user) => (
               <tr key={user._id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <input
+                    type="checkbox"
+                    checked={selectedUsers.includes(user._id)}
+                    onChange={(e) => handleSelectUser(user._id, e.target.checked)}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
                     <div className="flex-shrink-0 h-10 w-10">
