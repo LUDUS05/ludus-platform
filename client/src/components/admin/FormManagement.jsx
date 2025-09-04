@@ -6,6 +6,49 @@ import { Input } from '../ui/Input';
 import Alert from '../ui/Alert';
 import api from '../../services/api';
 
+// Placeholder FormEditor component
+const FormEditor = ({ form, onSave, onCancel }) => {
+  return (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h2 className="text-xl font-bold text-gray-900">
+          {form ? 'Edit Form' : 'Create New Form'}
+        </h2>
+        <Button
+          variant="outline"
+          onClick={onCancel}
+        >
+          Cancel
+        </Button>
+      </div>
+      
+      <Card className="p-6">
+        <div className="text-center py-8">
+          <div className="text-4xl mb-4">📝</div>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">Form Editor</h3>
+          <p className="text-gray-600 mb-6">
+            Form editor functionality is coming soon. This feature will allow you to create and edit custom forms.
+          </p>
+          <div className="flex gap-3 justify-center">
+            <Button
+              onClick={onSave}
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              Save Form
+            </Button>
+            <Button
+              variant="outline"
+              onClick={onCancel}
+            >
+              Cancel
+            </Button>
+          </div>
+        </div>
+      </Card>
+    </div>
+  );
+};
+
 const FormManagement = () => {
   const { t } = useTranslation();
   const [forms, setForms] = useState([]);

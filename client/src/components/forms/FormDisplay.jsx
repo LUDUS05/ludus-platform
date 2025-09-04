@@ -69,7 +69,7 @@ const FormDisplay = () => {
         }
         
         if (field.type === 'number' && isNaN(responses[field.id].value)) {
-          errors.push(`Invalid number format for field "${field.id].value}"`);
+          errors.push(`Invalid number format for field "${field.label}"`);
         }
       }
     });
