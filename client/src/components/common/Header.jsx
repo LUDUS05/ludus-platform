@@ -50,7 +50,7 @@ const Header = () => {
               to="/how-it-works"
               className="text-charcoal dark:text-dark-text-secondary hover:text-ludus-orange dark:hover:text-dark-ludus-orange font-medium transition-colors duration-200"
             >
-              {t('navigation.howItWorks')}
+              {t('navigation.howItWorks.title')}
             </Link>
             {/* Dynamic Header Menu Pages */}
             {headerPages.filter(page => page.status === 'published').map((page) => (
@@ -178,7 +178,7 @@ const Header = () => {
                 className="text-charcoal dark:text-dark-text-secondary hover:text-ludus-orange dark:hover:text-dark-ludus-orange font-medium transition-colors duration-200"
                 onClick={() => setIsMenuOpen(false)}
               >
-                {t('navigation.howItWorks')}
+                {t('navigation.howItWorks.title')}
               </Link>
               {/* Dynamic Header Menu Pages - Mobile */}
               {headerPages.filter(page => page.status === 'published').map((page) => (
