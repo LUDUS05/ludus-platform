@@ -37,6 +37,13 @@
     "referralQRCode": "رمز QR للإحالة",
     "yourReferralQRCode": "رمز QR للإحالة الخاص بك"
   },
+  "language": {
+    "arabic": "العربية",
+    "english": "English",
+    "switchLanguage": "تبديل اللغة",
+    "ar": "ع",
+    "en": "En"
+  },
   "navigation": {
     "home": "الرئيسية",
     "activities": "الأنشطة",
@@ -152,7 +159,11 @@
     "recentBookings": "الحجوزات الحديثة",
     "upcomingActivities": "الأنشطة القادمة",
     "earnings": "الأرباح",
-    "statistics": "الإحصائيات"
+    "statistics": "الإحصائيات",
+    "myBookings": "حجوزاتي",
+    "noBookingsYet": "لا توجد حجوزات بعد",
+    "startExploring": "ابدأ استكشاف الأنشطة لعمل أول حجز لك!",
+    "exploreActivities": "استكشف الأنشطة"
   },
   "admin": {
     "title": "الإدارة",
@@ -236,6 +247,27 @@
     "readyToStartDesc": "انضم إلى آلاف المستكشفين الذين يكتشفون تجارب مذهلة في جميع أنحاء المملكة العربية السعودية",
     "browseActivities": "تصفح الأنشطة",
     "becomePartner": "كن شريكاً"
+  },
+  "referral": {
+    "title": "لوحة الإحالة",
+    "totalReferrals": "إجمالي الإحالات",
+    "totalEarnings": "إجمالي الأرباح",
+    "pendingRewards": "المكافآت المعلقة",
+    "yourReferralCode": "رمز الإحالة الخاص بك",
+    "referralCode": "رمز الإحالة",
+    "generateReferralCode": "إنشاء رمز الإحالة",
+    "referralHistory": "تاريخ الإحالات",
+    "noReferralsYet": "لا توجد إحالات بعد. ابدأ المشاركة لرؤية تاريخك هنا!",
+    "shareQRCode": "شارك رمز QR هذا مع الأصدقاء لكسب المكافآت",
+    "downloadQRCode": "تحميل رمز QR",
+    "copyLink": "نسخ الرابط",
+    "shareLink": "مشاركة الرابط",
+    "viewDetails": "عرض التفاصيل",
+    "loadMore": "تحميل المزيد",
+    "refreshData": "تحديث البيانات",
+    "somethingWentWrong": "حدث خطأ ما",
+    "failedToLoad": "فشل في التحميل",
+    "loadingReferralData": "جاري تحميل بيانات الإحالة"
   },
   "user": {
     "title": "المستخدم",

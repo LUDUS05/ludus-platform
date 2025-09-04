@@ -364,19 +364,19 @@ const DashboardPage = () => {
           {activeTab === 'bookings' && (
             <div className="bg-white rounded-lg shadow border border-gray-200">
               <div className="px-6 py-4 border-b border-gray-200">
-                <h2 className="text-lg font-semibold text-gray-900">My Bookings</h2>
+                <h2 className="text-lg font-semibold text-gray-900">{t('myBookings')}</h2>
               </div>
               <div className="p-6">
                 {bookings.length === 0 ? (
                   <div className="text-center py-8">
                     <div className="text-gray-400 text-4xl mb-4">📅</div>
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">No bookings yet</h3>
-                    <p className="text-gray-500 mb-6">Start exploring activities to make your first booking!</p>
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">{t('noBookingsYet')}</h3>
+                    <p className="text-gray-500 mb-6">{t('startExploring')}</p>
                     <Link
                       to="/activities"
                       className="bg-ludus-orange text-white px-6 py-2 rounded-md hover:bg-ludus-orange-dark transition-colors"
                     >
-                      Explore Activities
+                      {t('exploreActivities')}
                     </Link>
                   </div>
                 ) : (

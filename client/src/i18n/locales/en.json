@@ -37,6 +37,13 @@
     "referralQRCode": "Referral QR Code",
     "yourReferralQRCode": "Your Referral QR Code"
   },
+  "language": {
+    "arabic": "العربية",
+    "english": "English",
+    "switchLanguage": "Switch Language",
+    "ar": "ع",
+    "en": "En"
+  },
   "navigation": {
     "home": "Home",
     "activities": "Activities",
@@ -132,7 +139,11 @@
     "recentBookings": "Recent Bookings",
     "upcomingActivities": "Upcoming Activities",
     "earnings": "Earnings",
-    "statistics": "Statistics"
+    "statistics": "Statistics",
+    "myBookings": "My Bookings",
+    "noBookingsYet": "No bookings yet",
+    "startExploring": "Start exploring activities to make your first booking!",
+    "exploreActivities": "Explore Activities"
   },
   "admin": {
     "title": "Admin",
@@ -216,6 +227,27 @@
     "readyToStartDesc": "Join thousands of explorers discovering amazing experiences across Saudi Arabia",
     "browseActivities": "Browse Activities",
     "becomePartner": "Become a Partner"
+  },
+  "referral": {
+    "title": "Referral Dashboard",
+    "totalReferrals": "Total Referrals",
+    "totalEarnings": "Total Earnings",
+    "pendingRewards": "Pending Rewards",
+    "yourReferralCode": "Your Referral Code",
+    "referralCode": "Referral Code",
+    "generateReferralCode": "Generate Referral Code",
+    "referralHistory": "Referral History",
+    "noReferralsYet": "No referrals yet. Start sharing to see your history here!",
+    "shareQRCode": "Share this QR code with friends to earn rewards",
+    "downloadQRCode": "Download QR Code",
+    "copyLink": "Copy Link",
+    "shareLink": "Share Link",
+    "viewDetails": "View Details",
+    "loadMore": "Load More",
+    "refreshData": "Refresh Data",
+    "somethingWentWrong": "Something went wrong",
+    "failedToLoad": "Failed to load",
+    "loadingReferralData": "Loading referral data"
   },
   "user": {
     "title": "User",

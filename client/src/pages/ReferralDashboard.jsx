@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import referralService from '../services/referralService';
 import { Card } from '../components/ui/Card';
@@ -19,6 +20,7 @@ import {
 } from 'lucide-react';
 
 const ReferralDashboard = () => {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -50,7 +52,7 @@ const ReferralDashboard = () => {
 
     } catch (error) {
       console.error('Error loading referral data:', error);
-      setError(error.message || 'Failed to load referral data');
+      setError(error.message || t('referral.failedToLoad'));
     } finally {
       setLoading(false);
     }
@@ -128,7 +130,7 @@ const ReferralDashboard = () => {
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Referral Dashboard</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">{t('referral.title')}</h1>
         <p className="text-gray-600">Share Ludus with friends and earn rewards!</p>
       </div>
 
@@ -144,7 +146,7 @@ const ReferralDashboard = () => {
               <Users className="h-6 w-6 text-blue-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Total Referrals</p>
+              <p className="text-sm font-medium text-gray-600">{t('referral.totalReferrals')}</p>
               <p className="text-2xl font-bold text-gray-900">
                 {formatNumber(referralStats?.totalReferrals || 0)}
               </p>
@@ -158,7 +160,7 @@ const ReferralDashboard = () => {
               <DollarSign className="h-6 w-6 text-green-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Total Earnings</p>
+              <p className="text-sm font-medium text-gray-600">{t('referral.totalEarnings')}</p>
               <p className="text-2xl font-bold text-gray-900">
                 {formatCurrency(referralStats?.totalEarnings || 0)}
               </p>
@@ -186,7 +188,7 @@ const ReferralDashboard = () => {
               <Award className="h-6 w-6 text-purple-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Pending Rewards</p>
+              <p className="text-sm font-medium text-gray-600">{t('referral.pendingRewards')}</p>
               <p className="text-2xl font-bold text-gray-900">
                 {formatCurrency(referralStats?.pendingRewards || 0)}
               </p>
@@ -199,7 +201,7 @@ const ReferralDashboard = () => {
         {/* Referral Code & Sharing */}
         <Card className="p-6">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-gray-900">Your Referral Code</h2>
+            <h2 className="text-xl font-semibold text-gray-900">{t('referral.yourReferralCode')}</h2>
             <button
               onClick={loadReferralData}
               className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
@@ -215,7 +217,7 @@ const ReferralDashboard = () => {
                 <div className="flex items-center gap-3">
                   <div className="text-2xl">🎁</div>
                   <div>
-                    <div className="font-medium text-gray-800">Referral Code</div>
+                    <div className="font-medium text-gray-800">{t('referral.referralCode')}</div>
                     <div className="text-sm text-gray-500 font-mono">{referralStats.referralCode}</div>
                   </div>
                 </div>
@@ -262,7 +264,7 @@ const ReferralDashboard = () => {
                 onClick={generateReferralCode}
                 className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
-                Generate Referral Code
+                {t('referral.generateReferralCode')}
               </button>
             </div>
           )}
@@ -343,7 +345,7 @@ const ReferralDashboard = () => {
       {/* Referral History */}
       <Card className="p-6 mt-8">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold text-gray-900">Referral History</h2>
+          <h2 className="text-xl font-semibold text-gray-900">{t('referral.referralHistory')}</h2>
           <button
             onClick={loadReferralData}
             className="text-blue-600 hover:text-blue-700 text-sm font-medium"
@@ -393,7 +395,7 @@ const ReferralDashboard = () => {
         ) : (
           <div className="text-center py-8 text-gray-500">
             <Users className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-            <p>No referrals yet. Start sharing to see your history here!</p>
+            <p>{t('referral.noReferralsYet')}</p>
           </div>
         )}
       </Card>
@@ -456,13 +458,13 @@ const ReferralDashboard = () => {
                 className="mx-auto mb-4 rounded-lg"
               />
               <p className="text-sm text-gray-600 mb-3">
-                Share this QR code with friends to earn rewards
+                {t('referral.shareQRCode')}
               </p>
               <button
                 onClick={downloadQRCode}
                 className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
-                Download QR Code
+                {t('referral.downloadQRCode')}
               </button>
             </div>
           </div>
