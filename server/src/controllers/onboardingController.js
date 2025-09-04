@@ -7,29 +7,34 @@ exports.getOnboardingConfig = async (req, res) => {
   try {
     const config = await OnboardingConfig.getConfig();
     
+    // Ensure steps array exists and is valid
+    const steps = config.steps || [];
+    
     // Only return enabled steps in order
-    const enabledSteps = config.steps
-      .filter(step => step.isEnabled)
-      .sort((a, b) => a.order - b.order);
+    const enabledSteps = steps
+      .filter(step => step && step.isEnabled)
+      .sort((a, b) => (a.order || 0) - (b.order || 0));
 
     res.json({
       success: true,
       config: {
+        onboardingEnabled: config.isEnabled,
         isEnabled: config.isEnabled,
         steps: enabledSteps,
-        welcomeConfig: config.welcomeConfig,
-        authConfig: config.authConfig,
-        profileConfig: config.profileConfig,
-        referralConfig: config.referralConfig,
-        interestsConfig: config.interestsConfig,
-        preferencesConfig: config.preferencesConfig
+        welcomeConfig: config.welcomeConfig || {},
+        authConfig: config.authConfig || {},
+        profileConfig: config.profileConfig || {},
+        referralConfig: config.referralConfig || {},
+        interestsConfig: config.interestsConfig || {},
+        preferencesConfig: config.preferencesConfig || {}
       }
     });
   } catch (error) {
     console.error('Get onboarding config error:', error);
     res.status(500).json({ 
       success: false, 
-      message: 'Failed to get onboarding configuration' 
+      message: 'Failed to get onboarding configuration',
+      error: error.message 
     });
   }
 };
@@ -40,13 +45,17 @@ exports.getFullOnboardingConfig = async (req, res) => {
     const config = await OnboardingConfig.getConfig();
     res.json({
       success: true,
-      config
+      config: {
+        ...config.toObject(),
+        onboardingEnabled: config.isEnabled
+      }
     });
   } catch (error) {
     console.error('Get full onboarding config error:', error);
     res.status(500).json({ 
       success: false, 
-      message: 'Failed to get onboarding configuration' 
+      message: 'Failed to get onboarding configuration',
+      error: error.message 
     });
   }
 };
@@ -77,7 +86,8 @@ exports.updateOnboardingConfig = async (req, res) => {
     console.error('Update onboarding config error:', error);
     res.status(500).json({ 
       success: false,
-      message: 'Failed to update onboarding configuration' 
+      message: 'Failed to update onboarding configuration',
+      error: error.message 
     });
   }
 };

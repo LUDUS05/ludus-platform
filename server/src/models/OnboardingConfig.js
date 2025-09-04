@@ -268,7 +268,17 @@ const onboardingConfigSchema = new mongoose.Schema({
 onboardingConfigSchema.statics.getConfig = async function() {
   let config = await this.findOne();
   if (!config) {
-    config = await this.create({});
+    // Create default configuration with all steps
+    config = await this.create({
+      steps: [
+        { stepId: 'welcome', isEnabled: true, isRequired: true, order: 1, config: {} },
+        { stepId: 'auth', isEnabled: true, isRequired: true, order: 2, config: {} },
+        { stepId: 'profile', isEnabled: true, isRequired: true, order: 3, config: {} },
+        { stepId: 'referral', isEnabled: true, isRequired: false, order: 4, config: {} },
+        { stepId: 'interests', isEnabled: true, isRequired: true, order: 5, config: {} },
+        { stepId: 'preferences', isEnabled: true, isRequired: false, order: 6, config: {} }
+      ]
+    });
   }
   return config;
 };
