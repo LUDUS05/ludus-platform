@@ -2,8 +2,8 @@ import api from './api';
 
 class AnalyticsService {
   constructor() {
-    this.baseURL = '/api/analytics';
-    this.reportsURL = '/api/reports';
+    this.baseURL = '/analytics';
+    this.reportsURL = '/reports';
   }
 
   // ===== ANALYTICS ENDPOINTS =====

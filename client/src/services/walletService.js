@@ -3,26 +3,26 @@ import { api } from './api';
 export const walletService = {
   // Get user wallet
   getWallet: async () => {
-    const response = await api.get('/api/wallet');
+    const response = await api.get('/wallet');
     return response.data;
   },
 
   // Get wallet transaction history
   getTransactions: async (params = {}) => {
     const queryParams = new URLSearchParams(params);
-    const response = await api.get(`/api/wallet/transactions?${queryParams.toString()}`);
+    const response = await api.get(`/wallet/transactions?${queryParams.toString()}`);
     return response.data;
   },
 
   // Get wallet statistics
   getStats: async () => {
-    const response = await api.get('/api/wallet/stats');
+    const response = await api.get('/wallet/stats');
     return response.data;
   },
 
   // Add funds to wallet
   depositFunds: async (amount, paymentMethodId, description = 'Wallet deposit') => {
-    const response = await api.post('/api/wallet/deposit', {
+    const response = await api.post('/wallet/deposit', {
       amount,
       paymentMethodId,
       description
@@ -32,7 +32,7 @@ export const walletService = {
 
   // Confirm deposit (for webhook/callback handling)
   confirmDeposit: async (paymentId, status) => {
-    const response = await api.post('/api/wallet/deposit/confirm', {
+    const response = await api.post('/wallet/deposit/confirm', {
       paymentId,
       status
     });
@@ -41,7 +41,7 @@ export const walletService = {
 
   // Withdraw funds from wallet
   withdrawFunds: async (amount, description = 'Wallet withdrawal') => {
-    const response = await api.post('/api/wallet/withdraw', {
+    const response = await api.post('/wallet/withdraw', {
       amount,
       description
     });
@@ -50,7 +50,7 @@ export const walletService = {
 
   // Pay with wallet funds
   payWithWallet: async (amount, bookingId, description = 'Activity booking payment') => {
-    const response = await api.post('/api/wallet/pay', {
+    const response = await api.post('/wallet/pay', {
       amount,
       bookingId,
       description
@@ -60,7 +60,7 @@ export const walletService = {
 
   // Update wallet settings
   updateSettings: async (settings) => {
-    const response = await api.put('/api/wallet/settings', { settings });
+    const response = await api.put('/wallet/settings', { settings });
     return response.data;
   },
 

@@ -2,7 +2,7 @@ import api from './api';
 
 class ReferralService {
   constructor() {
-    this.baseUrl = '/api/referrals';
+    this.baseUrl = '/referrals';
   }
 
   // Generate unique referral code for user
@@ -76,14 +76,14 @@ class ReferralService {
   // Generate QR code for referral link
   generateQRCode(referralCode, size = 200) {
     const baseUrl = process.env.REACT_APP_API_URL || 'https://ludus-backend-gf1g.onrender.com';
-    return `${baseUrl}/api/qr/${referralCode}?size=${size}&format=png`;
+    return `${baseUrl}/qr/${referralCode}?size=${size}&format=png`;
   }
 
   // Generate QR code as data URL (for better CORS compatibility)
   async generateQRCodeDataURL(referralCode, size = 200) {
     try {
       const baseUrl = process.env.REACT_APP_API_URL || 'https://ludus-backend-gf1g.onrender.com';
-      const response = await fetch(`${baseUrl}/api/qr/${referralCode}?size=${size}&format=png`);
+      const response = await fetch(`${baseUrl}/qr/${referralCode}?size=${size}&format=png`);
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -166,7 +166,7 @@ class ReferralService {
   // Download QR code
   downloadQRCode(referralCode, filename = 'referral-qr-code.png') {
     const baseUrl = process.env.REACT_APP_API_URL || 'https://ludus-backend-gf1g.onrender.com';
-    const downloadUrl = `${baseUrl}/api/qr/${referralCode}/download?size=300&format=png`;
+    const downloadUrl = `${baseUrl}/qr/${referralCode}/download?size=300&format=png`;
     
     // Create a temporary link to download the QR code
     const link = document.createElement('a');
@@ -186,7 +186,7 @@ class ReferralService {
   // Get referral analytics for admin
   async getReferralAnalytics(period = '30d') {
     try {
-      const response = await api.get('/api/admin/referrals/analytics', {
+      const response = await api.get('/admin/referrals/analytics', {
         params: { period }
       });
       return response.data;
@@ -199,7 +199,7 @@ class ReferralService {
   // Get top inviters for admin
   async getTopInviters(limit = 10) {
     try {
-      const response = await api.get('/api/admin/referrals/top-inviters', {
+      const response = await api.get('/admin/referrals/top-inviters', {
         params: { limit }
       });
       return response.data;
@@ -212,7 +212,7 @@ class ReferralService {
   // Update referral rewards (admin only)
   async updateReferralRewards(rewards) {
     try {
-      const response = await api.put('/api/admin/referrals/rewards', rewards);
+      const response = await api.put('/admin/referrals/rewards', rewards);
       return response.data;
     } catch (error) {
       console.error('Error updating referral rewards:', error);
@@ -223,7 +223,7 @@ class ReferralService {
   // Export referral data (admin only)
   async exportReferralData(format = 'csv', period = 'all') {
     try {
-      const response = await api.get('/api/admin/referrals/export', {
+      const response = await api.get('/admin/referrals/export', {
         params: { format, period },
         responseType: 'blob'
       });
@@ -252,7 +252,7 @@ class ReferralService {
       console.log('Referral click tracked:', { referralCode, source, platform, timestamp: new Date() });
       
       // In the future, this could send data to analytics service
-      // await api.post('/api/analytics/referral-click', { referralCode, source, platform });
+      // await api.post('/analytics/referral-click', { referralCode, source, platform });
       
       return { success: true };
     } catch (error) {
@@ -265,7 +265,7 @@ class ReferralService {
   // Create invitation for tracking
   async createInvitation(invitationData) {
     try {
-      const response = await api.post('/api/invitations', invitationData);
+      const response = await api.post('/invitations', invitationData);
       return response.data;
     } catch (error) {
       console.error('Error creating invitation:', error);
@@ -276,7 +276,7 @@ class ReferralService {
   // Track invitation click
   async trackInvitationClick(invitationId, metadata = {}) {
     try {
-      const response = await api.post(`/api/invitations/${invitationId}/click`, metadata);
+      const response = await api.post(`/invitations/${invitationId}/click`, metadata);
       return response.data;
     } catch (error) {
       console.error('Error tracking invitation click:', error);
@@ -287,7 +287,7 @@ class ReferralService {
   // Get invitation statistics
   async getInvitationStats(period = '30d') {
     try {
-      const response = await api.get('/api/invitations/stats', {
+      const response = await api.get('/invitations/stats', {
         params: { period }
       });
       return response.data;
@@ -300,7 +300,7 @@ class ReferralService {
   // Get invitation history
   async getInvitationHistory(page = 1, limit = 10, filters = {}) {
     try {
-      const response = await api.get('/api/invitations/history', {
+      const response = await api.get('/invitations/history', {
         params: { page, limit, ...filters }
       });
       return response.data;
@@ -313,7 +313,7 @@ class ReferralService {
   // Get invitation analytics
   async getInvitationAnalytics(period = '30d') {
     try {
-      const response = await api.get('/api/invitations/analytics', {
+      const response = await api.get('/invitations/analytics', {
         params: { period }
       });
       return response.data;
@@ -326,7 +326,7 @@ class ReferralService {
   // Get referral rewards configuration
   async getReferralRewards() {
     try {
-      const response = await api.get('/api/admin/referrals/rewards');
+      const response = await api.get('/admin/referrals/rewards');
       return response.data;
     } catch (error) {
       console.error('Error getting referral rewards:', error);
@@ -339,7 +339,7 @@ class ReferralService {
   // Get comprehensive referral analytics
   async getReferralAnalytics(period = '30d', filters = {}) {
     try {
-      const response = await api.get('/api/analytics/referrals', {
+      const response = await api.get('/analytics/referrals', {
         params: { period, ...filters }
       });
       return response.data;
@@ -352,7 +352,7 @@ class ReferralService {
   // Get referral funnel analysis
   async getReferralFunnel(period = '30d', referrerId = null) {
     try {
-      const response = await api.get('/api/analytics/funnel', {
+      const response = await api.get('/analytics/funnel', {
         params: { period, referrerId }
       });
       return response.data;
@@ -365,7 +365,7 @@ class ReferralService {
   // Get geographic analytics
   async getGeographicAnalytics(period = '30d', referrerId = null) {
     try {
-      const response = await api.get('/api/analytics/geographic', {
+      const response = await api.get('/analytics/geographic', {
         params: { period, referrerId }
       });
       return response.data;
@@ -378,7 +378,7 @@ class ReferralService {
   // Get source performance analytics
   async getSourcePerformance(period = '30d', referrerId = null) {
     try {
-      const response = await api.get('/api/analytics/sources', {
+      const response = await api.get('/analytics/sources', {
         params: { period, referrerId }
       });
       return response.data;
@@ -391,7 +391,7 @@ class ReferralService {
   // Get ROI analytics
   async getROIAnalytics(period = '30d', referrerId = null) {
     try {
-      const response = await api.get('/api/analytics/roi', {
+      const response = await api.get('/analytics/roi', {
         params: { period, referrerId }
       });
       return response.data;
@@ -406,7 +406,7 @@ class ReferralService {
   // Get available report templates
   async getReportTemplates() {
     try {
-      const response = await api.get('/api/reports/templates');
+      const response = await api.get('/reports/templates');
       return response.data;
     } catch (error) {
       console.error('Error fetching report templates:', error);
@@ -417,7 +417,7 @@ class ReferralService {
   // Generate referral report
   async generateReferralReport(reportConfig) {
     try {
-      const response = await api.post('/api/reports/generate', reportConfig);
+      const response = await api.post('/reports/generate', reportConfig);
       return response.data;
     } catch (error) {
       console.error('Error generating referral report:', error);
@@ -428,7 +428,7 @@ class ReferralService {
   // Export referral data
   async exportReferralData(exportConfig) {
     try {
-      const response = await api.post('/api/reports/export', exportConfig, {
+      const response = await api.post('/reports/export', exportConfig, {
         responseType: exportConfig.format === 'json' ? 'json' : 'blob'
       });
       return response.data;

@@ -2,7 +2,7 @@ import api from './api';
 
 class NotificationService {
   constructor() {
-    this.baseUrl = '/api/notifications';
+    this.baseUrl = '/notifications';
   }
 
   // Get user notifications
