@@ -513,11 +513,18 @@ const EnhancedVendorForm = () => {
               <textarea
                 value={formData.description}
                 onChange={(e) => handleInputChange('description', e.target.value)}
-                placeholder="Describe your business and what makes it unique..."
+                placeholder="Describe your business and what makes it unique... (Minimum 50 characters)"
                 className="w-full px-3 py-2 border border-ludus-gray-300 rounded-md resize-none h-24"
                 required
+                minLength={50}
+                maxLength={1000}
                 disabled={isViewing}
               />
+              {formData.description && formData.description.length < 50 && (
+                <p className="text-sm text-red-600 mt-1">
+                  Description must be at least 50 characters ({formData.description.length}/50)
+                </p>
+              )}
             </div>
 
             <div>
@@ -548,6 +555,160 @@ const EnhancedVendorForm = () => {
                 value={formData.businessInfo.licenseNumber}
                 onChange={(e) => handleNestedInputChange('businessInfo', 'licenseNumber', e.target.value)}
                 placeholder="CR-123456789"
+                disabled={isViewing}
+              />
+            </div>
+          </div>
+        </Card>
+
+        {/* Contact Information */}
+        <Card className="p-6">
+          <h3 className="text-body-lg font-semibold text-ludus-dark mb-4">📞 Contact Information</h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-label-sm font-medium text-ludus-dark mb-2">
+                Email Address *
+              </label>
+              <Input
+                type="email"
+                value={formData.contactInfo.email}
+                onChange={(e) => handleNestedInputChange('contactInfo', 'email', e.target.value)}
+                placeholder="contact@business.com"
+                required
+                disabled={isViewing}
+              />
+            </div>
+
+            <div>
+              <label className="block text-label-sm font-medium text-ludus-dark mb-2">
+                Phone Number *
+              </label>
+              <Input
+                type="tel"
+                value={formData.contactInfo.phone}
+                onChange={(e) => handleNestedInputChange('contactInfo', 'phone', e.target.value)}
+                placeholder="+966 50 123 4567"
+                required
+                disabled={isViewing}
+              />
+            </div>
+
+            <div>
+              <label className="block text-label-sm font-medium text-ludus-dark mb-2">
+                Website
+              </label>
+              <Input
+                type="url"
+                value={formData.contactInfo.website}
+                onChange={(e) => handleNestedInputChange('contactInfo', 'website', e.target.value)}
+                placeholder="https://www.business.com"
+                disabled={isViewing}
+              />
+            </div>
+
+            <div>
+              <label className="block text-label-sm font-medium text-ludus-dark mb-2">
+                WhatsApp
+              </label>
+              <Input
+                type="tel"
+                value={formData.contactInfo.whatsapp}
+                onChange={(e) => handleNestedInputChange('contactInfo', 'whatsapp', e.target.value)}
+                placeholder="+966 50 123 4567"
+                disabled={isViewing}
+              />
+            </div>
+          </div>
+        </Card>
+
+        {/* Location Information */}
+        <Card className="p-6">
+          <h3 className="text-body-lg font-semibold text-ludus-dark mb-4">📍 Location Information</h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="md:col-span-2">
+              <label className="block text-label-sm font-medium text-ludus-dark mb-2">
+                Street Address *
+              </label>
+              <Input
+                value={formData.address.street}
+                onChange={(e) => handleNestedInputChange('address', 'street', e.target.value)}
+                placeholder="123 King Fahd Road, Al Olaya District"
+                required
+                disabled={isViewing}
+              />
+            </div>
+
+            <div>
+              <label className="block text-label-sm font-medium text-ludus-dark mb-2">
+                City *
+              </label>
+              <Input
+                value={formData.address.city}
+                onChange={(e) => handleNestedInputChange('address', 'city', e.target.value)}
+                placeholder="Riyadh"
+                required
+                disabled={isViewing}
+              />
+            </div>
+
+            <div>
+              <label className="block text-label-sm font-medium text-ludus-dark mb-2">
+                State/Province *
+              </label>
+              <Input
+                value={formData.address.governorate}
+                onChange={(e) => handleNestedInputChange('address', 'governorate', e.target.value)}
+                placeholder="Riyadh Province"
+                required
+                disabled={isViewing}
+              />
+            </div>
+
+            <div>
+              <label className="block text-label-sm font-medium text-ludus-dark mb-2">
+                Postal Code *
+              </label>
+              <Input
+                value={formData.address.postalCode}
+                onChange={(e) => handleNestedInputChange('address', 'postalCode', e.target.value)}
+                placeholder="12345"
+                required
+                disabled={isViewing}
+              />
+            </div>
+
+            <div>
+              <label className="block text-label-sm font-medium text-ludus-dark mb-2">
+                Latitude
+              </label>
+              <Input
+                type="number"
+                step="any"
+                value={formData.address.coordinates.latitude}
+                onChange={(e) => handleNestedInputChange('address', 'coordinates', {
+                  ...formData.address.coordinates,
+                  latitude: parseFloat(e.target.value) || 0
+                })}
+                placeholder="24.7136"
+                disabled={isViewing}
+              />
+            </div>
+
+            <div>
+              <label className="block text-label-sm font-medium text-ludus-dark mb-2">
+                Longitude
+              </label>
+              <Input
+                type="number"
+                step="any"
+                value={formData.address.coordinates.longitude}
+                onChange={(e) => handleNestedInputChange('address', 'coordinates', {
+                  ...formData.address.coordinates,
+                  longitude: parseFloat(e.target.value) || 0
+                })}
+                placeholder="46.6753"
                 disabled={isViewing}
               />
             </div>
