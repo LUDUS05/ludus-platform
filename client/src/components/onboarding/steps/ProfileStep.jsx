@@ -171,7 +171,7 @@ const ProfileStep = ({ config, stepData, onComplete, onBack, t }) => {
         >
           {/* Progress indicator */}
           <div className="mb-8">
-            <div className="flex justify-between text-sm text-gray-500 mb-2">
+            <div className="flex justify-between text-sm text-gray-700 mb-2">
               <span>{currentFieldIndex + 1} of {fields.length}</span>
               <span>{Math.round(((currentFieldIndex + 1) / fields.length) * 100)}%</span>
             </div>

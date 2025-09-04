@@ -235,7 +235,7 @@ const AuthStep = ({ config, onComplete, onNext, t }) => {
                 <div className="w-full border-t border-gray-300" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">{t('common.or')}</span>
+                <span className="px-2 bg-white text-gray-700">{t('common.or')}</span>
               </div>
             </motion.div>
 
@@ -256,7 +256,7 @@ const AuthStep = ({ config, onComplete, onNext, t }) => {
           {/* Social Proof */}
           {config?.authConfig?.socialProof && (
             <motion.div variants={itemVariants} className="mt-6 text-center">
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-700">
                 {config.authConfig.socialProof.en}
               </p>
             </motion.div>
