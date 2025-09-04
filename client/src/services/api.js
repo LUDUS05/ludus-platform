@@ -22,13 +22,6 @@ const getApiBaseUrl = () => {
 
 const API_BASE_URL = getApiBaseUrl();
 
-// Debug logging for API configuration
-console.log('API Configuration:', {
-  NODE_ENV: process.env.NODE_ENV,
-  REACT_APP_API_URL: process.env.REACT_APP_API_URL,
-  API_BASE_URL: API_BASE_URL
-});
-
 // Create axios instance
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -38,6 +31,14 @@ const api = axios.create({
   withCredentials: true, // Include cookies in all requests for HttpOnly refresh tokens
 });
 
+// Debug logging for API configuration
+console.log('API Configuration:', {
+  NODE_ENV: process.env.NODE_ENV,
+  REACT_APP_API_URL: process.env.REACT_APP_API_URL,
+  API_BASE_URL: API_BASE_URL,
+  apiInstanceBaseURL: api.defaults.baseURL
+});
+
 // Request interceptor to add auth token
 api.interceptors.request.use(
   (config) => {
@@ -45,6 +46,15 @@ api.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+    
+    // Debug log the full URL being requested
+    console.log('API Request:', {
+      method: config.method,
+      url: config.url,
+      baseURL: config.baseURL,
+      fullURL: config.baseURL + config.url
+    });
+    
     return config;
   },
   (error) => {
