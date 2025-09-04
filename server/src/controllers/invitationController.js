@@ -20,7 +20,7 @@ const createInvitation = async (req, res) => {
       utmContent
     } = req.body;
 
-    const userId = req.user.userId;
+    const userId = req.user.id || req.user._id;
 
     // Validate activity if provided
     if (activityId) {
@@ -120,7 +120,7 @@ const trackInvitationClick = async (req, res) => {
 const recordInvitationConversion = async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.user.userId;
+    const userId = req.user.id || req.user._id;
 
     const invitation = await Invitation.findById(id);
     if (!invitation) {
@@ -158,7 +158,7 @@ const recordInvitationConversion = async (req, res) => {
 const getInvitationStats = async (req, res) => {
   try {
     const { period = '30d' } = req.query;
-    const userId = req.user.userId;
+    const userId = req.user.id || req.user._id;
 
     const stats = await Invitation.getInvitationStats(userId, period);
     const topPerforming = await Invitation.getTopPerformingInvitations(userId, 5);
@@ -188,7 +188,7 @@ const getInvitationStats = async (req, res) => {
 const getInvitationHistory = async (req, res) => {
   try {
     const { page = 1, limit = 10, status, platform, invitationType } = req.query;
-    const userId = req.user.userId;
+    const userId = req.user.id || req.user._id;
 
     const query = { referrerId: userId };
     
@@ -237,7 +237,7 @@ const updateInvitationStatus = async (req, res) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
-    const userId = req.user.userId;
+    const userId = req.user.id || req.user._id;
 
     const invitation = await Invitation.findOne({ _id: id, referrerId: userId });
     if (!invitation) {
@@ -271,7 +271,7 @@ const updateInvitationStatus = async (req, res) => {
 const deleteInvitation = async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.user.userId;
+    const userId = req.user.id || req.user._id;
 
     const invitation = await Invitation.findOne({ _id: id, referrerId: userId });
     if (!invitation) {
@@ -305,7 +305,7 @@ const deleteInvitation = async (req, res) => {
 const getInvitationAnalytics = async (req, res) => {
   try {
     const { period = '30d' } = req.query;
-    const userId = req.user.userId;
+    const userId = req.user.id || req.user._id;
 
     const endDate = new Date();
     const startDate = new Date();

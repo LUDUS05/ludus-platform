@@ -10,7 +10,7 @@ const Notification = require('../models/Notification');
 // @access  Private
 const generateReferralCode = async (req, res) => {
   try {
-    const { userId } = req.user;
+    const userId = req.user.id || req.user._id;
     
     // Check if user already has a referral code
     let existingCode = await ReferralCode.findOne({ userId });

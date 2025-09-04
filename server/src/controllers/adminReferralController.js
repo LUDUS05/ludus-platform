@@ -164,7 +164,7 @@ const getReferralRewards = async (req, res) => {
 const updateReferralRewards = async (req, res) => {
   try {
     const { registration, firstBooking } = req.body;
-    const adminUserId = req.user.userId;
+    const adminUserId = req.user.id || req.user._id;
     
     const updates = [];
     

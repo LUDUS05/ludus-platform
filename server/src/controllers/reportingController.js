@@ -72,7 +72,7 @@ const generateReferralReport = async (req, res) => {
       period,
       dateRange: { startDate, endDate },
       generatedAt: new Date(),
-      generatedBy: req.user.userId,
+      generatedBy: req.user.id || req.user._id,
       filters: { referrerId }
     };
 

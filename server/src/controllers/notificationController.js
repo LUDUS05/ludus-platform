@@ -7,7 +7,7 @@ const User = require('../models/User');
 const getNotifications = async (req, res) => {
   try {
     const { page = 1, limit = 20, status = 'unread', type, priority, category } = req.query;
-    const userId = req.user.userId;
+    const userId = req.user.id || req.user._id;
 
     const result = await Notification.getNotifications(userId, {
       page: parseInt(page),
@@ -37,7 +37,7 @@ const getNotifications = async (req, res) => {
 // @access  Private
 const getUnreadCount = async (req, res) => {
   try {
-    const userId = req.user.userId;
+    const userId = req.user.id || req.user._id;
     const count = await Notification.getUnreadCount(userId);
 
     res.status(200).json({
@@ -60,7 +60,7 @@ const getUnreadCount = async (req, res) => {
 const markAsRead = async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.user.userId;
+    const userId = req.user.id || req.user._id;
 
     const notification = await Notification.findOne({ _id: id, userId });
     if (!notification) {
@@ -92,7 +92,7 @@ const markAsRead = async (req, res) => {
 // @access  Private
 const markAllAsRead = async (req, res) => {
   try {
-    const userId = req.user.userId;
+    const userId = req.user.id || req.user._id;
     const result = await Notification.markAllAsRead(userId);
 
     res.status(200).json({
@@ -116,7 +116,7 @@ const markAllAsRead = async (req, res) => {
 const markAsArchived = async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.user.userId;
+    const userId = req.user.id || req.user._id;
 
     const notification = await Notification.findOne({ _id: id, userId });
     if (!notification) {
@@ -149,7 +149,7 @@ const markAsArchived = async (req, res) => {
 const deleteNotification = async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.user.userId;
+    const userId = req.user.id || req.user._id;
 
     const notification = await Notification.findOne({ _id: id, userId });
     if (!notification) {
@@ -238,7 +238,7 @@ const createSystemNotification = async (req, res) => {
         priority,
         richContent: {
           data: {
-            createdBy: req.user.userId,
+            createdBy: req.user.id || req.user._id,
             category,
             timestamp: new Date()
           }
@@ -281,7 +281,7 @@ const createSystemNotification = async (req, res) => {
 // @access  Private
 const getNotificationStats = async (req, res) => {
   try {
-    const userId = req.user.userId;
+    const userId = req.user.id || req.user._id;
     const { period = '30d' } = req.query;
 
     const endDate = new Date();
