@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
+import featureService from '../services/featureService';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import GoogleMap from '../components/maps/GoogleMap';
@@ -16,10 +17,22 @@ const ActivityDetailPage = () => {
   const [error, setError] = useState(null);
   const [selectedDate, setSelectedDate] = useState('');
   const [participantCount, setParticipantCount] = useState(1);
+  const [bookingEnabled, setBookingEnabled] = useState(true);
 
   useEffect(() => {
     fetchActivityDetails();
+    checkBookingAvailability();
   }, [id]);
+
+  const checkBookingAvailability = async () => {
+    try {
+      const enabled = await featureService.isBookingEnabled();
+      setBookingEnabled(enabled);
+    } catch (error) {
+      console.error('Failed to check booking availability:', error);
+      setBookingEnabled(true); // Default to enabled if check fails
+    }
+  };
 
   const fetchActivityDetails = async () => {
     try {
@@ -321,16 +334,32 @@ const ActivityDetailPage = () => {
               </div>
 
               {/* Book Button */}
-              <button
-                disabled
-                className="w-full bg-gray-400 text-white py-3 px-4 rounded-md cursor-not-allowed transition-colors font-medium"
-              >
-                Coming Soon قريبا
-              </button>
-
-              <p className="text-xs text-gray-500 mt-2 text-center">
-                Booking feature will be available soon
-              </p>
+              {bookingEnabled ? (
+                <>
+                  <button
+                    onClick={handleBookNow}
+                    disabled={!selectedDate}
+                    className="w-full bg-ludus-orange text-white py-3 px-4 rounded-md hover:bg-ludus-orange-dark disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium"
+                  >
+                    {!isAuthenticated ? 'Login to Book' : 'Book Now'}
+                  </button>
+                  <p className="text-xs text-gray-500 mt-2 text-center">
+                    You won't be charged yet
+                  </p>
+                </>
+              ) : (
+                <>
+                  <button
+                    disabled
+                    className="w-full bg-gray-400 text-white py-3 px-4 rounded-md cursor-not-allowed transition-colors font-medium"
+                  >
+                    Coming Soon قريبا
+                  </button>
+                  <p className="text-xs text-gray-500 mt-2 text-center">
+                    Booking feature will be available soon
+                  </p>
+                </>
+              )}
             </div>
           </div>
         </div>

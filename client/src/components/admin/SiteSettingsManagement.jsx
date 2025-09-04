@@ -19,7 +19,13 @@ const SiteSettingsManagement = () => {
     comingSoonMessage: '',
     maintenanceTitle: '',
     maintenanceMessage: '',
-    estimatedReturnTime: ''
+    estimatedReturnTime: '',
+    featureControls: {
+      bookingEnabled: true,
+      walletEnabled: true,
+      reviewsEnabled: true,
+      notificationsEnabled: true
+    }
   });
 
   useEffect(() => {
@@ -38,7 +44,13 @@ const SiteSettingsManagement = () => {
         comingSoonMessage: response.comingSoonMessage || 'We\'re building something amazing. Get ready to discover incredible activities and experiences!',
         maintenanceTitle: response.maintenanceTitle || 'Under Maintenance',
         maintenanceMessage: response.maintenanceMessage || 'We\'re currently updating our platform to serve you better. We\'ll be back shortly!',
-        estimatedReturnTime: response.estimatedReturnTime ? new Date(response.estimatedReturnTime).toISOString().slice(0, 16) : ''
+        estimatedReturnTime: response.estimatedReturnTime ? new Date(response.estimatedReturnTime).toISOString().slice(0, 16) : '',
+        featureControls: {
+          bookingEnabled: response.featureControls?.bookingEnabled !== false,
+          walletEnabled: response.featureControls?.walletEnabled !== false,
+          reviewsEnabled: response.featureControls?.reviewsEnabled !== false,
+          notificationsEnabled: response.featureControls?.notificationsEnabled !== false
+        }
       });
     } catch (error) {
       console.error('Error fetching settings:', error);
@@ -302,6 +314,111 @@ const SiteSettingsManagement = () => {
                   <div className="font-medium text-charcoal dark:text-dark-text-primary">Enable Maintenance Mode</div>
                   <div className="text-sm text-charcoal-light dark:text-dark-text-secondary">Show maintenance page to all visitors</div>
                 </div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        {/* Feature Controls */}
+        <div className="border-b border-warm dark:border-dark-border-secondary pb-6">
+          <h3 className="text-body-md font-medium text-charcoal dark:text-dark-text-primary mb-4">
+            Feature Controls
+          </h3>
+          
+          <div className="space-y-4">
+            <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-dark-bg-tertiary rounded-lg">
+              <div>
+                <h4 className="font-medium text-charcoal dark:text-dark-text-primary">Booking System</h4>
+                <p className="text-sm text-gray-600 dark:text-dark-text-secondary">
+                  Enable or disable the booking functionality
+                </p>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={formData.featureControls.bookingEnabled}
+                  onChange={(e) => setFormData(prev => ({
+                    ...prev,
+                    featureControls: {
+                      ...prev.featureControls,
+                      bookingEnabled: e.target.checked
+                    }
+                  }))}
+                  className="sr-only peer"
+                />
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-ludus-orange/20 dark:peer-focus:ring-dark-ludus-orange/20 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-ludus-orange dark:peer-checked:bg-dark-ludus-orange"></div>
+              </label>
+            </div>
+
+            <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-dark-bg-tertiary rounded-lg">
+              <div>
+                <h4 className="font-medium text-charcoal dark:text-dark-text-primary">Wallet System</h4>
+                <p className="text-sm text-gray-600 dark:text-dark-text-secondary">
+                  Enable or disable the wallet functionality
+                </p>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={formData.featureControls.walletEnabled}
+                  onChange={(e) => setFormData(prev => ({
+                    ...prev,
+                    featureControls: {
+                      ...prev.featureControls,
+                      walletEnabled: e.target.checked
+                    }
+                  }))}
+                  className="sr-only peer"
+                />
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-ludus-orange/20 dark:peer-focus:ring-dark-ludus-orange/20 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-ludus-orange dark:peer-checked:bg-dark-ludus-orange"></div>
+              </label>
+            </div>
+
+            <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-dark-bg-tertiary rounded-lg">
+              <div>
+                <h4 className="font-medium text-charcoal dark:text-dark-text-primary">Reviews System</h4>
+                <p className="text-sm text-gray-600 dark:text-dark-text-secondary">
+                  Enable or disable the reviews functionality
+                </p>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={formData.featureControls.reviewsEnabled}
+                  onChange={(e) => setFormData(prev => ({
+                    ...prev,
+                    featureControls: {
+                      ...prev.featureControls,
+                      reviewsEnabled: e.target.checked
+                    }
+                  }))}
+                  className="sr-only peer"
+                />
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-ludus-orange/20 dark:peer-focus:ring-dark-ludus-orange/20 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-ludus-orange dark:peer-checked:bg-dark-ludus-orange"></div>
+              </label>
+            </div>
+
+            <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-dark-bg-tertiary rounded-lg">
+              <div>
+                <h4 className="font-medium text-charcoal dark:text-dark-text-primary">Notifications</h4>
+                <p className="text-sm text-gray-600 dark:text-dark-text-secondary">
+                  Enable or disable the notifications system
+                </p>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={formData.featureControls.notificationsEnabled}
+                  onChange={(e) => setFormData(prev => ({
+                    ...prev,
+                    featureControls: {
+                      ...prev.featureControls,
+                      notificationsEnabled: e.target.checked
+                    }
+                  }))}
+                  className="sr-only peer"
+                />
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-ludus-orange/20 dark:peer-focus:ring-dark-ludus-orange/20 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-ludus-orange dark:peer-checked:bg-dark-ludus-orange"></div>
               </label>
             </div>
           </div>

@@ -3,6 +3,7 @@ import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import PaymentForm from '../components/payment/PaymentForm';
+import featureService from '../services/featureService';
 
 const BookingPage = () => {
   const { id } = useParams(); // activity ID
@@ -36,6 +37,7 @@ const BookingPage = () => {
 
   const [createdBooking, setCreatedBooking] = useState(null);
   const [availableSlots, setAvailableSlots] = useState([]);
+  const [bookingEnabled, setBookingEnabled] = useState(true);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -44,7 +46,18 @@ const BookingPage = () => {
     }
     
     fetchActivityDetails();
+    checkBookingAvailability();
   }, [id, isAuthenticated, navigate]);
+
+  const checkBookingAvailability = async () => {
+    try {
+      const enabled = await featureService.isBookingEnabled();
+      setBookingEnabled(enabled);
+    } catch (error) {
+      console.error('Failed to check booking availability:', error);
+      setBookingEnabled(true); // Default to enabled if check fails
+    }
+  };
 
   useEffect(() => {
     if (bookingData.date) {
@@ -278,6 +291,45 @@ const BookingPage = () => {
             >
               Back to Activity
             </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show coming soon message if booking is disabled
+  if (!bookingEnabled) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-4xl mx-auto px-4 py-8">
+          <div className="text-center">
+            <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-12">
+              <div className="text-6xl mb-6">🚧</div>
+              <h1 className="text-4xl font-bold text-gray-900 mb-4">
+                Coming Soon قريبا
+              </h1>
+              <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+                We're working hard to bring you an amazing booking experience. 
+                The booking feature will be available soon!
+              </p>
+              <div className="bg-orange-50 border border-orange-200 rounded-lg p-6 mb-8">
+                <h3 className="text-lg font-semibold text-orange-800 mb-2">
+                  What's Coming:
+                </h3>
+                <ul className="text-orange-700 space-y-2">
+                  <li>• Easy online booking system</li>
+                  <li>• Secure payment processing</li>
+                  <li>• Real-time availability</li>
+                  <li>• Booking management dashboard</li>
+                </ul>
+              </div>
+              <button
+                onClick={() => navigate('/activities')}
+                className="bg-ludus-orange text-white px-8 py-3 rounded-md hover:bg-ludus-orange-dark transition-colors font-medium"
+              >
+                Explore Activities
+              </button>
+            </div>
           </div>
         </div>
       </div>

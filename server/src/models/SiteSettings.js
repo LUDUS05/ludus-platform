@@ -67,6 +67,25 @@ const siteSettingsSchema = new mongoose.Schema({
       default: true
     }
   },
+  // Feature controls
+  featureControls: {
+    bookingEnabled: {
+      type: Boolean,
+      default: true
+    },
+    walletEnabled: {
+      type: Boolean,
+      default: true
+    },
+    reviewsEnabled: {
+      type: Boolean,
+      default: true
+    },
+    notificationsEnabled: {
+      type: Boolean,
+      default: true
+    }
+  },
   lastUpdatedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
