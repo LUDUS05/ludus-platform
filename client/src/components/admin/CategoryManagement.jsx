@@ -207,7 +207,7 @@ const CategoryManagement = () => {
                 <Input
                   value={newCategory.name.en}
                   onChange={(e) => updateCategoryField('name', e.target.value, 'en')}
-                  placeholder="Adventure Activities"
+                  placeholder={t('common.adventureActivities')}
                   required
                 />
               </div>

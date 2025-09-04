@@ -187,7 +187,7 @@ const PreferencesStep = ({ config, stepData, onComplete, onBack, t }) => {
           {/* Header */}
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              {config?.preferencesConfig?.title?.en || t('steps.preferences.title')}
+              {config?.preferencesConfig?.title?.en || t('onboarding.steps.preferences.title')}
             </h2>
             <p className="text-gray-600 text-lg">
               Customize your LUDUS experience

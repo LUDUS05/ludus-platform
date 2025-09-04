@@ -499,7 +499,7 @@ const EnhancedVendorForm = () => {
               <Input
                 value={formData.businessName}
                 onChange={(e) => handleInputChange('businessName', e.target.value)}
-                placeholder="Adventure Tours Saudi"
+                placeholder={t('common.adventureToursSaudi')}
                 required
                 disabled={isViewing}
               />
@@ -661,7 +661,7 @@ const EnhancedVendorForm = () => {
               <Input
                 value={formData.address.governorate}
                 onChange={(e) => handleNestedInputChange('address', 'governorate', e.target.value)}
-                placeholder="Riyadh Province"
+                placeholder={t('common.riyadhProvince')}
                 disabled={isViewing}
               />
             </div>
@@ -733,7 +733,7 @@ const EnhancedVendorForm = () => {
               <Input
                 value={formData.bankInfo.accountHolderName}
                 onChange={(e) => handleNestedInputChange('bankInfo', 'accountHolderName', e.target.value)}
-                placeholder="Business Account Name"
+                placeholder={t('common.businessAccountName')}
                 required={!isViewing}
                 disabled={isViewing}
               />
@@ -759,7 +759,7 @@ const EnhancedVendorForm = () => {
               <Input
                 value={formData.bankInfo.accountNumber}
                 onChange={(e) => handleNestedInputChange('bankInfo', 'accountNumber', e.target.value)}
-                placeholder="Account Number"
+                placeholder={t('common.accountNumber')}
                 disabled={isViewing}
               />
             </div>

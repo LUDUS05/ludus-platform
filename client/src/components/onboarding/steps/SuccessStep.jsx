@@ -81,17 +81,17 @@ const SuccessStep = ({ onComplete, t }) => {
           {/* Success Message */}
           <motion.div variants={itemVariants} className="mb-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              {t('success.title')}
+              {t('onboarding.success.title')}
             </h2>
             <p className="text-gray-600 text-lg leading-relaxed">
-              {t('success.message')}
+              {t('onboarding.success.message')}
             </p>
           </motion.div>
 
           {/* Countdown */}
           <motion.div variants={itemVariants} className="mb-8">
             <div className="flex items-center justify-center space-x-2">
-              <span className="text-gray-600">{t('success.redirecting')}</span>
+              <span className="text-gray-600">{t('onboarding.success.redirecting')}</span>
               <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
                 <span className="text-purple-600 font-bold">{countdown}</span>
               </div>

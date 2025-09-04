@@ -126,22 +126,22 @@ const ProfileStep = ({ config, stepData, onComplete, onBack, t }) => {
 
   const getFieldQuestion = (field) => {
     const questions = {
-      firstName: t('steps.profile.questions.firstName.question'),
-      lastName: t('steps.profile.questions.lastName.question', { name: formData.firstName || '' }),
-      email: t('steps.profile.questions.email.question'),
-      phone: t('steps.profile.questions.phone.question'),
-      dateOfBirth: t('steps.profile.questions.dateOfBirth.question')
+      firstName: t('onboarding.steps.profile.questions.firstName.question'),
+      lastName: t('onboarding.steps.profile.questions.lastName.question', { name: formData.firstName || '' }),
+      email: t('onboarding.steps.profile.questions.email.question'),
+      phone: t('onboarding.steps.profile.questions.phone.question'),
+      dateOfBirth: t('onboarding.steps.profile.questions.dateOfBirth.question')
     };
     return questions[field.fieldId] || field.label.en;
   };
 
   const getFieldPlaceholder = (field) => {
     const placeholders = {
-      firstName: t('steps.profile.questions.firstName.placeholder'),
-      lastName: t('steps.profile.questions.lastName.placeholder'),
-      email: t('steps.profile.questions.email.placeholder'),
-      phone: t('steps.profile.questions.phone.placeholder'),
-      dateOfBirth: t('steps.profile.questions.dateOfBirth.placeholder')
+      firstName: t('onboarding.steps.profile.questions.firstName.placeholder'),
+      lastName: t('onboarding.steps.profile.questions.lastName.placeholder'),
+      email: t('onboarding.steps.profile.questions.email.placeholder'),
+      phone: t('onboarding.steps.profile.questions.phone.placeholder'),
+      dateOfBirth: t('onboarding.steps.profile.questions.dateOfBirth.placeholder')
     };
     return placeholders[field.fieldId] || field.placeholder.en;
   };
@@ -150,11 +150,11 @@ const ProfileStep = ({ config, stepData, onComplete, onBack, t }) => {
     if (errors.length === 0) return null;
     
     const errorMessages = {
-      required: t('validation.required'),
-      invalidEmail: t('validation.invalidEmail'),
-      invalidPhone: t('validation.invalidPhone'),
-      minLength: t('validation.minLength'),
-      maxLength: t('validation.maxLength')
+      required: t('onboarding.validation.required'),
+      invalidEmail: t('onboarding.validation.invalidEmail'),
+      invalidPhone: t('onboarding.validation.invalidPhone'),
+      minLength: t('onboarding.validation.minLength'),
+      maxLength: t('onboarding.validation.maxLength')
     };
 
     return errorMessages[errors[0]] || errors[0];

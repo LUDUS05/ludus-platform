@@ -64,10 +64,10 @@ const WelcomeStep = ({ config, onComplete, t }) => {
         <motion.div variants={itemVariants} className="mb-12">
           <div className="mb-8">
             <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-6">
-              {config?.welcomeConfig?.title?.en || t('steps.welcome.title')}
+              {config?.welcomeConfig?.title?.en || t('onboarding.steps.welcome.title')}
             </h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-              {config?.welcomeConfig?.subtitle?.en || t('steps.welcome.subtitle')}
+              {config?.welcomeConfig?.subtitle?.en || t('onboarding.steps.welcome.subtitle')}
             </p>
           </div>
         </motion.div>

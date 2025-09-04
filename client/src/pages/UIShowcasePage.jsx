@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
+import {
   Plus, 
   Heart, 
   Star, 
@@ -57,10 +57,10 @@ const UIShowcasePage = () => {
 
   // Sample activity data for showcase
   const sampleActivity = {
-    id: 1,
+      id: 1,
     title: "Desert Safari Adventure",
     description: "Experience the thrill of dune bashing and camel riding in the beautiful Arabian desert. Perfect for adventure seekers and families alike.",
-    price: 250,
+      price: 250,
     category: "Adventure",
     vendor_rating: 4.8,
     location: "Dubai Desert",
@@ -74,19 +74,19 @@ const UIShowcasePage = () => {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <motion.div 
+      <motion.div 
           className="text-center mb-12"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
           <div className="flex justify-center items-center gap-4 mb-6">
             <LanguageSwitcher />
             <ThemeToggle />
           </div>
           <h1 className="text-5xl font-bold text-gray-900 dark:text-white mb-4">
             LUDUS UI Showcase
-          </h1>
+              </h1>
           <p className="text-xl text-gray-600 dark:text-gray-300 mb-4">
             Comprehensive component library with {isRTL ? 'RTL' : 'LTR'} support
           </p>
@@ -97,13 +97,13 @@ const UIShowcasePage = () => {
             <span>•</span>
             <span>Theme: {document.documentElement.classList.contains('dark') ? 'Dark' : 'Light'}</span>
           </div>
-        </motion.div>
+            </motion.div>
 
         {/* Navigation Tabs */}
-        <motion.div 
+            <motion.div
           className="flex justify-center mb-8"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
           <div className="bg-white dark:bg-gray-800 rounded-lg p-1 shadow-lg">
@@ -127,7 +127,7 @@ const UIShowcasePage = () => {
               </button>
             ))}
           </div>
-        </motion.div>
+            </motion.div>
 
         {/* Tab Content */}
         <AnimatePresence mode="wait">
@@ -152,16 +152,16 @@ const UIShowcasePage = () => {
                       <Button variant="outline" className="w-full">Outline</Button>
                       <Button variant="destructive" className="w-full">Destructive</Button>
                       <Button variant="ghost" className="w-full">Ghost</Button>
-                    </div>
+          </div>
                     <div className="flex gap-2">
                       <Button size="sm">Small</Button>
                       <Button size="default">Default</Button>
                       <Button size="lg">Large</Button>
-                    </div>
+        </div>
                     <div className="flex gap-2">
                       <Button disabled>Disabled</Button>
                       <Button loading>Loading</Button>
-                    </div>
+                </div>
                   </CardContent>
                 </Card>
 
@@ -186,8 +186,8 @@ const UIShowcasePage = () => {
                         onClick={() => setPasswordVisible(!passwordVisible)}
                       >
                         {passwordVisible ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                      </button>
-                    </div>
+                  </button>
+                </div>
                     <Input disabled placeholder={t('common.disabledInput')} />
                   </CardContent>
                 </Card>
@@ -216,7 +216,7 @@ const UIShowcasePage = () => {
                       <AlertCircle className="h-4 w-4" />
                       <span>This is a warning alert message.</span>
                     </Alert>
-                  </div>
+                </div>
                 </CardContent>
               </Card>
 
@@ -231,7 +231,7 @@ const UIShowcasePage = () => {
                       activity={sampleActivity}
                       onTap={(activity) => console.log('Activity tapped:', activity)}
                     />
-                  </div>
+                </div>
                 </CardContent>
               </Card>
 
@@ -248,15 +248,15 @@ const UIShowcasePage = () => {
                         alt={t('common.natureLandscape')}
                         className="w-full h-full"
                       />
-                    </div>
+              </div>
                     <div className="h-48 rounded-lg overflow-hidden">
                       <ProgressiveImage
                         src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop"
                         alt={t('common.desertLandscape')}
                         className="w-full h-full"
                       />
-                    </div>
-                  </div>
+            </div>
+          </div>
                 </CardContent>
               </Card>
             </motion.div>
@@ -270,7 +270,7 @@ const UIShowcasePage = () => {
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
             >
-              {/* Form Components */}
+        {/* Form Components */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
                 {/* Contact Form */}
                 <Card>
@@ -286,20 +286,20 @@ const UIShowcasePage = () => {
                         <Input
                           value={formData.name}
                           onChange={(e) => setFormData({...formData, name: e.target.value})}
-                          placeholder="Enter your full name"
-                        />
-                      </div>
+                    placeholder="Enter your full name"
+                  />
+                </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                           Email
                         </label>
                         <Input
-                          type="email"
+                    type="email"
                           value={formData.email}
                           onChange={(e) => setFormData({...formData, email: e.target.value})}
                           placeholder="Enter your email"
-                        />
-                      </div>
+                  />
+                </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                           Message
@@ -310,8 +310,8 @@ const UIShowcasePage = () => {
                           value={formData.message}
                           onChange={(e) => setFormData({...formData, message: e.target.value})}
                           placeholder="Enter your message"
-                        />
-                      </div>
+                    />
+                  </div>
                       <Button 
                         className="w-full" 
                         loading={isLoading}
@@ -339,7 +339,7 @@ const UIShowcasePage = () => {
                         onChange={(content) => console.log('Editor content:', content)}
                         placeholder="Start writing your content..."
                       />
-                    </div>
+                </div>
                   </CardContent>
                 </Card>
               </div>
@@ -358,17 +358,17 @@ const UIShowcasePage = () => {
                       <div className="relative">
                         <Input placeholder={t('common.validInput')} className="border-green-500" />
                         <Check className="absolute right-3 top-1/2 transform -translate-y-1/2 text-green-500 w-4 h-4" />
-                      </div>
-                    </div>
+                </div>
+                </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         Invalid Input
-                      </label>
+                  </label>
                       <div className="relative">
                         <Input placeholder={t('common.invalidInput')} className="border-red-500" />
                         <X className="absolute right-3 top-1/2 transform -translate-y-1/2 text-red-500 w-4 h-4" />
+                </div>
                       </div>
-                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -451,23 +451,23 @@ const UIShowcasePage = () => {
                                 delay: i * 0.2
                               }}
                               className="w-3 h-3 bg-ludus-orange rounded-full"
-                            />
-                          ))}
-                        </div>
+                  />
+                ))}
+              </div>
                         <span>Bouncing dots</span>
-                      </div>
+            </div>
                       <div className="flex items-center gap-4">
-                        <motion.div
+                  <motion.div
                           animate={{ width: ["0%", "100%", "0%"] }}
                           transition={{ duration: 2, repeat: Infinity }}
                           className="h-1 bg-ludus-orange rounded-full"
                         />
                         <span>Progress bar</span>
-                      </div>
+              </div>
                     </div>
                   </CardContent>
                 </Card>
-              </div>
+            </div>
 
               {/* Interactive Elements */}
               <Card className="mb-8">
@@ -476,16 +476,16 @@ const UIShowcasePage = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <motion.div
-                      whileHover={{ scale: 1.02 }}
+                <motion.div
+                  whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       className="p-6 bg-gradient-to-br from-blue-500 to-purple-600 text-white rounded-lg cursor-pointer"
                     >
                       <h4 className="font-semibold mb-2">Gradient Card</h4>
                       <p className="text-sm opacity-90">Hover and tap to see animations</p>
-                    </motion.div>
-                    
-                    <motion.div
+                </motion.div>
+
+                <motion.div
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.2 }}
@@ -493,9 +493,9 @@ const UIShowcasePage = () => {
                     >
                       <h4 className="font-semibold mb-2">Slide In</h4>
                       <p className="text-sm opacity-90">Animated on page load</p>
-                    </motion.div>
-                    
-                    <motion.div
+                </motion.div>
+
+                <motion.div
                       whileHover={{ 
                         background: "linear-gradient(135deg, #ff6b35, #f7931e)",
                         transition: { duration: 0.3 }
@@ -504,8 +504,8 @@ const UIShowcasePage = () => {
                     >
                       <h4 className="font-semibold mb-2">Color Change</h4>
                       <p className="text-sm opacity-90">Hover to change gradient</p>
-                    </motion.div>
-                  </div>
+                </motion.div>
+              </div>
                 </CardContent>
               </Card>
             </motion.div>
@@ -532,12 +532,12 @@ const UIShowcasePage = () => {
                     <div className="space-y-3">
                       <button className="w-full p-4 neumorphic rounded-xl text-gray-700 dark:text-gray-300 font-medium hover:neumorphic-pressed transition-all duration-200">
                         Neumorphic Button
-                      </button>
+                </button>
                       <button className="w-full p-4 neumorphic-subtle rounded-xl text-gray-600 dark:text-gray-400 font-medium hover:neumorphic-pressed transition-all duration-200">
                         Subtle Button
                       </button>
-                    </div>
-                  </div>
+            </div>
+          </div>
 
                   {/* Neomorphic Cards */}
                   <div className="space-y-4">
@@ -547,11 +547,11 @@ const UIShowcasePage = () => {
                       <p className="text-sm text-gray-600 dark:text-gray-400">
                         This is a neumorphic card with soft shadows and rounded corners.
                       </p>
-                    </div>
-                  </div>
+            </div>
+          </div>
 
                   {/* Neomorphic Inputs */}
-                  <div className="space-y-4">
+            <div className="space-y-4">
                     <h4 className="font-semibold text-gray-700 dark:text-gray-300">Inputs</h4>
                     <div className="space-y-3">
                       <input 
@@ -564,8 +564,8 @@ const UIShowcasePage = () => {
                         placeholder={t('common.pressedInput')}
                         className="w-full p-3 neumorphic-pressed rounded-xl border-0 focus:outline-none text-gray-700 dark:text-gray-300 placeholder-gray-500 dark:placeholder-gray-400"
                       />
-                    </div>
-                  </div>
+                </div>
+              </div>
                 </div>
               </div>
 
@@ -587,11 +587,11 @@ const UIShowcasePage = () => {
                           <span className="text-sm font-semibold text-gray-800">
                             ر.س {sampleActivity.price}
                           </span>
-                        </div>
-                      </div>
-                      
+                </div>
+              </div>
+
                       <div className="space-y-3">
-                        <div>
+                <div>
                           <h3 className="text-lg font-bold text-gray-800 mb-1">
                             {sampleActivity.title}
                           </h3>
@@ -604,10 +604,10 @@ const UIShowcasePage = () => {
                               <span className="text-sm font-medium text-gray-800">
                                 {sampleActivity.vendor_rating}
                               </span>
-                            </div>
-                          </div>
-                        </div>
-                        
+                </div>
+              </div>
+            </div>
+
                         <p className="text-sm text-gray-700">
                           {sampleActivity.description}
                         </p>
@@ -616,15 +616,15 @@ const UIShowcasePage = () => {
                           <div className="flex items-center">
                             <MapPin className="w-4 h-4 mr-1" />
                             {sampleActivity.location}
-                          </div>
+              </div>
                           <div className="flex items-center">
                             <Clock className="w-4 h-4 mr-1" />
                             {sampleActivity.duration}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                </div>
+                </div>
+              </div>
+                </div>
+                </div>
                 </CardContent>
               </Card>
             </motion.div>
@@ -645,12 +645,12 @@ const UIShowcasePage = () => {
               <div className="bg-green-100 dark:bg-green-900 p-4 rounded-lg">
                 <p className="font-medium text-green-900 dark:text-green-100">Second Item</p>
                 <p className="text-sm text-green-700 dark:text-green-300">Notice the order and spacing changes</p>
-              </div>
+            </div>
               <div className="bg-yellow-100 dark:bg-yellow-900 p-4 rounded-lg">
                 <p className="font-medium text-yellow-900 dark:text-yellow-100">Third Item</p>
                 <p className="text-sm text-yellow-700 dark:text-yellow-300">RTL languages flow right-to-left</p>
+          </div>
               </div>
-            </div>
 
             <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
               <h4 className="font-medium text-gray-800 dark:text-gray-200 mb-2">Layout Behavior</h4>
@@ -659,8 +659,8 @@ const UIShowcasePage = () => {
                 <p>• <strong>RTL (Arabic):</strong> Items flow right to left, margins/padding on right</p>
                 <p>• <strong>Spacing:</strong> Uses <code>rtl:space-x-reverse</code> for proper spacing</p>
                 <p>• <strong>Flexbox:</strong> Uses <code>flex-row-reverse</code> for RTL layouts</p>
-              </div>
-            </div>
+                </div>
+                </div>
           </CardContent>
         </Card>
 
@@ -678,19 +678,19 @@ const UIShowcasePage = () => {
                   <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 rounded">
                     <span className="font-medium text-gray-700 dark:text-gray-300">Save:</span>
                     <span className="text-gray-600 dark:text-gray-400">{t('common.save')}</span>
-                  </div>
+                      </div>
                   <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 rounded">
                     <span className="font-medium text-gray-700 dark:text-gray-300">Cancel:</span>
                     <span className="text-gray-600 dark:text-gray-400">{t('common.cancel')}</span>
-                  </div>
+                    </div>
                   <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 rounded">
                     <span className="font-medium text-gray-700 dark:text-gray-300">Delete:</span>
                     <span className="text-gray-600 dark:text-gray-400">{t('common.delete')}</span>
-                  </div>
+                </div>
                   <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 rounded">
                     <span className="font-medium text-gray-700 dark:text-gray-300">Loading:</span>
                     <span className="text-gray-600 dark:text-gray-400">{t('common.loading')}</span>
-                  </div>
+              </div>
                 </div>
               </div>
 
@@ -701,7 +701,7 @@ const UIShowcasePage = () => {
                   <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 rounded">
                     <span className="font-medium text-gray-700 dark:text-gray-300">Home:</span>
                     <span className="text-gray-600 dark:text-gray-400">{t('navigation.home')}</span>
-                  </div>
+            </div>
                   <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 rounded">
                     <span className="font-medium text-gray-700 dark:text-gray-300">Activities:</span>
                     <span className="text-gray-600 dark:text-gray-400">{t('navigation.activities')}</span>
@@ -709,11 +709,11 @@ const UIShowcasePage = () => {
                   <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 rounded">
                     <span className="font-medium text-gray-700 dark:text-gray-300">Profile:</span>
                     <span className="text-gray-600 dark:text-gray-400">{t('navigation.profile')}</span>
-                  </div>
+                </div>
                   <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 rounded">
                     <span className="font-medium text-gray-700 dark:text-gray-300">Wallet:</span>
                     <span className="text-gray-600 dark:text-gray-400">{t('navigation.wallet')}</span>
-                  </div>
+                </div>
                 </div>
               </div>
             </div>
@@ -742,14 +742,14 @@ const UIShowcasePage = () => {
               >
                 ×
               </button>
-            </div>
+      </div>
           </Alert>
         )}
 
-        {/* Floating Action Button */}
-        <FloatingActionButton
+      {/* Floating Action Button */}
+      <FloatingActionButton
           icon={Plus}
-          notifications={notifications}
+        notifications={notifications}
           tooltip="Add new item"
           onClick={() => {
             setNotifications(notifications + 1);

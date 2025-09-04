@@ -227,7 +227,7 @@ const ActivityForm = () => {
               <Input
                 value={formData.title}
                 onChange={(e) => handleInputChange('title', e.target.value)}
-                placeholder="Desert Safari Adventure"
+                placeholder={t('common.desertSafariAdventure')}
                 required
               />
             </div>
@@ -426,7 +426,7 @@ const ActivityForm = () => {
               <Input
                 value={formData.location.city}
                 onChange={(e) => handleNestedInputChange('location', 'city', e.target.value)}
-                placeholder="Al Khobar"
+                placeholder={t('common.alKhobar')}
                 required
               />
             </div>

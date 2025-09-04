@@ -100,10 +100,10 @@ const ReferralStep = ({ config, stepData, onComplete, onBack, onSkip, t }) => {
           {/* Header */}
           <div className="mb-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
-              {config?.referralConfig?.title?.en || t('steps.referral.title')}
+              {config?.referralConfig?.title?.en || t('onboarding.steps.referral.title')}
             </h2>
             <p className="text-gray-600">
-              {config?.referralConfig?.subtitle?.en || t('steps.referral.subtitle')}
+              {config?.referralConfig?.subtitle?.en || t('onboarding.steps.referral.subtitle')}
             </p>
           </div>
 
@@ -111,7 +111,7 @@ const ReferralStep = ({ config, stepData, onComplete, onBack, onSkip, t }) => {
           <motion.div variants={itemVariants} className="mb-8">
             <div className="bg-white rounded-2xl p-6 shadow-lg inline-block">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                {t('steps.referral.qrCodeTitle')}
+                {t('onboarding.steps.referral.qrCodeTitle')}
               </h3>
               {qrCodeData && (
                 <img
@@ -132,7 +132,7 @@ const ReferralStep = ({ config, stepData, onComplete, onBack, onSkip, t }) => {
           {/* Sharing Options */}
           <motion.div variants={itemVariants} className="mb-8">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              {t('steps.referral.incentiveMessage')}
+              {t('onboarding.steps.referral.incentiveMessage')}
             </h3>
             <div className="grid grid-cols-2 gap-3">
               {config?.referralConfig?.sharingOptions?.map((option) => (
@@ -163,7 +163,7 @@ const ReferralStep = ({ config, stepData, onComplete, onBack, onSkip, t }) => {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                       </svg>
                     )}
-                    <span>{t(`steps.referral.sharingOptions.${option.platform}`)}</span>
+                    <span>{t(`onboarding.steps.referral.sharingOptions.${option.platform}`)}</span>
                   </Button>
                 )
               ))}
@@ -184,7 +184,7 @@ const ReferralStep = ({ config, stepData, onComplete, onBack, onSkip, t }) => {
                 onClick={handleSkip}
                 variant="outline"
               >
-                {t('steps.referral.skipOption')}
+                {t('onboarding.steps.referral.skipOption')}
               </Button>
               <Button
                 onClick={handleContinue}

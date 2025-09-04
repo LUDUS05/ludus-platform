@@ -118,14 +118,14 @@ const InterestsStep = ({ config, stepData, onComplete, onBack, t }) => {
           {/* Header */}
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              {config?.interestsConfig?.title?.en || t('steps.interests.title')}
+              {config?.interestsConfig?.title?.en || t('onboarding.steps.interests.title')}
             </h2>
             <p className="text-gray-600 text-lg">
-              {t('steps.interests.subtitle', { min: minSelections })}
+              {t('onboarding.steps.interests.subtitle', { min: minSelections })}
             </p>
             <div className="mt-4">
               <span className="text-sm font-medium text-purple-600">
-                {t('steps.interests.selectedCount', { 
+                {t('onboarding.steps.interests.selectedCount', { 
                   count: selectedInterests.length, 
                   total: categories.length 
                 })}

@@ -82,10 +82,10 @@ const AuthStep = ({ config, onComplete, onNext, t }) => {
           <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg">
             <div className="text-center mb-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                {t('steps.auth.createAccount')}
+                {t('onboarding.steps.auth.createAccount')}
               </h2>
               <p className="text-gray-600">
-                {t('steps.auth.emailSubtitle')}
+                {t('onboarding.steps.auth.emailSubtitle')}
               </p>
             </div>
 
@@ -99,14 +99,14 @@ const AuthStep = ({ config, onComplete, onNext, t }) => {
               <div className="grid grid-cols-2 gap-4">
                 <input
                   type="text"
-                  placeholder={t('steps.auth.firstName')}
+                  placeholder={t('onboarding.steps.auth.firstName')}
                   value={emailData.firstName}
                   onChange={(e) => setEmailData(prev => ({ ...prev, firstName: e.target.value }))}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
                 <input
                   type="text"
-                  placeholder={t('steps.auth.lastName')}
+                  placeholder={t('onboarding.steps.auth.lastName')}
                   value={emailData.lastName}
                   onChange={(e) => setEmailData(prev => ({ ...prev, lastName: e.target.value }))}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
@@ -115,7 +115,7 @@ const AuthStep = ({ config, onComplete, onNext, t }) => {
               
               <input
                 type="email"
-                placeholder={t('steps.auth.email')}
+                placeholder={t('onboarding.steps.auth.email')}
                 value={emailData.email}
                 onChange={(e) => setEmailData(prev => ({ ...prev, email: e.target.value }))}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
@@ -123,7 +123,7 @@ const AuthStep = ({ config, onComplete, onNext, t }) => {
               
               <input
                 type="password"
-                placeholder={t('steps.auth.password')}
+                placeholder={t('onboarding.steps.auth.password')}
                 value={emailData.password}
                 onChange={(e) => setEmailData(prev => ({ ...prev, password: e.target.value }))}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
@@ -135,7 +135,7 @@ const AuthStep = ({ config, onComplete, onNext, t }) => {
                 variant="primary"
                 className="w-full py-3"
               >
-                {loading ? t('common.loading') : t('steps.auth.createAccount')}
+                {loading ? t('common.loading') : t('onboarding.steps.auth.createAccount')}
               </Button>
 
               <Button
@@ -148,12 +148,12 @@ const AuthStep = ({ config, onComplete, onNext, t }) => {
 
               <div className="text-center">
                 <p className="text-sm text-gray-600">
-                  {t('steps.auth.alreadyHaveAccount')}{' '}
+                  {t('onboarding.steps.auth.alreadyHaveAccount')}{' '}
                   <button
                     onClick={handleEmailSignIn}
                     className="text-purple-600 hover:text-purple-700 font-medium"
                   >
-                    {t('steps.auth.signInHere')}
+                    {t('onboarding.steps.auth.signInHere')}
                   </button>
                 </p>
               </div>
@@ -179,10 +179,10 @@ const AuthStep = ({ config, onComplete, onNext, t }) => {
           {/* Header */}
           <div className="text-center mb-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
-              {config?.authConfig?.title?.en || t('steps.auth.title')}
+              {config?.authConfig?.title?.en || t('onboarding.steps.auth.title')}
             </h2>
             <p className="text-gray-600">
-              {config?.authConfig?.subtitle?.en || t('steps.auth.subtitle')}
+              {config?.authConfig?.subtitle?.en || t('onboarding.steps.auth.subtitle')}
             </p>
           </div>
 
@@ -223,7 +223,7 @@ const AuthStep = ({ config, onComplete, onNext, t }) => {
                     />
                   </svg>
                   <span>
-                    {loading ? t('common.loading') : t('steps.auth.continueWithGoogle')}
+                    {loading ? t('common.loading') : t('onboarding.steps.auth.continueWithGoogle')}
                   </span>
                 </Button>
               </motion.div>
@@ -247,7 +247,7 @@ const AuthStep = ({ config, onComplete, onNext, t }) => {
                   variant="primary"
                   className="w-full py-3"
                 >
-                  {t('steps.auth.createAccount')}
+                  {t('onboarding.steps.auth.createAccount')}
                 </Button>
               </motion.div>
             )}
@@ -265,12 +265,12 @@ const AuthStep = ({ config, onComplete, onNext, t }) => {
           {/* Sign In Link */}
           <motion.div variants={itemVariants} className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              {t('steps.auth.alreadyHaveAccount')}{' '}
+              {t('onboarding.steps.auth.alreadyHaveAccount')}{' '}
               <button
                 onClick={() => onNext()}
                 className="text-purple-600 hover:text-purple-700 font-medium"
               >
-                {t('steps.auth.signInHere')}
+                {t('onboarding.steps.auth.signInHere')}
               </button>
             </p>
           </motion.div>
