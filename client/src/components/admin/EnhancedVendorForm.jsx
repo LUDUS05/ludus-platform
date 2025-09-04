@@ -334,10 +334,50 @@ const EnhancedVendorForm = () => {
     try {
       setSaving(true);
       
+      // Transform frontend data structure to match backend model
       const submitData = {
-        ...formData,
+        businessName: formData.businessName,
+        description: formData.description,
+        categories: [formData.category], // Convert single category to array
+        contactInfo: {
+          email: formData.contactInfo.email,
+          phone: formData.contactInfo.phone,
+          website: formData.contactInfo.website,
+          socialMedia: {
+            facebook: formData.socialMedia.facebook,
+            instagram: formData.socialMedia.instagram,
+            twitter: formData.socialMedia.twitter,
+            tiktok: formData.socialMedia.tiktok
+          }
+        },
+        location: {
+          address: formData.address.street,
+          city: formData.address.city,
+          state: formData.address.governorate,
+          zipCode: formData.address.postalCode,
+          coordinates: [formData.address.coordinates.longitude, formData.address.coordinates.latitude]
+        },
+        businessHours: Object.entries(formData.businessHours).map(([day, hours]) => ({
+          day,
+          isOpen: !hours.closed,
+          openTime: hours.open,
+          closeTime: hours.close
+        })),
+        images: {
+          logo: formData.images.logo,
+          banner: formData.images.banner,
+          gallery: formData.images.gallery
+        },
+        bankInfo: formData.bankInfo,
+        documents: formData.documents,
         isActive: formData.status.isActive,
-        statusHistory: formData.status.history
+        isFeatured: formData.status.isFeatured,
+        statusHistory: formData.status.history || [{
+          status: 'inactive',
+          note: 'Vendor created via admin panel',
+          timestamp: new Date(),
+          admin: 'Admin'
+        }]
       };
 
       if (isEditing) {
@@ -363,6 +403,13 @@ const EnhancedVendorForm = () => {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
         errorMessage = error.response.data?.message || `Server error: ${error.response.status}`;
+        
+        // Log validation errors if they exist
+        if (error.response.data?.errors) {
+          console.error('Validation errors:', error.response.data.errors);
+          const validationErrors = error.response.data.errors.map(err => `${err.path}: ${err.message}`).join(', ');
+          errorMessage += ` - Validation errors: ${validationErrors}`;
+        }
       } else if (error.request) {
         // The request was made but no response was received
         errorMessage = 'No response received from server.';
