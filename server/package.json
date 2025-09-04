@@ -8,6 +8,7 @@
     "smoke": "node scripts/smoke.js",
     "dev": "cross-env NODE_ENV=development nodemon src/app.js",
     "test": "jest --runInBand",
+    "test:auth": "jest --runInBand src/tests/auth.test.js",
     "test:referral": "node src/tests/run-tests.js",
     "test:referral:all": "node src/tests/run-tests.js --continue-on-failure",
     "test:referral:system": "node src/tests/test-complete-referral-system.js",
@@ -61,6 +62,7 @@
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-node": "^11.1.0",
     "jest": "^29.7.0",
+    "mongodb-memory-server": "^10.1.4",
     "nodemon": "^3.1.4",
     "prettier": "^2.8.8",
     "supertest": "^6.3.3"

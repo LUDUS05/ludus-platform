@@ -42,6 +42,12 @@ exports.getOnboardingConfig = async (req, res) => {
 // Get full onboarding configuration (admin only)
 exports.getFullOnboardingConfig = async (req, res) => {
   try {
+    console.log('Admin user info:', {
+      id: req.user?.id,
+      role: req.user?.role,
+      adminRole: req.user?.adminRole
+    });
+    
     const config = await OnboardingConfig.getConfig();
     res.json({
       success: true,
@@ -52,10 +58,12 @@ exports.getFullOnboardingConfig = async (req, res) => {
     });
   } catch (error) {
     console.error('Get full onboarding config error:', error);
+    console.error('Error stack:', error.stack);
     res.status(500).json({ 
       success: false, 
       message: 'Failed to get onboarding configuration',
-      error: error.message 
+      error: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
     });
   }
 };
@@ -63,6 +71,13 @@ exports.getFullOnboardingConfig = async (req, res) => {
 // Update onboarding configuration (admin only)
 exports.updateOnboardingConfig = async (req, res) => {
   try {
+    console.log('Update config - Admin user info:', {
+      id: req.user?.id,
+      role: req.user?.role,
+      adminRole: req.user?.adminRole
+    });
+    console.log('Update config - Request body:', req.body);
+    
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ 
@@ -84,10 +99,12 @@ exports.updateOnboardingConfig = async (req, res) => {
     });
   } catch (error) {
     console.error('Update onboarding config error:', error);
+    console.error('Error stack:', error.stack);
     res.status(500).json({ 
       success: false,
       message: 'Failed to update onboarding configuration',
-      error: error.message 
+      error: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
     });
   }
 };

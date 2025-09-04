@@ -416,10 +416,19 @@ const changePassword = async (req, res, next) => {
   try {
     const { currentPassword, newPassword } = req.body;
 
-    if (!currentPassword || !newPassword) {
+    if (!currentPassword || !newPassword || !currentPassword.trim() || !newPassword.trim()) {
       return res.status(400).json({
         success: false,
         message: 'Current password and new password are required'
+      });
+    }
+
+    // Validate new password strength
+    const passwordValidation = validatePasswordStrength(newPassword);
+    if (!passwordValidation.isValid) {
+      return res.status(400).json({
+        success: false,
+        message: passwordValidation.message
       });
     }
 
@@ -434,6 +443,15 @@ const changePassword = async (req, res, next) => {
       });
     }
 
+    // Check if new password is different from current password
+    const isSamePassword = await user.comparePassword(newPassword);
+    if (isSamePassword) {
+      return res.status(400).json({
+        success: false,
+        message: 'New password must be different from current password'
+      });
+    }
+
     // Update password
     user.password = newPassword;
     user.refreshToken = undefined; // Invalidate existing sessions
@@ -444,8 +462,72 @@ const changePassword = async (req, res, next) => {
       message: 'Password changed successfully'
     });
   } catch (error) {
+    // Handle Mongoose validation errors specifically
+    if (error.name === 'ValidationError') {
+      const validationErrors = Object.values(error.errors).map(err => err.message);
+      return res.status(400).json({
+        success: false,
+        message: 'Password validation failed',
+        errors: validationErrors
+      });
+    }
     next(error);
   }
+};
+
+// Helper function to validate password strength
+const validatePasswordStrength = (password) => {
+  const errors = [];
+
+  // Check minimum length
+  if (password.length < 8) {
+    errors.push('Password must be at least 8 characters long');
+  }
+
+  // Check maximum length (prevent DoS attacks)
+  if (password.length > 128) {
+    errors.push('Password must be no more than 128 characters long');
+  }
+
+  // Check for at least one uppercase letter
+  if (!/[A-Z]/.test(password)) {
+    errors.push('Password must contain at least one uppercase letter');
+  }
+
+  // Check for at least one lowercase letter
+  if (!/[a-z]/.test(password)) {
+    errors.push('Password must contain at least one lowercase letter');
+  }
+
+  // Check for at least one number
+  if (!/\d/.test(password)) {
+    errors.push('Password must contain at least one number');
+  }
+
+  // Check for at least one special character
+  if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+    errors.push('Password must contain at least one special character');
+  }
+
+  // Check for common weak passwords
+  const commonPasswords = [
+    'password', '123456', '123456789', 'qwerty', 'abc123', 
+    'password123', 'admin', 'letmein', 'welcome', 'monkey'
+  ];
+  
+  if (commonPasswords.includes(password.toLowerCase())) {
+    errors.push('Password is too common and easily guessable');
+  }
+
+  // Check for repeated characters (more than 3 in a row)
+  if (/(.)\1{3,}/.test(password)) {
+    errors.push('Password cannot contain more than 3 consecutive identical characters');
+  }
+
+  return {
+    isValid: errors.length === 0,
+    message: errors.length === 0 ? 'Password is valid' : errors.join('. ')
+  };
 };
 
 // @desc    Social login (Google, Facebook, Apple)

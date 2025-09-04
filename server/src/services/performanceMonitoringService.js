@@ -22,8 +22,10 @@ class PerformanceMonitoringService {
     this.maxHistorySize = 1000;
     this.startTime = Date.now();
     
-    // Start monitoring
-    this.startMonitoring();
+    // Start monitoring only if not in test mode or explicitly disabled
+    if (process.env.NODE_ENV !== 'test' && process.env.DISABLE_PERFORMANCE_MONITORING !== 'true') {
+      this.startMonitoring();
+    }
   }
 
   // Start performance monitoring
