@@ -116,7 +116,7 @@ const PaymentSuccessPage = () => {
                 to="/activities"
                 className="bg-ludus-orange text-white px-6 py-2 rounded-md hover:bg-ludus-orange-dark transition-colors"
               >
-                {t('home.browseActivities')}
+                Browse Activities
               </Link>
               <Link
                 to="/dashboard"
