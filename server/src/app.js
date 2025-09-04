@@ -263,6 +263,7 @@ app.use('/api/payments', require('./routes/payments'));
 app.use('/payments', require('./routes/payments'));
 app.use('/api/wallet', require('./routes/wallet'));
 app.use('/api/ratings', require('./routes/ratings'));
+app.use('/api/rating-system', require('./routes/enhancedRating'));
 app.use('/api/admin', require('./routes/admin'));
 app.use('/api/pages', require('./routes/pages'));
 app.use('/api', require('./routes/translations'));

@@ -253,7 +253,7 @@ const FormEditor = ({ form, onSave, onCancel }) => {
                     <Input
                       value={formData.title}
                       onChange={(e) => handleInputChange('title', e.target.value)}
-                      placeholder="Contact Form"
+                      placeholder={t('common.contactForm')}
                       required
                     />
                   </div>
@@ -319,7 +319,7 @@ const FormEditor = ({ form, onSave, onCancel }) => {
 
                 {formData.fields.length === 0 ? (
                   <div className="text-center py-8 text-gray-500">
-                    <p>No fields added yet. Click "Add Field" to get started.</p>
+                    <p>{t('common.noFieldsAdded')}</p>
                   </div>
                 ) : (
                   <div className="space-y-4">
@@ -469,7 +469,7 @@ const FormEditor = ({ form, onSave, onCancel }) => {
                       <Input
                         value={formData.menuPlacement.label}
                         onChange={(e) => handleNestedInputChange('menuPlacement', 'label', e.target.value)}
-                        placeholder="Contact Us"
+                        placeholder={t('common.contactUs')}
                       />
                     </div>
                     
@@ -585,7 +585,7 @@ const FieldEditor = ({ field, index, onUpdate, onRemove, onMove, fieldTypes }) =
           <Input
             value={fieldData.label}
             onChange={(e) => handleFieldChange('label', e.target.value)}
-            placeholder="Field Label"
+            placeholder={t('common.fieldLabel')}
             required
           />
         </div>

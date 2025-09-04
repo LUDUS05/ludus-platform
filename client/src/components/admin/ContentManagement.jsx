@@ -697,7 +697,7 @@ const ContentManagement = () => {
                             variant="ghost"
                             onClick={() => loadPageForEditing(page)}
                             className="text-ludus-orange hover:bg-ludus-orange/10"
-                            title="Edit page"
+                            title={t('common.editPage')}
                           >
                             ✏️
                           </Button>
@@ -706,7 +706,7 @@ const ContentManagement = () => {
                             variant="ghost"
                             onClick={() => duplicatePage(page._id)}
                             className="text-green-600 hover:bg-green-50"
-                            title="Duplicate page"
+                            title={t('common.duplicatePage')}
                           >
                             📋
                           </Button>
@@ -715,7 +715,7 @@ const ContentManagement = () => {
                             variant="ghost"
                             onClick={() => window.open(`/pages/${page.slug}?preview=true`, '_blank')}
                             className="text-ludus-blue hover:bg-ludus-blue/10"
-                            title="Preview page"
+                            title={t('common.previewPage')}
                           >
                             👁️
                           </Button>
@@ -724,7 +724,7 @@ const ContentManagement = () => {
                             variant="ghost"
                             onClick={() => deletePage(page._id)}
                             className="text-red-600 hover:bg-red-50"
-                            title="Delete page"
+                            title={t('common.deletePage')}
                           >
                             🗑️
                           </Button>

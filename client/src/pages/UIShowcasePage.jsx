@@ -171,12 +171,12 @@ const UIShowcasePage = () => {
                     <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Inputs</h3>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <Input placeholder="Enter your name" />
-                    <Input type="email" placeholder="Email address" />
+                    <Input placeholder={t('common.enterYourName')} />
+                    <Input type="email" placeholder={t('common.emailAddress')} />
                     <div className="relative">
                       <Input 
                         type={passwordVisible ? "text" : "password"}
-                        placeholder="Password"
+                        placeholder={t('common.password')}
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
                       />
@@ -188,7 +188,7 @@ const UIShowcasePage = () => {
                         {passwordVisible ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                       </button>
                     </div>
-                    <Input disabled placeholder="Disabled input" />
+                    <Input disabled placeholder={t('common.disabledInput')} />
                   </CardContent>
                 </Card>
               </div>
@@ -245,14 +245,14 @@ const UIShowcasePage = () => {
                     <div className="h-48 rounded-lg overflow-hidden">
                       <ProgressiveImage
                         category="nature"
-                        alt="Nature landscape"
+                        alt={t('common.natureLandscape')}
                         className="w-full h-full"
                       />
                     </div>
                     <div className="h-48 rounded-lg overflow-hidden">
                       <ProgressiveImage
                         src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop"
-                        alt="Desert landscape"
+                        alt={t('common.desertLandscape')}
                         className="w-full h-full"
                       />
                     </div>
@@ -356,7 +356,7 @@ const UIShowcasePage = () => {
                         Valid Input
                       </label>
                       <div className="relative">
-                        <Input placeholder="Valid input" className="border-green-500" />
+                        <Input placeholder={t('common.validInput')} className="border-green-500" />
                         <Check className="absolute right-3 top-1/2 transform -translate-y-1/2 text-green-500 w-4 h-4" />
                       </div>
                     </div>
@@ -365,7 +365,7 @@ const UIShowcasePage = () => {
                         Invalid Input
                       </label>
                       <div className="relative">
-                        <Input placeholder="Invalid input" className="border-red-500" />
+                        <Input placeholder={t('common.invalidInput')} className="border-red-500" />
                         <X className="absolute right-3 top-1/2 transform -translate-y-1/2 text-red-500 w-4 h-4" />
                       </div>
                     </div>
@@ -556,12 +556,12 @@ const UIShowcasePage = () => {
                     <div className="space-y-3">
                       <input 
                         type="text" 
-                        placeholder="Neumorphic input"
+                        placeholder={t('common.neumorphicInput')}
                         className="w-full p-3 neumorphic-subtle rounded-xl border-0 focus:neumorphic-pressed focus:outline-none text-gray-700 dark:text-gray-300 placeholder-gray-500 dark:placeholder-gray-400"
                       />
                       <input 
                         type="text" 
-                        placeholder="Pressed input"
+                        placeholder={t('common.pressedInput')}
                         className="w-full p-3 neumorphic-pressed rounded-xl border-0 focus:outline-none text-gray-700 dark:text-gray-300 placeholder-gray-500 dark:placeholder-gray-400"
                       />
                     </div>

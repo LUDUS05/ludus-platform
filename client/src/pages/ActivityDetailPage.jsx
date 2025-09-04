@@ -322,15 +322,14 @@ const ActivityDetailPage = () => {
 
               {/* Book Button */}
               <button
-                onClick={handleBookNow}
-                disabled={!selectedDate}
-                className="w-full bg-ludus-orange text-white py-3 px-4 rounded-md hover:bg-ludus-orange-dark disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium"
+                disabled
+                className="w-full bg-gray-400 text-white py-3 px-4 rounded-md cursor-not-allowed transition-colors font-medium"
               >
-                {!isAuthenticated ? 'Login to Book' : 'Book Now'}
+                Coming Soon قريبا
               </button>
 
               <p className="text-xs text-gray-500 mt-2 text-center">
-                You won't be charged yet
+                Booking feature will be available soon
               </p>
             </div>
           </div>

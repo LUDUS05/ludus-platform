@@ -4,6 +4,7 @@ import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import Alert from '../ui/Alert';
+import TranslationScanDashboard from './TranslationScanDashboard';
 
 const TranslationManagement = () => {
   const { t, i18n } = useTranslation();
@@ -25,6 +26,7 @@ const TranslationManagement = () => {
   const [workflowTemplates, setWorkflowTemplates] = useState([]);
   const [showWorkflowBuilder, setShowWorkflowBuilder] = useState(false);
   const [showMLDashboard, setShowMLDashboard] = useState(false);
+  const [showScanDashboard, setShowScanDashboard] = useState(false);
 
   const languages = [
     { code: 'ar', name: 'العربية', flag: '🇸🇦' },
@@ -597,9 +599,10 @@ const TranslationManagement = () => {
           onClick={() => {
             setShowWorkflowBuilder(false);
             setShowMLDashboard(false);
+            setShowScanDashboard(false);
           }}
           className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-            !showWorkflowBuilder && !showMLDashboard
+            !showWorkflowBuilder && !showMLDashboard && !showScanDashboard
               ? 'bg-white text-gray-900 shadow-sm'
               : 'text-gray-600 hover:text-gray-900'
           }`}
@@ -610,6 +613,7 @@ const TranslationManagement = () => {
           onClick={() => {
             setShowWorkflowBuilder(true);
             setShowMLDashboard(false);
+            setShowScanDashboard(false);
           }}
           className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
             showWorkflowBuilder
@@ -623,6 +627,7 @@ const TranslationManagement = () => {
           onClick={() => {
             setShowWorkflowBuilder(false);
             setShowMLDashboard(true);
+            setShowScanDashboard(false);
           }}
           className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
             showMLDashboard
@@ -632,10 +637,24 @@ const TranslationManagement = () => {
         >
           Machine Learning
         </button>
+        <button
+          onClick={() => {
+            setShowWorkflowBuilder(false);
+            setShowMLDashboard(false);
+            setShowScanDashboard(true);
+          }}
+          className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+            showScanDashboard
+              ? 'bg-white text-gray-900 shadow-sm'
+              : 'text-gray-600 hover:text-gray-900'
+          }`}
+        >
+          Code Scanner
+        </button>
       </div>
 
       {/* Main Content */}
-      {!showWorkflowBuilder && !showMLDashboard && (
+      {!showWorkflowBuilder && !showMLDashboard && !showScanDashboard && (
         <>
           {/* Language Selection */}
           <Card>
@@ -1174,6 +1193,11 @@ const TranslationManagement = () => {
             </div>
           </Card>
         </>
+      )}
+
+      {/* Code Scanner Dashboard */}
+      {showScanDashboard && (
+        <TranslationScanDashboard />
       )}
     </div>
   );
