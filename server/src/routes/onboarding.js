@@ -24,11 +24,9 @@ router.post('/complete', [
 router.get('/progress', onboardingController.getOnboardingProgress);
 
 // Admin routes (require admin role with proper RBAC)
-router.use(requireAdminRole());
+router.get('/admin/config', authenticate, authorize('admin'), onboardingController.getFullOnboardingConfig);
 
-router.get('/admin/config', onboardingController.getFullOnboardingConfig);
-
-router.put('/admin/config', [
+router.put('/admin/config', authenticate, authorize('admin'), [
   body('isEnabled').optional().isBoolean(),
   body('steps').optional().isArray(),
   body('welcomeConfig').optional().isObject(),
@@ -40,9 +38,9 @@ router.put('/admin/config', [
   body('analytics').optional().isObject()
 ], onboardingController.updateOnboardingConfig);
 
-router.post('/admin/toggle', onboardingController.toggleOnboarding);
+router.post('/admin/toggle', authenticate, authorize('admin'), onboardingController.toggleOnboarding);
 
-router.post('/admin/reset-user/:userId', [
+router.post('/admin/reset-user/:userId', authenticate, authorize('admin'), [
   param('userId').isMongoId()
 ], onboardingController.resetUserOnboarding);
 
