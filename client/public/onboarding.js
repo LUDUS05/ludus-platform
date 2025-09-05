@@ -14,7 +14,7 @@ let isRTL = false;
 
 // DOM elements
 const steps = document.querySelectorAll('.onboarding-step');
-const progressDots = document.querySelectorAll('.progress-dots .dot');
+const progressDots = document.querySelectorAll('.progress-dot');
 const prevBtn = document.getElementById('prev-btn');
 const nextBtn = document.getElementById('next-btn');
 const finishBtn = document.getElementById('finish-btn');
@@ -26,6 +26,9 @@ const body = document.body;
 function initOnboarding() {
   console.log('🎬 Project ATHENA Onboarding - Initializing...');
   
+  // Hide loading screen first
+  hideLoadingScreen();
+  
   // Set up event listeners
   setupEventListeners();
   
@@ -34,6 +37,33 @@ function initOnboarding() {
   
   // Start the experience
   startOnboarding();
+}
+
+// Hide loading screen
+function hideLoadingScreen() {
+  const loadingScreen = document.getElementById('loading-screen');
+  const onboardingContainer = document.getElementById('onboarding-container');
+  
+  if (loadingScreen && onboardingContainer) {
+    gsap.to(loadingScreen, {
+      opacity: 0,
+      duration: 0.5,
+      ease: 'power2.out',
+      onComplete: () => {
+        loadingScreen.style.display = 'none';
+        onboardingContainer.style.display = 'block';
+        gsap.fromTo(onboardingContainer, {
+          opacity: 0,
+          y: 20
+        }, {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          ease: 'power2.out'
+        });
+      }
+    });
+  }
 }
 
 // Set up event listeners
@@ -598,28 +628,34 @@ function handleResize() {
   }
 }
 
-// Performance monitoring
+// Performance monitoring (optimized)
 function monitorPerformance() {
-  // Monitor frame rate
+  // Monitor frame rate less aggressively
   let lastTime = performance.now();
   let frameCount = 0;
+  let checkCount = 0;
   
   function checkFrameRate() {
     frameCount++;
     const currentTime = performance.now();
     
-    if (currentTime - lastTime >= 1000) {
+    if (currentTime - lastTime >= 2000) { // Check every 2 seconds instead of 1
       const fps = Math.round((frameCount * 1000) / (currentTime - lastTime));
       
-      if (fps < 30) {
+      // Only warn if FPS is consistently low
+      if (fps < 20 && checkCount > 2) {
         console.warn(`⚠️ Low FPS detected: ${fps}fps`);
       }
       
       frameCount = 0;
       lastTime = currentTime;
+      checkCount++;
     }
     
-    requestAnimationFrame(checkFrameRate);
+    // Only check for first 10 seconds
+    if (checkCount < 5) {
+      requestAnimationFrame(checkFrameRate);
+    }
   }
   
   checkFrameRate();

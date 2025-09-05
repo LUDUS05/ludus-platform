@@ -110,22 +110,28 @@ function animateBackgroundElements() {
   });
 }
 
-// Animate particles
+// Animate particles (optimized for performance)
 function animateParticles() {
   const particles = document.querySelectorAll('.particle');
   
+  // Only animate first 4 particles for better performance
   particles.forEach((particle, index) => {
-    gsap.to(particle, {
-      opacity: 0.6,
-      y: -100,
-      duration: 15 + (index * 2),
-      ease: 'none',
-      repeat: -1,
-      delay: index * 2,
-      onComplete: () => {
-        gsap.set(particle, { y: 100, opacity: 0 });
-      }
-    });
+    if (index < 4) {
+      gsap.to(particle, {
+        opacity: 0.4,
+        y: -50,
+        duration: 20 + (index * 3),
+        ease: 'none',
+        repeat: -1,
+        delay: index * 3,
+        onComplete: () => {
+          gsap.set(particle, { y: 50, opacity: 0 });
+        }
+      });
+    } else {
+      // Hide extra particles
+      gsap.set(particle, { opacity: 0 });
+    }
   });
 }
 
@@ -745,28 +751,34 @@ function handleResize() {
   }
 }
 
-// Performance monitoring
+// Performance monitoring (optimized)
 function monitorPerformance() {
-  // Monitor frame rate
+  // Monitor frame rate less aggressively
   let lastTime = performance.now();
   let frameCount = 0;
+  let checkCount = 0;
   
   function checkFrameRate() {
     frameCount++;
     const currentTime = performance.now();
     
-    if (currentTime - lastTime >= 1000) {
+    if (currentTime - lastTime >= 2000) { // Check every 2 seconds instead of 1
       const fps = Math.round((frameCount * 1000) / (currentTime - lastTime));
       
-      if (fps < 30) {
+      // Only warn if FPS is consistently low
+      if (fps < 20 && checkCount > 2) {
         console.warn(`⚠️ Low FPS detected: ${fps}fps`);
       }
       
       frameCount = 0;
       lastTime = currentTime;
+      checkCount++;
     }
     
-    requestAnimationFrame(checkFrameRate);
+    // Only check for first 10 seconds
+    if (checkCount < 5) {
+      requestAnimationFrame(checkFrameRate);
+    }
   }
   
   checkFrameRate();
