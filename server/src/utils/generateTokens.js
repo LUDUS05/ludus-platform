@@ -2,7 +2,8 @@ const jwt = require('jsonwebtoken');
 
 const generateTokens = (userId, userRole = 'user', adminRole = null) => {
   // Include user role and admin role in payload to avoid DB lookups in middleware
-  const payload = { userId, role: userRole, adminRole };
+  // For legacy admin users without adminRole, we'll handle this in the middleware
+  const payload = { userId, role: userRole, adminRole: adminRole || null };
   
   const accessToken = jwt.sign(
     payload,

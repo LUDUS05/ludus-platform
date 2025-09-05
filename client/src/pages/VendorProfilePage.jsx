@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { vendorService } from '../services/vendorService';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
+import { FaTwitter } from 'react-icons/fa';
 
 const VendorProfilePage = () => {
   const { id } = useParams();
@@ -641,7 +642,7 @@ const VendorProfilePage = () => {
                             rel="noopener noreferrer"
                             className="w-10 h-10 bg-sky-500 text-white rounded-full flex items-center justify-center hover:bg-sky-600"
                           >
-                            🐦
+                            <FaTwitter className="text-lg" />
                           </a>
                         )}
                       </div>

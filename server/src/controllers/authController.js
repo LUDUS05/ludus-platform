@@ -127,6 +127,18 @@ const login = async (req, res, next) => {
       });
     }
 
+    // Handle legacy admin users without adminRole
+    if (user.role === 'admin' && !user.adminRole) {
+      console.log('Legacy admin user detected during login, assigning SA role');
+      user.adminRole = 'SA';
+      user.adminMetadata = {
+        assignedBy: user._id, // Self-assigned for legacy admins
+        assignedAt: new Date(),
+        lastActiveAt: new Date()
+      };
+      await user.save();
+    }
+
     // Generate tokens
     const { accessToken, refreshToken } = generateTokens(user._id, user.role, user.adminRole);
 

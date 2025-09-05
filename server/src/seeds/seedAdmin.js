@@ -23,6 +23,12 @@ const seedAdmin = async () => {
       email: process.env.ADMIN_EMAIL || 'admin@ludusapp.com',
       password: process.env.ADMIN_PASSWORD || 'AdminPassword123!',
       role: 'admin',
+      adminRole: 'SA', // Super Admin role
+      adminMetadata: {
+        assignedBy: null, // Self-created admin
+        assignedAt: new Date(),
+        lastActiveAt: new Date()
+      },
       isEmailVerified: true,
       location: {
         address: 'Riyadh, Saudi Arabia',

@@ -14,11 +14,19 @@ const requireAdminRole = (requiredRoles = []) => {
       }
 
       // Check if user has admin role
-      if (user.role !== 'admin' || !user.adminRole) {
+      if (user.role !== 'admin') {
         return res.status(403).json({
           success: false,
           message: 'Admin access required'
         });
+      }
+
+      // Handle legacy admin users without adminRole - assign SA role temporarily
+      if (!user.adminRole) {
+        console.log('Legacy admin user detected, assigning SA role temporarily');
+        // For legacy admin users, we'll allow access but log this for future cleanup
+        // The user will need to be properly assigned an adminRole through the admin management system
+        req.user.adminRole = 'SA'; // Temporary assignment for this request
       }
 
       // If no specific roles required, any admin role is sufficient

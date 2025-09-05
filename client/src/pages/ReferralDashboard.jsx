@@ -18,6 +18,14 @@ import {
   RefreshCw,
   ExternalLink
 } from 'lucide-react';
+import { 
+  FaWhatsapp, 
+  FaFacebook, 
+  FaTwitter, 
+  FaTelegram, 
+  FaEnvelope, 
+  FaSms 
+} from 'react-icons/fa';
 
 const ReferralDashboard = () => {
   const { t } = useTranslation();
@@ -300,7 +308,7 @@ const ReferralDashboard = () => {
                 className="flex items-center justify-center p-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
                 title="WhatsApp"
               >
-                <span className="text-lg">📱</span>
+                <FaWhatsapp className="text-lg" />
               </button>
               
               <button
@@ -309,7 +317,7 @@ const ReferralDashboard = () => {
                 className="flex items-center justify-center p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
                 title="Facebook"
               >
-                <span className="text-lg">📘</span>
+                <FaFacebook className="text-lg" />
               </button>
               
               <button
@@ -318,7 +326,7 @@ const ReferralDashboard = () => {
                 className="flex items-center justify-center p-2 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition-colors disabled:opacity-50"
                 title="Twitter"
               >
-                <span className="text-lg">🐦</span>
+                <FaTwitter className="text-lg" />
               </button>
               
               <button
@@ -327,7 +335,7 @@ const ReferralDashboard = () => {
                 className="flex items-center justify-center p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50"
                 title="Telegram"
               >
-                <span className="text-lg">📬</span>
+                <FaTelegram className="text-lg" />
               </button>
             </div>
 
@@ -339,7 +347,7 @@ const ReferralDashboard = () => {
                 className="flex items-center justify-center p-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50"
                 title="Email"
               >
-                <span className="text-lg">📧</span>
+                <FaEnvelope className="text-lg" />
               </button>
               
               <button
@@ -348,7 +356,7 @@ const ReferralDashboard = () => {
                 className="flex items-center justify-center p-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors disabled:opacity-50"
                 title="SMS"
               >
-                <span className="text-lg">💬</span>
+                <FaSms className="text-lg" />
               </button>
             </div>
           </div>
