@@ -1,11 +1,12 @@
 services:
-  # Backend Service (Node.js API)
+  # Backend Service (Node.js API) - Enhanced for ATHENA
   - type: web
-    name: ludus-backend-gf1g
+    name: ludus-backend-athena
     env: node
     plan: starter
-    buildCommand: cd server && npm install
+    buildCommand: cd server && npm install && npm run build
     startCommand: cd server && npm start
+    healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
         value: production
@@ -23,21 +24,25 @@ services:
         sync: false # Set in Render dashboard
       - key: CLIENT_URL
         value: https://app.letsludus.com
+      - key: ANIMATION_ENABLED
+        value: "true"
+      - key: RENDER_ENVIRONMENT
+        value: "production"
 
-  # Frontend Service (Static React App)
+  # Frontend Service (Static React App) - Enhanced for ATHENA
   - type: static
-    name: ludus-frontend-og2d
+    name: ludus-frontend-athena
     env: static
     buildCommand: cd client && npm install && npm run build
     staticPublishPath: client/build
-    # Enable Render's built-in SPA support (testing alternative approach)
+    # Enable Render's built-in SPA support with GSAP optimization
     spa: true
-    # Alternative SPA routing configuration
+    # Enhanced SPA routing configuration for ATHENA
     routes:
       # Ensure API calls go to backend
       - type: rewrite
         source: "/api/*"
-        destination: "https://ludus-backend-gf1g.onrender.com/api/*"
+        destination: "https://ludus-backend-athena.onrender.com/api/*"
       # Force SPA routing for all non-API routes
       - type: rewrite
         source: "/*"
@@ -49,7 +54,17 @@ services:
       - path: /static/*
         name: Cache-Control
         value: "public, max-age=31536000, immutable"
+      - path: /static/js/*
+        name: Cache-Control
+        value: "public, max-age=31536000, immutable"
+      - path: /static/css/*
+        name: Cache-Control
+        value: "public, max-age=31536000, immutable"
       # Add CORS headers for SPA routing
       - path: /*
         name: Access-Control-Allow-Origin
         value: "*"
+      # GSAP and animation assets optimization
+      - path: /static/media/*
+        name: Cache-Control
+        value: "public, max-age=31536000, immutable"
