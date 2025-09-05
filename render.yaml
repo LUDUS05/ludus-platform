@@ -36,3 +36,32 @@ services:
     plan: starter
     buildCommand: cd client && npm install --legacy-peer-deps && npm run build
     staticPublishPath: client/build
+    envVars:
+      # Core API Configuration - REQUIRED
+      - key: REACT_APP_API_URL
+        value: https://ludus-backend-athena.onrender.com
+      # Animation Configuration - REQUIRED
+      - key: REACT_APP_ANIMATION_ENABLED
+        value: "true"
+      - key: REACT_APP_RTL_SUPPORT
+        value: "true"
+      # Performance Monitoring - REQUIRED
+      - key: REACT_APP_PERFORMANCE_MONITORING
+        value: "true"
+      - key: REACT_APP_DEBUG_MODE
+        value: "false"
+      # Optional Services (uncomment and set values as needed)
+      # - key: REACT_APP_GOOGLE_MAPS_API_KEY
+      #   sync: false # Set in Render dashboard
+      # - key: REACT_APP_GOOGLE_CLIENT_ID
+      #   sync: false # Set in Render dashboard
+      # - key: REACT_APP_FACEBOOK_APP_ID
+      #   sync: false # Set in Render dashboard
+      # - key: REACT_APP_MOYASAR_PUBLISHABLE_KEY
+      #   sync: false # Set in Render dashboard
+      # - key: REACT_APP_UNSPLASH_ACCESS_KEY
+      #   sync: false # Set in Render dashboard
+      # - key: REACT_APP_UNSPLASH_SECRET_KEY
+      #   sync: false # Set in Render dashboard
+      # - key: REACT_APP_SENTRY_DSN
+      #   sync: false # Set in Render dashboard
