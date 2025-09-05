@@ -2,7 +2,7 @@
 ## LUDUS Platform - Enhanced UI/UX with GSAP Integration
 
 **Status:** Ready for Deployment ✅  
-**Branch:** `lds_dev_01`  
+**Branch:** `lds_staging`  
 **Target:** app.letsludus.com  
 **Platform:** Render Multi-Service  
 
@@ -16,7 +16,8 @@
 - [x] Social interaction features ready
 - [x] RTL support for Arabic language
 - [x] render.yaml configuration ready
-- [x] Code pushed to `lds_dev_01` branch
+- [x] Dependency conflicts resolved (React 19 compatibility)
+- [x] Code pushed to `lds_staging` branch
 
 ---
 
@@ -30,7 +31,7 @@
 ### Step 2: Create New Web Service (Backend)
 1. Click **"New +"** → **"Web Service"**
 2. Connect your GitHub repository: `ludus-platform`
-3. Select branch: `lds_dev_01`
+3. Select branch: `lds_staging`
 4. Configure the service:
 
 ```yaml
@@ -60,12 +61,12 @@ RENDER_ENVIRONMENT=production
 ### Step 4: Create Static Site (Frontend)
 1. Click **"New +"** → **"Static Site"**
 2. Connect your GitHub repository: `ludus-platform`
-3. Select branch: `lds_dev_01`
+3. Select branch: `lds_staging`
 4. Configure the service:
 
 ```yaml
 Name: ludus-frontend-athena
-Build Command: cd client && npm install && npm run build
+Build Command: cd client && npm install --legacy-peer-deps && npm run build
 Publish Directory: client/build
 ```
 
@@ -93,9 +94,15 @@ Since we have a complete `render.yaml` configuration, you can also:
 1. Go to Render Dashboard
 2. Click **"New +"** → **"Blueprint"**
 3. Connect your GitHub repository
-4. Select branch: `lds_dev_01`
+4. Select branch: `lds_staging`
 5. Render will automatically detect and use the `render.yaml` file
 6. This will create both services automatically
+
+### ✅ Fixed Issues in render.yaml:
+- ✅ Removed unsupported `spa: true` field
+- ✅ Removed unused `react-facebook-login` dependency
+- ✅ Added `--legacy-peer-deps` flag for React 19 compatibility
+- ✅ Simplified configuration for Blueprint compatibility
 
 ---
 
@@ -175,6 +182,8 @@ curl https://ludus-frontend-athena.onrender.com
 2. **API Connection:** Verify CORS settings
 3. **Animation Issues:** Check GSAP bundle size
 4. **RTL Problems:** Verify Arabic text direction
+5. **Dependency Conflicts:** Use `--legacy-peer-deps` flag (already configured)
+6. **React Version Issues:** Removed incompatible `react-facebook-login` package
 
 ### Support Resources
 - Render Documentation: [render.com/docs](https://render.com/docs)
@@ -215,4 +224,7 @@ After successful deployment:
 
 *Created by: Aether-Render Project Manager*  
 *Date: 2025-01-27*  
-*Status: Ready for Deployment* ✅
+*Updated: 2025-09-05*  
+*Status: Ready for Deployment* ✅  
+*Branch: lds_staging*  
+*Dependencies: Fixed for React 19*
