@@ -30,41 +30,12 @@ services:
         value: "production"
 
   # Frontend Service (Static React App) - Enhanced for ATHENA
-  - type: static
+  - type: web
     name: ludus-frontend-athena
     env: static
+    plan: starter
     buildCommand: cd client && npm install && npm run build
+    startCommand: cd client && npm start
     staticPublishPath: client/build
     # Enable Render's built-in SPA support with GSAP optimization
     spa: true
-    # Enhanced SPA routing configuration for ATHENA
-    routes:
-      # Ensure API calls go to backend
-      - type: rewrite
-        source: "/api/*"
-        destination: "https://ludus-backend-athena.onrender.com/api/*"
-      # Force SPA routing for all non-API routes
-      - type: rewrite
-        source: "/*"
-        destination: "/index.html"
-    headers:
-      - path: /*
-        name: Cache-Control
-        value: "public, max-age=0, must-revalidate"
-      - path: /static/*
-        name: Cache-Control
-        value: "public, max-age=31536000, immutable"
-      - path: /static/js/*
-        name: Cache-Control
-        value: "public, max-age=31536000, immutable"
-      - path: /static/css/*
-        name: Cache-Control
-        value: "public, max-age=31536000, immutable"
-      # Add CORS headers for SPA routing
-      - path: /*
-        name: Access-Control-Allow-Origin
-        value: "*"
-      # GSAP and animation assets optimization
-      - path: /static/media/*
-        name: Cache-Control
-        value: "public, max-age=31536000, immutable"
