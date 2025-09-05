@@ -4,7 +4,7 @@ services:
     name: ludus-backend-athena
     env: node
     plan: starter
-    buildCommand: cd server && npm install && npm run build
+    buildCommand: cd server && npm install --legacy-peer-deps && npm run build
     startCommand: cd server && npm start
     healthCheckPath: /api/health
     envVars:
