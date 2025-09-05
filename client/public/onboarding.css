@@ -1,6 +1,12 @@
 /* Project ATHENA - Onboarding Page Styles */
 /* Enhanced UI/UX with GSAP Integration */
 
+/* GSAP Animation Classes */
+.gsap-animate {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
 :root {
   /* Colors */
   --primary-color: #6366f1;

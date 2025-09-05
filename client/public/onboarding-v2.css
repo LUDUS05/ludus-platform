@@ -1,6 +1,12 @@
 /* Project ATHENA - Onboarding V2 Styles */
 /* Modern Tech-Focused Design with GSAP Integration */
 
+/* GSAP Animation Classes */
+.gsap-animate {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
 :root {
   /* Modern Color Palette */
   --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
