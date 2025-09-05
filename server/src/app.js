@@ -15,6 +15,37 @@ const logger = require('./utils/logger');
 // Load environment variables
 dotenv.config();
 
+// Memory optimization
+if (global.gc) {
+  // Force garbage collection every 5 minutes if available
+  setInterval(() => {
+    global.gc();
+    logger.info('Garbage collection performed');
+  }, 300000);
+}
+
+// Memory monitoring and cleanup
+setInterval(() => {
+  const memUsage = process.memoryUsage();
+  const memUsageMB = {
+    rss: Math.round(memUsage.rss / 1024 / 1024),
+    heapTotal: Math.round(memUsage.heapTotal / 1024 / 1024),
+    heapUsed: Math.round(memUsage.heapUsed / 1024 / 1024),
+    external: Math.round(memUsage.external / 1024 / 1024)
+  };
+  
+  // Log memory usage every 10 minutes
+  logger.info({ memoryUsage: memUsageMB }, 'Memory usage report');
+  
+  // Force cleanup if memory usage is high
+  if (memUsage.heapUsed / memUsage.heapTotal > 0.8) {
+    if (global.gc) {
+      global.gc();
+      logger.warn('High memory usage detected, garbage collection performed');
+    }
+  }
+}, 600000); // Every 10 minutes
+
 // Initialize express app
 const app = express();
 

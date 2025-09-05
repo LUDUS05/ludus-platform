@@ -35,8 +35,8 @@ const monitoringConfig = {
 
     // Memory usage thresholds (percentage)
     memory: {
-      warning: 70,        // 70%
-      critical: 85,       // 85%
+      warning: 75,        // 75%
+      critical: 90,       // 90%
       alert: 95           // 95%
     },
 
@@ -95,9 +95,9 @@ const monitoringConfig = {
 
     // Error retention
     retention: {
-      historySize: 1000,         // Keep last 1000 errors in memory
-      alertHistorySize: 100,     // Keep last 100 alerts
-      cleanupInterval: 3600000   // Cleanup every hour
+      historySize: 500,          // Keep last 500 errors in memory (reduced)
+      alertHistorySize: 50,      // Keep last 50 alerts (reduced)
+      cleanupInterval: 1800000   // Cleanup every 30 minutes (more frequent)
     }
   },
 

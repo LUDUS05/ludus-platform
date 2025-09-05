@@ -3,7 +3,7 @@
 const setCookieOptions = (maxAge = 30 * 24 * 60 * 60 * 1000) => ({ // 30 days default
   httpOnly: true, // Prevents XSS attacks
   secure: process.env.NODE_ENV === 'production', // HTTPS only in production
-  sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax', // CSRF protection
+  sameSite: 'none', // Allow cross-site cookies for production deployment
   maxAge,
   path: '/'
 });
@@ -17,7 +17,7 @@ const clearRefreshTokenCookie = (res) => {
   res.cookie('refreshToken', '', {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+    sameSite: 'none',
     expires: new Date(0),
     path: '/'
   });
