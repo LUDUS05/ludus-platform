@@ -285,8 +285,13 @@ onboardingConfigSchema.statics.getConfig = async function() {
 
 onboardingConfigSchema.statics.updateConfig = async function(updates, userId) {
   let config = await this.getConfig();
+  
+  // Convert userId to ObjectId if it's a string
+  const mongoose = require('mongoose');
+  const objectIdUserId = typeof userId === 'string' ? new mongoose.Types.ObjectId(userId) : userId;
+  
   Object.assign(config, updates, { 
-    lastUpdatedBy: userId,
+    lastUpdatedBy: objectIdUserId,
     version: config.version + 1
   });
   return await config.save();

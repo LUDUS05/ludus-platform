@@ -94,7 +94,11 @@ exports.updateOnboardingConfig = async (req, res) => {
     const updates = req.body;
     const userId = req.user.id;
 
+    console.log('Updating config with:', { updates, userId });
+
     const config = await OnboardingConfig.updateConfig(updates, userId);
+    
+    console.log('Config updated successfully:', config);
     
     res.json({ 
       success: true,
@@ -104,6 +108,27 @@ exports.updateOnboardingConfig = async (req, res) => {
   } catch (error) {
     console.error('Update onboarding config error:', error);
     console.error('Error stack:', error.stack);
+    
+    // Handle specific error types
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({
+        success: false,
+        message: 'Validation error',
+        errors: Object.values(error.errors).map(err => ({
+          field: err.path,
+          message: err.message
+        }))
+      });
+    }
+    
+    if (error.name === 'CastError') {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid data format',
+        error: error.message
+      });
+    }
+    
     res.status(500).json({ 
       success: false,
       message: 'Failed to update onboarding configuration',
