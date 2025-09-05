@@ -194,7 +194,7 @@ const NotificationCenter = () => {
                     <button
                       onClick={() => deleteNotification(notification.id)}
                       className="p-1 text-charcoal-light dark:text-dark-text-secondary hover:text-error dark:hover:text-dark-error transition-colors"
-                      title="Delete notification"
+                      title={t('common.deleteNotification')}
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

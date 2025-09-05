@@ -72,6 +72,9 @@
     "adventureActivities": "أنشطة المغامرات",
     "desertSafariAdventure": "مغامرة رحلة الصحراء",
     "alKhobar": "الخبر",
+    "deleteNotification": "حذف الإشعار",
+    "clearSearch": "مسح البحث",
+    "johnDoe": "محمد أحمد",
     "enterYourName": "أدخل اسمك",
     "emailAddress": "عنوان البريد الإلكتروني",
     "password": "كلمة المرور",
@@ -995,7 +998,7 @@
   "onboarding": {
     "title": "مرحباً بك في لودوس",
     "subtitle": "اكتشف أنشطة رائعة وتواصل مع أشخاص متشابهين في التفكير",
-    "getStarted": "ابدأ الآن",
+      "getStarted": "ابدأ الآن",
     "continue": "متابعة",
     "back": "رجوع",
     "skip": "تخطي",
@@ -1037,24 +1040,24 @@
       },
       "profile": {
         "title": "أخبرنا عن نفسك",
-        "questions": {
-          "firstName": {
+      "questions": {
+        "firstName": {
             "question": "ماذا نسميك؟",
             "placeholder": "أدخل اسمك الأول"
-          },
-          "lastName": {
+        },
+        "lastName": {
             "question": "ما هو اسم عائلتك، {{name}}؟",
             "placeholder": "أدخل اسم العائلة"
-          },
-          "email": {
+        },
+        "email": {
             "question": "أين يمكننا الوصول إليك؟",
             "placeholder": "example@email.com"
-          },
-          "phone": {
+        },
+        "phone": {
             "question": "رقم هاتفك",
             "placeholder": "+966 XX XXX XXXX"
-          },
-          "dateOfBirth": {
+        },
+        "dateOfBirth": {
             "question": "ما تاريخ ميلادك؟ (اختياري)",
             "placeholder": "اختر التاريخ"
           }

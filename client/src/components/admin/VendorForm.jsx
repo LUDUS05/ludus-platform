@@ -447,7 +447,7 @@ const VendorForm = () => {
               <Input
                 value={formData.address.city}
                 onChange={(e) => handleNestedInputChange('address', 'city', e.target.value)}
-                placeholder="Al Khobar"
+                placeholder={t('common.alKhobar')}
                 required
               />
             </div>

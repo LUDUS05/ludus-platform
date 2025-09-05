@@ -277,7 +277,7 @@ const PaymentForm = ({
                     type="text"
                     value={cardData.name}
                     onChange={(e) => handleCardInputChange('name', e.target.value)}
-                    placeholder="John Doe"
+                    placeholder={t('common.johnDoe')}
                     className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
                       errors.name ? 'border-red-500' : 'border-gray-300'
                     }`}

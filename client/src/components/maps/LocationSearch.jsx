@@ -196,7 +196,7 @@ const LocationSearch = ({
             <button
               onClick={handleClear}
               className="p-1 text-gray-400 hover:text-gray-600 transition-colors"
-              title="Clear search"
+              title={t('common.clearSearch')}
             >
               <X className="w-4 h-4" />
             </button>
