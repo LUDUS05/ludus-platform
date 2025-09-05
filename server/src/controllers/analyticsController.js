@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Controller for handling advanced analytics, particularly for the referral system.
+ * @module controllers/analyticsController
+ */
+
 const Referral = require('../models/Referral');
 const ReferralCode = require('../models/ReferralCode');
 const ReferralConversion = require('../models/ReferralConversion');
@@ -5,9 +10,12 @@ const Invitation = require('../models/Invitation');
 const User = require('../models/User');
 const Wallet = require('../models/Wallet');
 
-// @desc    Get comprehensive referral analytics
-// @route   GET /api/analytics/referrals
-// @access  Private (Admin)
+/**
+ * Get comprehensive referral analytics.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getReferralAnalytics = async (req, res) => {
   try {
     const { period = '30d', referrerId, groupBy = 'day' } = req.query;
@@ -80,9 +88,12 @@ const getReferralAnalytics = async (req, res) => {
   }
 };
 
-// @desc    Get referral funnel analysis
-// @route   GET /api/analytics/funnel
-// @access  Private (Admin)
+/**
+ * Get referral funnel analysis.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getReferralFunnel = async (req, res) => {
   try {
     const { period = '30d', referrerId, source, platform } = req.query;
@@ -153,9 +164,12 @@ const getReferralFunnel = async (req, res) => {
   }
 };
 
-// @desc    Get geographic referral analytics
-// @route   GET /api/analytics/geographic
-// @access  Private (Admin)
+/**
+ * Get geographic referral analytics.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getGeographicAnalytics = async (req, res) => {
   try {
     const { period = '30d', referrerId, country, city } = req.query;
@@ -263,9 +277,12 @@ const getGeographicAnalytics = async (req, res) => {
   }
 };
 
-// @desc    Get source performance analytics
-// @route   GET /api/analytics/sources
-// @access  Private (Admin)
+/**
+ * Get referral source performance analytics.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getSourcePerformance = async (req, res) => {
   try {
     const { period = '30d', referrerId, source } = req.query;
@@ -362,9 +379,12 @@ const getSourcePerformance = async (req, res) => {
   }
 };
 
-// @desc    Get ROI and performance metrics
-// @route   GET /api/analytics/roi
-// @access  Private (Admin)
+/**
+ * Get ROI and performance metrics for the referral program.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getROIAnalytics = async (req, res) => {
   try {
     const { period = '30d', referrerId } = req.query;
@@ -421,7 +441,12 @@ const getROIAnalytics = async (req, res) => {
   }
 };
 
-// Helper functions
+/**
+ * Helper function to get time series data for referral conversions.
+ * @param {object} query - The MongoDB query object.
+ * @param {string} groupBy - The time unit to group by (day, week, month).
+ * @returns {Promise<Array>} A promise that resolves to an array of time series data.
+ */
 async function getTimeSeriesData(query, groupBy) {
   const dateFormat = groupBy === 'day' ? '%Y-%m-%d' : 
                     groupBy === 'week' ? '%Y-%U' : 
@@ -443,6 +468,11 @@ async function getTimeSeriesData(query, groupBy) {
   ]);
 }
 
+/**
+ * Helper function to get overall statistics for referrals.
+ * @param {object} query - The MongoDB query object.
+ * @returns {Promise<object>} A promise that resolves to an object with overall stats.
+ */
 async function getOverallStats(query) {
   const [totalReferrals, totalConversions, totalRevenue] = await Promise.all([
     Referral.countDocuments(query),
@@ -461,6 +491,11 @@ async function getOverallStats(query) {
   };
 }
 
+/**
+ * Helper function to calculate ROI for the referral program.
+ * @param {object} query - The MongoDB query object.
+ * @returns {Promise<object>} A promise that resolves to an object with ROI data.
+ */
 async function calculateROI(query) {
   // Calculate total investment (referral rewards paid)
   const totalInvestment = await Wallet.aggregate([
@@ -504,6 +539,11 @@ async function calculateROI(query) {
   };
 }
 
+/**
+ * Helper function to calculate the progression through the referral funnel.
+ * @param {Array} funnelStages - An array of funnel stages with counts.
+ * @returns {Array} An array representing the funnel progression.
+ */
 function calculateFunnelProgression(funnelStages) {
   const progression = [];
   let previousCount = 0;
@@ -525,6 +565,11 @@ function calculateFunnelProgression(funnelStages) {
   return progression;
 }
 
+/**
+ * Helper function to analyze dropoffs at each stage of the referral funnel.
+ * @param {object} query - The MongoDB query object.
+ * @returns {Promise<Array>} A promise that resolves to an array of dropoff analysis data.
+ */
 async function analyzeDropoffs(query) {
   return await ReferralConversion.aggregate([
     { $match: query },
@@ -553,6 +598,11 @@ async function analyzeDropoffs(query) {
   ]);
 }
 
+/**
+ * Helper function to calculate the conversion velocity at each stage of the referral funnel.
+ * @param {object} query - The MongoDB query object.
+ * @returns {Promise<Array>} A promise that resolves to an array of conversion velocity data.
+ */
 async function calculateConversionVelocity(query) {
   return await ReferralConversion.aggregate([
     { $match: query },
@@ -568,6 +618,12 @@ async function calculateConversionVelocity(query) {
   ]);
 }
 
+/**
+ * Helper function to calculate ROI metrics.
+ * @param {object} query - The MongoDB query object.
+ * @returns {Promise<object>} A promise that resolves to an object with ROI metrics.
+ * @todo Implement the actual logic for this function.
+ */
 async function calculateROIMetrics(query) {
   // Implementation for ROI metrics calculation
   return {
@@ -578,6 +634,12 @@ async function calculateROIMetrics(query) {
   };
 }
 
+/**
+ * Helper function to perform cost analysis.
+ * @param {object} query - The MongoDB query object.
+ * @returns {Promise<object>} A promise that resolves to an object with cost analysis data.
+ * @todo Implement the actual logic for this function.
+ */
 async function calculateCostAnalysis(query) {
   // Implementation for cost analysis
   return {
@@ -588,6 +650,12 @@ async function calculateCostAnalysis(query) {
   };
 }
 
+/**
+ * Helper function to calculate revenue attribution.
+ * @param {object} query - The MongoDB query object.
+ * @returns {Promise<object>} A promise that resolves to an object with revenue attribution data.
+ * @todo Implement the actual logic for this function.
+ */
 async function calculateRevenueAttribution(query) {
   // Implementation for revenue attribution
   return {
@@ -598,6 +666,12 @@ async function calculateRevenueAttribution(query) {
   };
 }
 
+/**
+ * Helper function to calculate customer acquisition cost (CAC).
+ * @param {object} query - The MongoDB query object.
+ * @returns {Promise<object>} A promise that resolves to an object with CAC data.
+ * @todo Implement the actual logic for this function.
+ */
 async function calculateCustomerAcquisitionCost(query) {
   // Implementation for customer acquisition cost
   return {

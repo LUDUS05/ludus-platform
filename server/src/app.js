@@ -1,3 +1,9 @@
+/**
+ * @fileoverview Main application entry point.
+ * @version 1.0.0
+ * @author Your Name
+ */
+
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -28,7 +34,13 @@ if (process.env.NODE_ENV !== 'test' && process.env.MONGODB_URI) {
   logger.info('Skipping database connection (test mode or no MONGODB_URI)');
 }
 
-// Function to create partner terms page
+/**
+ * Creates the partner terms and conditions page if it doesn't already exist.
+ * This function is idempotent and can be safely called multiple times.
+ * @async
+ * @function createPartnerTermsPage
+ * @returns {Promise<void>} A promise that resolves when the page is created or if it already exists.
+ */
 async function createPartnerTermsPage() {
   try {
     const Page = require('./models/Page');

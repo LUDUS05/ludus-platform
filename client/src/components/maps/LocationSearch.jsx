@@ -2,7 +2,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import { Search, MapPin, X } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
 
 const LocationSearch = ({ 
   onPlaceSelect, 
@@ -12,7 +11,6 @@ const LocationSearch = ({
   onClear
 }) => {
   const inputRef = useRef(null);
-  const { t } = useTranslation();
   const autocompleteRef = useRef(null);
   const [inputValue, setInputValue] = useState(initialValue);
   const [isLoading, setIsLoading] = useState(false);

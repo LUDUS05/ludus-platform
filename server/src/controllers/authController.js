@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Controller for handling user authentication.
+ * @module controllers/authController
+ */
+
 const User = require('../models/User');
 const { generateTokens, verifyToken, generatePasswordResetToken } = require('../utils/generateTokens');
 const { setRefreshTokenCookie, clearRefreshTokenCookie, getRefreshTokenFromCookie } = require('../utils/cookieHelpers');
@@ -8,9 +13,13 @@ const crypto = require('crypto');
 // Import referral processing function
 const { processReferralRegistration } = require('./referralController');
 
-// @desc    Register user
-// @route   POST /api/auth/register
-// @access  Public
+/**
+ * Register a new user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} next - The Express next middleware function.
+ * @returns {Promise<void>}
+ */
 const register = async (req, res, next) => {
   try {
     const { firstName, lastName, email, password } = req.body;
@@ -102,9 +111,13 @@ const register = async (req, res, next) => {
   }
 };
 
-// @desc    Login user
-// @route   POST /api/auth/login
-// @access  Public
+/**
+ * Login an existing user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} next - The Express next middleware function.
+ * @returns {Promise<void>}
+ */
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -125,18 +138,6 @@ const login = async (req, res, next) => {
         success: false,
         message: 'Invalid credentials'
       });
-    }
-
-    // Handle legacy admin users without adminRole
-    if (user.role === 'admin' && !user.adminRole) {
-      console.log('Legacy admin user detected during login, assigning SA role');
-      user.adminRole = 'SA';
-      user.adminMetadata = {
-        assignedBy: user._id, // Self-assigned for legacy admins
-        assignedAt: new Date(),
-        lastActiveAt: new Date()
-      };
-      await user.save();
     }
 
     // Generate tokens
@@ -170,9 +171,13 @@ const login = async (req, res, next) => {
   }
 };
 
-// @desc    Refresh access token
-// @route   POST /api/auth/refresh
-// @access  Public
+/**
+ * Refresh the access token using a refresh token.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} _next - The Express next middleware function (unused).
+ * @returns {Promise<void>}
+ */
 const refreshToken = async (req, res, _next) => {
   try {
     // Get refresh token from HttpOnly cookie
@@ -224,9 +229,13 @@ const refreshToken = async (req, res, _next) => {
   }
 };
 
-// @desc    Logout user
-// @route   POST /api/auth/logout
-// @access  Private
+/**
+ * Logout the current user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} next - The Express next middleware function.
+ * @returns {Promise<void>}
+ */
 const logout = async (req, res, next) => {
   try {
     // Clear refresh token from database
@@ -246,9 +255,13 @@ const logout = async (req, res, next) => {
   }
 };
 
-// @desc    Get current user
-// @route   GET /api/auth/me
-// @access  Private
+/**
+ * Get the currently authenticated user's profile.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} next - The Express next middleware function.
+ * @returns {Promise<void>}
+ */
 const getMe = async (req, res, next) => {
   try {
     // Use req.user from middleware instead of additional DB query
@@ -264,9 +277,13 @@ const getMe = async (req, res, next) => {
   }
 };
 
-// @desc    Verify email
-// @route   POST /api/auth/verify-email
-// @access  Public
+/**
+ * Verify a user's email address using a token.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} next - The Express next middleware function.
+ * @returns {Promise<void>}
+ */
 const verifyEmail = async (req, res, next) => {
   try {
     const { token } = req.body;
@@ -325,9 +342,13 @@ const verifyEmail = async (req, res, next) => {
   }
 };
 
-// @desc    Request password reset
-// @route   POST /api/auth/forgot-password
-// @access  Public
+/**
+ * Handle a forgot password request.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} next - The Express next middleware function.
+ * @returns {Promise<void>}
+ */
 const forgotPassword = async (req, res, next) => {
   try {
     const { email } = req.body;
@@ -376,9 +397,13 @@ const forgotPassword = async (req, res, next) => {
   }
 };
 
-// @desc    Reset password
-// @route   POST /api/auth/reset-password
-// @access  Public
+/**
+ * Reset a user's password using a reset token.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} next - The Express next middleware function.
+ * @returns {Promise<void>}
+ */
 const resetPassword = async (req, res, next) => {
   try {
     const { token, password } = req.body;
@@ -421,9 +446,13 @@ const resetPassword = async (req, res, next) => {
   }
 };
 
-// @desc    Change password
-// @route   PUT /api/auth/change-password
-// @access  Private
+/**
+ * Change the password for an authenticated user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} next - The Express next middleware function.
+ * @returns {Promise<void>}
+ */
 const changePassword = async (req, res, next) => {
   try {
     const { currentPassword, newPassword } = req.body;
@@ -487,7 +516,11 @@ const changePassword = async (req, res, next) => {
   }
 };
 
-// Helper function to validate password strength
+/**
+ * Helper function to validate the strength of a password.
+ * @param {string} password - The password to validate.
+ * @returns {{isValid: boolean, message: string}} An object indicating if the password is valid and a message.
+ */
 const validatePasswordStrength = (password) => {
   const errors = [];
 
@@ -542,9 +575,13 @@ const validatePasswordStrength = (password) => {
   };
 };
 
-// @desc    Social login (Google, Facebook, Apple)
-// @route   POST /api/auth/social-login
-// @access  Public
+/**
+ * Handle social login (Google, Facebook, Apple).
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} next - The Express next middleware function.
+ * @returns {Promise<void>}
+ */
 const socialLogin = async (req, res, next) => {
   try {
     const { provider, token } = req.body;

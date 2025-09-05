@@ -3,15 +3,7 @@ import { Activity } from '../entities/Activity';
 import { Booking } from '../entities/Booking';
 import { User } from '../entities/User';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, MapPin, Clock, Users, Star, Calendar, Heart, Share, X, Link, MessageCircle } from 'lucide-react';
-import { 
-  FaWhatsapp, 
-  FaFacebook, 
-  FaTwitter, 
-  FaTelegram, 
-  FaEnvelope, 
-  FaSms 
-} from 'react-icons/fa';
+import { ArrowLeft, MapPin, Clock, Users, Star, Calendar, Heart, Share, X, Link, MessageCircle, Facebook } from 'lucide-react';
 import referralService from '../../services/referralService';
 
 export default function ActivityDetailsPage() {
@@ -293,7 +285,7 @@ export default function ActivityDetailsPage() {
                   onClick={() => handleShare('whatsapp')}
                   className="flex items-center gap-2 p-3 neo-category-badge hover:neo-filter-pill active rounded-lg transition-all duration-200"
                 >
-                  <FaWhatsapp className="text-lg" />
+                  <span className="text-lg">📱</span>
                   <span className="text-gray-700 text-sm">واتساب</span>
                 </button>
                 
@@ -301,7 +293,7 @@ export default function ActivityDetailsPage() {
                   onClick={() => handleShare('facebook')}
                   className="flex items-center gap-2 p-3 neo-category-badge hover:neo-filter-pill active rounded-lg transition-all duration-200"
                 >
-                  <FaFacebook className="text-lg" />
+                  <span className="text-lg">📘</span>
                   <span className="text-gray-700 text-sm">فيسبوك</span>
                 </button>
                 
@@ -309,7 +301,7 @@ export default function ActivityDetailsPage() {
                   onClick={() => handleShare('twitter')}
                   className="flex items-center gap-2 p-3 neo-category-badge hover:neo-filter-pill active rounded-lg transition-all duration-200"
                 >
-                  <FaTwitter className="text-lg" />
+                  <span className="text-lg">🐦</span>
                   <span className="text-gray-700 text-sm">تويتر</span>
                 </button>
                 
@@ -317,7 +309,7 @@ export default function ActivityDetailsPage() {
                   onClick={() => handleShare('telegram')}
                   className="flex items-center gap-2 p-3 neo-category-badge hover:neo-filter-pill active rounded-lg transition-all duration-200"
                 >
-                  <FaTelegram className="text-lg" />
+                  <span className="text-lg">📬</span>
                   <span className="text-gray-700 text-sm">تلغرام</span>
                 </button>
               </div>
@@ -327,7 +319,7 @@ export default function ActivityDetailsPage() {
                   onClick={() => handleShare('email')}
                   className="flex items-center gap-2 p-3 neo-category-badge hover:neo-filter-pill active rounded-lg transition-all duration-200"
                 >
-                  <FaEnvelope className="text-lg" />
+                  <span className="text-lg">📧</span>
                   <span className="text-gray-700 text-sm">البريد الإلكتروني</span>
                 </button>
                 
@@ -335,7 +327,7 @@ export default function ActivityDetailsPage() {
                   onClick={() => handleShare('sms')}
                   className="flex items-center gap-2 p-3 neo-category-badge hover:neo-filter-pill active rounded-lg transition-all duration-200"
                 >
-                  <FaSms className="text-lg" />
+                  <span className="text-lg">💬</span>
                   <span className="text-gray-700 text-sm">الرسائل</span>
                 </button>
               </div>

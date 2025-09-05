@@ -1,11 +1,19 @@
+/**
+ * @fileoverview Controller for admin-related operations.
+ * @module controllers/adminController
+ */
+
 const User = require('../models/User');
 const Vendor = require('../models/Vendor');
 const Activity = require('../models/Activity');
 const Booking = require('../models/Booking');
 
-// @desc    Get admin dashboard statistics
-// @route   GET /api/admin/dashboard/stats
-// @access  Private (Admin only)
+/**
+ * Get statistics for the admin dashboard.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getDashboardStats = async (req, res) => {
   try {
     // Get counts for all entities
@@ -93,9 +101,12 @@ const getDashboardStats = async (req, res) => {
   }
 };
 
-// @desc    Get all vendors for admin
-// @route   GET /api/admin/vendors
-// @access  Private (Admin only)
+/**
+ * Get all vendors with pagination and filtering.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getVendors = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -147,9 +158,12 @@ const getVendors = async (req, res) => {
   }
 };
 
-// @desc    Get single vendor for admin
-// @route   GET /api/admin/vendors/:id
-// @access  Private (Admin only)
+/**
+ * Get a single vendor by ID.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getVendor = async (req, res) => {
   try {
     console.log('Get vendor request:', {
@@ -185,9 +199,12 @@ const getVendor = async (req, res) => {
   }
 };
 
-// @desc    Create new vendor
-// @route   POST /api/admin/vendors
-// @access  Private (Admin only)
+/**
+ * Create a new vendor.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const createVendor = async (req, res) => {
   try {
     const vendorData = {
@@ -226,9 +243,12 @@ const createVendor = async (req, res) => {
   }
 };
 
-// @desc    Update vendor
-// @route   PUT /api/admin/vendors/:id
-// @access  Private (Admin only)
+/**
+ * Update an existing vendor.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const updateVendor = async (req, res) => {
   try {
     const vendor = await Vendor.findByIdAndUpdate(
@@ -269,9 +289,12 @@ const updateVendor = async (req, res) => {
   }
 };
 
-// @desc    Delete vendor
-// @route   DELETE /api/admin/vendors/:id
-// @access  Private (Admin only)
+/**
+ * Delete a vendor.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const deleteVendor = async (req, res) => {
   try {
     const vendor = await Vendor.findById(req.params.id);
@@ -309,9 +332,12 @@ const deleteVendor = async (req, res) => {
   }
 };
 
-// @desc    Get all activities for admin
-// @route   GET /api/admin/activities
-// @access  Private (Admin only)
+/**
+ * Get all activities with pagination and filtering for admin.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getActivities = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -366,9 +392,12 @@ const getActivities = async (req, res) => {
   }
 };
 
-// @desc    Create new activity
-// @route   POST /api/admin/activities
-// @access  Private (Admin only)
+/**
+ * Create a new activity.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const createActivity = async (req, res) => {
   try {
     const activityData = {
@@ -410,9 +439,12 @@ const createActivity = async (req, res) => {
   }
 };
 
-// @desc    Update activity
-// @route   PUT /api/admin/activities/:id
-// @access  Private (Admin only)
+/**
+ * Update an existing activity.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const updateActivity = async (req, res) => {
   try {
     const activity = await Activity.findByIdAndUpdate(
@@ -456,9 +488,12 @@ const updateActivity = async (req, res) => {
   }
 };
 
-// @desc    Delete activity
-// @route   DELETE /api/admin/activities/:id
-// @access  Private (Admin only)
+/**
+ * Delete an activity.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const deleteActivity = async (req, res) => {
   try {
     const activity = await Activity.findById(req.params.id);
@@ -496,9 +531,12 @@ const deleteActivity = async (req, res) => {
   }
 };
 
-// @desc    Get all bookings for admin
-// @route   GET /api/admin/bookings
-// @access  Private (Admin only)
+/**
+ * Get all bookings with pagination and filtering for admin.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getBookings = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -551,9 +589,12 @@ const getBookings = async (req, res) => {
   }
 };
 
-// @desc    Update booking status
-// @route   PUT /api/admin/bookings/:id/status
-// @access  Private (Admin only)
+/**
+ * Update the status of a booking.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const updateBookingStatus = async (req, res) => {
   try {
     const { status } = req.body;
@@ -590,9 +631,12 @@ const updateBookingStatus = async (req, res) => {
   }
 };
 
-// @desc    Get all users for admin
-// @route   GET /api/admin/users
-// @access  Private (Admin only)
+/**
+ * Get all users with pagination and filtering for admin.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getUsers = async (req, res) => {
   try {
     const { page = 1, limit = 20, search = '', role = '' } = req.query;
@@ -646,9 +690,12 @@ const getUsers = async (req, res) => {
   }
 };
 
-// @desc    Update user status
-// @route   PUT /api/admin/users/:id/status
-// @access  Private (Admin only)
+/**
+ * Update the status of a user (activate or deactivate).
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const updateUserStatus = async (req, res) => {
   try {
     const { id } = req.params;
@@ -682,9 +729,12 @@ const updateUserStatus = async (req, res) => {
   }
 };
 
-// @desc    Get single activity for admin
-// @route   GET /api/admin/activities/:id
-// @access  Private (Admin only)
+/**
+ * Get a single activity by ID for admin.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getActivity = async (req, res) => {
   try {
     const activity = await Activity.findById(req.params.id)
@@ -713,9 +763,12 @@ const getActivity = async (req, res) => {
   }
 };
 
-// @desc    Bulk update users
-// @route   PUT /api/admin/users/bulk
-// @access  Private (Admin only)
+/**
+ * Bulk update users (activate or deactivate).
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const bulkUpdateUsers = async (req, res) => {
   try {
     const { ids, action } = req.body;
@@ -758,9 +811,12 @@ const bulkUpdateUsers = async (req, res) => {
   }
 };
 
-// @desc    Bulk delete users
-// @route   DELETE /api/admin/users/bulk
-// @access  Private (Admin only)
+/**
+ * Bulk delete users.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const bulkDeleteUsers = async (req, res) => {
   try {
     const { ids } = req.body;

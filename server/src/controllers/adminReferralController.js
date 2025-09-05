@@ -1,11 +1,19 @@
+/**
+ * @fileoverview Controller for handling referral-related operations in the admin dashboard.
+ * @module controllers/adminReferralController
+ */
+
 const Referral = require('../models/Referral');
 const ReferralCode = require('../models/ReferralCode');
 const ReferralReward = require('../models/ReferralReward');
 const User = require('../models/User');
 
-// @desc    Get comprehensive referral statistics for admin
-// @route   GET /api/admin/referrals/stats
-// @access  Private (Admin only)
+/**
+ * Get comprehensive referral statistics for the admin dashboard.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getReferralStats = async (req, res) => {
   try {
     // Get total referrals
@@ -86,9 +94,12 @@ const getReferralStats = async (req, res) => {
   }
 };
 
-// @desc    Get top inviters leaderboard
-// @route   GET /api/admin/referrals/top-inviters
-// @access  Private (Admin only)
+/**
+ * Get the top inviters leaderboard.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getTopInviters = async (req, res) => {
   try {
     const { limit = 10 } = req.query;
@@ -123,9 +134,12 @@ const getTopInviters = async (req, res) => {
   }
 };
 
-// @desc    Get current referral rewards configuration
-// @route   GET /api/admin/referrals/rewards
-// @access  Private (Admin only)
+/**
+ * Get the current referral rewards configuration.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getReferralRewards = async (req, res) => {
   try {
     const rewards = await ReferralReward.find({ isActive: true });
@@ -158,9 +172,12 @@ const getReferralRewards = async (req, res) => {
   }
 };
 
-// @desc    Update referral rewards
-// @route   PUT /api/admin/referrals/rewards
-// @access  Private (Admin only)
+/**
+ * Update referral rewards amounts.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const updateReferralRewards = async (req, res) => {
   try {
     const { registration, firstBooking } = req.body;
@@ -216,9 +233,12 @@ const updateReferralRewards = async (req, res) => {
   }
 };
 
-// @desc    Get detailed referral analytics
-// @route   GET /api/admin/referrals/analytics
-// @access  Private (Admin only)
+/**
+ * Get detailed referral analytics over a specified period.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getReferralAnalytics = async (req, res) => {
   try {
     const { period = '30d' } = req.query;
@@ -318,9 +338,12 @@ const getReferralAnalytics = async (req, res) => {
   }
 };
 
-// @desc    Export referral data as CSV
-// @route   GET /api/admin/referrals/export
-// @access  Private (Admin only)
+/**
+ * Export referral data as CSV or JSON.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const exportReferralData = async (req, res) => {
   try {
     const { format = 'csv', period = 'all' } = req.query;

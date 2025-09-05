@@ -1,9 +1,17 @@
+/**
+ * @fileoverview Controller for managing admin users and roles.
+ * @module controllers/adminManagementController
+ */
+
 const User = require('../models/User');
 const AdminRole = require('../models/AdminRole');
 
-// @desc    Get all admin roles
-// @route   GET /api/admin/roles
-// @access  Private (SA only)
+/**
+ * Get all active admin roles.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getAdminRoles = async (req, res) => {
   try {
     const roles = await AdminRole.find({ isActive: true }).sort({ hierarchy: 1 });
@@ -21,9 +29,12 @@ const getAdminRoles = async (req, res) => {
   }
 };
 
-// @desc    Get all admin users
-// @route   GET /api/admin/team
-// @access  Private (SA, ADMIN_PARTNERSHIPS)
+/**
+ * Get all admin users with pagination and filtering.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getAdminTeam = async (req, res) => {
   try {
     const { page = 1, limit = 20, role: filterRole } = req.query;
@@ -69,9 +80,12 @@ const getAdminTeam = async (req, res) => {
   }
 };
 
-// @desc    Assign admin role to user
-// @route   POST /api/admin/team/assign
-// @access  Private (SA only)
+/**
+ * Assign an admin role to a user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const assignAdminRole = async (req, res) => {
   try {
     const { userId, adminRole, assignedPartners = [] } = req.body;
@@ -134,9 +148,12 @@ const assignAdminRole = async (req, res) => {
   }
 };
 
-// @desc    Update admin role or assignments
-// @route   PUT /api/admin/team/:userId
-// @access  Private (SA, ADMIN_PARTNERSHIPS for PSM/PSA)
+/**
+ * Update an admin user's role or assignments.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const updateAdminUser = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -208,9 +225,12 @@ const updateAdminUser = async (req, res) => {
   }
 };
 
-// @desc    Remove admin role from user
-// @route   DELETE /api/admin/team/:userId
-// @access  Private (SA only)
+/**
+ * Remove an admin role from a user, reverting them to a regular user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const removeAdminRole = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -256,9 +276,12 @@ const removeAdminRole = async (req, res) => {
   }
 };
 
-// @desc    Get admin dashboard overview
-// @route   GET /api/admin/dashboard/overview
-// @access  Private (Admin)
+/**
+ * Get a dashboard overview tailored to the logged-in admin's role.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getAdminDashboardOverview = async (req, res) => {
   try {
     const userRole = req.user.adminRole;
@@ -321,9 +344,12 @@ const getAdminDashboardOverview = async (req, res) => {
   }
 };
 
-// @desc    Initialize default admin roles
-// @route   POST /api/admin/roles/initialize
-// @access  Private (SA only)
+/**
+ * Initialize or seed the default admin roles in the database.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const initializeAdminRoles = async (req, res) => {
   try {
     await AdminRole.seedDefaultRoles();

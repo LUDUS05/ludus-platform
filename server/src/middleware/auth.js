@@ -22,11 +22,6 @@ const authenticate = async (req, res, next) => {
       role: decoded.role || 'user',
       adminRole: decoded.adminRole || null
     };
-
-    // Handle legacy admin users - if role is admin but no adminRole, we'll handle in RBAC middleware
-    if (req.user.role === 'admin' && !req.user.adminRole) {
-      console.log('Legacy admin user detected in auth middleware');
-    }
     
     next();
   } catch (error) {

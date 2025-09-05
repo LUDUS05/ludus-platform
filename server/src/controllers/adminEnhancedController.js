@@ -1,7 +1,22 @@
+/**
+ * @fileoverview Enhanced controller for advanced admin operations like translation,
+ * category, content, and system settings management.
+ *
+ * @note This controller currently uses mock data and implementations.
+ * It needs to be connected to a database and proper models for production use.
+ *
+ * @module controllers/adminEnhancedController
+ */
+
 const fs = require('fs').promises;
 const path = require('path');
 
-// Translation Management
+/**
+ * Get translations for a specific language and namespace.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getTranslations = async (req, res) => {
   try {
     const { language, namespace } = req.params;
@@ -23,6 +38,12 @@ const getTranslations = async (req, res) => {
   }
 };
 
+/**
+ * Update translations for a specific language and namespace.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const updateTranslations = async (req, res) => {
   try {
     const { language, namespace } = req.params;
@@ -53,7 +74,13 @@ const updateTranslations = async (req, res) => {
   }
 };
 
-// Category Management (Mock implementation - you'll need a Category model)
+/**
+ * Get all categories.
+ * @note Mock implementation.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getCategories = async (req, res) => {
   try {
     // Mock data - replace with actual database queries
@@ -93,6 +120,13 @@ const getCategories = async (req, res) => {
   }
 };
 
+/**
+ * Create a new category.
+ * @note Mock implementation.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const createCategory = async (req, res) => {
   try {
     const categoryData = req.body;
@@ -118,6 +152,13 @@ const createCategory = async (req, res) => {
   }
 };
 
+/**
+ * Update an existing category.
+ * @note Mock implementation.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const updateCategory = async (req, res) => {
   try {
   const { id: _id } = req.params;
@@ -144,6 +185,13 @@ const updateCategory = async (req, res) => {
   }
 };
 
+/**
+ * Delete a category.
+ * @note Mock implementation.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const deleteCategory = async (req, res) => {
   try {
     const { id: _id } = req.params;
@@ -164,6 +212,13 @@ const deleteCategory = async (req, res) => {
   }
 };
 
+/**
+ * Reorder categories.
+ * @note Mock implementation.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const reorderCategories = async (req, res) => {
   try {
   const { draggedId: _draggedId, targetId: _targetId } = req.body;
@@ -183,6 +238,13 @@ const reorderCategories = async (req, res) => {
   }
 };
 
+/**
+ * Update the status of a category (activate or deactivate).
+ * @note Mock implementation.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const updateCategoryStatus = async (req, res) => {
   try {
   const { id: _id } = req.params;
@@ -203,7 +265,13 @@ const updateCategoryStatus = async (req, res) => {
   }
 };
 
-// Content Management (Mock implementation - you'll need a Page model)
+/**
+ * Get all content pages.
+ * @note Mock implementation.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getPages = async (req, res) => {
   try {
     // Mock data - replace with actual database queries
@@ -243,6 +311,13 @@ const getPages = async (req, res) => {
   }
 };
 
+/**
+ * Create a new content page.
+ * @note Mock implementation.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const createPage = async (req, res) => {
   try {
     const pageData = req.body;
@@ -269,6 +344,13 @@ const createPage = async (req, res) => {
   }
 };
 
+/**
+ * Update an existing content page.
+ * @note Mock implementation.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const updatePage = async (req, res) => {
   try {
   const { id: _id } = req.params;
@@ -295,6 +377,13 @@ const updatePage = async (req, res) => {
   }
 };
 
+/**
+ * Delete a content page.
+ * @note Mock implementation.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const deletePage = async (req, res) => {
   try {
   const { id: _id } = req.params;
@@ -314,7 +403,13 @@ const deletePage = async (req, res) => {
   }
 };
 
-// System Settings Management
+/**
+ * Get system settings.
+ * @note Mock implementation.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getSystemSettings = async (req, res) => {
   try {
     // Mock settings - replace with actual database queries
@@ -361,6 +456,13 @@ const getSystemSettings = async (req, res) => {
   }
 };
 
+/**
+ * Update system settings.
+ * @note Mock implementation.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const updateSystemSettings = async (req, res) => {
   try {
     const _settingsData = req.body; // kept for future use; intentionally unused for now

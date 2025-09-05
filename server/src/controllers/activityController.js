@@ -1,9 +1,17 @@
+/**
+ * @fileoverview Controller for handling activities.
+ * @module controllers/activityController
+ */
+
 const Activity = require('../models/Activity');
 const { validationResult } = require('express-validator');
 
-// @desc    Get all activities with filters
-// @route   GET /api/activities
-// @access  Public
+/**
+ * Get all activities with filters, pagination, and sorting.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getActivities = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -92,9 +100,12 @@ const getActivities = async (req, res) => {
   }
 };
 
-// @desc    Get single activity
-// @route   GET /api/activities/:id
-// @access  Public
+/**
+ * Get a single activity by its ID, along with related activities.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getActivityById = async (req, res) => {
   try {
     const activity = await Activity.findOne({
@@ -138,9 +149,12 @@ const getActivityById = async (req, res) => {
   }
 };
 
-// @desc    Search activities
-// @route   GET /api/activities/search
-// @access  Public
+/**
+ * Search for activities based on a query string.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const searchActivities = async (req, res) => {
   try {
     const query = req.query.q || '';
@@ -185,9 +199,13 @@ const searchActivities = async (req, res) => {
   }
 };
 
-// @desc    Get popular activities
-// @route   GET /api/activities/popular
-// @access  Public
+/**
+ * Get a list of popular activities.
+ * Popularity is determined by total bookings, vendor rating, and creation date.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getPopularActivities = async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 8;
@@ -219,9 +237,12 @@ const getPopularActivities = async (req, res) => {
   }
 };
 
-// @desc    Get activities by category
-// @route   GET /api/activities/category/:category
-// @access  Public
+/**
+ * Get activities by category with pagination.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getActivitiesByCategory = async (req, res) => {
   try {
     const { category } = req.params;
@@ -265,9 +286,13 @@ const getActivitiesByCategory = async (req, res) => {
   }
 };
 
-// @desc    Bulk update activities
-// @route   PUT /api/admin/activities/bulk
-// @access  Private (Admin)
+/**
+ * Bulk update activities (activate or deactivate).
+ * Requires admin privileges.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const bulkUpdateActivities = async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -319,9 +344,13 @@ const bulkUpdateActivities = async (req, res) => {
   }
 };
 
-// @desc    Bulk delete activities
-// @route   DELETE /api/admin/activities/bulk
-// @access  Private (Admin)
+/**
+ * Bulk delete activities.
+ * Requires admin privileges.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const bulkDeleteActivities = async (req, res) => {
   try {
     const errors = validationResult(req);
