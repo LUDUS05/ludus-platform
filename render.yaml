@@ -34,5 +34,5 @@ services:
     name: ludus-frontend-athena
     env: static
     plan: starter
-    buildCommand: cd client && npm install && npm run build
+    buildCommand: cd client && npm install --legacy-peer-deps && npm run build
     staticPublishPath: client/build

@@ -30,7 +30,6 @@
     "react": "^19.1.1",
     "react-blurhash": "^0.3.0",
     "react-dom": "^19.1.1",
-    "react-facebook-login": "^4.1.1",
     "react-i18next": "^15.6.1",
     "react-quill": "^2.0.0",
     "react-router-dom": "^7.7.1",
