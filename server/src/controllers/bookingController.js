@@ -104,7 +104,13 @@ const createBooking = async (req, res) => {
     res.status(201).json({
       success: true,
       data: { booking },
-      message: 'Booking created successfully'
+      message: 'Booking created successfully',
+      animationTriggers: {
+        celebration: true,
+        confetti: true,
+        successMessage: 'تم تأكيد الحجز بنجاح! 🎉',
+        hapticFeedback: true
+      }
     });
 
   } catch (error) {

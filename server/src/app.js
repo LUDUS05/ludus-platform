@@ -290,6 +290,7 @@ app.use('/api/reports', require('./routes/reports'));
 app.use('/api/monitoring', require('./routes/monitoring'));
 app.use('/api/qr', require('./routes/qr'));
 app.use('/api/onboarding', require('./routes/onboarding'));
+app.use('/api/social', require('./routes/social'));
 const formsRoutes = require('./routes/forms');
 app.use('/api/forms', formsRoutes.publicRouter);
 app.use('/api/admin/forms', formsRoutes.adminRouter);
