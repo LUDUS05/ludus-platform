@@ -35,7 +35,6 @@ services:
     env: static
     plan: starter
     buildCommand: cd client && npm install && npm run build
-    startCommand: cd client && npm start
     staticPublishPath: client/build
     # Enable Render's built-in SPA support with GSAP optimization
     spa: true
