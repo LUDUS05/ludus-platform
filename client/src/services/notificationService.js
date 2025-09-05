@@ -1,204 +1,238 @@
-import api from './api';
+// frontend/src/services/notificationService.js
+import { gsap } from '../utils/gsap-setup';
+import { animationPresets, rtlAware } from '../utils/gsap-setup';
 
-class NotificationService {
+class LUDUSNotificationService {
   constructor() {
-    this.baseUrl = '/notifications';
+    this.container = null;
+    this.notifications = new Map();
+    this.init();
   }
 
-  // Get user notifications
-  async getNotifications(options = {}) {
-    try {
-      const { page = 1, limit = 20, status = 'unread', type, priority, category } = options;
-      
-      const response = await api.get(this.baseUrl, {
-        params: { page, limit, status, type, priority, category }
-      });
-      
-      return response.data;
-    } catch (error) {
-      console.error('Error getting notifications:', error);
-      throw new Error(error.response?.data?.message || 'Failed to get notifications');
-    }
-  }
-
-  // Get unread notification count
-  async getUnreadCount() {
-    try {
-      const response = await api.get(`${this.baseUrl}/unread-count`);
-      return response.data;
-    } catch (error) {
-      console.error('Error getting unread count:', error);
-      throw new Error(error.response?.data?.message || 'Failed to get unread count');
-    }
-  }
-
-  // Mark notification as read
-  async markAsRead(notificationId) {
-    try {
-      const response = await api.put(`${this.baseUrl}/${notificationId}/read`);
-      return response.data;
-    } catch (error) {
-      console.error('Error marking notification as read:', error);
-      throw new Error(error.response?.data?.message || 'Failed to mark notification as read');
-    }
-  }
-
-  // Mark all notifications as read
-  async markAllAsRead() {
-    try {
-      const response = await api.put(`${this.baseUrl}/mark-all-read`);
-      return response.data;
-    } catch (error) {
-      console.error('Error marking all notifications as read:', error);
-      throw new Error(error.response?.data?.message || 'Failed to mark all notifications as read');
-    }
-  }
-
-  // Mark notification as archived
-  async markAsArchived(notificationId) {
-    try {
-      const response = await api.put(`${this.baseUrl}/${notificationId}/archive`);
-      return response.data;
-    } catch (error) {
-      console.error('Error archiving notification:', error);
-      throw new Error(error.response?.data?.message || 'Failed to archive notification');
-    }
-  }
-
-  // Delete notification
-  async deleteNotification(notificationId) {
-    try {
-      const response = await api.delete(`${this.baseUrl}/${notificationId}`);
-      return response.data;
-    } catch (error) {
-      console.error('Error deleting notification:', error);
-      throw new Error(error.response?.data?.message || 'Failed to delete notification');
-    }
-  }
-
-  // Get notification statistics
-  async getNotificationStats(period = '30d') {
-    try {
-      const response = await api.get(`${this.baseUrl}/stats`, {
-        params: { period }
-      });
-      return response.data;
-    } catch (error) {
-      console.error('Error getting notification stats:', error);
-      throw new Error(error.response?.data?.message || 'Failed to get notification statistics');
-    }
-  }
-
-  // Create system notification (admin only)
-  async createSystemNotification(notificationData) {
-    try {
-      const response = await api.post(`${this.baseUrl}/system`, notificationData);
-      return response.data;
-    } catch (error) {
-      console.error('Error creating system notification:', error);
-      throw new Error(error.response?.data?.message || 'Failed to create system notification');
-    }
-  }
-
-  // Helper method to format notification content
-  formatNotificationContent(notification) {
-    const { type, title, content, richContent, action, createdAt } = notification;
+  init() {
+    // Create notification container
+    this.container = document.createElement('div');
+    this.container.className = 'ludus-notification-container';
+    this.container.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+      pointer-events: none;
+      max-width: 400px;
+    `;
     
-    // Format timestamp
-    const timestamp = new Date(createdAt).toLocaleString();
+    // RTL support
+    const isRTL = document.dir === 'rtl' || document.documentElement.dir === 'rtl';
+    if (isRTL) {
+      this.container.style.right = 'auto';
+      this.container.style.left = '20px';
+    }
     
-    // Get icon based on type
-    const getIcon = (type) => {
-      const icons = {
-        referral_reward_registration: '🎉',
-        referral_reward_booking: '🎉',
-        referral_code_generated: '🔑',
-        referral_conversion: '📈',
-        wallet_credited: '💰',
-        system_announcement: '📢',
-        activity_reminder: '⏰',
-        booking_confirmation: '✅',
-        payment_success: '💳',
-        payment_failed: '❌'
-      };
-      return icons[type] || '📌';
+    document.body.appendChild(this.container);
+  }
+
+  show(type, message, duration = 4000, options = {}) {
+    const notification = this.createNotification(type, message, options);
+    const id = Date.now() + Math.random();
+    
+    this.notifications.set(id, notification);
+    this.container.appendChild(notification);
+    
+    const tl = gsap.timeline({
+      onComplete: () => this.remove(id)
+    });
+    
+    // RTL-aware entrance animation
+    const isRTL = document.dir === 'rtl' || document.documentElement.dir === 'rtl';
+    const entranceX = isRTL ? -20 : 20;
+    
+    tl.from(notification, {
+      duration: 0.5,
+      y: -50,
+      x: entranceX,
+      opacity: 0,
+      scale: 0.9,
+      ease: 'back.out(1.7)'
+    })
+    .to(notification, {
+      duration: 0.3,
+      y: -70,
+      opacity: 0,
+      scale: 0.95,
+      ease: 'power2.in',
+      delay: duration / 1000
+    });
+
+    // Auto-remove after duration
+    setTimeout(() => {
+      if (this.notifications.has(id)) {
+        this.remove(id);
+      }
+    }, duration);
+
+    return id;
+  }
+
+  createNotification(type, message, options = {}) {
+    const notification = document.createElement('div');
+    notification.className = `ludus-notification ludus-notification--${type}`;
+    
+    // Base styles
+    notification.style.cssText = `
+      background: white;
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+      border-left: 4px solid;
+      pointer-events: auto;
+      cursor: pointer;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 14px;
+      line-height: 1.4;
+      max-width: 100%;
+      word-wrap: break-word;
+    `;
+
+    // Type-specific styling
+    const typeStyles = {
+      success: {
+        borderLeftColor: '#10b981',
+        color: '#065f46'
+      },
+      error: {
+        borderLeftColor: '#ef4444',
+        color: '#991b1b'
+      },
+      warning: {
+        borderLeftColor: '#f59e0b',
+        color: '#92400e'
+      },
+      info: {
+        borderLeftColor: '#3b82f6',
+        color: '#1e40af'
+      }
     };
 
-    // Format rich content if available
-    let formattedContent = content;
-    if (richContent?.data) {
-      const data = richContent.data;
-      
-      if (type === 'referral_reward_registration' || type === 'referral_reward_booking') {
-        formattedContent = `Congratulations! You earned ${data.amount} ${data.currency} for referring a new user with code ${data.referralCode}.`;
-      } else if (type === 'wallet_credited') {
-        formattedContent = `Your wallet has been credited with ${data.amount} ${data.currency}. ${data.description || ''}`;
+    const style = typeStyles[type] || typeStyles.info;
+    Object.assign(notification.style, style);
+
+    // Add icon and content
+    const icon = this.getIcon(type);
+    notification.innerHTML = `
+      <div style="display: flex; align-items: flex-start; gap: 12px;">
+        <div class="notification-icon" style="flex-shrink: 0; margin-top: 2px;">
+          ${icon}
+        </div>
+        <div class="notification-content" style="flex: 1;">
+          <div class="notification-message">${message}</div>
+        </div>
+        <button class="notification-close" style="
+          flex-shrink: 0;
+          background: none;
+          border: none;
+          font-size: 18px;
+          cursor: pointer;
+          color: #6b7280;
+          padding: 0;
+          width: 20px;
+          height: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        ">×</button>
+      </div>
+    `;
+
+    // Add click handlers
+    const closeBtn = notification.querySelector('.notification-close');
+    closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.remove(notification);
+    });
+
+    return notification;
+  }
+
+  getIcon(type) {
+    const icons = {
+      success: '✅',
+      error: '❌',
+      warning: '⚠️',
+      info: 'ℹ️'
+    };
+    return icons[type] || icons.info;
+  }
+
+  remove(idOrElement) {
+    let notification;
+    
+    if (typeof idOrElement === 'number') {
+      notification = this.notifications.get(idOrElement);
+      this.notifications.delete(idOrElement);
+    } else {
+      notification = idOrElement;
+      // Find and remove from map
+      for (const [id, notif] of this.notifications.entries()) {
+        if (notif === notification) {
+          this.notifications.delete(id);
+          break;
+        }
       }
     }
 
-    return {
-      icon: getIcon(type),
-      title,
-      content: formattedContent,
-      timestamp,
-      action,
-      type
-    };
+    if (notification && notification.parentNode) {
+      gsap.to(notification, {
+        duration: 0.3,
+        x: rtlAware.transform(100, 0).x,
+        opacity: 0,
+        scale: 0.9,
+        ease: 'power2.in',
+        onComplete: () => {
+          if (notification.parentNode) {
+            notification.parentNode.removeChild(notification);
+          }
+        }
+      });
+    }
   }
 
-  // Helper method to group notifications by date
-  groupNotificationsByDate(notifications) {
-    const groups = {};
-    
-    notifications.forEach(notification => {
-      const date = new Date(notification.createdAt).toDateString();
-      if (!groups[date]) {
-        groups[date] = [];
-      }
-      groups[date].push(notification);
-    });
-    
-    return groups;
-  }
-
-  // Helper method to filter notifications by priority
-  filterByPriority(notifications, priority) {
-    return notifications.filter(notification => notification.priority === priority);
-  }
-
-  // Helper method to search notifications
-  searchNotifications(notifications, searchTerm) {
-    if (!searchTerm) return notifications;
-    
-    const term = searchTerm.toLowerCase();
-    return notifications.filter(notification => 
-      notification.title.toLowerCase().includes(term) ||
-      notification.content.toLowerCase().includes(term) ||
-      notification.type.toLowerCase().includes(term)
-    );
-  }
-
-  // Helper method to get notification summary
-  getNotificationSummary(notifications) {
-    const summary = {
-      total: notifications.length,
-      unread: notifications.filter(n => n.status === 'unread').length,
-      read: notifications.filter(n => n.status === 'read').length,
-      archived: notifications.filter(n => n.status === 'archived').length,
-      byType: {},
-      byPriority: {}
-    };
-
-    notifications.forEach(notification => {
-      // Count by type
-      summary.byType[notification.type] = (summary.byType[notification.type] || 0) + 1;
+  // Show notification from API responses
+  showFromAPIResponse(response) {
+    if (response.animationTriggers) {
+      const { errorMessage, successMessage, errorShake } = response.animationTriggers;
       
-      // Count by priority
-      summary.byPriority[notification.priority] = (summary.byPriority[notification.priority] || 0) + 1;
-    });
+      if (errorMessage) {
+        this.show('error', errorMessage);
+        if (errorShake) this.triggerErrorShake();
+      }
+      
+      if (successMessage) {
+        this.show('success', successMessage);
+      }
+    }
+  }
 
-    return summary;
+  triggerErrorShake() {
+    const mainContainer = document.querySelector('.main-container') || document.body;
+    gsap.to(mainContainer, {
+      duration: 0.1,
+      x: 5,
+      repeat: 5,
+      yoyo: true,
+      ease: 'power2.inOut'
+    });
+  }
+
+  // Clear all notifications
+  clear() {
+    this.notifications.forEach((notification, id) => {
+      this.remove(id);
+    });
   }
 }
 
-export default new NotificationService();
+// Create singleton instance
+export const notificationService = new LUDUSNotificationService();
+export default notificationService;
