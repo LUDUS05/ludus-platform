@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { paymentService } from '../../services/paymentService';
 
 const PaymentForm = ({ 
@@ -9,6 +10,7 @@ const PaymentForm = ({
   metadata = {},
   showSavedMethods = true 
 }) => {
+  const { t } = useTranslation();
   const [paymentMethod, setPaymentMethod] = useState('creditcard');
   const [cardData, setCardData] = useState({
     number: '',
