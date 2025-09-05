@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const onboardingController = require('../controllers/onboardingController');
 const { authenticate, authorize } = require('../middleware/auth');
+const { requireAdminRole } = require('../middleware/rbac');
 const { body, param } = require('express-validator');
 
 // Public routes
@@ -22,8 +23,8 @@ router.post('/complete', [
 
 router.get('/progress', onboardingController.getOnboardingProgress);
 
-// Admin routes (require admin role)
-router.use(authorize('admin'));
+// Admin routes (require admin role with proper RBAC)
+router.use(requireAdminRole());
 
 router.get('/admin/config', onboardingController.getFullOnboardingConfig);
 

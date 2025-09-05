@@ -48,19 +48,7 @@ exports.getFullOnboardingConfig = async (req, res) => {
       adminRole: req.user?.adminRole
     });
     
-    // Check if user has admin role
-    if (!req.user?.adminRole) {
-      console.log('User does not have adminRole assigned');
-      return res.status(403).json({
-        success: false,
-        message: 'Admin role not assigned. Please contact system administrator.',
-        userInfo: {
-          id: req.user?.id,
-          role: req.user?.role,
-          adminRole: req.user?.adminRole
-        }
-      });
-    }
+    // RBAC middleware already validated admin role
     
     const config = await OnboardingConfig.getConfig();
     res.json({
@@ -92,19 +80,7 @@ exports.updateOnboardingConfig = async (req, res) => {
     });
     console.log('Update config - Request body:', req.body);
     
-    // Check if user has admin role
-    if (!req.user?.adminRole) {
-      console.log('User does not have adminRole assigned for update');
-      return res.status(403).json({
-        success: false,
-        message: 'Admin role not assigned. Please contact system administrator.',
-        userInfo: {
-          id: req.user?.id,
-          role: req.user?.role,
-          adminRole: req.user?.adminRole
-        }
-      });
-    }
+    // RBAC middleware already validated admin role
     
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
