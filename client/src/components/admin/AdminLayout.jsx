@@ -152,9 +152,7 @@ const AdminLayout = ({ children }) => {
         </div>
 
         {/* Main Content */}
-        <div className={`main-content flex-1 transition-all duration-300 ease-in-out ${
-          sidebarOpen ? 'lg:ml-0' : 'lg:ml-0'
-        }`}>
+        <div className={`main-content flex-1 transition-all duration-300 ease-in-out lg:ml-64`}>
           {/* Top Bar */}
           <header className="admin-header bg-white shadow-sm border-b border-gray-200">
             <div className="header-container px-6 py-4">
@@ -168,14 +166,7 @@ const AdminLayout = ({ children }) => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                   </button>
-                  <button
-                    onClick={() => setSidebarOpen(!sidebarOpen)}
-                    className="desktop-menu-toggle hidden lg:block p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 mr-4"
-                  >
-                    <svg className="sidebar-toggle-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={sidebarOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
-                    </svg>
-                  </button>
+                  <div className="hidden lg:block mr-4" />
                   <h1 className="page-title text-2xl font-semibold text-gray-900">
                     {navigation.find(item => isActivePath(item.href))?.name || 'Admin Panel'}
                   </h1>

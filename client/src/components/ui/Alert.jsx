@@ -13,6 +13,11 @@ const Alert = ({
   dismissible = false,
   onDismiss,
   className,
+  // Legacy props compatibility (type/message/title/onClose)
+  type,
+  message,
+  title,
+  onClose,
   ...props 
 }) => {
   const variants = {
@@ -38,7 +43,9 @@ const Alert = ({
     },
   };
 
-  const { container, icon: Icon, iconColor } = variants[variant];
+  // Map legacy `type` to `variant` if provided
+  const resolvedVariant = type || variant;
+  const { container, icon: Icon, iconColor } = variants[resolvedVariant] || variants.info;
 
   return (
     <div
@@ -51,11 +58,19 @@ const Alert = ({
     >
       <Icon className={cn('w-5 h-5 mt-0.5 flex-shrink-0', iconColor)} />
       <div className="flex-1">
-        {children}
+        {/* Prefer children; fallback to legacy title/message */}
+        {children ? (
+          children
+        ) : (
+          <div>
+            {title && <AlertTitle>{title}</AlertTitle>}
+            {message && <AlertDescription>{message}</AlertDescription>}
+          </div>
+        )}
       </div>
-      {dismissible && (
+      {(dismissible || onClose) && (
         <button
-          onClick={onDismiss}
+          onClick={onDismiss || onClose}
           className={cn('p-1 hover:bg-black/5 rounded-lg transition-colors', iconColor)}
         >
           <XMarkIcon className="w-4 h-4" />
