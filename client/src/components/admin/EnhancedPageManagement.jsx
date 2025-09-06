@@ -63,11 +63,26 @@ const EnhancedPageManagement = () => {
       });
       
       const response = await api.get(`/admin/pages?${params}`);
-      setPages(response.data.data.pages);
+      const respData = response.data;
+      // Support current backend shape: { success, data: [...], pagination: { totalPages, totalCount, ... } }
+      // and fallback to older nested shapes if present
+      const pagesArray = Array.isArray(respData?.data)
+        ? respData.data
+        : (respData?.data?.pages || []);
+
+      setPages(pagesArray);
+
+      const totalPages = respData?.pagination?.totalPages
+        ?? respData?.data?.pagination?.pages
+        ?? 1;
+      const totalCount = respData?.pagination?.totalCount
+        ?? respData?.data?.pagination?.total
+        ?? pagesArray.length;
+
       setPagination(prev => ({
         ...prev,
-        totalPages: response.data.data.pagination.pages,
-        totalCount: response.data.data.pagination.total
+        totalPages,
+        totalCount
       }));
     } catch (err) {
       setError('Failed to fetch pages');
