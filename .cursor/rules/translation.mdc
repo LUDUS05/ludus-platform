@@ -1,0 +1,88 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+
+Translations
+## 📋 Key Sections Included:
+
+### 1. **System Architecture**
+- Core components and file structure
+- i18next configuration and enhanced hooks
+- Translation management tools
+
+### 2. **Core Principles**
+- Arabic-first approach (Arabic is default)
+- Never hardcode text
+- Consistent translation keys
+- Graceful fallbacks
+
+### 3. **Translation Hook Usage**
+- Basic `useTranslation` usage
+- Enhanced `useTranslationWithFallback` with analytics
+- Language detection patterns
+
+### 4. **RTL/LTR Layout Guidelines**
+- Tailwind RTL utilities
+- Custom RTL classes
+- Icon and image handling
+- Document direction setup
+
+### 5. **Translation Key Naming Conventions**
+- Hierarchical structure
+- Descriptive naming rules
+- Grouping by feature/page
+- Pluralization patterns
+
+### 6. **Component Development Patterns**
+- Basic component pattern
+- Form component pattern
+- List/grid component pattern
+
+### 7. **Form Development Guidelines**
+- Input components with RTL support
+- Validation messages
+- Form submission handling
+
+### 8. **Error Handling & Validation**
+- Translation error handling
+- Validation error patterns
+- API error handling
+
+### 9. **Testing Guidelines**
+- Unit testing with translations
+- Integration testing
+- Translation coverage testing
+
+### 10. **Common Pitfalls & Solutions**
+- Hardcoded text issues
+- Incorrect RTL layout
+- Missing fallbacks
+- Inconsistent key naming
+
+### 11. **Performance Considerations**
+- Translation loading optimization
+- Conditional loading
+- Memoization strategies
+
+### 12. **Code Review Checklist**
+- Comprehensive checklist for reviewing translation implementation
+
+## �� Key Guidelines for Developers:
+
+1. **Always use translation keys** - Never hardcode text
+2. **Arabic-first design** - Design for Arabic, then ensure English works
+3. **RTL-aware layouts** - Use proper CSS utilities for RTL support
+4. **Consistent naming** - Follow hierarchical key naming conventions
+5. **Provide fallbacks** - Always have fallback values for missing translations
+6. **Test both languages** - Ensure functionality works in both Arabic and English
+
+The guidelines are based on the actual implementation in your codebase, including:
+- The enhanced translation hook with fallbacks and analytics
+- The comprehensive translation management system
+- The RTL/LTR layout handling
+- The existing translation key structure
+- The admin tools for translation management
+
+This document will help ensure all developers working on the LUDUS platform maintain consistency with the translation system and avoid common pitfalls.
