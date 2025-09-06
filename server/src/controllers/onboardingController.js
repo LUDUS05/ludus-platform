@@ -22,6 +22,7 @@ exports.getOnboardingConfig = async (req, res) => {
         isEnabled: config.isEnabled,
         steps: enabledSteps,
         welcomeConfig: config.welcomeConfig || {},
+        socialProofConfig: config.socialProofConfig || {},
         authConfig: config.authConfig || {},
         profileConfig: config.profileConfig || {},
         referralConfig: config.referralConfig || {},

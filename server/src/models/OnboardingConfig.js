@@ -12,7 +12,7 @@ const onboardingConfigSchema = new mongoose.Schema({
     stepId: {
       type: String,
       required: true,
-      enum: ['welcome', 'auth', 'profile', 'referral', 'interests', 'preferences']
+      enum: ['welcome', 'socialProof', 'auth', 'profile', 'referral', 'interests', 'preferences']
     },
     isEnabled: {
       type: Boolean,
@@ -59,6 +59,26 @@ const onboardingConfigSchema = new mongoose.Schema({
       enum: ['particles', 'gradient', 'none'],
       default: 'gradient'
     }
+  },
+
+  // Social proof step configuration
+  socialProofConfig: {
+    title: {
+      en: { type: String, default: 'Trusted by our community' },
+      ar: { type: String, default: 'موثوق به من مجتمعنا' }
+    },
+    highlights: [{
+      icon: { type: String, default: '✨' },
+      title: {
+        en: { type: String, required: true },
+        ar: { type: String, required: true }
+      },
+      description: {
+        en: { type: String, default: '' },
+        ar: { type: String, default: '' }
+      }
+    }],
+    showSkip: { type: Boolean, default: true }
   },
 
   // Authentication step configuration
@@ -272,11 +292,12 @@ onboardingConfigSchema.statics.getConfig = async function() {
     config = await this.create({
       steps: [
         { stepId: 'welcome', isEnabled: true, isRequired: true, order: 1, config: {} },
-        { stepId: 'auth', isEnabled: true, isRequired: true, order: 2, config: {} },
-        { stepId: 'profile', isEnabled: true, isRequired: true, order: 3, config: {} },
-        { stepId: 'referral', isEnabled: true, isRequired: false, order: 4, config: {} },
-        { stepId: 'interests', isEnabled: true, isRequired: true, order: 5, config: {} },
-        { stepId: 'preferences', isEnabled: true, isRequired: false, order: 6, config: {} }
+        { stepId: 'socialProof', isEnabled: true, isRequired: false, order: 2, config: {} },
+        { stepId: 'auth', isEnabled: true, isRequired: true, order: 3, config: {} },
+        { stepId: 'profile', isEnabled: true, isRequired: true, order: 4, config: {} },
+        { stepId: 'referral', isEnabled: true, isRequired: false, order: 5, config: {} },
+        { stepId: 'interests', isEnabled: true, isRequired: true, order: 6, config: {} },
+        { stepId: 'preferences', isEnabled: true, isRequired: false, order: 7, config: {} }
       ]
     });
   }

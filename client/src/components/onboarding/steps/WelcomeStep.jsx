@@ -69,6 +69,8 @@ const WelcomeStep = ({ config, onComplete, t }) => {
             <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
               {config?.welcomeConfig?.subtitle?.en || t('onboarding.steps.welcome.subtitle')}
             </p>
+            <p className="mt-3 text-sm text-gray-500">{t('onboarding.welcomeTaglineAr')} / {t('onboarding.welcomeTaglineEn')}</p>
+            <p className="mt-1 text-sm text-gray-600">{t('onboarding.valuePromise')}</p>
           </div>
         </motion.div>
 
