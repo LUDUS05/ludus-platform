@@ -92,3 +92,18 @@ services:
         value: https://ludus-agents-api.onrender.com
       - key: RENDER_ENVIRONMENT
         value: production
+
+  # Ollama Service (Custom LUDUS Model)
+  - type: web
+    name: ludus-ollama
+    env: docker
+    plan: starter
+    dockerfilePath: ollama/Dockerfile
+    healthCheckPath: /api/tags
+    envVars:
+      - key: OLLAMA_HOST
+        value: 0.0.0.0
+      - key: OLLAMA_ORIGINS
+        value: "*"
+      - key: RENDER_ENVIRONMENT
+        value: production
