@@ -32,9 +32,9 @@ const Alert = ({
       iconColor: 'text-error-red',
     },
     info: {
-      container: 'bg-accent-blue/10 border-accent-blue/20 text-accent-blue-dark',
+      container: 'bg-accent-blue/10 border-accent-blue/20 text-charcoal dark:text-dark-text-primary',
       icon: InformationCircleIcon,
-      iconColor: 'text-accent-blue',
+      iconColor: 'text-accent-blue-dark',
     },
   };
 

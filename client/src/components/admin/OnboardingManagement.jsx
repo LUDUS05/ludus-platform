@@ -88,18 +88,26 @@ const OnboardingManagement = () => {
   };
 
   const addStep = () => {
+    const allowedIds = ['welcome', 'auth', 'profile', 'referral', 'interests', 'preferences']
+    const existing = new Set((config.steps || []).map(s => s.stepId))
+    const nextId = allowedIds.find(id => !existing.has(id))
+    if (!nextId) {
+      setError('All allowed steps are already present')
+      return
+    }
+    const nextOrder = (config.steps || []).length
     const newStep = {
-      stepId: 'newStep',
+      stepId: nextId,
       isEnabled: true,
       isRequired: true,
-      order: config.steps.length,
+      order: nextOrder,
       config: {}
-    };
+    }
     setConfig(prev => ({
       ...prev,
-      steps: [...prev.steps, newStep]
-    }));
-  };
+      steps: [...(prev.steps || []), newStep]
+    }))
+  }
 
   const removeStep = (index) => {
     setConfig(prev => ({
