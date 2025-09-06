@@ -75,19 +75,24 @@ const getActivities = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      data: {
-        activities,
-        pagination: {
-          page,
-          limit,
-          totalPages: Math.ceil(totalActivities / limit),
-          totalActivities
-        },
-        filters: {
-          categories: categories.sort(),
-          cities: cities.sort(),
-          priceRange: priceRange[0] || { minPrice: 0, maxPrice: 0 }
-        }
+      data: activities,
+      pagination: {
+        page,
+        limit,
+        totalPages: Math.ceil(totalActivities / limit),
+        totalActivities,
+        hasMore: page < Math.ceil(totalActivities / limit)
+      },
+      filters: {
+        categories: categories.sort(),
+        cities: cities.sort(),
+        priceRange: priceRange[0] || { minPrice: 0, maxPrice: 0 }
+      },
+      animationConfig: {
+        staggerDelay: 0.1,
+        duration: 0.6,
+        entrance: 'slideUp',
+        loadingType: 'skeleton'
       }
     });
 

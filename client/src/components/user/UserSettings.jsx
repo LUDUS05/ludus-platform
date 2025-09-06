@@ -5,6 +5,7 @@ import { Button } from '../ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../ui/card';
 import { Input } from '../ui/input';
 import SocialLogin from '../auth/SocialLogin';
+import EnhancedUserPreferences from './EnhancedUserPreferences';
 
 const UserSettings = () => {
   const { t } = useTranslation();
@@ -156,7 +157,7 @@ const UserSettings = () => {
 
   const tabs = [
     { id: 'profile', label: 'Profile Information' },
-    { id: 'preferences', label: 'Preferences' },
+    { id: 'preferences', label: 'Participation Preferences' },
     { id: 'social', label: 'Social Accounts' },
     { id: 'privacy', label: 'Privacy & Security' }
   ];
@@ -303,6 +304,11 @@ const UserSettings = () => {
 
       {/* Preferences Tab */}
       {activeTab === 'preferences' && (
+        <EnhancedUserPreferences />
+      )}
+
+      {/* Legacy Preferences Tab - keeping for reference */}
+      {activeTab === 'preferences-legacy' && (
         <Card>
           <CardHeader>
             <CardTitle>Your Preferences</CardTitle>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Logo from '../common/Logo';
@@ -7,7 +7,27 @@ const AdminLayout = ({ children }) => {
   const { user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // Handle responsive sidebar behavior
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setSidebarOpen(true);
+      } else {
+        setSidebarOpen(false);
+      }
+    };
+
+    // Set initial state
+    handleResize();
+
+    // Add event listener
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleLogout = () => {
     logout();
@@ -66,11 +86,11 @@ const AdminLayout = ({ children }) => {
         )}
 
         {/* Sidebar */}
-        <div className={`admin-sidebar w-64 bg-white shadow-lg transform transition-transform duration-200 ease-in-out ${
+        <div className={`admin-sidebar w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out ${
           sidebarOpen 
-            ? 'translate-x-0 lg:translate-x-0' 
-            : '-translate-x-full lg:-translate-x-full'
-        } fixed inset-y-0 left-0 z-50 lg:static lg:inset-0`}>
+            ? 'translate-x-0' 
+            : '-translate-x-full'
+        } fixed inset-y-0 left-0 z-50 lg:translate-x-0 lg:static lg:inset-0`}>
           <div className="sidebar-container flex flex-col h-full">
             {/* Logo */}
             <div className="sidebar-header flex items-center justify-between h-16 px-4 border-b border-gray-200">
@@ -132,7 +152,9 @@ const AdminLayout = ({ children }) => {
         </div>
 
         {/* Main Content */}
-        <div className="main-content flex-1 transition-all duration-200 ease-in-out">
+        <div className={`main-content flex-1 transition-all duration-300 ease-in-out ${
+          sidebarOpen ? 'lg:ml-0' : 'lg:ml-0'
+        }`}>
           {/* Top Bar */}
           <header className="admin-header bg-white shadow-sm border-b border-gray-200">
             <div className="header-container px-6 py-4">
@@ -151,7 +173,7 @@ const AdminLayout = ({ children }) => {
                     className="desktop-menu-toggle hidden lg:block p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 mr-4"
                   >
                     <svg className="sidebar-toggle-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={sidebarOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
                     </svg>
                   </button>
                   <h1 className="page-title text-2xl font-semibold text-gray-900">

@@ -26,6 +26,7 @@ import ReferralDashboard from '../pages/ReferralDashboard';
 import ReferralTestPage from '../pages/ReferralTestPage';
 import ContactPage from '../pages/ContactPage';
 import DynamicPage from '../components/pages/DynamicPage';
+import UserProfilePage from '../components/user/UserProfilePage';
 import OnboardingWrapper from '../components/onboarding/OnboardingWrapper';
 import OnboardingTest from '../components/onboarding/OnboardingTest';
 import NeoLayout from '../neoui/Layout';
@@ -83,6 +84,11 @@ const AppRoutes = () => {
         <Route path="profile" element={
           <ProtectedRoute>
             <ProfilePage />
+          </ProtectedRoute>
+        } />
+        <Route path="user/:userId" element={
+          <ProtectedRoute>
+            <UserProfilePage />
           </ProtectedRoute>
         } />
         <Route path="wallet" element={
