@@ -4,7 +4,7 @@
 FROM node:18-alpine AS frontend-build
 WORKDIR /app/client
 COPY client/package*.json ./
-RUN npm ci
+RUN npm install --legacy-peer-deps
 COPY client/ ./
 RUN npm run build
 
@@ -14,7 +14,7 @@ WORKDIR /app
 
 # Install backend dependencies
 COPY server/package*.json ./
-RUN npm ci --omit=dev
+RUN npm install --legacy-peer-deps --omit=dev
 
 # Copy backend source
 COPY server/ ./
