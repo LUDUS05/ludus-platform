@@ -116,11 +116,93 @@ const userSchema = new mongoose.Schema({
     notifications: {
       email: { type: Boolean, default: true },
       sms: { type: Boolean, default: false },
-      marketing: { type: Boolean, default: true }
+      push: { type: Boolean, default: true },
+      marketing: { type: Boolean, default: true },
+      activityUpdates: { type: Boolean, default: true },
+      socialUpdates: { type: Boolean, default: true },
+      reminderNotifications: { type: Boolean, default: true }
+    },
+    // Enhanced participation preferences
+    participantPreferences: {
+      ageGroups: {
+        preferred: [String],
+        avoid: [String]
+      },
+      genders: {
+        preferred: [String],
+        avoid: [String]
+      },
+      languages: {
+        preferred: [String],
+        avoid: [String]
+      },
+      experienceLevels: {
+        preferred: [String],
+        avoid: [String]
+      },
+      groupSizes: {
+        preferred: [String],
+        avoid: [String]
+      }
+    },
+    // Enhanced social preferences
+    socialPreferences: {
+      socialInteraction: {
+        type: String,
+        enum: ['minimal', 'moderate', 'high'],
+        default: 'moderate'
+      },
+      networking: { type: Boolean, default: true },
+      teamBuilding: { type: Boolean, default: true },
+      competitive: { type: Boolean, default: false }
+    },
+    // Enhanced activity preferences
+    indoorOutdoor: {
+      type: String,
+      enum: ['both', 'indoor', 'outdoor'],
+      default: 'both'
+    },
+    physicalIntensity: {
+      type: String,
+      enum: ['low', 'moderate', 'high', 'very-high'],
+      default: 'moderate'
     }
   },
   profileImage: {
     type: String // Cloudinary URL
+  },
+  // Enhanced profile fields
+  bio: {
+    type: String,
+    maxlength: 500
+  },
+  socialLinks: {
+    instagram: String,
+    twitter: String,
+    linkedin: String,
+    website: String,
+    snapchat: String
+  },
+  location: {
+    city: String,
+    country: {
+      type: String,
+      default: 'Saudi Arabia'
+    }
+  },
+  interests: [String],
+  languages: [String],
+  availability: {
+    weekdays: { type: Boolean, default: false },
+    weekends: { type: Boolean, default: false },
+    evenings: { type: Boolean, default: false },
+    mornings: { type: Boolean, default: false }
+  },
+  contactPreferences: {
+    allowMessages: { type: Boolean, default: true },
+    allowFriendRequests: { type: Boolean, default: true },
+    showEmail: { type: Boolean, default: false },
+    showPhone: { type: Boolean, default: false }
   },
   // Community rating system (legacy - will be migrated to UserRatingProfile)
   communityRating: {

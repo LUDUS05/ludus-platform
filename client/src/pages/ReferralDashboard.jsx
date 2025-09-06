@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import referralService from '../services/referralService';
 import { Card } from '../components/ui/Card';
 import Alert from '../components/ui/Alert';
+import ReferralSocialShare from '../components/referral/ReferralSocialShare';
 import { 
   Users, 
   DollarSign, 
@@ -287,71 +288,11 @@ const ReferralDashboard = () => {
         <Card className="p-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-6">{t('referral.shareAndEarn')}</h2>
           
-          <div className="space-y-3">
-            <p className="text-sm text-gray-600 mb-4">
-              {t('referral.shareReferralLink')}
-            </p>
-
-            {/* Social Sharing Buttons */}
-            <div className="grid grid-cols-4 gap-2">
-              <button
-                onClick={() => shareOnPlatform('whatsapp')}
-                disabled={sharing || !referralStats?.referralCode}
-                className="flex items-center justify-center p-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
-                title="WhatsApp"
-              >
-                <span className="text-lg">📱</span>
-              </button>
-              
-              <button
-                onClick={() => shareOnPlatform('facebook')}
-                disabled={sharing || !referralStats?.referralCode}
-                className="flex items-center justify-center p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
-                title="Facebook"
-              >
-                <span className="text-lg">📘</span>
-              </button>
-              
-              <button
-                onClick={() => shareOnPlatform('twitter')}
-                disabled={sharing || !referralStats?.referralCode}
-                className="flex items-center justify-center p-2 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition-colors disabled:opacity-50"
-                title="Twitter"
-              >
-                <span className="text-lg">🐦</span>
-              </button>
-              
-              <button
-                onClick={() => shareOnPlatform('telegram')}
-                disabled={sharing || !referralStats?.referralCode}
-                className="flex items-center justify-center p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50"
-                title="Telegram"
-              >
-                <span className="text-lg">📬</span>
-              </button>
-            </div>
-
-            {/* Other Sharing Options */}
-            <div className="grid grid-cols-2 gap-2 mt-3">
-              <button
-                onClick={() => shareOnPlatform('email')}
-                disabled={sharing || !referralStats?.referralCode}
-                className="flex items-center justify-center p-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50"
-                title="Email"
-              >
-                <span className="text-lg">📧</span>
-              </button>
-              
-              <button
-                onClick={() => shareOnPlatform('sms')}
-                disabled={sharing || !referralStats?.referralCode}
-                className="flex items-center justify-center p-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors disabled:opacity-50"
-                title="SMS"
-              >
-                <span className="text-lg">💬</span>
-              </button>
-            </div>
-          </div>
+          <ReferralSocialShare 
+            referralCode={referralStats?.referralCode}
+            referralLink={referralStats?.referralLink}
+            disabled={sharing}
+          />
         </Card>
       </div>
 
