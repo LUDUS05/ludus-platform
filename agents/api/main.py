@@ -69,35 +69,96 @@ async def health():
     return status
 
 
+def build_ludus_prompt(message: str, language: str, history: list[dict]) -> str:
+    """Build LUDUS-specific prompt with context and conversation history."""
+    
+    # LUDUS system context
+    if language.startswith("ar"):
+        system_context = """أنت مساعد ذكي لمنصة LUDUS، منصة الأنشطة الاجتماعية في السعودية. 
+أنت متخصص في:
+- مساعدة المستخدمين في العثور على الأنشطة المناسبة
+- إدارة الحجوزات والدفعات
+- تنسيق مع مقدمي الخدمات
+- تقديم الدعم باللغة العربية
+
+اجب باختصار ومفيد، وكن ودوداً ومهذباً."""
+    else:
+        system_context = """You are an intelligent assistant for LUDUS, a social activities platform in Saudi Arabia.
+You specialize in:
+- Helping users find suitable activities
+- Managing bookings and payments
+- Coordinating with service providers
+- Providing support in English
+
+Answer briefly and helpfully, be friendly and polite."""
+    
+    # Build conversation context
+    context_lines = [system_context]
+    
+    # Add recent history (last 3 exchanges)
+    recent_history = history[-6:] if len(history) > 6 else history
+    for entry in recent_history:
+        if entry["role"] == "user":
+            context_lines.append(f"User: {entry['content']}")
+        else:
+            context_lines.append(f"Assistant: {entry['content']}")
+    
+    # Add current message
+    context_lines.append(f"User: {message}")
+    context_lines.append("Assistant:")
+    
+    return "\n".join(context_lines)
+
+
 @app.post("/chat")
 async def chat(req: ChatRequest):
     session_id = req.session_id or str(uuid.uuid4())
     history = load_history(session_id)
+    language = req.language or "ar"
 
-    prompt_prefix = "يرجى الرد باللغة العربية باختصار: " if (req.language or "ar").startswith("ar") else "Reply briefly in English: "
-    user_prompt = f"{prompt_prefix}{req.message}"
-
+    # Build LUDUS-specific prompt with context
+    full_prompt = build_ludus_prompt(req.message, language, history)
+    
     reply_text = None
 
-    # Try Ollama
+    # Try Ollama with enhanced prompt
     try:
         resp = requests.post(
             f"{OLLAMA_HOST}/api/generate",
-            json={"model": OLLAMA_MODEL, "prompt": user_prompt},
+            json={
+                "model": OLLAMA_MODEL, 
+                "prompt": full_prompt,
+                "stream": False,
+                "options": {
+                    "temperature": 0.7,
+                    "top_p": 0.9,
+                    "max_tokens": 200
+                }
+            },
             timeout=30,
         )
         if resp.ok:
             data = resp.json()
-            # ollama /api/generate streams; in blocking request, 'response' may contain final
-            reply_text = data.get("response") or data.get("message") or ""
-    except Exception:
+            reply_text = data.get("response", "").strip()
+            
+            # Clean up response (remove any system context that might leak)
+            if "Assistant:" in reply_text:
+                reply_text = reply_text.split("Assistant:")[-1].strip()
+                
+    except Exception as e:
+        print(f"Ollama error: {e}")
         reply_text = None
 
-    if not reply_text:
-        reply_text = ("تلقى النظام رسالتك." if (req.language or "ar").startswith("ar") else "The system received your message.") + f" ({req.message})"
+    # Fallback response
+    if not reply_text or len(reply_text) < 3:
+        if language.startswith("ar"):
+            reply_text = f"مرحباً! أنا مساعد LUDUS. كيف يمكنني مساعدتك اليوم؟ (تلقيت رسالتك: {req.message})"
+        else:
+            reply_text = f"Hello! I'm your LUDUS assistant. How can I help you today? (Received: {req.message})"
 
-    history.append({"role": "user", "content": req.message, "language": req.language})
-    history.append({"role": "assistant", "content": reply_text, "language": req.language})
+    # Save conversation
+    history.append({"role": "user", "content": req.message, "language": language})
+    history.append({"role": "assistant", "content": reply_text, "language": language})
     save_history(session_id, history)
 
-    return {"reply": reply_text, "language": req.language, "session_id": session_id}
+    return {"reply": reply_text, "language": language, "session_id": session_id}
