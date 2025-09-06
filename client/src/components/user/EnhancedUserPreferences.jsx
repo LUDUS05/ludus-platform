@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
-import { Button } from '../ui/button';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../ui/card';
-import { Input } from '../ui/input';
+import { Button, Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter, Input } from '../ui';
 import Alert from '../ui/Alert';
 
 const EnhancedUserPreferences = () => {

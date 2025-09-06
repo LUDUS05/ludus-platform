@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
-import { Button } from '../ui/button';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../ui/card';
-import { Input } from '../ui/input';
+import { Button, Card, CardHeader, CardTitle, CardDescription, CardContent, Input } from '../ui';
 import Alert from '../ui/Alert';
 import api from '../../services/api';
 
