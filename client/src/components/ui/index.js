@@ -1,6 +1,6 @@
-export { Button, buttonVariants } from './button'
-export { Input } from './input'
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from './card'
+export { Button, buttonVariants } from './Button'
+export { Input } from './Input'
+export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from './Card'
 
 // Re-export existing components for backward compatibility
 export { default as Alert } from './Alert'
