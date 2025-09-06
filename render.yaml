@@ -65,3 +65,30 @@ services:
       #   sync: false # Set in Render dashboard
       # - key: REACT_APP_SENTRY_DSN
       #   sync: false # Set in Render dashboard
+
+  # Agents API (FastAPI)
+  - type: web
+    name: ludus-agents-api
+    env: docker
+    plan: starter
+    dockerfilePath: agents/Dockerfile.api
+    healthCheckPath: /health
+    envVars:
+      - key: REDIS_URL
+        sync: false
+      - key: OLLAMA_HOST
+        value: http://localhost:11434
+      - key: RENDER_ENVIRONMENT
+        value: production
+
+  # Agents UI (Streamlit)
+  - type: web
+    name: ludus-agents-ui
+    env: docker
+    plan: starter
+    dockerfilePath: agents/Dockerfile.ui
+    envVars:
+      - key: AGENTS_API_URL
+        value: https://ludus-agents-api.onrender.com
+      - key: RENDER_ENVIRONMENT
+        value: production
