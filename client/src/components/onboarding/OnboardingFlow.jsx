@@ -10,6 +10,7 @@ import ReferralStep from './steps/ReferralStep';
 import InterestsStep from './steps/InterestsStep';
 import PreferencesStep from './steps/PreferencesStep';
 import SuccessStep from './steps/SuccessStep';
+import SocialProofStep from './steps/SocialProofStep';
 
 // Import UI components
 import { Button } from '../ui/Button';
@@ -65,6 +66,8 @@ const OnboardingFlow = () => {
     switch (stepId) {
       case 'welcome':
         return <WelcomeStep {...commonProps} />;
+      case 'socialProof':
+        return <SocialProofStep {...commonProps} />;
       case 'auth':
         return <AuthStep {...commonProps} />;
       case 'profile':

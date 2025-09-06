@@ -1006,6 +1006,13 @@
     "complete": "إكمال الإعداد",
     "progress": "الخطوة {{current}} من {{total}}",
     "steps": {
+      "socialProof": {
+        "title": "موثوق من مجتمع لودوس",
+        "subtitle": "حجم أنشطة حقيقي ومجتمع متنامٍ في الرياض",
+        "activities": { "title": "أكثر من 12,000 حجز هذا الشهر", "subtitle": "إقبال كبير عبر أشهر الفئات" },
+        "members": { "title": "أكثر من 50,000 عضو نشط", "subtitle": "اعثر على مجموعتك في الرياض" },
+        "rating": { "title": "متوسط تقييم 4.9/5", "subtitle": "محبوب من مجتمعنا" }
+      },
       "welcome": {
         "title": "مرحباً بك في لودوس",
         "subtitle": "اكتشف أنشطة رائعة وتواصل مع أشخاص متشابهين في التفكير",
@@ -1173,6 +1180,9 @@
         }
       }
     },
+    "welcomeTaglineAr": "اكتشف. احجز. تواصل",
+    "welcomeTaglineEn": "Discover. Book. Connect",
+    "valuePromise": "اعثر على مجموعتك من خلال أنشطة رائعة في الرياض",
     "validation": {
       "required": "هذا الحقل مطلوب",
       "invalidEmail": "يرجى إدخال بريد إلكتروني صحيح",

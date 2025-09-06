@@ -35,6 +35,19 @@ export const OnboardingProvider = ({ children }) => {
     if (refCode) {
       setFormData(prev => ({ ...prev, referralCode: refCode }));
     }
+    // Adjust-style deep link params (campaign, adgroup, creative, deep_link)
+    const campaign = searchParams.get('campaign') || searchParams.get('utm_campaign');
+    const adgroup = searchParams.get('adgroup') || searchParams.get('utm_adgroup');
+    const creative = searchParams.get('creative') || searchParams.get('utm_content');
+    const deepLink = searchParams.get('deep_link') || searchParams.get('deepLink');
+    const feature = searchParams.get('feature');
+    if (campaign || adgroup || creative || deepLink || feature) {
+      setFormData(prev => ({
+        ...prev,
+        attribution: { campaign, adgroup, creative, feature },
+        deepLinkTarget: deepLink || null
+      }));
+    }
   }, [searchParams]);
 
   const initializeOnboarding = async () => {

@@ -977,6 +977,13 @@
     "complete": "Complete Setup",
     "progress": "Step {{current}} of {{total}}",
     "steps": {
+      "socialProof": {
+        "title": "Trusted by the LUDUS community",
+        "subtitle": "Real activity volumes and a growing community in Riyadh",
+        "activities": { "title": "12,000+ activities booked this month", "subtitle": "High demand across top categories" },
+        "members": { "title": "50,000+ active members", "subtitle": "Connect with your tribe in Riyadh" },
+        "rating": { "title": "4.9/5 average rating", "subtitle": "Loved by our community" }
+      },
       "welcome": {
         "title": "Welcome to LUDUS",
         "subtitle": "Discover amazing activities and connect with like-minded people",
@@ -1144,6 +1151,9 @@
         }
       }
     },
+    "welcomeTaglineAr": "اكتشف. احجز. تواصل",
+    "welcomeTaglineEn": "Discover. Book. Connect",
+    "valuePromise": "Find your tribe through amazing activities in Riyadh",
     "validation": {
       "required": "This field is required",
       "invalidEmail": "Please enter a valid email address",
