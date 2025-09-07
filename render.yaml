@@ -1,4 +1,56 @@
 services:
+  # Backend Service (Node.js API) - Standard
+  - type: web
+    name: ludus-backend
+    env: node
+    plan: starter
+    buildCommand: cd server && npm install --legacy-peer-deps && npm run build
+    startCommand: cd server && npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false # Set in Render dashboard
+      - key: JWT_SECRET
+        sync: false # Set in Render dashboard
+      - key: JWT_REFRESH_SECRET
+        sync: false # Set in Render dashboard
+      - key: MOYASAR_SECRET_KEY
+        sync: false # Set in Render dashboard
+      - key: MOYASAR_PUBLISHABLE_KEY
+        sync: false # Set in Render dashboard
+      - key: MOYASAR_WEBHOOK_SECRET
+        sync: false # Set in Render dashboard
+      - key: CLIENT_URL
+        value: https://app.letsludus.com
+      - key: ANIMATION_ENABLED
+        value: "true"
+      - key: RENDER_ENVIRONMENT
+        value: "production"
+
+  # Frontend Service (Static React App) - Standard
+  - type: web
+    name: ludus-frontend
+    env: static
+    plan: starter
+    buildCommand: cd client && npm install --legacy-peer-deps && npm run build
+    staticPublishPath: client/build
+    envVars:
+      # Core API Configuration - REQUIRED
+      - key: REACT_APP_API_URL
+        value: https://ludus-backend.onrender.com
+      # Animation Configuration - REQUIRED
+      - key: REACT_APP_ANIMATION_ENABLED
+        value: "true"
+      - key: REACT_APP_RTL_SUPPORT
+        value: "true"
+      # Performance Monitoring - REQUIRED
+      - key: REACT_APP_PERFORMANCE_MONITORING
+        value: "true"
+      - key: REACT_APP_DEBUG_MODE
+        value: "false"
+
   # Backend Service (Node.js API) - Enhanced for ATHENA
   - type: web
     name: ludus-backend-athena
