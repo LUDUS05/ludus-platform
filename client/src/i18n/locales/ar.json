@@ -1255,6 +1255,12 @@
         "referral_connected": "شارة جديدة: ربط الإحالة",
         "onboarding_complete": "شارة جديدة: بطل الانضمام"
       }
+    },
+    "leaderboard": {
+      "title": "لوحة صدارة التسجيل",
+      "topN": "أفضل {{n}}",
+      "points": "{{points}} نقطة",
+      "streak": "🔥 {{n}}"
     }
   }
 }

@@ -53,6 +53,8 @@ The LUDUS Onboarding System is a comprehensive, premium user onboarding experien
    - Completion bonus points on finishing onboarding
    - Real-time toasts for points and badge unlocks (RTL-aware)
    - Progress bar with step count (localized)
+   - Daily streak tracking with longest streak
+   - Onboarding leaderboard endpoint and UI
 
 ## Architecture
 
@@ -226,6 +228,9 @@ const stepResp = await onboardingService.completeStep('welcome', { data: 'value'
 // Complete onboarding (returns gamification info)
 const completeResp = await onboardingService.completeOnboarding(finalData);
 // completeResp.gamification = { totalPoints, awardedPoints, newBadges: ['onboarding_complete'] }
+
+// Leaderboard
+const { leaderboard } = await onboardingService.getLeaderboard(10);
 ```
 
 ```javascript
@@ -257,7 +262,8 @@ const MyComponent = () => {
     formData,
     onboardingProgress,
     // Gamification
-    gamification, // { totalPoints, badges }
+    gamification, // { totalPoints, badges, currentStreak, longestStreak }
+    leaderboard,
     nextStep,
     previousStep,
     completeOnboarding,
