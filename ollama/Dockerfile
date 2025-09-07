@@ -20,4 +20,4 @@ RUN echo '#!/bin/bash' > /start.sh && \
     chmod +x /start.sh
 
 # Use the startup script
-CMD ["/start.sh"]
+CMD ["/bin/bash", "/start.sh"]
