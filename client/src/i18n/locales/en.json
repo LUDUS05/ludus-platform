@@ -1214,7 +1214,8 @@
       "completeStep": "Failed to complete step",
       "completeOnboarding": "Failed to complete onboarding",
       "networkError": "Network error. Please try again."
-    }
+    },
+
     "gamification": {
       "pointsAwarded": "+{{points}} points",
       "onboardingCompleteBonus": "Onboarding complete! Bonus +{{points}}",
