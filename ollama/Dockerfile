@@ -8,7 +8,7 @@ ENV OLLAMA_ORIGINS=*
 EXPOSE 11434
 
 # Copy Modelfile
-COPY Modelfile /Modelfile
+COPY ollama/Modelfile /Modelfile
 
 # Create startup script
 RUN echo '#!/bin/bash' > /start.sh && \
