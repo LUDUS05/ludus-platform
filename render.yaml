@@ -6,7 +6,7 @@ services:
     plan: starter
     buildCommand: cd server && npm install --legacy-peer-deps && npm run build
     startCommand: cd server && npm start
-    healthCheckPath: /api/health
+    healthCheckPath: /health
     envVars:
       - key: NODE_ENV
         value: production
