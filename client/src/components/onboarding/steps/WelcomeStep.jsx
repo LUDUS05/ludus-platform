@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from '../../ui/Button';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
+import Logo from '../../common/Logo';
 
 const WelcomeStep = ({ config, onComplete, t }) => {
+  const { i18n } = useTranslation();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -54,89 +56,72 @@ const WelcomeStep = ({ config, onComplete, t }) => {
 
   return (
     <motion.div
-      className="min-h-screen flex items-center justify-center px-4"
+      className="neumorphic rounded-2xl p-8 text-center"
       variants={containerVariants}
       initial="hidden"
       animate={isVisible ? "visible" : "hidden"}
     >
-      <div className="max-w-4xl w-full text-center">
-        {/* Hero Section */}
-        <motion.div variants={itemVariants} className="mb-12">
-          <div className="mb-8">
-            <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-6">
-              {config?.welcomeConfig?.title?.en || t('onboarding.steps.welcome.title')}
-            </h1>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-              {config?.welcomeConfig?.subtitle?.en || t('onboarding.steps.welcome.subtitle')}
-            </p>
-            <p className="mt-3 text-sm text-gray-500">{t('onboarding.welcomeTaglineAr')} / {t('onboarding.welcomeTaglineEn')}</p>
-            <p className="mt-1 text-sm text-gray-600">{t('onboarding.valuePromise')}</p>
-          </div>
-        </motion.div>
+      {/* Logo */}
+      <motion.div variants={itemVariants} className="mb-6">
+        <div className="flex justify-center">
+          <Logo className="h-16 w-auto" />
+        </div>
+      </motion.div>
 
-        {/* Value Propositions */}
-        <motion.div 
-          variants={itemVariants}
-          className="grid md:grid-cols-3 gap-8 mb-12"
-        >
-          {valuePropositions.map((proposition, index) => (
-            <motion.div
-              key={index}
-              variants={itemVariants}
-              className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-            >
-              <div className="text-4xl mb-4">{proposition.icon}</div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                {proposition.title.en}
-              </h3>
-              <p className="text-gray-600 leading-relaxed">
-                {proposition.description.en}
-              </p>
-            </motion.div>
-          ))}
-        </motion.div>
+      {/* Hero Section */}
+      <motion.div variants={itemVariants} className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-800 mb-4">
+          {i18n.language === 'ar' 
+            ? (config?.welcomeConfig?.title?.ar || t('onboarding.steps.welcome.title'))
+            : (config?.welcomeConfig?.title?.en || t('onboarding.steps.welcome.title'))
+          }
+        </h1>
+        <p className="text-gray-600 mb-4">
+          {i18n.language === 'ar' 
+            ? (config?.welcomeConfig?.subtitle?.ar || t('onboarding.steps.welcome.subtitle'))
+            : (config?.welcomeConfig?.subtitle?.en || t('onboarding.steps.welcome.subtitle'))
+          }
+        </p>
+        <p className="text-sm text-gray-500">
+          {t('onboarding.valuePromise')}
+        </p>
+      </motion.div>
 
-        {/* CTA Button */}
-        <motion.div variants={itemVariants}>
-          <Button
-            onClick={handleGetStarted}
-            variant="primary"
-            size="lg"
-            className="px-12 py-4 text-lg font-semibold bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 transform hover:scale-105 transition-all duration-200"
+      {/* Value Propositions */}
+      <motion.div 
+        variants={itemVariants}
+        className="space-y-4 mb-8"
+      >
+        {valuePropositions.map((proposition, index) => (
+          <motion.div
+            key={index}
+            variants={itemVariants}
+            className="neumorphic-subtle rounded-xl p-4"
           >
-            {t('getStarted')}
-          </Button>
-        </motion.div>
-
-        {/* Background Animation */}
-        {config?.welcomeConfig?.backgroundAnimation === 'particles' && (
-          <div className="fixed inset-0 -z-10 overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50">
-              {/* Animated particles */}
-              {[...Array(20)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  className="absolute w-2 h-2 bg-purple-300 rounded-full opacity-30"
-                  animate={{
-                    x: [0, 100, 0],
-                    y: [0, -100, 0],
-                    scale: [1, 1.5, 1],
-                  }}
-                  transition={{
-                    duration: 10 + i * 0.5,
-                    repeat: Infinity,
-                    delay: i * 0.2,
-                  }}
-                  style={{
-                    left: `${Math.random() * 100}%`,
-                    top: `${Math.random() * 100}%`,
-                  }}
-                />
-              ))}
+            <div className="flex items-center gap-3">
+              <div className="text-2xl">{proposition.icon}</div>
+              <div className="text-right flex-1">
+                <h3 className="text-lg font-semibold text-gray-800 mb-1">
+                  {i18n.language === 'ar' ? proposition.title.ar : proposition.title.en}
+                </h3>
+                <p className="text-sm text-gray-600">
+                  {i18n.language === 'ar' ? proposition.description.ar : proposition.description.en}
+                </p>
+              </div>
             </div>
-          </div>
-        )}
-      </div>
+          </motion.div>
+        ))}
+      </motion.div>
+
+      {/* CTA Button */}
+      <motion.div variants={itemVariants}>
+        <button
+          onClick={handleGetStarted}
+          className="neumorphic-subtle hover:neumorphic-pressed w-full py-3 px-6 rounded-xl text-lg font-medium text-gray-700 transition-all duration-200"
+        >
+          {t('getStarted')}
+        </button>
+      </motion.div>
     </motion.div>
   );
 };

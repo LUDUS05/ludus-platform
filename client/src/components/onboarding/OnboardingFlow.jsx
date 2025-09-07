@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useOnboarding } from './OnboardingProvider';
+import { Globe } from 'lucide-react';
 
 // Import step components
 import WelcomeStep from './steps/WelcomeStep';
@@ -19,6 +21,7 @@ import LoadingSpinner from '../ui/LoadingSpinner';
 
 const OnboardingFlow = () => {
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
   const {
     config,
     currentStep,
@@ -31,8 +34,25 @@ const OnboardingFlow = () => {
     completeOnboarding,
     getCurrentStepConfig,
     getProgressPercentage,
-    t
+    t: onboardingT
   } = useOnboarding();
+
+  // Set Arabic as default language on component mount
+  useEffect(() => {
+    if (i18n.language !== 'ar') {
+      i18n.changeLanguage('ar');
+    }
+  }, [i18n]);
+
+  // Language switcher
+  const toggleLanguage = () => {
+    const newLang = i18n.language === 'ar' ? 'en' : 'ar';
+    i18n.changeLanguage(newLang);
+  };
+
+  const getCurrentLanguageText = () => {
+    return i18n.language === 'ar' ? 'English' : 'العربية';
+  };
 
   // Handle step completion
   const handleStepComplete = async (stepId, data) => {
@@ -96,10 +116,46 @@ const OnboardingFlow = () => {
   // Loading state
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-blue-50">
-        <div className="text-center">
-          <LoadingSpinner size="lg" />
-          <p className="mt-4 text-gray-600">{t('common.loading')}</p>
+      <div className="min-h-screen bg-[#e0e0e0]" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'} lang={i18n.language}>
+        <style>
+          {`
+            .neumorphic {
+              box-shadow: 8px 8px 16px #bebebe, -8px -8px 16px #ffffff;
+              background-color: #e0e0e0;
+            }
+            .neumorphic-pressed {
+              box-shadow: inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff;
+            }
+            .neumorphic-subtle {
+              box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #ffffff;
+              background-color: #e0e0e0;
+            }
+          `}
+        </style>
+
+        {/* Language Switcher */}
+        <div className="max-w-md mx-auto px-4 pt-6 pb-4">
+          <div className="neumorphic rounded-xl p-3 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Globe className="w-5 h-5 text-gray-700" />
+              <span className="text-sm text-gray-700 font-medium">
+                {t('auth.language')}
+              </span>
+            </div>
+            <button
+              onClick={toggleLanguage}
+              className="neumorphic-subtle hover:neumorphic-pressed px-4 py-2 rounded-lg transition-all duration-200 text-sm font-medium text-gray-700"
+            >
+              {getCurrentLanguageText()}
+            </button>
+          </div>
+        </div>
+
+        <div className="max-w-md mx-auto px-4 pb-24">
+          <div className="neumorphic rounded-2xl p-8 text-center">
+            <LoadingSpinner size="lg" />
+            <p className="mt-4 text-gray-600">{t('common.loading')}</p>
+          </div>
         </div>
       </div>
     );
@@ -108,13 +164,52 @@ const OnboardingFlow = () => {
   // Error state
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-blue-50">
-        <div className="max-w-md w-full mx-4">
-          <Alert type="error" message={error} />
-          <div className="mt-4 text-center">
-            <Button onClick={() => window.location.reload()} variant="primary">
-              {t('common.tryAgain')}
-            </Button>
+      <div className="min-h-screen bg-[#e0e0e0]" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'} lang={i18n.language}>
+        <style>
+          {`
+            .neumorphic {
+              box-shadow: 8px 8px 16px #bebebe, -8px -8px 16px #ffffff;
+              background-color: #e0e0e0;
+            }
+            .neumorphic-pressed {
+              box-shadow: inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff;
+            }
+            .neumorphic-subtle {
+              box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #ffffff;
+              background-color: #e0e0e0;
+            }
+          `}
+        </style>
+
+        {/* Language Switcher */}
+        <div className="max-w-md mx-auto px-4 pt-6 pb-4">
+          <div className="neumorphic rounded-xl p-3 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Globe className="w-5 h-5 text-gray-700" />
+              <span className="text-sm text-gray-700 font-medium">
+                {t('auth.language')}
+              </span>
+            </div>
+            <button
+              onClick={toggleLanguage}
+              className="neumorphic-subtle hover:neumorphic-pressed px-4 py-2 rounded-lg transition-all duration-200 text-sm font-medium text-gray-700"
+            >
+              {getCurrentLanguageText()}
+            </button>
+          </div>
+        </div>
+
+        <div className="max-w-md mx-auto px-4 pb-24">
+          <div className="neumorphic rounded-2xl p-8">
+            <Alert type="error" message={error} />
+            <div className="mt-4 text-center">
+              <button
+                onClick={() => window.location.reload()}
+                className="neumorphic-subtle hover:neumorphic-pressed w-full py-3 px-6 rounded-xl text-lg font-medium text-gray-700 transition-all duration-200"
+              >
+                {t('common.tryAgain')}
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -124,51 +219,120 @@ const OnboardingFlow = () => {
   // No config available
   if (!config || !config.isEnabled) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-blue-50">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">
-            {t('onboarding.title')}
-          </h1>
-          <p className="text-gray-600 mb-6">
-            {t('onboarding.subtitle')}
-          </p>
-          <Button onClick={() => navigate('/dashboard')} variant="primary">
-            {t('common.getStarted')}
-          </Button>
+      <div className="min-h-screen bg-[#e0e0e0]" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'} lang={i18n.language}>
+        <style>
+          {`
+            .neumorphic {
+              box-shadow: 8px 8px 16px #bebebe, -8px -8px 16px #ffffff;
+              background-color: #e0e0e0;
+            }
+            .neumorphic-pressed {
+              box-shadow: inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff;
+            }
+            .neumorphic-subtle {
+              box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #ffffff;
+              background-color: #e0e0e0;
+            }
+          `}
+        </style>
+
+        {/* Language Switcher */}
+        <div className="max-w-md mx-auto px-4 pt-6 pb-4">
+          <div className="neumorphic rounded-xl p-3 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Globe className="w-5 h-5 text-gray-700" />
+              <span className="text-sm text-gray-700 font-medium">
+                {t('auth.language')}
+              </span>
+            </div>
+            <button
+              onClick={toggleLanguage}
+              className="neumorphic-subtle hover:neumorphic-pressed px-4 py-2 rounded-lg transition-all duration-200 text-sm font-medium text-gray-700"
+            >
+              {getCurrentLanguageText()}
+            </button>
+          </div>
+        </div>
+
+        <div className="max-w-md mx-auto px-4 pb-24">
+          <div className="neumorphic rounded-2xl p-8 text-center">
+            <h1 className="text-2xl font-bold text-gray-800 mb-4">
+              {t('onboarding.title')}
+            </h1>
+            <p className="text-gray-600 mb-6">
+              {t('onboarding.subtitle')}
+            </p>
+            <button
+              onClick={() => navigate('/dashboard')}
+              className="neumorphic-subtle hover:neumorphic-pressed w-full py-3 px-6 rounded-xl text-lg font-medium text-gray-700 transition-all duration-200"
+            >
+              {t('common.getStarted')}
+            </button>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50">
+    <div className="min-h-screen bg-[#e0e0e0]" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'} lang={i18n.language}>
+      <style>
+        {`
+          .neumorphic {
+            box-shadow: 8px 8px 16px #bebebe, -8px -8px 16px #ffffff;
+            background-color: #e0e0e0;
+          }
+          .neumorphic-pressed {
+            box-shadow: inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff;
+          }
+          .neumorphic-subtle {
+            box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #ffffff;
+            background-color: #e0e0e0;
+          }
+        `}
+      </style>
+
+      {/* Language Switcher */}
+      <div className="max-w-md mx-auto px-4 pt-6 pb-4">
+        <div className="neumorphic rounded-xl p-3 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Globe className="w-5 h-5 text-gray-700" />
+            <span className="text-sm text-gray-700 font-medium">
+              {t('auth.language')}
+            </span>
+          </div>
+          <button
+            onClick={toggleLanguage}
+            className="neumorphic-subtle hover:neumorphic-pressed px-4 py-2 rounded-lg transition-all duration-200 text-sm font-medium text-gray-700"
+          >
+            {getCurrentLanguageText()}
+          </button>
+        </div>
+      </div>
+
       {/* Progress indicator */}
       {config.steps && config.steps.length > 1 && (
-        <div className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-sm border-b border-gray-200">
-          <div className="max-w-4xl mx-auto px-4 py-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <span className="text-sm font-medium text-gray-600">
-                  {t('progress', { current: currentStep + 1, total: config.steps.length })}
-                </span>
-              </div>
-              <div className="flex-1 max-w-xs">
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div
-                    className="bg-gradient-to-r from-purple-500 to-blue-500 h-2 rounded-full transition-all duration-300 ease-out"
-                    style={{
-                      width: `${getProgressPercentage()}%`
-                    }}
-                  />
-                </div>
-              </div>
+        <div className="max-w-md mx-auto px-4 pb-4">
+          <div className="neumorphic rounded-xl p-3">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium text-gray-600">
+                {t('progress', { current: currentStep + 1, total: config.steps.length })}
+              </span>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-2">
+              <div
+                className="bg-gradient-to-r from-orange-500 to-orange-600 h-2 rounded-full transition-all duration-300 ease-out"
+                style={{
+                  width: `${getProgressPercentage()}%`
+                }}
+              />
             </div>
           </div>
         </div>
       )}
 
       {/* Main content */}
-      <div className="pt-16">
+      <div className="max-w-md mx-auto px-4 pb-24">
         {renderCurrentStep()}
       </div>
 
