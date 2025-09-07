@@ -427,6 +427,14 @@ For technical support or feature requests:
 - ✅ Responsive design
 - ✅ Testing framework
 
+### Version 1.1.0 (2025-09-07, GMT+3)
+- ✅ Gamification v1: per-step points and badge unlocks
+- ✅ Completion bonus points and final badge
+- ✅ Daily streak tracking (current and longest)
+- ✅ Onboarding leaderboard endpoint + UI widget
+- ✅ Provider updates to surface `gamification` and `leaderboard`
+- ✅ New AR/EN translations for gamification and leaderboard
+
 ---
 
 *This documentation is maintained alongside the codebase. Please update it when making changes to the onboarding system.*

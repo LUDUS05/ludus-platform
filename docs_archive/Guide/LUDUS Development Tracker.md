@@ -95,6 +95,17 @@ This document tracks the development progress of the LUDUS social activity disco
 | 6.9 | Perform security audit | High | Not Started | | | |
 | 6.10 | Deploy to production | High | Not Started | | | |
 
+### Phase 7: Onboarding Gamification & Engagement
+
+| Task ID | Task Description | Priority | Status | Assigned To | Due Date | Notes |
+|---------|------------------|----------|--------|-------------|----------|-------|
+| 7.1 | Implement per-step points and badges | High | Completed | | 2025-09-07 | v1 shipped |
+| 7.2 | Add streak tracking (current/longest) | High | Completed | | 2025-09-07 | daily-based |
+| 7.3 | Leaderboard API and UI component | Medium | Completed | | 2025-09-07 | /onboarding/leaderboard |
+| 7.4 | Surface gamification in Success/Dashboard | Medium | Planned | | | add UI widgets |
+| 7.5 | Define levels and thresholds | Medium | Planned | | | show progress to next level |
+| 7.6 | Rewards catalog and redemption | Medium | Planned | | | redeemable items |
+
 ## Sprint Planning
 
 ### Sprint 1 (Week 1-2)

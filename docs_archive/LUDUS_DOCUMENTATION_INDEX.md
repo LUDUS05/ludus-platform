@@ -54,6 +54,7 @@
 | Document | Purpose | Last Updated | Priority | Status |
 |----------|---------|--------------|----------|---------|
 | [**CONTENT_MANAGEMENT_REBUILD_COMPLETE.md**](CONTENT_MANAGEMENT_REBUILD_COMPLETE.md) | Complete CMS rebuild documentation | Jan 2025 | 🔥 Critical | ✅ Active |
+| [**ONBOARDING_SYSTEM_DOCUMENTATION.md**](ONBOARDING_SYSTEM_DOCUMENTATION.md) | Onboarding system with gamification and leaderboard | Sep 2025 | 🔥 Critical | ✅ Active |
 
 #### 🎨 **Design System**
 | Document | Purpose | Last Updated | Priority | Status |
