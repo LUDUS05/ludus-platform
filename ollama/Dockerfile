@@ -19,5 +19,6 @@ RUN echo '#!/bin/bash' > /start.sh && \
     echo 'wait' >> /start.sh && \
     chmod +x /start.sh
 
-# Use the startup script
+# Override entrypoint and use the startup script
+ENTRYPOINT []
 CMD ["/bin/bash", "/start.sh"]
