@@ -5,9 +5,9 @@ import json
 import uuid
 import requests
 import redis
-from booking_agent import BookingAgent, BookingRequest
-from vendor_agent import VendorAgent, VendorRequest
-from search_agent import SearchAgent, SearchRequest
+from agents.api.booking_agent import BookingAgent, BookingRequest
+from agents.api.vendor_agent import VendorAgent, VendorRequest
+from agents.api.search_agent import SearchAgent, SearchRequest
 
 app = FastAPI(title="LUDUS Agents API")
 
