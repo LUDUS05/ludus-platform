@@ -24,6 +24,7 @@ class ChatRequest(BaseModel):
     message: str
     session_id: str | None = None
     language: str | None = "ar"
+    agent_type: str | None = "customer_service"
 
 
 def _session_key(session_id: str) -> str:
@@ -69,28 +70,84 @@ async def health():
     return status
 
 
-def build_ludus_prompt(message: str, language: str, history: list[dict]) -> str:
+def get_agent_context(agent_type: str, language: str) -> str:
+    """Get specialized context for different agent types."""
+    
+    contexts = {
+        "customer_service": {
+            "ar": """أنت وكيل خدمة عملاء متخصص لمنصة LUDUS. أنت متخصص في:
+- مساعدة المستخدمين في الاستفسارات العامة
+- حل المشاكل التقنية
+- تقديم الدعم الفني
+- الإجابة على أسئلة المنصة
+
+كن مفيداً ومهذباً، وقدم حلول عملية للمستخدمين.""",
+            "en": """You are a customer service specialist for LUDUS platform. You specialize in:
+- Helping users with general inquiries
+- Solving technical problems
+- Providing technical support
+- Answering platform questions
+
+Be helpful and polite, provide practical solutions to users."""
+        },
+        "booking": {
+            "ar": """أنت وكيل حجوزات متخصص لمنصة LUDUS. أنت متخصص في:
+- إدارة الحجوزات والمواعيد
+- معالجة طلبات الحجز
+- تنسيق المواعيد مع مقدمي الخدمات
+- إدارة الدفعات والمدفوعات
+
+كن دقيقاً ومنظماً في إدارة الحجوزات.""",
+            "en": """You are a booking specialist for LUDUS platform. You specialize in:
+- Managing bookings and appointments
+- Processing booking requests
+- Coordinating schedules with service providers
+- Managing payments and transactions
+
+Be precise and organized in managing bookings."""
+        },
+        "vendor": {
+            "ar": """أنت وكيل تنسيق موردين متخصص لمنصة LUDUS. أنت متخصص في:
+- التنسيق مع مقدمي الخدمات
+- إدارة علاقات الموردين
+- تنسيق الجداول والمواعيد
+- حل مشاكل التنسيق
+
+كن محترفاً في التعامل مع الموردين.""",
+            "en": """You are a vendor coordination specialist for LUDUS platform. You specialize in:
+- Coordinating with service providers
+- Managing vendor relationships
+- Scheduling and appointment coordination
+- Resolving coordination issues
+
+Be professional in dealing with vendors."""
+        },
+        "search": {
+            "ar": """أنت وكيل بحث أنشطة متخصص لمنصة LUDUS. أنت متخصص في:
+- البحث عن الأنشطة المناسبة
+- تقديم توصيات شخصية
+- تحليل تفضيلات المستخدمين
+- اقتراح أنشطة جديدة
+
+كن مبدعاً ومفيداً في التوصيات.""",
+            "en": """You are an activity search specialist for LUDUS platform. You specialize in:
+- Finding suitable activities
+- Providing personalized recommendations
+- Analyzing user preferences
+- Suggesting new activities
+
+Be creative and helpful in recommendations."""
+        }
+    }
+    
+    return contexts.get(agent_type, contexts["customer_service"]).get(language, contexts["customer_service"]["en"])
+
+
+def build_ludus_prompt(message: str, language: str, history: list[dict], agent_type: str = "customer_service") -> str:
     """Build LUDUS-specific prompt with context and conversation history."""
     
-    # LUDUS system context
-    if language.startswith("ar"):
-        system_context = """أنت مساعد ذكي لمنصة LUDUS، منصة الأنشطة الاجتماعية في السعودية. 
-أنت متخصص في:
-- مساعدة المستخدمين في العثور على الأنشطة المناسبة
-- إدارة الحجوزات والدفعات
-- تنسيق مع مقدمي الخدمات
-- تقديم الدعم باللغة العربية
-
-اجب باختصار ومفيد، وكن ودوداً ومهذباً."""
-    else:
-        system_context = """You are an intelligent assistant for LUDUS, a social activities platform in Saudi Arabia.
-You specialize in:
-- Helping users find suitable activities
-- Managing bookings and payments
-- Coordinating with service providers
-- Providing support in English
-
-Answer briefly and helpfully, be friendly and polite."""
+    # Get agent-specific context
+    system_context = get_agent_context(agent_type, language)
     
     # Build conversation context
     context_lines = [system_context]
@@ -115,9 +172,10 @@ async def chat(req: ChatRequest):
     session_id = req.session_id or str(uuid.uuid4())
     history = load_history(session_id)
     language = req.language or "ar"
+    agent_type = req.agent_type or "customer_service"
 
     # Build LUDUS-specific prompt with context
-    full_prompt = build_ludus_prompt(req.message, language, history)
+    full_prompt = build_ludus_prompt(req.message, language, history, agent_type)
     
     reply_text = None
 
@@ -149,16 +207,92 @@ async def chat(req: ChatRequest):
         print(f"Ollama error: {e}")
         reply_text = None
 
-    # Fallback response
+    # Fallback response based on agent type
     if not reply_text or len(reply_text) < 3:
-        if language.startswith("ar"):
-            reply_text = f"مرحباً! أنا مساعد LUDUS. كيف يمكنني مساعدتك اليوم؟ (تلقيت رسالتك: {req.message})"
-        else:
-            reply_text = f"Hello! I'm your LUDUS assistant. How can I help you today? (Received: {req.message})"
+        fallback_responses = {
+            "customer_service": {
+                "ar": f"مرحباً! أنا وكيل خدمة العملاء في LUDUS. كيف يمكنني مساعدتك؟ (تلقيت رسالتك: {req.message})",
+                "en": f"Hello! I'm your LUDUS customer service agent. How can I help you? (Received: {req.message})"
+            },
+            "booking": {
+                "ar": f"مرحباً! أنا وكيل الحجوزات في LUDUS. كيف يمكنني مساعدتك في حجز نشاط؟ (تلقيت رسالتك: {req.message})",
+                "en": f"Hello! I'm your LUDUS booking agent. How can I help you book an activity? (Received: {req.message})"
+            },
+            "vendor": {
+                "ar": f"مرحباً! أنا وكيل تنسيق الموردين في LUDUS. كيف يمكنني مساعدتك في التنسيق؟ (تلقيت رسالتك: {req.message})",
+                "en": f"Hello! I'm your LUDUS vendor coordination agent. How can I help you coordinate? (Received: {req.message})"
+            },
+            "search": {
+                "ar": f"مرحباً! أنا وكيل البحث عن الأنشطة في LUDUS. كيف يمكنني مساعدتك في العثور على نشاط؟ (تلقيت رسالتك: {req.message})",
+                "en": f"Hello! I'm your LUDUS activity search agent. How can I help you find an activity? (Received: {req.message})"
+            }
+        }
+        
+        agent_fallbacks = fallback_responses.get(agent_type, fallback_responses["customer_service"])
+        reply_text = agent_fallbacks.get(language, agent_fallbacks["en"])
 
-    # Save conversation
-    history.append({"role": "user", "content": req.message, "language": language})
-    history.append({"role": "assistant", "content": reply_text, "language": language})
+    # Save conversation with agent type
+    history.append({
+        "role": "user", 
+        "content": req.message, 
+        "language": language,
+        "agent_type": agent_type
+    })
+    history.append({
+        "role": "assistant", 
+        "content": reply_text, 
+        "language": language,
+        "agent_type": agent_type
+    })
     save_history(session_id, history)
 
-    return {"reply": reply_text, "language": language, "session_id": session_id}
+    return {
+        "reply": reply_text, 
+        "language": language, 
+        "session_id": session_id,
+        "agent_type": agent_type
+    }
+
+
+@app.get("/agents")
+async def get_agents():
+    """Get available agents and their information."""
+    agents = {
+        "customer_service": {
+            "id": "customer_service",
+            "name": "Customer Service Agent",
+            "name_ar": "وكيل خدمة العملاء",
+            "description": "Helps with general inquiries and support",
+            "description_ar": "يساعد في الاستفسارات العامة والدعم",
+            "icon": "🎧",
+            "color": "#667eea"
+        },
+        "booking": {
+            "id": "booking",
+            "name": "Booking Agent",
+            "name_ar": "وكيل الحجوزات",
+            "description": "Manages bookings and reservations",
+            "description_ar": "يدير الحجوزات والمواعيد",
+            "icon": "📅",
+            "color": "#764ba2"
+        },
+        "vendor": {
+            "id": "vendor",
+            "name": "Vendor Coordination Agent",
+            "name_ar": "وكيل تنسيق الموردين",
+            "description": "Coordinates with service providers",
+            "description_ar": "يتنسق مع مقدمي الخدمات",
+            "icon": "🤝",
+            "color": "#f093fb"
+        },
+        "search": {
+            "id": "search",
+            "name": "Activity Search Agent",
+            "name_ar": "وكيل البحث عن الأنشطة",
+            "description": "Finds and recommends activities",
+            "description_ar": "يجد ويوصي بالأنشطة",
+            "icon": "🔍",
+            "color": "#4facfe"
+        }
+    }
+    return {"agents": agents}
