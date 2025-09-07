@@ -1226,6 +1226,12 @@
         "referral_connected": "Badge unlocked: Referral Connected",
         "onboarding_complete": "Badge unlocked: Onboarding Champion"
       }
+    },
+    "leaderboard": {
+      "title": "Onboarding Leaderboard",
+      "topN": "Top {{n}}",
+      "points": "{{points}} pts",
+      "streak": "🔥 {{n}}"
     }
   }
 }

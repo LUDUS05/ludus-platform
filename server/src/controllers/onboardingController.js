@@ -1,6 +1,7 @@
 const OnboardingConfig = require('../models/OnboardingConfig');
 const User = require('../models/User');
 const { validationResult } = require('express-validator');
+const mongoose = require('mongoose');
 
 // Get onboarding configuration (public)
 exports.getOnboardingConfig = async (req, res) => {
@@ -37,6 +38,30 @@ exports.getOnboardingConfig = async (req, res) => {
       message: 'Failed to get onboarding configuration',
       error: error.message 
     });
+  }
+};
+
+// Leaderboard: top users by onboarding points (last 30 days optional later)
+exports.getOnboardingLeaderboard = async (req, res) => {
+  try {
+    const limit = Math.min(parseInt(req.query.limit || '10', 10), 50);
+    const users = await User.find({ 'onboardingGamification.points': { $gt: 0 } })
+      .select('firstName lastName onboardingGamification.points onboardingGamification.currentStreak onboardingGamification.longestStreak')
+      .sort({ 'onboardingGamification.points': -1 })
+      .limit(limit)
+      .lean();
+
+    const leaderboard = users.map(u => ({
+      name: `${u.firstName} ${u.lastName}`.trim(),
+      points: u.onboardingGamification?.points || 0,
+      currentStreak: u.onboardingGamification?.currentStreak || 0,
+      longestStreak: u.onboardingGamification?.longestStreak || 0
+    }));
+
+    res.json({ success: true, leaderboard });
+  } catch (error) {
+    console.error('Get onboarding leaderboard error:', error);
+    res.status(500).json({ success: false, message: 'Failed to get leaderboard' });
   }
 };
 
@@ -215,9 +240,9 @@ exports.completeOnboardingStep = async (req, res) => {
       data: stepData
     };
 
-    // Gamification: award points/badges for step completion
+    // Gamification: award points/badges/streaks for step completion
     user.onboardingGamification = user.onboardingGamification || { points: 0, badges: [] };
-    const gamification = { awardedPoints: 0, newBadges: [] };
+    const gamification = { awardedPoints: 0, newBadges: [], currentStreak: 0, longestStreak: 0 };
 
     // Basic per-step points
     const stepPoints = {
@@ -246,6 +271,33 @@ exports.completeOnboardingStep = async (req, res) => {
     if (stepId === 'interests') unlockBadge('interests_selected');
     if (stepId === 'referral' && stepData?.referralCode) unlockBadge('referral_connected');
 
+    // Streak tracking (daily)
+    const now = new Date();
+    const lastActionAt = user.onboardingGamification.lastActionAt
+      ? new Date(user.onboardingGamification.lastActionAt)
+      : null;
+    const isSameDay = (a, b) => a.toDateString() === b.toDateString();
+    const isYesterday = (a, b) => {
+      const diff = new Date(a.getFullYear(), a.getMonth(), a.getDate()) - new Date(b.getFullYear(), b.getMonth(), b.getDate());
+      return diff === 24 * 60 * 60 * 1000;
+    };
+    if (!lastActionAt) {
+      user.onboardingGamification.currentStreak = 1;
+    } else if (isSameDay(now, lastActionAt)) {
+      // no change to streak within same day
+    } else if (isYesterday(now, lastActionAt)) {
+      user.onboardingGamification.currentStreak = (user.onboardingGamification.currentStreak || 0) + 1;
+    } else {
+      user.onboardingGamification.currentStreak = 1;
+    }
+    user.onboardingGamification.longestStreak = Math.max(
+      user.onboardingGamification.longestStreak || 0,
+      user.onboardingGamification.currentStreak || 0
+    );
+    user.onboardingGamification.lastActionAt = now;
+    gamification.currentStreak = user.onboardingGamification.currentStreak;
+    gamification.longestStreak = user.onboardingGamification.longestStreak;
+
     await user.save();
 
     res.json({
@@ -254,7 +306,9 @@ exports.completeOnboardingStep = async (req, res) => {
       gamification: {
         totalPoints: user.onboardingGamification.points,
         awardedPoints: gamification.awardedPoints,
-        newBadges: gamification.newBadges
+        newBadges: gamification.newBadges,
+        currentStreak: gamification.currentStreak,
+        longestStreak: gamification.longestStreak
       }
     });
   } catch (error) {
@@ -311,7 +365,9 @@ exports.completeOnboarding = async (req, res) => {
       gamification: {
         totalPoints: user.onboardingGamification.points,
         awardedPoints: completionBonus,
-        newBadges: ['onboarding_complete']
+        newBadges: ['onboarding_complete'],
+        currentStreak: user.onboardingGamification.currentStreak || 0,
+        longestStreak: user.onboardingGamification.longestStreak || 0
       }
     });
   } catch (error) {
@@ -344,7 +400,9 @@ exports.getOnboardingProgress = async (req, res) => {
         onboardingCompletedAt: user.onboardingCompletedAt,
         gamification: {
           totalPoints: user.onboardingGamification?.points || 0,
-          badges: user.onboardingGamification?.badges || []
+          badges: user.onboardingGamification?.badges || [],
+          currentStreak: user.onboardingGamification?.currentStreak || 0,
+          longestStreak: user.onboardingGamification?.longestStreak || 0
         }
       }
     });

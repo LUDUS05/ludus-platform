@@ -315,7 +315,18 @@ const userSchema = new mongoose.Schema({
     },
     badges: [{
       type: String
-    }]
+    }],
+    lastActionAt: Date,
+    currentStreak: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
+    longestStreak: {
+      type: Number,
+      default: 0,
+      min: 0
+    }
   }
 }, {
   timestamps: true

@@ -22,6 +22,7 @@ router.post('/complete', [
 ], onboardingController.completeOnboarding);
 
 router.get('/progress', onboardingController.getOnboardingProgress);
+router.get('/leaderboard', onboardingController.getOnboardingLeaderboard);
 
 // Admin routes (require admin role with proper RBAC)
 router.get('/admin/config', authenticate, authorize('admin'), onboardingController.getFullOnboardingConfig);

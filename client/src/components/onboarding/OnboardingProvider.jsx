@@ -26,6 +26,7 @@ export const OnboardingProvider = ({ children }) => {
   const [error, setError] = useState('');
   const [onboardingProgress, setOnboardingProgress] = useState(null);
   const [gamification, setGamification] = useState({ totalPoints: 0, badges: [] });
+  const [leaderboard, setLeaderboard] = useState([]);
 
   useEffect(() => {
     initializeOnboarding();
@@ -77,6 +78,13 @@ export const OnboardingProvider = ({ children }) => {
             setGamification(progressResponse.progress.gamification);
           }
         }
+
+        // Load leaderboard (non-blocking)
+        onboardingService.getLeaderboard(10).then(data => {
+          if (data?.success && Array.isArray(data.leaderboard)) {
+            setLeaderboard(data.leaderboard);
+          }
+        }).catch(() => {});
       }
     } catch (error) {
       console.error('Error initializing onboarding:', error);
@@ -280,6 +288,8 @@ export const OnboardingProvider = ({ children }) => {
     error,
     user,
     onboardingProgress,
+    gamification,
+    leaderboard,
     
     // Actions
     nextStep,

@@ -59,6 +59,19 @@ class OnboardingService {
   }
 
   /**
+   * Get onboarding leaderboard
+   */
+  async getLeaderboard(limit = 10) {
+    try {
+      const response = await api.get(`/onboarding/leaderboard`, { params: { limit } });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching onboarding leaderboard:', error);
+      throw error;
+    }
+  }
+
+  /**
    * Admin: Get full onboarding configuration
    */
   async getFullConfig() {
