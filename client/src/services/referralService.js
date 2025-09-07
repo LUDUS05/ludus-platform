@@ -75,14 +75,16 @@ class ReferralService {
 
   // Generate QR code for referral link
   generateQRCode(referralCode, size = 200) {
-    const baseUrl = process.env.REACT_APP_API_URL || 'https://ludus-backend-gf1g.onrender.com';
+    const envUrl = process.env.REACT_APP_API_URL || 'https://ludus-backend-athena.onrender.com';
+    const baseUrl = envUrl.endsWith('/api') ? envUrl : `${envUrl}/api`;
     return `${baseUrl}/qr/${referralCode}?size=${size}&format=png`;
   }
 
   // Generate QR code as data URL (for better CORS compatibility)
   async generateQRCodeDataURL(referralCode, size = 200) {
     try {
-      const baseUrl = process.env.REACT_APP_API_URL || 'https://ludus-backend-gf1g.onrender.com';
+      const envUrl = process.env.REACT_APP_API_URL || 'https://ludus-backend-athena.onrender.com';
+      const baseUrl = envUrl.endsWith('/api') ? envUrl : `${envUrl}/api`;
       const response = await fetch(`${baseUrl}/qr/${referralCode}?size=${size}&format=png`);
       
       if (!response.ok) {
@@ -165,7 +167,8 @@ class ReferralService {
 
   // Download QR code
   downloadQRCode(referralCode, filename = 'referral-qr-code.png') {
-    const baseUrl = process.env.REACT_APP_API_URL || 'https://ludus-backend-gf1g.onrender.com';
+    const envUrl = process.env.REACT_APP_API_URL || 'https://ludus-backend-athena.onrender.com';
+    const baseUrl = envUrl.endsWith('/api') ? envUrl : `${envUrl}/api`;
     const downloadUrl = `${baseUrl}/qr/${referralCode}/download?size=300&format=png`;
     
     // Create a temporary link to download the QR code
