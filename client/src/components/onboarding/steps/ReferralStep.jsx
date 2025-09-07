@@ -134,6 +134,7 @@ const ReferralStep = ({ config, stepData, onComplete, onBack, onSkip, t }) => {
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
               {t('onboarding.steps.referral.incentiveMessage')}
             </h3>
+            <p className="text-sm text-gray-600 mb-4">{t('onboarding.steps.referral.ctaShareFriends')}</p>
             <div className="grid grid-cols-2 gap-3">
               {config?.referralConfig?.sharingOptions?.map((option) => (
                 option.isEnabled && (

@@ -1075,9 +1075,11 @@
         }
       },
       "auth": {
-        "title": "دعنا نبدأ",
-        "subtitle": "اختر كيف تريد تسجيل الدخول",
-        "continueWithGoogle": "المتابعة مع جوجل",
+        "title": "لنبدأ حسابك",
+        "subtitle": "اختر طريقة التسجيل",
+        "continueWithGoogle": "المتابعة عبر جوجل",
+        "continueWithApple": "المتابعة عبر آبل",
+        "continueWithFacebook": "المتابعة عبر فيسبوك",
         "createAccount": "إنشاء حساب",
         "emailSubtitle": "أدخل بياناتك للبدء",
         "firstName": "الاسم الأول",
@@ -1086,7 +1088,8 @@
         "password": "كلمة المرور",
         "socialProof": "انضم إلى أكثر من 10,000 مستخدم يكتشفون الأنشطة",
         "alreadyHaveAccount": "هل لديك حساب بالفعل؟",
-        "signInHere": "سجل الدخول هنا"
+        "signInHere": "سجل الدخول هنا",
+        "privacyNote": "بياناتك آمنة معنا. يمكنك تأكيد البريد لاحقًا."
       },
       "profile": {
         "title": "أخبرنا عن نفسك",
@@ -1117,6 +1120,7 @@
         "title": "مرحباً بك في لودوس، {{name}}!",
         "subtitle": "ادع الأصدقاء واكسب المكافآت!",
         "qrCodeTitle": "رمز QR للإحالة الخاص بك",
+        "ctaShareFriends": "شارك LUDUS مع اصدقائك",
         "sharingOptions": {
           "whatsapp": "واتساب",
           "twitter": "تويتر",
