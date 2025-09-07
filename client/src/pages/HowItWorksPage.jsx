@@ -5,7 +5,7 @@ import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 
 const HowItWorksPage = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('navigation');
   const [visibleSections, setVisibleSections] = useState(new Set());
   const sectionRefs = useRef([]);
 

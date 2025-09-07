@@ -305,6 +305,17 @@ const userSchema = new mongoose.Schema({
       default: false
     },
     lastReferralAt: Date
+  },
+  // Onboarding gamification (points, badges)
+  onboardingGamification: {
+    points: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
+    badges: [{
+      type: String
+    }]
   }
 }, {
   timestamps: true

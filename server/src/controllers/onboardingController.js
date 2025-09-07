@@ -215,11 +215,47 @@ exports.completeOnboardingStep = async (req, res) => {
       data: stepData
     };
 
+    // Gamification: award points/badges for step completion
+    user.onboardingGamification = user.onboardingGamification || { points: 0, badges: [] };
+    const gamification = { awardedPoints: 0, newBadges: [] };
+
+    // Basic per-step points
+    const stepPoints = {
+      welcome: 10,
+      socialProof: 5,
+      auth: 20,
+      profile: 25,
+      referral: 15,
+      interests: 20,
+      preferences: 15
+    };
+    const pointsToAdd = stepPoints[stepId] || 5;
+    user.onboardingGamification.points += pointsToAdd;
+    gamification.awardedPoints = pointsToAdd;
+
+    // Badge unlocks
+    const unlockBadge = (badge) => {
+      if (!user.onboardingGamification.badges.includes(badge)) {
+        user.onboardingGamification.badges.push(badge);
+        gamification.newBadges.push(badge);
+      }
+    };
+
+    if (stepId === 'auth') unlockBadge('first_login');
+    if (stepId === 'profile') unlockBadge('profile_complete');
+    if (stepId === 'interests') unlockBadge('interests_selected');
+    if (stepId === 'referral' && stepData?.referralCode) unlockBadge('referral_connected');
+
     await user.save();
 
     res.json({
       success: true,
-      message: 'Onboarding step completed successfully'
+      message: 'Onboarding step completed successfully',
+      gamification: {
+        totalPoints: user.onboardingGamification.points,
+        awardedPoints: gamification.awardedPoints,
+        newBadges: gamification.newBadges
+      }
     });
   } catch (error) {
     console.error('Complete onboarding step error:', error);
@@ -259,11 +295,24 @@ exports.completeOnboarding = async (req, res) => {
       }
     }
 
+    // Award completion bonus
+    user.onboardingGamification = user.onboardingGamification || { points: 0, badges: [] };
+    const completionBonus = 50;
+    user.onboardingGamification.points += completionBonus;
+    if (!user.onboardingGamification.badges.includes('onboarding_complete')) {
+      user.onboardingGamification.badges.push('onboarding_complete');
+    }
+
     await user.save();
 
     res.json({
       success: true,
-      message: 'Onboarding completed successfully'
+      message: 'Onboarding completed successfully',
+      gamification: {
+        totalPoints: user.onboardingGamification.points,
+        awardedPoints: completionBonus,
+        newBadges: ['onboarding_complete']
+      }
     });
   } catch (error) {
     console.error('Complete onboarding error:', error);
@@ -292,7 +341,11 @@ exports.getOnboardingProgress = async (req, res) => {
       progress: {
         onboardingProgress: user.onboardingProgress || {},
         onboardingCompleted: user.onboardingCompleted || false,
-        onboardingCompletedAt: user.onboardingCompletedAt
+        onboardingCompletedAt: user.onboardingCompletedAt,
+        gamification: {
+          totalPoints: user.onboardingGamification?.points || 0,
+          badges: user.onboardingGamification?.badges || []
+        }
       }
     });
   } catch (error) {
