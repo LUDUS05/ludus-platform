@@ -47,6 +47,13 @@ The LUDUS Onboarding System is a comprehensive, premium user onboarding experien
    - Typeform-style sliding UI
    - Premium visual design
 
+7. **Gamification Enhancements**
+   - Step-based points awarding (per-step configurable defaults)
+   - Badge unlocks: `first_login`, `profile_complete`, `interests_selected`, `referral_connected`, `onboarding_complete`
+   - Completion bonus points on finishing onboarding
+   - Real-time toasts for points and badge unlocks (RTL-aware)
+   - Progress bar with step count (localized)
+
 ## Architecture
 
 ### Frontend Components
@@ -212,11 +219,13 @@ import onboardingService from '../services/onboardingService';
 // Get configuration
 const config = await onboardingService.getConfig();
 
-// Complete step
-await onboardingService.completeStep('welcome', { data: 'value' });
+// Complete step (returns gamification info)
+const stepResp = await onboardingService.completeStep('welcome', { data: 'value' });
+// stepResp.gamification = { totalPoints, awardedPoints, newBadges: [] }
 
-// Complete onboarding
-await onboardingService.completeOnboarding(finalData);
+// Complete onboarding (returns gamification info)
+const completeResp = await onboardingService.completeOnboarding(finalData);
+// completeResp.gamification = { totalPoints, awardedPoints, newBadges: ['onboarding_complete'] }
 ```
 
 ```javascript
@@ -246,6 +255,9 @@ const MyComponent = () => {
     config,
     currentStep,
     formData,
+    onboardingProgress,
+    // Gamification
+    gamification, // { totalPoints, badges }
     nextStep,
     previousStep,
     completeOnboarding,
@@ -281,6 +293,30 @@ The system uses Tailwind CSS with custom design tokens:
 - Spacing: 8px base unit
 - Border radius: 12px/16px/24px
 - Shadows: Subtle elevation system
+
+### Gamification Localization
+
+Translation keys added under `onboarding.gamification` in `client/src/i18n/locales/{en,ar}.json`:
+
+```json
+{
+  "onboarding": {
+    "gamification": {
+      "pointsAwarded": "+{{points}} points",
+      "onboardingCompleteBonus": "Onboarding complete! Bonus +{{points}}",
+      "badgeUnlocked": {
+        "first_login": "Badge unlocked: First Login",
+        "profile_complete": "Badge unlocked: Profile Complete",
+        "interests_selected": "Badge unlocked: Interests Selected",
+        "referral_connected": "Badge unlocked: Referral Connected",
+        "onboarding_complete": "Badge unlocked: Onboarding Champion"
+      }
+    }
+  }
+}
+```
+
+Arabic equivalents provided with RTL-aware toasts.
 
 ## Testing
 

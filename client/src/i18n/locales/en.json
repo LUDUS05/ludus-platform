@@ -209,7 +209,50 @@
     "myBookings": "My Bookings",
     "noBookingsYet": "No bookings yet",
     "startExploring": "Start exploring activities to make your first booking!",
-    "exploreActivities": "Explore Activities"
+    "exploreActivities": "Explore Activities",
+    "welcomeBack": "Welcome back, {{name}}!",
+    "manageBookings": "Manage your bookings, profile, and preferences",
+    "totalBookings": "Total Bookings",
+    "upcoming": "Upcoming",
+    "completed": "Completed",
+    "totalSpent": "Total Spent",
+    "quickActions": "Quick Actions",
+    "exploreActivitiesDesc": "Find new experiences",
+    "updateProfile": "Update Profile",
+    "updateProfileDesc": "Keep your info current",
+    "preferences": "Preferences",
+    "preferencesDesc": "Customize your experience",
+    "referralProgram": "Referral Program",
+    "viewFullDashboard": "View Full Dashboard",
+    "earnRewards": "Earn Rewards by Referring Friends",
+    "referralDesc": "Share your unique referral link with friends and earn rewards when they join Ludus!",
+    "startReferring": "Start Referring",
+    "profileInformation": "Profile Information",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "phone": "Phone",
+    "dateOfBirth": "Date of Birth",
+    "location": "Location",
+    "address": "Address",
+    "city": "City",
+    "stateProvince": "State/Province",
+    "updateProfileButton": "Update Profile",
+    "preferencesSettings": "Preferences & Settings",
+    "preferredCategories": "Preferred Activity Categories",
+    "priceRangePreference": "Price Range Preference",
+    "minimumPrice": "Minimum Price (SAR)",
+    "maximumPrice": "Maximum Price (SAR)",
+    "notificationPreferences": "Notification Preferences",
+    "emailNotifications": "Email Notifications",
+    "emailNotificationsDesc": "Receive booking confirmations and updates via email",
+    "smsNotifications": "SMS Notifications",
+    "smsNotificationsDesc": "Receive reminders and updates via SMS",
+    "marketingCommunications": "Marketing Communications",
+    "marketingCommunicationsDesc": "Receive newsletters and promotional offers",
+    "savePreferences": "Save Preferences",
+    "participants": "participants",
+    "participant": "participant"
   },
   "admin": {
     "title": "Admin",
@@ -1171,6 +1214,17 @@
       "completeStep": "Failed to complete step",
       "completeOnboarding": "Failed to complete onboarding",
       "networkError": "Network error. Please try again."
+    }
+    "gamification": {
+      "pointsAwarded": "+{{points}} points",
+      "onboardingCompleteBonus": "Onboarding complete! Bonus +{{points}}",
+      "badgeUnlocked": {
+        "first_login": "Badge unlocked: First Login",
+        "profile_complete": "Badge unlocked: Profile Complete",
+        "interests_selected": "Badge unlocked: Interests Selected",
+        "referral_connected": "Badge unlocked: Referral Connected",
+        "onboarding_complete": "Badge unlocked: Onboarding Champion"
+      }
     }
   }
 }

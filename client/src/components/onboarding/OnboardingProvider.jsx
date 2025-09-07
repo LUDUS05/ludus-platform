@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import onboardingService from '../../services/onboardingService';
+import notificationService from '../../services/notificationService';
 
 const OnboardingContext = createContext();
 
@@ -24,6 +25,7 @@ export const OnboardingProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [onboardingProgress, setOnboardingProgress] = useState(null);
+  const [gamification, setGamification] = useState({ totalPoints: 0, badges: [] });
 
   useEffect(() => {
     initializeOnboarding();
@@ -71,6 +73,9 @@ export const OnboardingProvider = ({ children }) => {
           setOnboardingProgress(progressResponse.progress);
           setCurrentStep(progressResponse.progress.currentStep || 0);
           setFormData(progressResponse.progress.formData || {});
+          if (progressResponse.progress.gamification) {
+            setGamification(progressResponse.progress.gamification);
+          }
         }
       }
     } catch (error) {
@@ -99,7 +104,23 @@ export const OnboardingProvider = ({ children }) => {
       if (user) {
         const stepId = config.steps[currentStep]?.stepId;
         if (stepId) {
-          await onboardingService.completeStep(stepId, stepData);
+          const resp = await onboardingService.completeStep(stepId, stepData);
+          // Handle gamification response
+          if (resp?.gamification) {
+            const { awardedPoints, newBadges, totalPoints } = resp.gamification;
+            setGamification(prev => ({
+              totalPoints: totalPoints ?? prev.totalPoints + (awardedPoints || 0),
+              badges: [...new Set([...(prev.badges || []), ...(newBadges || [])])]
+            }));
+            if (awardedPoints) {
+              notificationService.show('success', t('onboarding.gamification.pointsAwarded', { points: awardedPoints }), 3500);
+            }
+            if (newBadges && newBadges.length > 0) {
+              newBadges.forEach(badge => {
+                notificationService.show('info', t(`onboarding.gamification.badgeUnlocked.${badge}`, badge), 4000);
+              });
+            }
+          }
         }
       }
 
@@ -143,6 +164,14 @@ export const OnboardingProvider = ({ children }) => {
             completedAt: new Date().toISOString(),
             ...result.data
           });
+          if (result.gamification) {
+            setGamification(prev => ({
+              totalPoints: result.gamification.totalPoints ?? prev.totalPoints,
+              badges: [...new Set([...(prev.badges || []), ...(['onboarding_complete'])])]
+            }));
+            notificationService.show('success', t('onboarding.gamification.onboardingCompleteBonus', { points: result.gamification.awardedPoints || 0 }), 4000);
+            notificationService.show('info', t('onboarding.gamification.badgeUnlocked.onboarding_complete'), 4000);
+          }
           return { success: true };
         } else {
           throw new Error(result.error || 'Failed to complete onboarding');

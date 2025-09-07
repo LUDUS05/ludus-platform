@@ -333,7 +333,50 @@
     "myBookings": "حجوزاتي",
     "noBookingsYet": "لا توجد حجوزات بعد",
     "startExploring": "ابدأ استكشاف الأنشطة لعمل أول حجز لك!",
-    "exploreActivities": "استكشف الأنشطة"
+    "exploreActivities": "استكشف الأنشطة",
+    "welcomeBack": "مرحباً بعودتك، {{name}}!",
+    "manageBookings": "إدارة حجوزاتك وملفك الشخصي وتفضيلاتك",
+    "totalBookings": "إجمالي الحجوزات",
+    "upcoming": "القادمة",
+    "completed": "مكتملة",
+    "totalSpent": "إجمالي المبلغ المنفق",
+    "quickActions": "إجراءات سريعة",
+    "exploreActivitiesDesc": "اكتشف تجارب جديدة",
+    "updateProfile": "تحديث الملف الشخصي",
+    "updateProfileDesc": "حافظ على معلوماتك محدثة",
+    "preferences": "التفضيلات",
+    "preferencesDesc": "خصص تجربتك",
+    "referralProgram": "برنامج الإحالة",
+    "viewFullDashboard": "عرض لوحة التحكم الكاملة",
+    "earnRewards": "اكسب المكافآت من خلال إحالة الأصدقاء",
+    "referralDesc": "شارك رابط الإحالة الفريد الخاص بك مع الأصدقاء واكسب المكافآت عند انضمامهم إلى لودوس!",
+    "startReferring": "ابدأ الإحالة",
+    "profileInformation": "معلومات الملف الشخصي",
+    "firstName": "الاسم الأول",
+    "lastName": "اسم العائلة",
+    "email": "البريد الإلكتروني",
+    "phone": "الهاتف",
+    "dateOfBirth": "تاريخ الميلاد",
+    "location": "الموقع",
+    "address": "العنوان",
+    "city": "المدينة",
+    "stateProvince": "المنطقة/المحافظة",
+    "updateProfileButton": "تحديث الملف الشخصي",
+    "preferencesSettings": "التفضيلات والإعدادات",
+    "preferredCategories": "فئات الأنشطة المفضلة",
+    "priceRangePreference": "تفضيل نطاق السعر",
+    "minimumPrice": "الحد الأدنى للسعر (ريال)",
+    "maximumPrice": "الحد الأقصى للسعر (ريال)",
+    "notificationPreferences": "تفضيلات الإشعارات",
+    "emailNotifications": "إشعارات البريد الإلكتروني",
+    "emailNotificationsDesc": "تلقي تأكيدات الحجز والتحديثات عبر البريد الإلكتروني",
+    "smsNotifications": "إشعارات الرسائل النصية",
+    "smsNotificationsDesc": "تلقي التذكيرات والتحديثات عبر الرسائل النصية",
+    "marketingCommunications": "التواصل التسويقي",
+    "marketingCommunicationsDesc": "تلقي النشرات الإخبارية والعروض الترويجية",
+    "savePreferences": "حفظ التفضيلات",
+    "participants": "مشاركين",
+    "participant": "مشارك"
   },
   "admin": {
     "title": "الإدارة",
@@ -1200,6 +1243,17 @@
       "completeStep": "فشل في إكمال الخطوة",
       "completeOnboarding": "فشل في إكمال التسجيل",
       "networkError": "خطأ في الشبكة. يرجى المحاولة مرة أخرى."
+    }
+    "gamification": {
+      "pointsAwarded": "+{{points}} نقاط",
+      "onboardingCompleteBonus": "اكتملت عملية الانضمام! مكافأة +{{points}}",
+      "badgeUnlocked": {
+        "first_login": "شارة جديدة: أول تسجيل دخول",
+        "profile_complete": "شارة جديدة: اكتمال الملف الشخصي",
+        "interests_selected": "شارة جديدة: اختيار الاهتمامات",
+        "referral_connected": "شارة جديدة: ربط الإحالة",
+        "onboarding_complete": "شارة جديدة: بطل الانضمام"
+      }
     }
   }
 }

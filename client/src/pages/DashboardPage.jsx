@@ -169,11 +169,11 @@ const DashboardPage = () => {
   };
 
   const tabs = [
-    { id: 'overview', label: 'Overview', icon: '📊' },
-    { id: 'bookings', label: 'My Bookings', icon: '📅' },
-    { id: 'referrals', label: 'Referrals', icon: '🎁' },
-    { id: 'profile', label: 'Profile', icon: '👤' },
-    { id: 'preferences', label: 'Preferences', icon: '⚙️' }
+    { id: 'overview', label: t('overview'), icon: '📊' },
+    { id: 'bookings', label: t('myBookings'), icon: '📅' },
+    { id: 'referrals', label: t('referralProgram'), icon: '🎁' },
+    { id: 'profile', label: t('profileInformation'), icon: '👤' },
+    { id: 'preferences', label: t('preferences'), icon: '⚙️' }
   ];
 
   if (loading) {
@@ -194,10 +194,10 @@ const DashboardPage = () => {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Welcome back, {user?.firstName}!
+            {t('welcomeBack', { name: user?.firstName })}
           </h1>
           <p className="text-gray-600">
-            Manage your bookings, profile, and preferences
+            {t('manageBookings')}
           </p>
         </div>
 
@@ -238,7 +238,7 @@ const DashboardPage = () => {
                       </div>
                     </div>
                     <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-500">Total Bookings</p>
+                      <p className="text-sm font-medium text-gray-500">{t('totalBookings')}</p>
                       <p className="text-2xl font-semibold text-gray-900">{stats.totalBookings}</p>
                     </div>
                   </div>
@@ -252,7 +252,7 @@ const DashboardPage = () => {
                       </div>
                     </div>
                     <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-500">Upcoming</p>
+                      <p className="text-sm font-medium text-gray-500">{t('upcoming')}</p>
                       <p className="text-2xl font-semibold text-gray-900">{stats.upcomingBookings}</p>
                     </div>
                   </div>
@@ -266,7 +266,7 @@ const DashboardPage = () => {
                       </div>
                     </div>
                     <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-500">Completed</p>
+                      <p className="text-sm font-medium text-gray-500">{t('completed')}</p>
                       <p className="text-2xl font-semibold text-gray-900">{stats.completedBookings}</p>
                     </div>
                   </div>
@@ -280,7 +280,7 @@ const DashboardPage = () => {
                       </div>
                     </div>
                     <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-500">Total Spent</p>
+                      <p className="text-sm font-medium text-gray-500">{t('totalSpent')}</p>
                       <p className="text-2xl font-semibold text-gray-900">{formatCurrency(stats.totalSpent)}</p>
                     </div>
                   </div>
@@ -291,7 +291,7 @@ const DashboardPage = () => {
               <div className="bg-white rounded-lg shadow border border-gray-200">
                 <div className="px-6 py-4 border-b border-gray-200">
                   <div className="flex items-center justify-between">
-                    <h2 className="text-lg font-semibold text-gray-900">Recent Bookings</h2>
+                    <h2 className="text-lg font-semibold text-gray-900">{t('recentBookings')}</h2>
                     <Link
                       to="#"
                       onClick={() => setActiveTab('bookings')}
@@ -324,7 +324,7 @@ const DashboardPage = () => {
 
               {/* Quick Actions */}
               <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">{t('quickActions')}</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <Link
                     to="/activities"
@@ -332,8 +332,8 @@ const DashboardPage = () => {
                   >
                     <div className="text-center">
                       <div className="text-2xl mb-2">🔍</div>
-                      <h3 className="font-medium text-gray-900">Explore Activities</h3>
-                      <p className="text-sm text-gray-500">Find new experiences</p>
+                      <h3 className="font-medium text-gray-900">{t('exploreActivities')}</h3>
+                      <p className="text-sm text-gray-500">{t('exploreActivitiesDesc')}</p>
                     </div>
                   </Link>
                   <button
@@ -342,8 +342,8 @@ const DashboardPage = () => {
                   >
                     <div className="text-center">
                       <div className="text-2xl mb-2">👤</div>
-                      <h3 className="font-medium text-gray-900">Update Profile</h3>
-                      <p className="text-sm text-gray-500">Keep your info current</p>
+                      <h3 className="font-medium text-gray-900">{t('updateProfile')}</h3>
+                      <p className="text-sm text-gray-500">{t('updateProfileDesc')}</p>
                     </div>
                   </button>
                   <button
@@ -352,8 +352,8 @@ const DashboardPage = () => {
                   >
                     <div className="text-center">
                       <div className="text-2xl mb-2">⚙️</div>
-                      <h3 className="font-medium text-gray-900">Preferences</h3>
-                      <p className="text-sm text-gray-500">Customize your experience</p>
+                      <h3 className="font-medium text-gray-900">{t('preferences')}</h3>
+                      <p className="text-sm text-gray-500">{t('preferencesDesc')}</p>
                     </div>
                   </button>
                 </div>
@@ -396,7 +396,7 @@ const DashboardPage = () => {
                                 {new Date(booking.bookingDate).toLocaleDateString()} at {booking.timeSlot.startTime}
                               </p>
                               <p className="text-sm text-gray-500">
-                                {booking.participants.count} participant{booking.participants.count > 1 ? 's' : ''}
+                                {booking.participants.count} {booking.participants.count > 1 ? t('participants') : t('participant')}
                               </p>
                             </div>
                           </div>
@@ -421,27 +421,27 @@ const DashboardPage = () => {
             <div className="space-y-6">
               <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-lg font-semibold text-gray-900">Referral Program</h2>
+                  <h2 className="text-lg font-semibold text-gray-900">{t('referralProgram')}</h2>
                   <Link
                     to="/referrals"
                     className="text-sm text-ludus-orange hover:text-ludus-orange-dark font-medium"
                   >
-                    View Full Dashboard →
+                    {t('viewFullDashboard')} →
                   </Link>
                 </div>
                 
                 <div className="text-center py-8">
                   <div className="text-4xl mb-4">🎁</div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">Earn Rewards by Referring Friends</h3>
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">{t('earnRewards')}</h3>
                   <p className="text-gray-600 mb-6">
-                    Share your unique referral link with friends and earn rewards when they join Ludus!
+                    {t('referralDesc')}
                   </p>
                   <Link
                     to="/referrals"
                     className="bg-ludus-orange text-white px-6 py-3 rounded-lg hover:bg-ludus-orange-dark transition-colors inline-flex items-center gap-2"
                   >
                     <span>🎁</span>
-                    Start Referring
+                    {t('startReferring')}
                   </Link>
                 </div>
               </div>
@@ -452,13 +452,13 @@ const DashboardPage = () => {
           {activeTab === 'profile' && (
             <div className="bg-white rounded-lg shadow border border-gray-200">
               <div className="px-6 py-4 border-b border-gray-200">
-                <h2 className="text-lg font-semibold text-gray-900">Profile Information</h2>
+                <h2 className="text-lg font-semibold text-gray-900">{t('profileInformation')}</h2>
               </div>
               <form onSubmit={handleProfileUpdate} className="p-6 space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      First Name
+                      {t('firstName')}
                     </label>
                     <input
                       type="text"
@@ -472,7 +472,7 @@ const DashboardPage = () => {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Last Name
+                      {t('lastName')}
                     </label>
                     <input
                       type="text"
@@ -489,7 +489,7 @@ const DashboardPage = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Email
+                      {t('email')}
                     </label>
                     <input
                       type="email"
@@ -503,7 +503,7 @@ const DashboardPage = () => {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Phone
+                      {t('phone')}
                     </label>
                     <input
                       type="tel"
@@ -519,7 +519,7 @@ const DashboardPage = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Date of Birth
+                    {t('dateOfBirth')}
                   </label>
                   <input
                     type="date"
@@ -533,11 +533,11 @@ const DashboardPage = () => {
                 </div>
 
                 <div className="space-y-4">
-                  <h3 className="text-lg font-medium text-gray-900">Location</h3>
+                  <h3 className="text-lg font-medium text-gray-900">{t('location')}</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="md:col-span-2">
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Address
+                        {t('address')}
                       </label>
                       <input
                         type="text"
@@ -551,7 +551,7 @@ const DashboardPage = () => {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        City
+                        {t('city')}
                       </label>
                       <input
                         type="text"
@@ -565,7 +565,7 @@ const DashboardPage = () => {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        State/Province
+                        {t('stateProvince')}
                       </label>
                       <input
                         type="text"
@@ -585,7 +585,7 @@ const DashboardPage = () => {
                     type="submit"
                     className="bg-ludus-orange text-white px-6 py-2 rounded-md hover:bg-ludus-orange-dark transition-colors"
                   >
-                    Update Profile
+                    {t('updateProfileButton')}
                   </button>
                 </div>
               </form>
@@ -596,12 +596,12 @@ const DashboardPage = () => {
           {activeTab === 'preferences' && (
             <div className="bg-white rounded-lg shadow border border-gray-200">
               <div className="px-6 py-4 border-b border-gray-200">
-                <h2 className="text-lg font-semibold text-gray-900">Preferences & Settings</h2>
+                <h2 className="text-lg font-semibold text-gray-900">{t('preferencesSettings')}</h2>
               </div>
               <div className="p-6 space-y-6">
                 {/* Preferred Categories */}
                 <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">Preferred Activity Categories</h3>
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">{t('preferredCategories')}</h3>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                     {['fitness', 'arts', 'food', 'outdoor', 'unique', 'wellness'].map((category) => (
                       <label key={category} className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
@@ -632,11 +632,11 @@ const DashboardPage = () => {
 
                 {/* Price Range */}
                 <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">Price Range Preference</h3>
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">{t('priceRangePreference')}</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Minimum Price (SAR)
+                        {t('minimumPrice')}
                       </label>
                       <input
                         type="number"
@@ -657,7 +657,7 @@ const DashboardPage = () => {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Maximum Price (SAR)
+                        {t('maximumPrice')}
                       </label>
                       <input
                         type="number"
@@ -681,12 +681,12 @@ const DashboardPage = () => {
 
                 {/* Notification Preferences */}
                 <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">Notification Preferences</h3>
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">{t('notificationPreferences')}</h3>
                   <div className="space-y-4">
                     <label className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
                       <div>
-                        <div className="font-medium text-gray-900">Email Notifications</div>
-                        <div className="text-sm text-gray-500">Receive booking confirmations and updates via email</div>
+                        <div className="font-medium text-gray-900">{t('emailNotifications')}</div>
+                        <div className="text-sm text-gray-500">{t('emailNotificationsDesc')}</div>
                       </div>
                       <input
                         type="checkbox"
@@ -706,8 +706,8 @@ const DashboardPage = () => {
                     </label>
                     <label className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
                       <div>
-                        <div className="font-medium text-gray-900">SMS Notifications</div>
-                        <div className="text-sm text-gray-500">Receive reminders and updates via SMS</div>
+                        <div className="font-medium text-gray-900">{t('smsNotifications')}</div>
+                        <div className="text-sm text-gray-500">{t('smsNotificationsDesc')}</div>
                       </div>
                       <input
                         type="checkbox"
@@ -727,8 +727,8 @@ const DashboardPage = () => {
                     </label>
                     <label className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
                       <div>
-                        <div className="font-medium text-gray-900">Marketing Communications</div>
-                        <div className="text-sm text-gray-500">Receive newsletters and promotional offers</div>
+                        <div className="font-medium text-gray-900">{t('marketingCommunications')}</div>
+                        <div className="text-sm text-gray-500">{t('marketingCommunicationsDesc')}</div>
                       </div>
                       <input
                         type="checkbox"
@@ -754,7 +754,7 @@ const DashboardPage = () => {
                     onClick={handleProfileUpdate}
                     className="bg-ludus-orange text-white px-6 py-2 rounded-md hover:bg-ludus-orange-dark transition-colors"
                   >
-                    Save Preferences
+                    {t('savePreferences')}
                   </button>
                 </div>
               </div>

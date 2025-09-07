@@ -1,13 +1,19 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import os
 import json
 import uuid
 import requests
 import redis
-from agents.api.booking_agent import BookingAgent, BookingRequest
-from agents.api.vendor_agent import VendorAgent, VendorRequest
-from agents.api.search_agent import SearchAgent, SearchRequest
+from datetime import datetime
+from .booking_agent import BookingAgent, BookingRequest
+from .vendor_agent import VendorAgent, VendorRequest
+from .search_agent import SearchAgent, SearchRequest
+from .ui_ux_agent import UIUXAgent, DesignRequest, DesignType, DesignComplexity
+from .fullstack_agent import FullstackAgent, DevelopmentRequest, DevelopmentType, TechStack
+from .debugging_agent import DebuggingAgent, DebuggingRequest, IssueType, Severity
+from .workflow_engine import WorkflowEngine, WorkflowTemplate, WorkflowStatus
+from .monitoring import MonitoringSystem
 
 app = FastAPI(title="LUDUS Agents API")
 
@@ -26,6 +32,13 @@ if REDIS_URL:
 booking_agent = BookingAgent(redis_client)
 vendor_agent = VendorAgent(redis_client)
 search_agent = SearchAgent(redis_client)
+
+# Initialize automated workflow agents
+ui_ux_agent = UIUXAgent(redis_client)
+fullstack_agent = FullstackAgent(redis_client)
+debugging_agent = DebuggingAgent(redis_client)
+workflow_engine = WorkflowEngine(redis_client)
+monitoring_system = MonitoringSystem(redis_client)
 
 
 class ChatRequest(BaseModel):
@@ -392,3 +405,335 @@ async def search_activities(search_data: SearchRequest, user_id: str = "anonymou
 async def get_activity_categories(language: str = "ar"):
     """Get available activity categories"""
     return {"categories": search_agent.get_activity_categories(language)}
+
+
+# ============================================================================
+# AUTOMATED WORKFLOW AGENTS ENDPOINTS
+# ============================================================================
+
+# UI/UX Agent Endpoints
+@app.post("/ui-ux/design")
+async def create_design_request(design_data: dict):
+    """Create a new UI/UX design request"""
+    try:
+        request = DesignRequest(
+            request_id=str(uuid.uuid4()),
+            design_type=DesignType(design_data.get("design_type", "component")),
+            complexity=DesignComplexity(design_data.get("complexity", "simple")),
+            requirements=design_data.get("requirements", ""),
+            language=design_data.get("language", "ar"),
+            target_platform=design_data.get("target_platform", "web"),
+            user_context=design_data.get("user_context"),
+            existing_components=design_data.get("existing_components"),
+            design_constraints=design_data.get("design_constraints")
+        )
+        
+        response = ui_ux_agent.create_design_request(request)
+        return response.dict()
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.get("/ui-ux/design/{request_id}")
+async def get_design_request(request_id: str):
+    """Get design request details"""
+    request = ui_ux_agent.get_design_request(request_id)
+    if not request:
+        raise HTTPException(status_code=404, detail="Design request not found")
+    return request
+
+
+@app.get("/ui-ux/requests")
+async def get_all_design_requests():
+    """Get all design requests"""
+    requests = ui_ux_agent.get_all_design_requests()
+    return {"requests": requests}
+
+
+# Fullstack Agent Endpoints
+@app.post("/fullstack/develop")
+async def create_development_request(development_data: dict):
+    """Create a new fullstack development request"""
+    try:
+        tech_stack = [TechStack(tech) for tech in development_data.get("tech_stack", ["react", "nodejs"])]
+        
+        request = DevelopmentRequest(
+            request_id=str(uuid.uuid4()),
+            development_type=DevelopmentType(development_data.get("development_type", "api")),
+            tech_stack=tech_stack,
+            requirements=development_data.get("requirements", ""),
+            language=development_data.get("language", "ar"),
+            existing_code=development_data.get("existing_code"),
+            database_schema=development_data.get("database_schema"),
+            api_endpoints=development_data.get("api_endpoints"),
+            frontend_components=development_data.get("frontend_components")
+        )
+        
+        response = fullstack_agent.create_development_request(request)
+        return response.dict()
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.get("/fullstack/development/{request_id}")
+async def get_development_request(request_id: str):
+    """Get development request details"""
+    request = fullstack_agent.get_development_request(request_id)
+    if not request:
+        raise HTTPException(status_code=404, detail="Development request not found")
+    return request
+
+
+# Debugging Agent Endpoints
+@app.post("/debugging/analyze")
+async def create_debugging_request(debugging_data: dict):
+    """Create a new debugging request"""
+    try:
+        request = DebuggingRequest(
+            request_id=str(uuid.uuid4()),
+            issue_type=IssueType(debugging_data.get("issue_type", "error")),
+            severity=Severity(debugging_data.get("severity", "medium")),
+            error_message=debugging_data.get("error_message"),
+            stack_trace=debugging_data.get("stack_trace"),
+            code_snippet=debugging_data.get("code_snippet"),
+            logs=debugging_data.get("logs"),
+            environment=debugging_data.get("environment"),
+            reproduction_steps=debugging_data.get("reproduction_steps"),
+            expected_behavior=debugging_data.get("expected_behavior"),
+            actual_behavior=debugging_data.get("actual_behavior")
+        )
+        
+        response = debugging_agent.create_debugging_request(request)
+        return response.dict()
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.get("/debugging/analysis/{request_id}")
+async def get_debugging_request(request_id: str):
+    """Get debugging request details"""
+    request = debugging_agent.get_debugging_request(request_id)
+    if not request:
+        raise HTTPException(status_code=404, detail="Debugging request not found")
+    return request
+
+
+# Workflow Engine Endpoints
+@app.post("/workflows/create")
+async def create_workflow(workflow_data: dict):
+    """Create a new workflow from template"""
+    try:
+        workflow = workflow_engine.create_workflow(
+            name=workflow_data.get("name", "New Workflow"),
+            template=WorkflowTemplate(workflow_data.get("template", "feature_development")),
+            input_data=workflow_data.get("input_data", {})
+        )
+        return workflow.dict()
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.post("/workflows/{workflow_id}/start")
+async def start_workflow(workflow_id: str):
+    """Start workflow execution"""
+    success = workflow_engine.start_workflow(workflow_id)
+    if not success:
+        raise HTTPException(status_code=400, detail="Failed to start workflow")
+    return {"message": "Workflow started successfully"}
+
+
+@app.get("/workflows/{workflow_id}")
+async def get_workflow(workflow_id: str):
+    """Get workflow details"""
+    workflow = workflow_engine.get_workflow(workflow_id)
+    if not workflow:
+        raise HTTPException(status_code=404, detail="Workflow not found")
+    return workflow.dict()
+
+
+@app.get("/workflows/{workflow_id}/status")
+async def get_workflow_status(workflow_id: str):
+    """Get workflow status and progress"""
+    status = workflow_engine.get_workflow_status(workflow_id)
+    if not status:
+        raise HTTPException(status_code=404, detail="Workflow not found")
+    return status
+
+
+@app.post("/workflows/{workflow_id}/pause")
+async def pause_workflow(workflow_id: str):
+    """Pause workflow execution"""
+    success = workflow_engine.pause_workflow(workflow_id)
+    if not success:
+        raise HTTPException(status_code=400, detail="Failed to pause workflow")
+    return {"message": "Workflow paused successfully"}
+
+
+@app.post("/workflows/{workflow_id}/resume")
+async def resume_workflow(workflow_id: str):
+    """Resume workflow execution"""
+    success = workflow_engine.resume_workflow(workflow_id)
+    if not success:
+        raise HTTPException(status_code=400, detail="Failed to resume workflow")
+    return {"message": "Workflow resumed successfully"}
+
+
+@app.post("/workflows/{workflow_id}/cancel")
+async def cancel_workflow(workflow_id: str):
+    """Cancel workflow execution"""
+    success = workflow_engine.cancel_workflow(workflow_id)
+    if not success:
+        raise HTTPException(status_code=400, detail="Failed to cancel workflow")
+    return {"message": "Workflow cancelled successfully"}
+
+
+@app.get("/workflows")
+async def get_all_workflows():
+    """Get all workflows"""
+    workflows = workflow_engine.get_all_workflows()
+    return {"workflows": [w.dict() for w in workflows]}
+
+
+@app.get("/workflows/templates")
+async def get_workflow_templates():
+    """Get available workflow templates"""
+    templates = workflow_engine.get_workflow_templates()
+    return {"templates": templates}
+
+
+# Enhanced Chat Endpoint with Automated Workflow Support
+@app.post("/chat/workflow")
+async def chat_with_workflow_support(request: ChatRequest):
+    """Enhanced chat endpoint with automated workflow capabilities"""
+    session_id = request.session_id or str(uuid.uuid4())
+    history = load_history(session_id)
+    
+    # Check if message contains workflow-related keywords
+    message_lower = request.message.lower()
+    
+    if any(keyword in message_lower for keyword in ["workflow", "automate", "pipeline", "process"]):
+        # Handle workflow-related requests
+        if "create workflow" in message_lower or "إنشاء سير عمل" in message_lower:
+            # Extract workflow parameters from message
+            template = "feature_development"  # Default
+            if "bug" in message_lower or "خطأ" in message_lower:
+                template = "bug_fix"
+            elif "performance" in message_lower or "أداء" in message_lower:
+                template = "performance_optimization"
+            elif "security" in message_lower or "أمان" in message_lower:
+                template = "security_audit"
+            
+            # Create workflow
+            workflow = workflow_engine.create_workflow(
+                name=f"Workflow from chat - {datetime.now().strftime('%Y-%m-%d %H:%M')}",
+                template=WorkflowTemplate(template),
+                input_data={"requirements": request.message, "language": request.language}
+            )
+            
+            # Start workflow
+            workflow_engine.start_workflow(workflow.id)
+            
+            response_message = f"تم إنشاء سير عمل جديد: {workflow.name}" if request.language == "ar" else f"Created new workflow: {workflow.name}"
+            
+            # Save to history
+            history.append({"role": "user", "content": request.message})
+            history.append({"role": "assistant", "content": response_message})
+            save_history(session_id, history)
+            
+            return {
+                "response": response_message,
+                "session_id": session_id,
+                "workflow_id": workflow.id,
+                "workflow_status": "started"
+            }
+    
+    # Handle specific agent requests
+    if "design" in message_lower or "تصميم" in message_lower:
+        response_message = ui_ux_agent.process_design_inquiry(request.message, request.language)
+    elif "develop" in message_lower or "تطوير" in message_lower:
+        response_message = fullstack_agent.process_development_inquiry(request.message, request.language)
+    elif "debug" in message_lower or "خطأ" in message_lower:
+        response_message = debugging_agent.process_debugging_inquiry(request.message, request.language)
+    else:
+        # Use existing chat logic
+        response_message = await process_chat_message(request.message, request.language, history)
+    
+    # Save to history
+    history.append({"role": "user", "content": request.message})
+    history.append({"role": "assistant", "content": response_message})
+    save_history(session_id, history)
+    
+    return {
+        "response": response_message,
+        "session_id": session_id
+    }
+
+
+# ============================================================================
+# MONITORING AND ANALYTICS ENDPOINTS
+# ============================================================================
+
+@app.get("/monitoring/health")
+async def get_health_status():
+    """Get overall system health status"""
+    return monitoring_system.get_health_status()
+
+
+@app.get("/monitoring/agents/performance")
+async def get_all_agents_performance():
+    """Get performance summary for all agents"""
+    performances = monitoring_system.get_all_agents_performance()
+    return {"agents": [p.dict() for p in performances]}
+
+
+@app.get("/monitoring/agents/{agent_type}/performance")
+async def get_agent_performance(agent_type: str):
+    """Get performance summary for a specific agent"""
+    performance = monitoring_system.get_agent_performance(agent_type)
+    if not performance:
+        raise HTTPException(status_code=404, detail="Agent not found")
+    return performance.dict()
+
+
+@app.get("/monitoring/agents/{agent_type}/metrics")
+async def get_agent_metrics(agent_type: str, metric_type: str = "performance", 
+                           name: str = "response_time", hours: int = 24):
+    """Get time series metrics for a specific agent"""
+    from agents.api.monitoring import MetricType
+    
+    try:
+        metric_type_enum = MetricType(metric_type)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid metric type")
+    
+    metrics = monitoring_system.get_metrics_timeseries(agent_type, metric_type_enum, name, hours)
+    return {"metrics": metrics}
+
+
+@app.get("/monitoring/workflows/analytics")
+async def get_workflow_analytics():
+    """Get workflow analytics summary"""
+    analytics = monitoring_system.get_workflow_analytics()
+    if not analytics:
+        raise HTTPException(status_code=404, detail="Workflow analytics not found")
+    return analytics.dict()
+
+
+@app.get("/monitoring/report")
+async def generate_monitoring_report(hours: int = 24):
+    """Generate comprehensive monitoring report"""
+    return monitoring_system.generate_report(hours)
+
+
+@app.post("/monitoring/cleanup")
+async def cleanup_old_metrics(days: int = 30):
+    """Clean up old metrics data"""
+    monitoring_system.cleanup_old_metrics(days)
+    return {"message": f"Cleaned up metrics older than {days} days"}
+
+
+@app.post("/monitoring/flush")
+async def flush_metrics():
+    """Manually flush metrics buffer"""
+    monitoring_system.flush_metrics()
+    return {"message": "Metrics buffer flushed successfully"}
