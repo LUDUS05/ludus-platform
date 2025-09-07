@@ -48,6 +48,7 @@
 | **LUDUS Design System** | 2025-07-28 | 🔶 High | Complete UI component library with RTL support |
 | **Email Notification System** | 2025-08-02 | 🔶 High | Google Workspace SMTP integration |
 | **Payment System Integration** | 2025-07-26 | 🔥 Critical | Moyasar with Saudi payment methods |
+| **Onboarding Gamification v1** | 2025-09-07 | 🔶 High | Points, badges, streaks, leaderboard (AR/EN) |
 
 ---
 

@@ -13,7 +13,15 @@ from .ui_ux_agent import UIUXAgent, DesignRequest, DesignType, DesignComplexity
 from .fullstack_agent import FullstackAgent, DevelopmentRequest, DevelopmentType, TechStack
 from .debugging_agent import DebuggingAgent, DebuggingRequest, IssueType, Severity
 from .workflow_engine import WorkflowEngine, WorkflowTemplate, WorkflowStatus
+from .agents_creation_agent import (
+    AgentsCreationAgent,
+    CreateAgentSpec,
+    CreateAgentResponse,
+    AgentBlueprintType,
+)
 from .monitoring import MonitoringSystem
+from .notion_project_manager_agent import router as notion_pm_router
+from .recommendation_agent import router as recommendation_router
 
 app = FastAPI(title="LUDUS Agents API")
 
@@ -39,6 +47,9 @@ fullstack_agent = FullstackAgent(redis_client)
 debugging_agent = DebuggingAgent(redis_client)
 workflow_engine = WorkflowEngine(redis_client)
 monitoring_system = MonitoringSystem(redis_client)
+agents_creator = AgentsCreationAgent(redis_client)
+app.include_router(notion_pm_router)
+app.include_router(recommendation_router)
 
 
 class ChatRequest(BaseModel):
@@ -737,3 +748,32 @@ async def flush_metrics():
     """Manually flush metrics buffer"""
     monitoring_system.flush_metrics()
     return {"message": "Metrics buffer flushed successfully"}
+
+
+# ============================================================================
+# AGENTS CREATION (META-AGENT) ENDPOINTS
+# ============================================================================
+
+@app.get("/agents/templates")
+def list_agent_templates():
+    return {
+        "blueprints": [t.value for t in AgentBlueprintType],
+        "example": {
+            "agent_name": "recommendation",
+            "agent_title": "Recommendation Agent",
+            "description": "Suggests activities/items to users",
+            "blueprint": "custom",
+            "io": {
+                "request_model_name": "RecommendationRequest",
+                "response_model_name": "RecommendationResponse",
+                "endpoints": ["/recommendation/process"],
+            },
+            "write_to_fs": True,
+            "register_routes": True,
+        },
+    }
+
+
+@app.post("/agents/create", response_model=CreateAgentResponse)
+def create_agent_endpoint(spec: CreateAgentSpec):
+    return agents_creator.create_agent(spec)
