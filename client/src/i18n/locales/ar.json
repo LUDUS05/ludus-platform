@@ -1243,7 +1243,8 @@
       "completeStep": "فشل في إكمال الخطوة",
       "completeOnboarding": "فشل في إكمال التسجيل",
       "networkError": "خطأ في الشبكة. يرجى المحاولة مرة أخرى."
-    }
+    },
+
     "gamification": {
       "pointsAwarded": "+{{points}} نقاط",
       "onboardingCompleteBonus": "اكتملت عملية الانضمام! مكافأة +{{points}}",
