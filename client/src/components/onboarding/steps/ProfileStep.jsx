@@ -265,6 +265,9 @@ const ProfileStep = ({ config, stepData, onComplete, onBack, onSkip, t }) => {
               {isValidating ? t('common.loading') : t('continue')}
             </Button>
           </div>
+          {onSkip && (
+            <p className="text-xs text-gray-500 mt-3 text-center">{t('onboarding.completeLaterHint')}</p>
+          )}
         </motion.div>
       </div>
     </div>

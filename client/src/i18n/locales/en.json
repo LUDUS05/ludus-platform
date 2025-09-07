@@ -1019,6 +1019,7 @@
     "maybeLater": "Maybe Later",
     "complete": "Complete Setup",
     "completeLater": "Complete Later",
+    "completeLaterHint": "You can finish this anytime from your profile.",
     "progress": "Step {{current}} of {{total}}",
     "steps": {
       "socialProof": {
