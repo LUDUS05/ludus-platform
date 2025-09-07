@@ -5,6 +5,9 @@ import json
 import uuid
 import requests
 import redis
+from booking_agent import BookingAgent, BookingRequest
+from vendor_agent import VendorAgent, VendorRequest
+from search_agent import SearchAgent, SearchRequest
 
 app = FastAPI(title="LUDUS Agents API")
 
@@ -18,6 +21,11 @@ if REDIS_URL:
         redis_client = redis.from_url(REDIS_URL, decode_responses=True)
     except Exception:
         redis_client = None
+
+# Initialize specialized agents
+booking_agent = BookingAgent(redis_client)
+vendor_agent = VendorAgent(redis_client)
+search_agent = SearchAgent(redis_client)
 
 
 class ChatRequest(BaseModel):
@@ -207,29 +215,31 @@ async def chat(req: ChatRequest):
         print(f"Ollama error: {e}")
         reply_text = None
 
-    # Fallback response based on agent type
+    # Use specialized agent processing if Ollama is not available
     if not reply_text or len(reply_text) < 3:
-        fallback_responses = {
-            "customer_service": {
-                "ar": f"مرحباً! أنا وكيل خدمة العملاء في LUDUS. كيف يمكنني مساعدتك؟ (تلقيت رسالتك: {req.message})",
-                "en": f"Hello! I'm your LUDUS customer service agent. How can I help you? (Received: {req.message})"
-            },
-            "booking": {
-                "ar": f"مرحباً! أنا وكيل الحجوزات في LUDUS. كيف يمكنني مساعدتك في حجز نشاط؟ (تلقيت رسالتك: {req.message})",
-                "en": f"Hello! I'm your LUDUS booking agent. How can I help you book an activity? (Received: {req.message})"
-            },
-            "vendor": {
-                "ar": f"مرحباً! أنا وكيل تنسيق الموردين في LUDUS. كيف يمكنني مساعدتك في التنسيق؟ (تلقيت رسالتك: {req.message})",
-                "en": f"Hello! I'm your LUDUS vendor coordination agent. How can I help you coordinate? (Received: {req.message})"
-            },
-            "search": {
-                "ar": f"مرحباً! أنا وكيل البحث عن الأنشطة في LUDUS. كيف يمكنني مساعدتك في العثور على نشاط؟ (تلقيت رسالتك: {req.message})",
-                "en": f"Hello! I'm your LUDUS activity search agent. How can I help you find an activity? (Received: {req.message})"
+        # Try specialized agent processing
+        try:
+            if agent_type == "booking":
+                reply_text = booking_agent.process_booking_inquiry(req.message, session_id, language)
+            elif agent_type == "vendor":
+                reply_text = vendor_agent.process_vendor_inquiry(req.message, session_id, language)
+            elif agent_type == "search":
+                reply_text = search_agent.process_search_inquiry(req.message, session_id, language)
+            else:
+                # Customer service fallback
+                fallback_responses = {
+                    "ar": f"مرحباً! أنا وكيل خدمة العملاء في LUDUS. كيف يمكنني مساعدتك؟ (تلقيت رسالتك: {req.message})",
+                    "en": f"Hello! I'm your LUDUS customer service agent. How can I help you? (Received: {req.message})"
+                }
+                reply_text = fallback_responses.get(language, fallback_responses["en"])
+        except Exception as e:
+            print(f"Specialized agent error: {e}")
+            # Final fallback
+            fallback_responses = {
+                "ar": f"مرحباً! أنا مساعد LUDUS. كيف يمكنني مساعدتك اليوم؟ (تلقيت رسالتك: {req.message})",
+                "en": f"Hello! I'm your LUDUS assistant. How can I help you today? (Received: {req.message})"
             }
-        }
-        
-        agent_fallbacks = fallback_responses.get(agent_type, fallback_responses["customer_service"])
-        reply_text = agent_fallbacks.get(language, agent_fallbacks["en"])
+            reply_text = fallback_responses.get(language, fallback_responses["en"])
 
     # Save conversation with agent type
     history.append({
@@ -296,3 +306,89 @@ async def get_agents():
         }
     }
     return {"agents": agents}
+
+
+@app.post("/booking/create")
+async def create_booking(booking_data: BookingRequest):
+    """Create a new booking"""
+    return booking_agent.create_booking(booking_data)
+
+
+@app.get("/booking/{booking_id}")
+async def get_booking(booking_id: str):
+    """Get booking details"""
+    booking = booking_agent.get_booking(booking_id)
+    if booking:
+        return {"success": True, "booking": booking}
+    else:
+        return {"success": False, "message": "Booking not found"}
+
+
+@app.post("/booking/{booking_id}/cancel")
+async def cancel_booking(booking_id: str, language: str = "ar"):
+    """Cancel a booking"""
+    return booking_agent.cancel_booking(booking_id, language)
+
+
+@app.post("/booking/{booking_id}/confirm")
+async def confirm_booking(booking_id: str, language: str = "ar"):
+    """Confirm a booking"""
+    return booking_agent.confirm_booking(booking_id, language)
+
+
+@app.get("/booking/user/{user_id}")
+async def get_user_bookings(user_id: str):
+    """Get user's bookings"""
+    booking_ids = booking_agent.get_user_bookings(user_id)
+    bookings = []
+    for booking_id in booking_ids:
+        booking = booking_agent.get_booking(booking_id)
+        if booking:
+            bookings.append(booking)
+    return {"bookings": bookings}
+
+
+@app.post("/vendor/request")
+async def create_vendor_request(request_data: VendorRequest):
+    """Create a vendor coordination request"""
+    return vendor_agent.create_vendor_request(request_data)
+
+
+@app.get("/vendor/request/{request_id}")
+async def get_vendor_request(request_id: str):
+    """Get vendor request details"""
+    request = vendor_agent.get_vendor_request(request_id)
+    if request:
+        return {"success": True, "request": request}
+    else:
+        return {"success": False, "message": "Request not found"}
+
+
+@app.post("/vendor/request/{request_id}/confirm")
+async def confirm_vendor_request(request_id: str, language: str = "ar"):
+    """Confirm vendor availability"""
+    return vendor_agent.confirm_vendor_availability(request_id, language)
+
+
+@app.get("/vendor/requests/{vendor_id}")
+async def get_vendor_requests(vendor_id: str):
+    """Get vendor's requests"""
+    request_ids = vendor_agent.get_vendor_requests(vendor_id)
+    requests = []
+    for request_id in request_ids:
+        request = vendor_agent.get_vendor_request(request_id)
+        if request:
+            requests.append(request)
+    return {"requests": requests}
+
+
+@app.post("/search/activities")
+async def search_activities(search_data: SearchRequest, user_id: str = "anonymous"):
+    """Search for activities"""
+    return search_agent.search_activities(search_data, user_id)
+
+
+@app.get("/search/categories")
+async def get_activity_categories(language: str = "ar"):
+    """Get available activity categories"""
+    return {"categories": search_agent.get_activity_categories(language)}
