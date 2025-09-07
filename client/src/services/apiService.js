@@ -4,7 +4,9 @@ import { notificationService } from './notificationService';
 
 class LUDUSAPIService {
   constructor() {
-    this.baseURL = process.env.REACT_APP_API_URL || 'https://ludus-backend-gf1g.onrender.com';
+    // Default to athena backend; append /api if not provided
+    const envUrl = process.env.REACT_APP_API_URL || 'https://ludus-backend-athena.onrender.com';
+    this.baseURL = envUrl.endsWith('/api') ? envUrl : `${envUrl}/api`;
     this.client = axios.create({
       baseURL: this.baseURL,
       timeout: 10000,
