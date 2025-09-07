@@ -18,6 +18,7 @@ import ForgotPasswordPage from '../pages/ForgotPasswordPage';
 import UIShowcasePage from '../pages/UIShowcasePage';
 import PartnerRegistrationPage from '../pages/PartnerRegistrationPage';
 import UserRegistrationPage from '../pages/UserRegistrationPage';
+import OnboardTestPage from '../pages/OnboardTestPage';
 import ComingSoonPage from '../pages/ComingSoonPage';
 import MaintenancePage from '../pages/MaintenancePage';
 import MapPage from '../pages/MapPage';
@@ -43,6 +44,7 @@ const AppRoutes = () => {
     <Routes>
       {/* Routes without layout (standalone pages) */}
       <Route path="/register" element={<UserRegistrationPage />} />
+      <Route path="/onboard-test" element={<OnboardTestPage />} />
       <Route path="/partner-registration" element={<PartnerRegistrationPage />} />
       <Route path="/coming-soon" element={<ComingSoonPage />} />
       <Route path="/maintenance" element={<MaintenancePage />} />
