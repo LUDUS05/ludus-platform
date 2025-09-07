@@ -1047,6 +1047,7 @@
     "skip": "تخطي",
     "maybeLater": "ربما لاحقاً",
     "complete": "إكمال الإعداد",
+    "completeLater": "إكمال لاحقًا",
     "progress": "الخطوة {{current}} من {{total}}",
     "steps": {
       "socialProof": {

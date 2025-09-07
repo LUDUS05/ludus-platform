@@ -3,7 +3,7 @@ import { Button } from '../../ui/Button';
 import { motion } from 'framer-motion';
 import onboardingService from '../../../services/onboardingService';
 
-const InterestsStep = ({ config, stepData, onComplete, onBack, t }) => {
+const InterestsStep = ({ config, stepData, onComplete, onBack, onSkip, t }) => {
   const [selectedInterests, setSelectedInterests] = useState(stepData || []);
   const [isValid, setIsValid] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -209,13 +209,23 @@ const InterestsStep = ({ config, stepData, onComplete, onBack, t }) => {
           )}
 
           {/* Navigation */}
-          <div className="flex justify-between">
-            <Button
-              onClick={onBack}
-              variant="outline"
-            >
-              {t('back')}
-            </Button>
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <Button
+                onClick={onBack}
+                variant="outline"
+              >
+                {t('back')}
+              </Button>
+              {onSkip && (
+                <Button
+                  onClick={() => onSkip()}
+                  variant="outline"
+                >
+                  {t('onboarding.completeLater')}
+                </Button>
+              )}
+            </div>
             
             <Button
               onClick={handleContinue}
