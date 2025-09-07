@@ -105,8 +105,8 @@ main() {
     fi
     
     # Stage 3: Pull base model
-    log "Stage 3: Pulling base model llama3.2..."
-    if ! pull_model_with_retry "llama3.2"; then
+    log "Stage 3: Pulling base model llama3.2:latest..."
+    if ! pull_model_with_retry "llama3.2:latest"; then
         log "ERROR: Failed to pull base model"
         kill $OLLAMA_PID 2>/dev/null || true
         exit 1
