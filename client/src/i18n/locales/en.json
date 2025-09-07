@@ -1049,6 +1049,8 @@
         "title": "Let's get you started",
         "subtitle": "Choose how you'd like to sign in",
         "continueWithGoogle": "Continue with Google",
+        "continueWithApple": "Continue with Apple",
+        "continueWithFacebook": "Continue with Facebook",
         "createAccount": "Create Account",
         "emailSubtitle": "Enter your details to get started",
         "firstName": "First Name",
@@ -1057,7 +1059,8 @@
         "password": "Password",
         "socialProof": "Join 10,000+ users discovering activities",
         "alreadyHaveAccount": "Already have an account?",
-        "signInHere": "Sign in here"
+        "signInHere": "Sign in here",
+        "privacyNote": "Your data is safe with us. You can verify email later."
       },
       "profile": {
         "title": "Tell us about yourself",
@@ -1088,6 +1091,7 @@
         "title": "Welcome to LUDUS, {{name}}!",
         "subtitle": "Invite friends and earn rewards!",
         "qrCodeTitle": "Your Referral QR Code",
+        "ctaShareFriends": "شارك LUDUS مع اصدقائك",
         "sharingOptions": {
           "whatsapp": "WhatsApp",
           "twitter": "Twitter",
