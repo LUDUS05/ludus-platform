@@ -1018,6 +1018,7 @@
     "skip": "Skip",
     "maybeLater": "Maybe Later",
     "complete": "Complete Setup",
+    "completeLater": "Complete Later",
     "progress": "Step {{current}} of {{total}}",
     "steps": {
       "socialProof": {

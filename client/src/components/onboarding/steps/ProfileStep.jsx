@@ -4,7 +4,7 @@ import { Input } from '../../ui/Input';
 import { motion, AnimatePresence } from 'framer-motion';
 import onboardingService from '../../../services/onboardingService';
 
-const ProfileStep = ({ config, stepData, onComplete, onBack, t }) => {
+const ProfileStep = ({ config, stepData, onComplete, onBack, onSkip, t }) => {
   const [currentFieldIndex, setCurrentFieldIndex] = useState(0);
   const [formData, setFormData] = useState(stepData || {});
   const [errors, setErrors] = useState({});
@@ -236,14 +236,25 @@ const ProfileStep = ({ config, stepData, onComplete, onBack, t }) => {
           </AnimatePresence>
 
           {/* Navigation */}
-          <div className="flex justify-between">
-            <Button
-              onClick={handleBack}
-              variant="outline"
-              disabled={isValidating}
-            >
-              {t('back')}
-            </Button>
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <Button
+                onClick={handleBack}
+                variant="outline"
+                disabled={isValidating}
+              >
+                {t('back')}
+              </Button>
+              {onSkip && (
+                <Button
+                  onClick={() => onSkip()}
+                  variant="outline"
+                  disabled={isValidating}
+                >
+                  {t('onboarding.completeLater')}
+                </Button>
+              )}
+            </div>
             
             <Button
               onClick={handleNext}
@@ -251,8 +262,7 @@ const ProfileStep = ({ config, stepData, onComplete, onBack, t }) => {
               disabled={isValidating || !formData[currentField.fieldId]?.trim()}
               className="min-w-[120px]"
             >
-              {isValidating ? t('common.loading') : 
-               currentFieldIndex === fields.length - 1 ? t('continue') : t('continue')}
+              {isValidating ? t('common.loading') : t('continue')}
             </Button>
           </div>
         </motion.div>
