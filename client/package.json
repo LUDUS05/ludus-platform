@@ -39,6 +39,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "cross-env SKIP_PREFLIGHT_CHECK=true CI=false react-scripts build",
+    "build:render": "cross-env SKIP_PREFLIGHT_CHECK=true CI=false react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "storybook dev -p 6006",
