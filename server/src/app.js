@@ -272,6 +272,31 @@ app.get('/health', (req, res) => {
   });
 });
 
+// Health check route (API-prefixed) for Render
+app.get('/api/health', (req, res) => {
+  res.status(200).json({
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    environment: process.env.NODE_ENV || 'development',
+    version: process.env.npm_package_version || '1.0.1',
+    services: {
+      database: 'connected',
+      referral: 'active',
+      analytics: 'active',
+      notifications: 'active',
+      invitations: 'active',
+      reports: 'active'
+    },
+    referral: {
+      system: 'operational',
+      rewards: 'active',
+      tracking: 'enabled',
+      analytics: 'available'
+    }
+  });
+});
+
 // Manual endpoint to create partner terms page
 app.post('/api/create-partner-terms', async (req, res) => {
   try {
