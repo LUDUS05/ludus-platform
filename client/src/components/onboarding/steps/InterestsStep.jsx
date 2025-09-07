@@ -236,6 +236,9 @@ const InterestsStep = ({ config, stepData, onComplete, onBack, onSkip, t }) => {
               {t('continue')}
             </Button>
           </div>
+          {onSkip && (
+            <p className="text-xs text-gray-500 mt-3 text-center">{t('onboarding.completeLaterHint')}</p>
+          )}
         </motion.div>
       </div>
     </motion.div>

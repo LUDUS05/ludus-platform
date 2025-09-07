@@ -1048,6 +1048,7 @@
     "maybeLater": "ربما لاحقاً",
     "complete": "إكمال الإعداد",
     "completeLater": "إكمال لاحقًا",
+    "completeLaterHint": "يمكنك إكمال هذه الخطوات لاحقًا من ملفك الشخصي.",
     "progress": "الخطوة {{current}} من {{total}}",
     "steps": {
       "socialProof": {
