@@ -70,53 +70,51 @@ client/src/components/onboarding/
 ### Backend Models
 
 ```javascript
-// OnboardingConfig Model (MongoDB)
+// OnboardingConfig Model (MongoDB - key fields)
 {
   isEnabled: Boolean,
-  version: String,
+  version: Number,
   steps: [{
-    stepId: String,
+    stepId: 'welcome'|'auth'|'profile'|'referral'|'interests'|'preferences',
     isEnabled: Boolean,
     isRequired: Boolean,
     order: Number,
-    config: Object
+    config: Mixed
   }],
-  welcomeConfig: Object,
-  interestsConfig: Object,
-  analytics: Object,
+  welcomeConfig: { title: {en, ar}, subtitle: {en, ar}, valuePropositions: [], backgroundAnimation },
+  authConfig: { allowGoogleAuth, allowEmailAuth, requireEmailVerification, socialProof: {en, ar} },
+  profileConfig: { fields: [{ fieldId, isEnabled, isRequired, order, label: {en, ar}, placeholder: {en, ar}, validation }] },
+  referralConfig: { isEnabled, isRequired, title: {en, ar}, description: {en, ar}, sharingOptions: [{ platform, isEnabled }] },
+  interestsConfig: { categories: [{ categoryId, name: {en, ar}, icon, color, isEnabled, order }], minSelections, maxSelections, title: {en, ar} },
+  preferencesConfig: { preferences: [{ preferenceId, isEnabled, isRequired, order, label: {en, ar}, description: {en, ar}, defaultValue, options: [{ value, label: {en, ar}}]}], title: {en, ar} },
+  analytics: { trackStepCompletion, trackDropOffPoints, trackTimeToCompletion },
+  lastUpdatedBy: ObjectId,
   createdAt: Date,
   updatedAt: Date
 }
 
-// SiteSettings Model (updated)
+// User onboarding progress (selected fields)
 {
-  featureControls: {
-    onboardingEnabled: Boolean
-  }
-}
-
-// User Model (updated with onboarding fields)
-{
-  // ... existing user fields
-  onboarding: {
-    completed: Boolean,
-    currentStep: Number,
-    completedSteps: [String],
-    formData: Object,
-    startedAt: Date,
-    completedAt: Date
-  }
+  onboardingProgress: Record<stepId, { completed: boolean, completedAt: Date, data: any }>,
+  onboardingCompleted: Boolean,
+  onboardingCompletedAt: Date
 }
 ```
 
 ### API Endpoints
 
 ```
-GET    /api/onboarding/config           # Get onboarding configuration
-PUT    /api/admin/onboarding/config     # Update configuration (admin)
-GET    /api/onboarding/progress         # Get user progress
-POST   /api/onboarding/complete-step    # Mark step complete
-POST   /api/onboarding/complete         # Complete onboarding
+# Public/user
+GET    /api/onboarding/config
+GET    /api/onboarding/progress
+POST   /api/onboarding/complete-step
+POST   /api/onboarding/complete
+
+# Admin (auth + role=admin)
+GET    /api/onboarding/admin/config
+PUT    /api/onboarding/admin/config
+POST   /api/onboarding/admin/toggle
+POST   /api/onboarding/admin/reset-user/:userId
 ```
 
 ## Installation & Setup
@@ -145,14 +143,14 @@ Run the following to initialize the onboarding configuration:
 // Initialize default onboarding config
 const defaultConfig = {
   isEnabled: true,
-  version: "1.0.0",
+  version: 1,
   steps: [
     { stepId: "welcome", isEnabled: true, isRequired: true, order: 0 },
     { stepId: "auth", isEnabled: true, isRequired: true, order: 1 },
     { stepId: "profile", isEnabled: true, isRequired: true, order: 2 },
     { stepId: "referral", isEnabled: true, isRequired: false, order: 3 },
     { stepId: "interests", isEnabled: true, isRequired: true, order: 4 },
-    { stepId: "preferences", isEnabled: true, isRequired: true, order: 5 }
+    { stepId: "preferences", isEnabled: true, isRequired: false, order: 5 }
   ],
   welcomeConfig: {
     title: { en: "Welcome to LUDUS", ar: "مرحباً بك في لودوس" },
@@ -161,9 +159,9 @@ const defaultConfig = {
   interestsConfig: {
     minSelections: 3,
     maxSelections: 12,
-    categories: [...]
+    categories: []
   }
-};
+}
 ```
 
 ## Usage
@@ -171,8 +169,9 @@ const defaultConfig = {
 ### Accessing the Onboarding
 
 1. **Direct Access**: Navigate to `/onboarding`
-2. **Test Mode**: Navigate to `/onboarding-test` for testing
-3. **Admin Management**: Navigate to `/admin/onboarding`
+2. **Incognito Preview**: Open `/onboarding` in an incognito window to simulate a fresh user
+3. **Reset a User**: POST `/api/onboarding/admin/reset-user/:userId` to re-run onboarding
+4. **Admin Management**: Navigate to `/admin/onboarding` to edit the config
 
 ### Admin Controls
 
@@ -184,6 +183,10 @@ Admins can:
 - Monitor analytics
 - Manage user progress
 
+Notes:
+- Step IDs must be one of: `welcome`, `auth`, `profile`, `referral`, `interests`, `preferences` (invalid IDs are rejected with 400).
+- Reordering updates `order` indexes; only `isEnabled: true` steps are sent to users via `/api/onboarding/config`.
+
 ### User Experience
 
 1. **Welcome Screen**: Introduction with value propositions
@@ -193,6 +196,10 @@ Admins can:
 5. **Interest Selection**: Category selection with minimum requirements
 6. **Preferences**: Language, theme, notifications, location
 7. **Success**: Celebration and dashboard redirect
+
+### Preview Tips
+- After changing step structure, refresh `/onboarding` in an incognito tab.
+- If already completed onboarding, reset the user via admin API.
 
 ## API Integration
 
@@ -321,7 +328,7 @@ Run the test suite at `/onboarding-test`:
 
 ### Data Protection
 
-- Firestore security rules
+- Role-based admin endpoints (`authorize('admin')`)
 - Input validation and sanitization
 - Rate limiting on API endpoints
 - Secure environment variable handling
@@ -334,6 +341,7 @@ Run the test suite at `/onboarding-test`:
 2. **Translation Missing**: Verify translation keys in JSON files
 3. **Step Not Loading**: Check step configuration in admin panel
 4. **Authentication Fails**: Verify JWT authentication setup
+5. **400 on Save (Admin)**: Ensure `steps[].stepId` is valid; remove any temporary/unknown IDs.
 
 ### Debug Mode
 
