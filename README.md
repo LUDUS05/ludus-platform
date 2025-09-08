@@ -18,6 +18,7 @@ A comprehensive social activity platform built for the Saudi Arabian market, fea
 - **Ollama Integration**: Local AI model deployment and management
 - **Athena System**: Advanced AI-powered features and automation
 - **Render MCP**: Model Context Protocol integration for AI agents
+- **Render MCP API**: RESTful endpoints for Render service management
 
 ### Technical Features
 - **Firebase Integration**: Real-time database and authentication
@@ -47,6 +48,12 @@ A comprehensive social activity platform built for the Saudi Arabian market, fea
 - **Framework**: Python with FastAPI
 - **Models**: Ollama integration for local AI
 - **Protocol**: MCP (Model Context Protocol) support
+
+### Render MCP API
+- **Location**: `server/src/controllers/renderMCPController.js`
+- **Endpoints**: 8 RESTful endpoints for Render service management
+- **Authentication**: JWT with admin role requirements
+- **Features**: Service listing, deployment control, logs, metrics
 
 ## 🛠️ Installation
 
