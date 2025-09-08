@@ -73,7 +73,11 @@ const AppRoutes = () => {
           <OnboardingTest />
         </SmartRoute>
       } />
-      <Route path="/hi" element={<NewOnboarding />} />
+      <Route path="/hi" element={
+        <SmartRoute path="/hi">
+          <NewOnboarding />
+        </SmartRoute>
+      } />
       <Route path="/invite/:code" element={<NewOnboarding />} />
       <Route path="/share" element={
         <SmartRoute path="/share">

@@ -218,12 +218,82 @@ const WelcomeStep = ({ onNext }) => {
 };
 
 // Registration Step Component
-const RegistrationStep = ({ onNext, onBack }) => {
+const RegistrationStep = ({ onNext, onBack, referralCode }) => {
   const { t, i18n } = useTranslation();
+  const { loginWithSocial } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const isRTL = i18n.language === 'ar';
+
+  // Google login response handler
+  const handleGoogleResponse = async (response) => {
+    setLoading(true);
+    try {
+      console.log('Google login response received');
+      
+      // Get referral code from localStorage if available
+      const storedReferralCode = localStorage.getItem('referral_code');
+      
+      // Create user data with referral information
+      const userData = {
+        referralCode: storedReferralCode || referralCode,
+        referralSource: 'google_oauth',
+        referralPlatform: 'web'
+      };
+      
+      // Call the social login function
+      const result = await loginWithSocial('google', response.credential, userData);
+      
+      if (result.success) {
+        console.log('Google login successful:', result);
+        // Clear the referral code from localStorage after successful login
+        if (storedReferralCode) {
+          localStorage.removeItem('referral_code');
+        }
+        onNext();
+      } else {
+        console.error('Google login failed:', result.message);
+        alert('Google login failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('Google login error:', error);
+      alert('Google login failed. Please try again.');
+    }
+    setLoading(false);
+  };
+
+  // Initialize Google Identity Services
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.async = true;
+    script.defer = true;
+    
+    script.onload = () => {
+      if (window.google) {
+        const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+        if (!clientId || clientId === 'your_google_client_id_here') {
+          console.error('Google Client ID not configured. Please set REACT_APP_GOOGLE_CLIENT_ID environment variable.');
+          return;
+        }
+        
+        window.google.accounts.id.initialize({
+          client_id: clientId,
+          callback: handleGoogleResponse,
+        });
+      }
+    };
+    
+    document.head.appendChild(script);
+    
+    return () => {
+      // Cleanup script on unmount
+      if (document.head.contains(script)) {
+        document.head.removeChild(script);
+      }
+    };
+  }, []);
 
   const handleGoogleSignIn = async () => {
     setLoading(true);
@@ -1053,3 +1123,163 @@ export default function NewOnboarding() {
     </div>
   );
 }
+
+// Main NewOnboarding Component
+const NewOnboarding = () => {
+  const navigate = useNavigate();
+  const { code } = useParams();
+  const [currentStep, setCurrentStep] = useState(0);
+  const [referralCode, setReferralCode] = useState(null);
+
+  console.log('🚀 NewOnboarding Component Mounted!');
+  console.log('📍 Current URL:', window.location.href);
+  console.log('📍 Current Pathname:', window.location.pathname);
+  console.log('📍 Referral Code from useParams:', code);
+
+  // Capture referral code from various sources
+  useEffect(() => {
+    console.log('NewOnboarding mounted, code from useParams:', code);
+    
+    // Check multiple sources for referral code
+    let capturedCode = null;
+    
+    // 1. From URL params (useParams)
+    if (code) {
+      capturedCode = code;
+    }
+    
+    // 2. From URL search params
+    const urlParams = new URLSearchParams(window.location.search);
+    const refParam = urlParams.get('ref') || urlParams.get('referral') || urlParams.get('referral_code');
+    if (refParam) {
+      capturedCode = refParam;
+    }
+    
+    // 3. From URL hash
+    const hash = window.location.hash;
+    if (hash) {
+      const hashParams = new URLSearchParams(hash.substring(1));
+      const hashRef = hashParams.get('ref') || hashParams.get('referral') || hashParams.get('referral_code');
+      if (hashRef) {
+        capturedCode = hashRef;
+      }
+    }
+    
+    // 4. From spa-redirect parameter (for SPA routing)
+    const spaRedirect = urlParams.get('spa-redirect');
+    if (spaRedirect) {
+      try {
+        const decodedRedirect = decodeURIComponent(spaRedirect);
+        const redirectParams = new URLSearchParams(decodedRedirect.split('?')[1] || '');
+        const redirectRef = redirectParams.get('ref') || redirectParams.get('referral') || redirectParams.get('referral_code');
+        if (redirectRef) {
+          capturedCode = redirectRef;
+        }
+      } catch (error) {
+        console.error('Error parsing spa-redirect:', error);
+      }
+    }
+    
+    if (capturedCode) {
+      console.log('🎯 Referral code captured:', capturedCode);
+      setReferralCode(capturedCode);
+      // Store in localStorage for later use
+      localStorage.setItem('referral_code', capturedCode);
+    } else {
+      console.log('No referral code found in URL parameters, search params, or hash');
+    }
+  }, [code]);
+
+  const handleNext = () => {
+    if (currentStep < steps.length - 1) {
+      setCurrentStep(currentStep + 1);
+    } else {
+      // Navigate to share page after completing onboarding
+      navigate('/share');
+    }
+  };
+
+  const handleBack = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
+  const CurrentStepComponent = () => {
+    switch (currentStep) {
+      case 0:
+        return <WelcomeStep onNext={handleNext} />;
+      case 1:
+        return <RegistrationStep onNext={handleNext} onBack={handleBack} referralCode={referralCode} />;
+      case 2:
+        return <ProfileStep onNext={handleNext} onBack={handleBack} />;
+      case 3:
+        return <InterestsStep onNext={handleNext} onBack={handleBack} />;
+      case 4:
+        return <ReferralStep onNext={handleNext} onBack={handleBack} />;
+      default:
+        return <WelcomeStep onNext={handleNext} />;
+    }
+  };
+
+  return (
+    <div>
+      <style jsx>{`
+        :root {
+          --brutalist-yellow: #FFE600;
+          --brutalist-pink: #FF6B9D;
+          --brutalist-blue: #4DABF7;
+          --brutalist-green: #51CF66;
+          --brutalist-red: #FF6B6B;
+          --brutalist-black: #000000;
+          --brutalist-white: #FFFFFF;
+        }
+        
+        .brutalist-shadow {
+          box-shadow: 4px 4px 0px var(--brutalist-black);
+        }
+        
+        .brutalist-shadow-hover:hover {
+          box-shadow: 6px 6px 0px var(--brutalist-black);
+          transform: translate(-2px, -2px);
+        }
+        
+        .brutalist-border {
+          border: 3px solid var(--brutalist-black);
+        }
+        
+        .brutalist-text {
+          font-weight: 900;
+          text-transform: uppercase;
+          letter-spacing: -0.02em;
+        }
+
+        [dir="rtl"] {
+          text-align: right;
+        }
+        
+        [dir="rtl"] .brutalist-shadow {
+          box-shadow: -4px 4px 0px var(--brutalist-black);
+        }
+        
+        [dir="rtl"] .brutalist-shadow-hover:hover {
+          box-shadow: -6px 6px 0px var(--brutalist-black);
+          transform: translate(2px, -2px);
+        }
+
+        .neo-brutalist-bg {
+          background: linear-gradient(45deg, #FFE600 25%, transparent 25%), 
+                      linear-gradient(-45deg, #FFE600 25%, transparent 25%), 
+                      linear-gradient(45deg, transparent 75%, #FFE600 75%), 
+                      linear-gradient(-45deg, transparent 75%, #FFE600 75%);
+          background-size: 20px 20px;
+          background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        }
+      `}</style>
+
+      <CurrentStepComponent />
+    </div>
+  );
+};
+
+export default NewOnboarding;
