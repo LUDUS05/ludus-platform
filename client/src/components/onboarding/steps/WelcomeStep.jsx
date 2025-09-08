@@ -119,7 +119,7 @@ const WelcomeStep = ({ config, onComplete, t }) => {
           onClick={handleGetStarted}
           className="neumorphic-subtle hover:neumorphic-pressed w-full py-3 px-6 rounded-xl text-lg font-medium text-gray-700 transition-all duration-200"
         >
-          {t('getStarted')}
+          {t('common.getStarted')}
         </button>
       </motion.div>
     </motion.div>

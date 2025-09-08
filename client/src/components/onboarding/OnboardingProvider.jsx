@@ -201,16 +201,28 @@ export const OnboardingProvider = ({ children }) => {
       setLoading(true);
       setError('');
 
-      // Use existing Google authentication from AuthContext
-      const result = await login('google');
-      if (result.success) {
-        // Reset onboarding state for new user
-        setCurrentStep(0);
-        setFormData({});
-        setOnboardingProgress(null);
-        return { success: true, user: result.user };
+      // Use Google Identity Services directly
+      if (window.google) {
+        return new Promise((resolve) => {
+          window.google.accounts.id.prompt((notification) => {
+            if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+              setLoading(false);
+              resolve({ success: false, error: 'Google authentication cancelled' });
+            }
+          });
+        });
       } else {
-        throw new Error(result.error || 'Google authentication failed');
+        // Fallback to AuthContext login
+        const result = await login('google');
+        if (result.success) {
+          // Reset onboarding state for new user
+          setCurrentStep(0);
+          setFormData({});
+          setOnboardingProgress(null);
+          return { success: true, user: result.user };
+        } else {
+          throw new Error(result.error || 'Google authentication failed');
+        }
       }
     } catch (error) {
       console.error('Error authenticating with Google:', error);

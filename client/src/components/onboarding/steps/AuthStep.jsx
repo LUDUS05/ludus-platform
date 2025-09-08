@@ -15,9 +15,19 @@ const AuthStep = ({ config, onComplete, onNext, t }) => {
   });
 
   const handleGoogleAuth = async () => {
-    const result = await authenticateWithGoogle();
-    if (result.success) {
-      onComplete({ method: 'google', user: result.user });
+    try {
+      // Use Google Identity Services directly
+      if (window.google) {
+        window.google.accounts.id.prompt();
+      } else {
+        // Fallback to the provider method
+        const result = await authenticateWithGoogle();
+        if (result.success) {
+          onComplete({ method: 'google', user: result.user });
+        }
+      }
+    } catch (error) {
+      console.error('Google authentication error:', error);
     }
   };
 
@@ -228,12 +238,12 @@ const AuthStep = ({ config, onComplete, onNext, t }) => {
           </motion.div>
         )}
 
-        {/* Apple Auth (pre-launch placeholder) */}
+        {/* Apple Auth (disabled) */}
         <motion.div variants={itemVariants}>
           <button
-            onClick={() => { /* TODO: integrate Apple */ }}
-            disabled={loading}
-            className="neumorphic-subtle hover:neumorphic-pressed w-full flex items-center justify-center gap-3 py-3 px-6 rounded-xl text-lg font-medium text-gray-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={true}
+            className="neumorphic-subtle w-full flex items-center justify-center gap-3 py-3 px-6 rounded-xl text-lg font-medium text-gray-400 transition-all duration-200 opacity-50 cursor-not-allowed"
+            title="Apple Sign-In coming soon"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
               <path d="M16.365 1.43c0 1.14-.44 2.2-1.21 3.01-.77.82-2.01 1.45-3.15 1.36-.14-1.08.45-2.22 1.19-2.97.82-.83 2.22-1.44 3.17-1.4zM20.7 17.27c-.59 1.35-.87 1.94-1.62 3.13-1.05 1.7-2.53 3.82-4.36 3.85-1.63.03-2.05-1.04-4.26-1.04-2.21 0-2.68 1.07-4.31 1.07-1.84.04-3.25-1.84-4.3-3.53C-.2 17.25-.56 12.64 1.73 9.53 2.88 7.95 4.71 6.96 6.66 6.93c1.7-.03 3.31 1.13 4.26 1.13.94 0 2.62-1.4 4.42-1.2.75.03 2.85.3 4.19 2.27-3.69 2.01-3.09 7.22.86 8.14z" />
@@ -242,14 +252,14 @@ const AuthStep = ({ config, onComplete, onNext, t }) => {
           </button>
         </motion.div>
 
-        {/* Facebook Auth (pre-launch placeholder) */}
+        {/* Facebook Auth (disabled) */}
         <motion.div variants={itemVariants}>
           <button
-            onClick={() => { /* TODO: integrate Facebook */ }}
-            disabled={loading}
-            className="neumorphic-subtle hover:neumorphic-pressed w-full flex items-center justify-center gap-3 py-3 px-6 rounded-xl text-lg font-medium text-gray-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={true}
+            className="neumorphic-subtle w-full flex items-center justify-center gap-3 py-3 px-6 rounded-xl text-lg font-medium text-gray-400 transition-all duration-200 opacity-50 cursor-not-allowed"
+            title="Facebook Sign-In coming soon"
           >
-            <svg className="w-5 h-5 text-blue-600" viewBox="0 0 24 24" fill="currentColor">
+            <svg className="w-5 h-5 text-gray-400" viewBox="0 0 24 24" fill="currentColor">
               <path d="M22 12a10 10 0 10-11.5 9.95v-7.04H7.9V12h2.6V9.8c0-2.57 1.53-3.99 3.87-3.99 1.12 0 2.29.2 2.29.2v2.52h-1.29c-1.27 0-1.67.79-1.67 1.6V12h2.84l-.45 2.91h-2.39v7.04A10 10 0 0022 12z" />
             </svg>
             <span>{t('onboarding.steps.auth.continueWithFacebook')}</span>
