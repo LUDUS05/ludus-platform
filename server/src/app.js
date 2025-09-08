@@ -359,6 +359,7 @@ app.use('/api/qr', require('./routes/qr'));
 app.use('/api/onboarding', require('./routes/onboarding'));
 app.use('/api/social', require('./routes/social'));
 app.use('/api/setup', require('./routes/setup'));
+app.use('/api/render-mcp', require('./routes/renderMCP'));
 const formsRoutes = require('./routes/forms');
 app.use('/api/forms', formsRoutes.publicRouter);
 app.use('/api/admin/forms', formsRoutes.adminRouter);
