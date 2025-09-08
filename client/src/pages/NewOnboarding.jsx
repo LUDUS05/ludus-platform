@@ -109,6 +109,17 @@ const WelcomeStep = ({ onNext }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const isRTL = i18n.language === 'ar';
 
+  // Debug: Log translation status
+  console.log('WelcomeStep Debug:', {
+    language: i18n.language,
+    isInitialized: i18n.isInitialized,
+    currentStep: currentStep,
+    titleKey: steps[currentStep]?.titleKey,
+    titleTranslation: t(steps[currentStep]?.titleKey),
+    descriptionKey: steps[currentStep]?.descriptionKey,
+    descriptionTranslation: t(steps[currentStep]?.descriptionKey)
+  });
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentStep((prev) => (prev + 1) % steps.length);
@@ -166,11 +177,11 @@ const WelcomeStep = ({ onNext }) => {
                 </div>
                 
                 <h2 className="text-2xl brutalist-text mb-4 text-black">
-                  {t(steps[currentStep].titleKey)}
+                  {t(steps[currentStep].titleKey, steps[currentStep].titleKey)}
                 </h2>
                 
                 <p className="text-lg text-black font-bold max-w-xs mx-auto">
-                  {t(steps[currentStep].descriptionKey)}
+                  {t(steps[currentStep].descriptionKey, steps[currentStep].descriptionKey)}
                 </p>
               </motion.div>
             </AnimatePresence>
