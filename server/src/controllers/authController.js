@@ -584,7 +584,7 @@ const validatePasswordStrength = (password) => {
  */
 const socialLogin = async (req, res, next) => {
   try {
-    const { provider, token } = req.body;
+    const { provider, token, referralCode, referralSource, referralPlatform } = req.body;
 
     if (!provider || !token) {
       return res.status(400).json({
@@ -610,6 +610,8 @@ const socialLogin = async (req, res, next) => {
         { email: userInfo.email }
       ]
     });
+
+    let isNewUser = false;
 
     if (user) {
       // Update social info if not already linked
@@ -638,8 +640,11 @@ const socialLogin = async (req, res, next) => {
             id: userInfo.id,
             email: userInfo.email
           }
-        }
+        },
+        referredBy: referralCode || null // Store referral code if provided
       });
+      
+      isNewUser = true;
     }
 
     // Generate tokens
@@ -651,6 +656,35 @@ const socialLogin = async (req, res, next) => {
 
     // Set refresh token as HttpOnly cookie
     setRefreshTokenCookie(res, refreshToken);
+
+    // Process referral if this is a new user and referral code was provided
+    let referralProcessed = false;
+    if (isNewUser && referralCode) {
+      try {
+        // Import referral controller function
+        const { processReferralRegistration } = require('./referralController');
+        
+        // Process referral registration
+        const referralResult = await processReferralRegistration({
+          body: {
+            referralCode,
+            newUserId: user._id,
+            source: referralSource || 'direct-link',
+            platform: referralPlatform || 'unknown',
+            userAgent: req.headers['user-agent'],
+            ipAddress: req.ip || req.connection.remoteAddress
+          }
+        }, res);
+        
+        if (referralResult) {
+          referralProcessed = true;
+          console.log(`✅ Referral processed for new social user ${user._id} with code ${referralCode}`);
+        }
+      } catch (referralError) {
+        console.error('Failed to process referral during social login:', referralError);
+        // Don't fail login if referral processing fails
+      }
+    }
 
     // Remove sensitive data
     user.password = undefined;
@@ -668,7 +702,8 @@ const socialLogin = async (req, res, next) => {
           role: user.role,
           isEmailVerified: user.isEmailVerified
         },
-        accessToken
+        accessToken,
+        referralProcessed
         // refreshToken no longer sent in response body for security
       }
     });

@@ -164,12 +164,12 @@ export const AuthProvider = ({ children }) => {
   };
 
   // Social login action
-  const loginWithSocial = async (provider, token) => {
+  const loginWithSocial = async (provider, token, userData = {}) => {
     try {
       dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: true });
       dispatch({ type: AUTH_ACTIONS.CLEAR_ERROR });
 
-      const response = await authService.socialLogin(provider, token);
+      const response = await authService.socialLogin(provider, token, userData);
       dispatch({
         type: AUTH_ACTIONS.LOGIN_SUCCESS,
         payload: { user: response.data.user },
