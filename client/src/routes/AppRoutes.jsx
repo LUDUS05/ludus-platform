@@ -74,6 +74,7 @@ const AppRoutes = () => {
         </SmartRoute>
       } />
       <Route path="/hi" element={<NewOnboarding />} />
+      <Route path="/invite/:code" element={<NewOnboarding />} />
       <Route path="/share" element={
         <SmartRoute path="/share">
           <ProtectedRoute>
