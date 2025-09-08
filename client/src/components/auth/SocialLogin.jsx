@@ -16,8 +16,14 @@ const SocialLogin = ({ onSuccess, onError }) => {
 
     script.onload = () => {
       if (window.google) {
+        const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+        if (!clientId || clientId === 'your_google_client_id_here') {
+          console.error('Google Client ID not configured. Please set REACT_APP_GOOGLE_CLIENT_ID environment variable.');
+          return;
+        }
+        
         window.google.accounts.id.initialize({
-          client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+          client_id: clientId,
           callback: handleGoogleResponse,
         });
       }
