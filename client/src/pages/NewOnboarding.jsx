@@ -224,6 +224,11 @@ const RegistrationStep = ({ onNext, onBack, referralCode }) => {
   const [loading, setLoading] = useState(false);
   const isRTL = i18n.language === 'ar';
 
+  // Debug: Log when RegistrationStep receives referral code
+  useEffect(() => {
+    console.log('📝 RegistrationStep mounted with referral code:', referralCode);
+  }, [referralCode]);
+
   // Google login response handler
   const handleGoogleResponse = async (response) => {
     setLoading(true);
@@ -239,6 +244,8 @@ const RegistrationStep = ({ onNext, onBack, referralCode }) => {
         referralSource: 'google_oauth',
         referralPlatform: 'web'
       };
+      
+      console.log('🔐 RegistrationStep: Attempting Google login with referral data:', userData);
       
       // Call the social login function
       const result = await loginWithSocial('google', response.credential, userData);
@@ -986,6 +993,11 @@ export default function NewOnboarding() {
     }
   }, [code]);
 
+  // Debug: Log referral code state changes
+  useEffect(() => {
+    console.log('🔄 Referral code state updated:', referralCode);
+  }, [referralCode]);
+
   // Load Google Identity Services script
   useEffect(() => {
     const script = document.createElement('script');
@@ -1029,6 +1041,8 @@ export default function NewOnboarding() {
         referralPlatform: 'web'
       };
       
+      console.log('🔐 Attempting Google login with referral data:', userData);
+      
       const result = await loginWithSocial('google', response.credential, userData);
       console.log('Google login successful:', result);
       
@@ -1042,6 +1056,7 @@ export default function NewOnboarding() {
       navigate('/share');
     } catch (error) {
       console.error('Google login error:', error);
+      alert('Google login failed. Please try again.');
     }
   };
 
