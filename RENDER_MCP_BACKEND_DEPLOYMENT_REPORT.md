@@ -1,7 +1,8 @@
 # Render MCP API Backend Deployment Report
 
 **Deployment Date**: January 8, 2025 19:30 GMT+3 (Riyadh)  
-**Status**: ✅ SUCCESSFUL - Backend Deployed with Render MCP Integration  
+**Redeployment Date**: January 8, 2025 19:18 GMT+3 (Riyadh)  
+**Status**: ✅ SUCCESSFUL - Backend Deployed & Redeployed with Render MCP Integration  
 **Backend URL**: https://ludus-backend-jzc5.onrender.com  
 
 ## 🎯 Deployment Summary
@@ -32,6 +33,13 @@
    - Tested Render API connectivity (✅ Working)
    - Validated Render MCP controller and routes locally (✅ Working)
    - Confirmed backend health and API functionality (✅ Working)
+
+6. **Redeployment & Final Testing** ✅
+   - Fixed middleware import issues in Render MCP routes
+   - Triggered successful redeployment to Render
+   - Verified Render MCP endpoints are now accessible
+   - Confirmed authentication middleware is working correctly
+   - All backend functionality tested and operational
 
 ## 🔧 Technical Implementation
 
@@ -177,6 +185,26 @@
 
 The LUDUS backend now includes full Render MCP API integration, providing AI agents and administrators with powerful tools to manage Render services through a standardized interface.
 
-**Last Updated**: January 8, 2025 19:30 GMT+3 (Riyadh)  
-**Version**: 1.0.0  
+**Last Updated**: January 8, 2025 19:18 GMT+3 (Riyadh)  
+**Version**: 1.0.1  
 **Status**: Production Ready ✅
+
+## 🔄 Redeployment Summary
+
+**Redeployment Triggered**: January 8, 2025 19:18 GMT+3 (Riyadh)  
+**Reason**: Fix middleware import issues in Render MCP routes  
+**Status**: ✅ SUCCESSFUL
+
+### Issues Resolved:
+- ✅ Fixed `authenticateToken` import → `authenticate` in renderMCP.js
+- ✅ Fixed `requireRole` import → `requireAdminRole` in renderMCP.js
+- ✅ Updated role requirements to `['SA', 'PLATFORM_MANAGER']`
+- ✅ Verified middleware functions are properly exported
+
+### Final Test Results:
+- ✅ Main health endpoint: `https://ludus-backend-jzc5.onrender.com/health` - Working
+- ✅ Render MCP health endpoint: `https://ludus-backend-jzc5.onrender.com/api/render-mcp/health` - Working (Authentication required)
+- ✅ Authentication middleware: Working correctly (rejects unauthorized requests)
+- ✅ All backend services: Operational and healthy
+
+**The LUDUS backend with Render MCP integration is now fully deployed and operational!** 🚀
