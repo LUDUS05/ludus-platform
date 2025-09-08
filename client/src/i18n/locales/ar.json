@@ -1229,6 +1229,64 @@
         }
       }
     },
+    "welcome": {
+      "startJourney": "ابدأ رحلتك",
+      "dataSafe": "بياناتك آمنة معنا"
+    },
+    "registration": {
+      "title": "انضم إلى LUDUS",
+      "subtitle": "تواصل واكتشف الأنشطة",
+      "googleBtn": "متابعة بحساب جوجل",
+      "email": "عنوان البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "signupBtn": "إنشاء حساب",
+      "privacy": "بياناتك آمنة معنا"
+    },
+    "profile": {
+      "title": "إعداد الملف الشخصي",
+      "subtitle": "ساعد الآخرين على اكتشافك",
+      "photoLabel": "الصورة الشخصية",
+      "nameLabel": "اسم العرض",
+      "namePlaceholder": "كيف يجب أن يناديك الآخرون؟",
+      "bioLabel": "النبذة الشخصية (اختيارية)",
+      "bioPlaceholder": "أخبرنا عن نفسك...",
+      "socialLabel": "الشبكات الاجتماعية (اختياري)",
+      "instagramPlaceholder": "اسم مستخدم انستغرام",
+      "facebookPlaceholder": "رابط ملف فيسبوك",
+      "snapchatPlaceholder": "اسم مستخدم سناب شات",
+      "saveBtn": "متابعة",
+      "skipBtn": "إكمال لاحقاً",
+      "uploadingText": "جاري الرفع..."
+    },
+    "interests": {
+      "title": "اختر اهتماماتك",
+      "subtitle": "اختر من 3-12 نشاط تحبه",
+      "continueBtn": "متابعة",
+      "skipBtn": "تخطي الآن",
+      "minError": "اختر على الأقل 3 اهتمامات",
+      "selected": "مختار",
+      "sportsFitness": "الرياضة واللياقة",
+      "foodDining": "الطعام والمطاعم",
+      "artsCulture": "الفنون والثقافة",
+      "entertainment": "الترفيه",
+      "learningWorkshops": "التعلم وورش العمل",
+      "outdoorAdventures": "المغامرات الخارجية",
+      "socialEvents": "الفعاليات الاجتماعية"
+    },
+    "referral": {
+      "title": "شارك LUDUS",
+      "subtitle": "ادع الأصدقاء واحصل على مكافآت",
+      "reward": "احصل على 5 ريال لكل صديق ينضم",
+      "qrTitle": "رمز الاستجابة السريعة",
+      "linkTitle": "رابط الدعوة",
+      "copyBtn": "نسخ الرابط",
+      "copiedText": "تم النسخ!",
+      "finishBtn": "ابدأ الاستكشاف",
+      "skipBtn": "تخطي الآن",
+      "shareText": "انضم إلي على LUDUS - اكتشف أنشطة رائعة بالقرب منك!",
+      "whatsapp": "مشاركة عبر الواتساب",
+      "share": "مشاركة الرابط"
+    },
     "welcomeTaglineAr": "اكتشف. احجز. تواصل",
     "welcomeTaglineEn": "Discover. Book. Connect",
     "valuePromise": "اعثر على مجموعتك من خلال أنشطة رائعة في الرياض",

@@ -1200,6 +1200,64 @@
         }
       }
     },
+    "welcome": {
+      "startJourney": "START YOUR JOURNEY",
+      "dataSafe": "YOUR DATA IS SAFE WITH US"
+    },
+    "registration": {
+      "title": "JOIN LUDUS",
+      "subtitle": "Connect & Discover Activities",
+      "googleBtn": "CONTINUE WITH GOOGLE",
+      "email": "Email Address",
+      "password": "Password",
+      "signupBtn": "CREATE ACCOUNT",
+      "privacy": "Your data is safe with us"
+    },
+    "profile": {
+      "title": "SETUP PROFILE",
+      "subtitle": "Help others discover you",
+      "photoLabel": "Profile Photo",
+      "nameLabel": "Display Name",
+      "namePlaceholder": "How should others call you?",
+      "bioLabel": "Bio (Optional)",
+      "bioPlaceholder": "Tell us about yourself...",
+      "socialLabel": "Social Networks (Optional)",
+      "instagramPlaceholder": "Instagram username",
+      "facebookPlaceholder": "Facebook profile URL",
+      "snapchatPlaceholder": "Snapchat username",
+      "saveBtn": "CONTINUE",
+      "skipBtn": "COMPLETE LATER",
+      "uploadingText": "UPLOADING..."
+    },
+    "interests": {
+      "title": "CHOOSE INTERESTS",
+      "subtitle": "Select 3-12 activities you love",
+      "continueBtn": "CONTINUE",
+      "skipBtn": "SKIP FOR NOW",
+      "minError": "Select at least 3 interests",
+      "selected": "SELECTED",
+      "sportsFitness": "SPORTS & FITNESS",
+      "foodDining": "FOOD & DINING",
+      "artsCulture": "ARTS & CULTURE",
+      "entertainment": "ENTERTAINMENT",
+      "learningWorkshops": "LEARNING & WORKSHOPS",
+      "outdoorAdventures": "OUTDOOR ADVENTURES",
+      "socialEvents": "SOCIAL EVENTS"
+    },
+    "referral": {
+      "title": "SHARE LUDUS",
+      "subtitle": "Invite friends & earn rewards",
+      "reward": "Get 5 SAR for each friend who joins",
+      "qrTitle": "QR CODE",
+      "linkTitle": "INVITATION LINK",
+      "copyBtn": "COPY LINK",
+      "copiedText": "COPIED!",
+      "finishBtn": "START EXPLORING",
+      "skipBtn": "SKIP FOR NOW",
+      "shareText": "Join me on LUDUS - discover amazing activities near you!",
+      "whatsapp": "SHARE ON WHATSAPP",
+      "share": "SHARE LINK"
+    },
     "welcomeTaglineAr": "اكتشف. احجز. تواصل",
     "welcomeTaglineEn": "Discover. Book. Connect",
     "valuePromise": "Find your tribe through amazing activities in Riyadh",

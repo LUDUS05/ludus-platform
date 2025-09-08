@@ -44,6 +44,26 @@ const OnboardingFlow = () => {
     }
   }, [i18n]);
 
+  // Get current step name for display
+  const getCurrentStepName = () => {
+    if (!config?.steps || !config.steps[currentStep]) {
+      return t('common.loading');
+    }
+    
+    const stepId = config.steps[currentStep].stepId;
+    const stepNames = {
+      welcome: t('onboarding.steps.welcome.title'),
+      socialProof: t('onboarding.steps.socialProof.title'),
+      auth: t('onboarding.steps.auth.title'),
+      profile: t('onboarding.steps.profile.title'),
+      referral: t('onboarding.steps.referral.title'),
+      interests: t('onboarding.steps.interests.title'),
+      preferences: t('onboarding.steps.preferences.title')
+    };
+    
+    return stepNames[stepId] || t('common.loading');
+  };
+
   // Language switcher
   const toggleLanguage = () => {
     const newLang = i18n.language === 'ar' ? 'en' : 'ar';
@@ -310,14 +330,45 @@ const OnboardingFlow = () => {
         </div>
       </div>
 
-      {/* Progress indicator */}
+      {/* Progress indicator with navigation */}
       {config.steps && config.steps.length > 1 && (
         <div className="max-w-md mx-auto px-4 pb-4">
           <div className="neumorphic rounded-xl p-3">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-gray-600">
-                {t('progress', { current: currentStep + 1, total: config.steps.length })}
-              </span>
+              <div className="flex flex-col">
+                <span className="text-sm font-medium text-gray-600">
+                  {getCurrentStepName()}
+                </span>
+                <span className="text-xs text-gray-500">
+                  {t('onboarding.progress', { current: currentStep + 1, total: config.steps.length })}
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                {/* Previous step arrow */}
+                {currentStep > 0 && (
+                  <button
+                    onClick={previousStep}
+                    className="neumorphic-subtle hover:neumorphic-pressed p-2 rounded-lg transition-all duration-200"
+                    title={t('common.previous')}
+                  >
+                    <svg className="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+                )}
+                {/* Next step arrow */}
+                {currentStep < config.steps.length - 1 && (
+                  <button
+                    onClick={nextStep}
+                    className="neumorphic-subtle hover:neumorphic-pressed p-2 rounded-lg transition-all duration-200"
+                    title={t('common.next')}
+                  >
+                    <svg className="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                )}
+              </div>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
               <div
