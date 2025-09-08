@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "../context/AuthContext";
 import { FaInstagram, FaFacebook, FaSnapchatGhost } from "react-icons/fa";
 import { 
   ArrowRight, 
@@ -227,7 +228,11 @@ const RegistrationStep = ({ onNext, onBack }) => {
   const handleGoogleSignIn = async () => {
     setLoading(true);
     try {
-      await User.loginWithRedirect(window.location.origin + createPageUrl("Profile"));
+      if (window.google) {
+        window.google.accounts.id.prompt();
+      } else {
+        console.error('Google Identity Services not loaded');
+      }
     } catch (error) {
       console.error("Google sign in error:", error);
     }
@@ -296,7 +301,7 @@ const RegistrationStep = ({ onNext, onBack }) => {
               <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
               <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
             </svg>
-            {t('onboarding.registration.googleBtn')}
+            متابعة مع جوجل
           </Button>
 
           {/* Divider */}
@@ -832,6 +837,7 @@ export default function NewOnboarding() {
   const { i18n } = useTranslation();
   const navigate = useNavigate();
   const { code } = useParams(); // Get referral code from URL
+  const { loginWithSocial } = useAuth(); // Get Google login function
   const [currentStep, setCurrentStep] = useState(0);
   const [referralCode, setReferralCode] = useState(code || null); // Store incoming referral code
 
@@ -850,6 +856,42 @@ export default function NewOnboarding() {
       console.log('Referral code captured:', code);
     }
   }, [code]);
+
+  // Load Google Identity Services script
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+
+    script.onload = () => {
+      if (window.google) {
+        window.google.accounts.id.initialize({
+          client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+          callback: handleGoogleResponse,
+        });
+      }
+    };
+
+    return () => {
+      if (document.head.contains(script)) {
+        document.head.removeChild(script);
+      }
+    };
+  }, []);
+
+  // Handle Google login response
+  const handleGoogleResponse = async (response) => {
+    try {
+      const result = await loginWithSocial('google', response.credential);
+      console.log('Google login successful:', result);
+      // Navigate to share page after successful login
+      navigate('/share');
+    } catch (error) {
+      console.error('Google login error:', error);
+    }
+  };
 
   const steps = [
     { component: WelcomeStep, name: 'welcome' },
