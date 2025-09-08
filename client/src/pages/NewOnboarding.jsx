@@ -39,22 +39,22 @@ const UploadFile = async ({ file }) => {
   });
 };
 
-// Step configurations
+// Step configurations with hardcoded Arabic text
 const steps = [
   {
     icon: Heart,
-    titleKey: "interests.title",
-    descriptionKey: "interests.subtitle"
+    title: "اختر اهتماماتك",
+    description: "اختر الأنشطة التي تحبها"
   },
   {
     icon: MapPin,
-    titleKey: "findDiscover.title", 
-    descriptionKey: "findDiscover.subtitle"
+    title: "ابحث واكتشف",
+    description: "استكشف الأنشطة القريبة منك"
   },
   {
     icon: Users,
-    titleKey: "connectParticipate.title",
-    descriptionKey: "connectParticipate.subtitle"
+    title: "تواصل وشارك",
+    description: "انضم إلى الآخرين الذين يشاركونك نفس الاهتمامات"
   }
 ];
 
@@ -62,80 +62,51 @@ const interests = [
   {
     id: "sports_fitness",
     icon: "💪",
-    titleKey: "interests.sportsFitness",
+    title: "الرياضة واللياقة",
     color: "bg-red-400"
   },
   {
     id: "food_dining", 
     icon: "🍽️",
-    titleKey: "interests.foodDining",
+    title: "الطعام والمطاعم",
     color: "bg-orange-400"
   },
   {
     id: "arts_culture",
     icon: "🎨",
-    titleKey: "interests.artsCulture",
+    title: "الفنون والثقافة",
     color: "bg-purple-400"
   },
   {
     id: "entertainment",
     icon: "🎬",
-    titleKey: "interests.entertainment",
+    title: "الترفيه",
     color: "bg-pink-400"
   },
   {
     id: "learning_workshops",
     icon: "📚",
-    titleKey: "interests.learningWorkshops",
+    title: "التعلم وورش العمل",
     color: "bg-blue-400"
   },
   {
     id: "outdoor_adventures",
     icon: "🏕️",
-    titleKey: "interests.outdoorAdventures",
+    title: "المغامرات الخارجية",
     color: "bg-green-400"
   },
   {
     id: "social_events",
     icon: "🎉",
-    titleKey: "interests.socialEvents",
+    title: "الفعاليات الاجتماعية",
     color: "bg-yellow-400"
   }
 ];
 
 // Welcome Step Component
 const WelcomeStep = ({ onNext }) => {
-  const { t, i18n } = useTranslation();
   const [currentStep, setCurrentStep] = useState(0);
-  const isRTL = i18n.language === 'ar';
-
-  // Clear translation cache on component mount
-  useEffect(() => {
-    console.log('Clearing translation cache...');
-    localStorage.removeItem('preferred-language');
-    i18n.reloadResources();
-  }, []);
-
-  // Debug: Log translation status
-  console.log('WelcomeStep Debug:', {
-    language: i18n.language,
-    isInitialized: i18n.isInitialized,
-    currentStep: currentStep,
-    titleKey: steps[currentStep]?.titleKey,
-    titleTranslation: t(steps[currentStep]?.titleKey),
-    descriptionKey: steps[currentStep]?.descriptionKey,
-    descriptionTranslation: t(steps[currentStep]?.descriptionKey),
-    hasResourceBundle: i18n.hasResourceBundle(i18n.language, 'translation'),
-    allResources: i18n.getResourceBundle(i18n.language, 'translation')
-  });
-
-  // Force reload translations if they're not working
-  useEffect(() => {
-    if (i18n.isInitialized && !t(steps[currentStep]?.titleKey)?.includes('.')) {
-      console.log('Forcing translation reload...');
-      i18n.reloadResources();
-    }
-  }, [i18n, t, currentStep]);
+  const isRTL = true; // Always Arabic for now
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -144,14 +115,7 @@ const WelcomeStep = ({ onNext }) => {
     return () => clearInterval(interval);
   }, []);
 
-  // Don't render until i18n is initialized
-  if (!i18n.isInitialized) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-yellow-300 via-pink-300 to-blue-300">
-        <div className="animate-spin rounded-full h-12 w-12 border-2 border-black border-t-transparent"></div>
-      </div>
-    );
-  }
+  // No need to wait for i18n initialization since we're using hardcoded text
 
   return (
     <div className={`min-h-screen bg-gradient-to-br from-yellow-400 via-pink-400 to-blue-400 neo-brutalist-bg relative overflow-hidden ${isRTL ? 'rtl' : 'ltr'}`} dir={isRTL ? 'rtl' : 'ltr'}>
@@ -165,10 +129,9 @@ const WelcomeStep = ({ onNext }) => {
         <div className="flex justify-end mb-8">
           <div className="brutalist-border bg-white brutalist-shadow">
             <button
-              onClick={() => i18n.changeLanguage(i18n.language === 'en' ? 'ar' : 'en')}
               className="px-4 py-2 brutalist-text text-sm hover:bg-gray-100 transition-colors"
             >
-              {i18n.language === 'en' ? 'العربية' : 'ENGLISH'}
+              العربية
             </button>
           </div>
         </div>
@@ -203,11 +166,11 @@ const WelcomeStep = ({ onNext }) => {
                 </div>
                 
                 <h2 className="text-2xl brutalist-text mb-4 text-black">
-                  {t(steps[currentStep].titleKey) || steps[currentStep].titleKey}
+                  {steps[currentStep].title}
                 </h2>
                 
                 <p className="text-lg text-black font-bold max-w-xs mx-auto">
-                  {t(steps[currentStep].descriptionKey) || steps[currentStep].descriptionKey}
+                  {steps[currentStep].description}
                 </p>
               </motion.div>
             </AnimatePresence>
@@ -237,14 +200,14 @@ const WelcomeStep = ({ onNext }) => {
               onClick={onNext}
               className="w-full bg-green-400 hover:bg-green-500 brutalist-border brutalist-shadow brutalist-shadow-hover brutalist-text text-lg h-14 text-black transition-all duration-200"
             >
-              {t('onboarding.welcome.startJourney')}
+              ابدأ رحلتك
               <ArrowRight className={`w-5 h-5 ${isRTL ? 'mr-2' : 'ml-2'} ${isRTL ? 'rotate-180' : ''}`} />
             </Button>
           </motion.div>
 
           <div className="text-center">
             <p className="text-black font-bold">
-              {t('onboarding.welcome.dataSafe')}
+              بياناتك آمنة معنا
             </p>
           </div>
         </div>
@@ -637,10 +600,10 @@ const InterestsStep = ({ onNext, onBack }) => {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl brutalist-text mb-2 text-black">
-            {t('onboarding.interests.title')}
+            اختر اهتماماتك
           </h1>
           <p className="text-lg font-bold text-gray-800">
-            {t('onboarding.interests.subtitle')}
+            اختر الأنشطة التي تحبها
           </p>
           <div className="w-16 h-1 bg-green-400 mx-auto mt-4"></div>
         </div>
@@ -649,7 +612,7 @@ const InterestsStep = ({ onNext, onBack }) => {
         <div className="text-center mb-6">
           <div className="inline-block bg-white brutalist-border brutalist-shadow px-4 py-2">
             <span className="brutalist-text text-black">
-              {selectedInterests.length}/12 {t('onboarding.interests.selected')}
+              {selectedInterests.length}/12 مختار
             </span>
           </div>
         </div>
@@ -667,8 +630,6 @@ const InterestsStep = ({ onNext, onBack }) => {
                 interest={interest}
                 isSelected={selectedInterests.includes(interest.id)}
                 onClick={() => toggleInterest(interest.id)}
-                language={i18n.language}
-                t={t}
               />
             </motion.div>
           ))}
