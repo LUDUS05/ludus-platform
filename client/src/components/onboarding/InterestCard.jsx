@@ -1,8 +1,8 @@
 import React from "react";
 import { Check } from "lucide-react";
 
-export default function InterestCard({ interest, isSelected, onClick, language, t }) {
-  const title = t(interest.titleKey);
+export default function InterestCard({ interest, isSelected, onClick }) {
+  const title = interest.title;
   
   return (
     <button
