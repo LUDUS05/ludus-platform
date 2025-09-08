@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const renderMCPController = require('../controllers/renderMCPController');
-const { authenticateToken } = require('../middleware/auth');
-const { requireRole } = require('../middleware/rbac');
+const { authenticate } = require('../middleware/auth');
+const { requireAdminRole } = require('../middleware/rbac');
 
 // Apply authentication to all routes
-router.use(authenticateToken);
+router.use(authenticate);
 
 // Apply admin role requirement to all routes
-router.use(requireRole(['admin', 'super_admin']));
+router.use(requireAdminRole(['SA', 'PLATFORM_MANAGER']));
 
 /**
  * @route GET /api/render-mcp/health
