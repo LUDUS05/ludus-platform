@@ -4,6 +4,8 @@ const renderMCPController = require('../controllers/renderMCPController');
 const { authenticate } = require('../middleware/auth');
 const { requireAdminRole } = require('../middleware/rbac');
 
+// Render MCP API Routes - Updated for deployment
+
 // Apply authentication to all routes
 router.use(authenticate);
 
