@@ -3,6 +3,10 @@
 // Verify Google OAuth token
 const verifyGoogleToken = async (token) => {
   try {
+    console.log('🔍 Verifying Google token...');
+    console.log('🔑 Google Client ID:', process.env.GOOGLE_CLIENT_ID ? 'Set' : 'Not set');
+    console.log('🎫 Token length:', token ? token.length : 'No token');
+    
     const { OAuth2Client } = require('google-auth-library');
     const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
     
@@ -12,6 +16,8 @@ const verifyGoogleToken = async (token) => {
     });
     
     const payload = ticket.getPayload();
+    console.log('✅ Google token verified successfully for user:', payload.email);
+    
     return {
       id: payload.sub,
       email: payload.email,
@@ -20,7 +26,8 @@ const verifyGoogleToken = async (token) => {
       emailVerified: payload.email_verified
     };
   } catch (error) {
-    console.error('Google token verification failed:', error);
+    console.error('❌ Google token verification failed:', error.message);
+    console.error('Error details:', error);
     return null;
   }
 };
