@@ -12,7 +12,9 @@ const SmartRoute = ({ children, path }) => {
     path,
     isAuthenticated,
     user: user ? { id: user.id, role: user.role } : null,
-    isLoading
+    isLoading,
+    currentURL: window.location.href,
+    currentPath: window.location.pathname
   });
   
   // Show loading spinner while checking authentication

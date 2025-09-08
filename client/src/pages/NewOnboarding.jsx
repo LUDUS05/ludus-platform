@@ -850,10 +850,13 @@ export default function NewOnboarding() {
 
   // Store referral code when available
   useEffect(() => {
+    console.log('NewOnboarding mounted, code from useParams:', code);
     if (code) {
       setReferralCode(code);
       localStorage.setItem('referral_code', code);
-      console.log('Referral code captured:', code);
+      console.log('Referral code captured and stored:', code);
+    } else {
+      console.log('No referral code found in URL parameters');
     }
   }, [code]);
 
