@@ -28,6 +28,11 @@ services:
         value: "true"
       - key: RENDER_ENVIRONMENT
         value: "production"
+      # Google OAuth Configuration
+      - key: GOOGLE_CLIENT_ID
+        sync: false # Set in Render dashboard
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false # Set in Render dashboard
 
   # Frontend Service (Static React App) - Standard
   - type: web
@@ -50,6 +55,9 @@ services:
         value: "true"
       - key: REACT_APP_DEBUG_MODE
         value: "false"
+      # Google OAuth Configuration
+      - key: REACT_APP_GOOGLE_CLIENT_ID
+        sync: false # Set in Render dashboard
 
   # Backend Service (Node.js API) - Enhanced for ATHENA
   - type: web
@@ -80,6 +88,11 @@ services:
         value: "true"
       - key: RENDER_ENVIRONMENT
         value: "production"
+      # Google OAuth Configuration
+      - key: GOOGLE_CLIENT_ID
+        sync: false # Set in Render dashboard
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false # Set in Render dashboard
 
   # Frontend Service (Static React App) - Enhanced for ATHENA
   - type: web
@@ -105,8 +118,8 @@ services:
       # Optional Services (uncomment and set values as needed)
       # - key: REACT_APP_GOOGLE_MAPS_API_KEY
       #   sync: false # Set in Render dashboard
-      # - key: REACT_APP_GOOGLE_CLIENT_ID
-      #   sync: false # Set in Render dashboard
+      - key: REACT_APP_GOOGLE_CLIENT_ID
+        sync: false # Set in Render dashboard
       # - key: REACT_APP_FACEBOOK_APP_ID
       #   sync: false # Set in Render dashboard
       # - key: REACT_APP_MOYASAR_PUBLISHABLE_KEY
