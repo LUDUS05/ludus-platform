@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaInstagram, FaFacebook, FaSnapchatGhost } from "react-icons/fa";
@@ -831,7 +831,9 @@ const ReferralStep = ({ onNext, onBack }) => {
 export default function NewOnboarding() {
   const { i18n } = useTranslation();
   const navigate = useNavigate();
+  const { code } = useParams(); // Get referral code from URL
   const [currentStep, setCurrentStep] = useState(0);
+  const [referralCode, setReferralCode] = useState(code || null); // Store incoming referral code
 
   // Set Arabic as default language
   useEffect(() => {
@@ -839,6 +841,15 @@ export default function NewOnboarding() {
       i18n.changeLanguage('ar');
     }
   }, [i18n]);
+
+  // Store referral code when available
+  useEffect(() => {
+    if (code) {
+      setReferralCode(code);
+      localStorage.setItem('referral_code', code);
+      console.log('Referral code captured:', code);
+    }
+  }, [code]);
 
   const steps = [
     { component: WelcomeStep, name: 'welcome' },
