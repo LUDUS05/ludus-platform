@@ -585,8 +585,17 @@ const validatePasswordStrength = (password) => {
 const socialLogin = async (req, res, next) => {
   try {
     const { provider, token, referralCode, referralSource, referralPlatform } = req.body;
+    
+    console.log('🔐 Social login attempt:', {
+      provider,
+      tokenLength: token ? token.length : 'No token',
+      referralCode,
+      referralSource,
+      referralPlatform
+    });
 
     if (!provider || !token) {
+      console.log('❌ Missing provider or token');
       return res.status(400).json({
         success: false,
         message: 'Provider and token are required'
@@ -594,6 +603,7 @@ const socialLogin = async (req, res, next) => {
     }
 
     // Verify token using social auth service
+    console.log('🔍 Verifying social token...');
     const userInfo = await verifySocialToken(provider, token);
 
     if (!userInfo) {
