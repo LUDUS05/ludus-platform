@@ -43,18 +43,18 @@ const UploadFile = async ({ file }) => {
 const steps = [
   {
     icon: Heart,
-    titleKey: "onboarding.steps.chooseInterests.title",
-    descriptionKey: "onboarding.steps.chooseInterests.description"
+    titleKey: "interests.title",
+    descriptionKey: "interests.subtitle"
   },
   {
     icon: MapPin,
-    titleKey: "onboarding.steps.findDiscover.title", 
-    descriptionKey: "onboarding.steps.findDiscover.description"
+    titleKey: "findDiscover.title", 
+    descriptionKey: "findDiscover.subtitle"
   },
   {
     icon: Users,
-    titleKey: "onboarding.steps.connectParticipate.title",
-    descriptionKey: "onboarding.steps.connectParticipate.description"
+    titleKey: "connectParticipate.title",
+    descriptionKey: "connectParticipate.subtitle"
   }
 ];
 
@@ -62,37 +62,37 @@ const interests = [
   {
     id: "sports_fitness",
     icon: "💪",
-    titleKey: "onboarding.interests.sportsFitness",
+    titleKey: "interests.sportsFitness",
     color: "bg-red-400"
   },
   {
     id: "food_dining", 
     icon: "🍽️",
-    titleKey: "onboarding.interests.foodDining",
+    titleKey: "interests.foodDining",
     color: "bg-orange-400"
   },
   {
     id: "arts_culture",
     icon: "🎨",
-    titleKey: "onboarding.interests.artsCulture",
+    titleKey: "interests.artsCulture",
     color: "bg-purple-400"
   },
   {
     id: "entertainment",
     icon: "🎬",
-    titleKey: "onboarding.interests.entertainment",
+    titleKey: "interests.entertainment",
     color: "bg-pink-400"
   },
   {
     id: "learning_workshops",
     icon: "📚",
-    titleKey: "onboarding.interests.learningWorkshops",
+    titleKey: "interests.learningWorkshops",
     color: "bg-blue-400"
   },
   {
     id: "outdoor_adventures",
     icon: "🏕️",
-    titleKey: "onboarding.interests.outdoorAdventures",
+    titleKey: "interests.outdoorAdventures",
     color: "bg-green-400"
   },
   {
@@ -854,8 +854,8 @@ export default function NewOnboarding() {
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
-      // Onboarding completed, navigate to dashboard
-      navigate('/dashboard');
+      // Onboarding completed, navigate to share page
+      navigate('/share');
     }
   };
 
