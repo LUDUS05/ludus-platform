@@ -244,10 +244,11 @@ const RegistrationStep = ({ onNext, onBack }) => {
     setLoading(true);
     
     try {
-      const referralCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+      // Generate a new referral code for the user (not the one they used to join)
+      const newReferralCode = Math.random().toString(36).substring(2, 8).toUpperCase();
       
       await User.updateMyUserData({
-        referral_code: referralCode,
+        referral_code: newReferralCode,
         preferred_language: i18n.language
       });
       
@@ -917,8 +918,25 @@ export default function NewOnboarding() {
   // Handle Google login response
   const handleGoogleResponse = async (response) => {
     try {
-      const result = await loginWithSocial('google', response.credential);
+      // Get referral code from localStorage if available
+      const storedReferralCode = localStorage.getItem('referral_code');
+      
+      // Create user data with referral code if available
+      const userData = {
+        referralCode: storedReferralCode,
+        referralSource: 'direct-link',
+        referralPlatform: 'google'
+      };
+      
+      const result = await loginWithSocial('google', response.credential, userData);
       console.log('Google login successful:', result);
+      
+      // Clear stored referral code after successful login
+      if (storedReferralCode) {
+        localStorage.removeItem('referral_code');
+        console.log('Referral code processed and cleared:', storedReferralCode);
+      }
+      
       // Navigate to share page after successful login
       navigate('/share');
     } catch (error) {

@@ -84,10 +84,11 @@ export const authService = {
   },
 
   // Social login
-  socialLogin: async (provider, token) => {
+  socialLogin: async (provider, token, userData = {}) => {
     const response = await api.post('/auth/social-login', {
       provider,
       token,
+      ...userData, // Include referral code and other data
     });
     const { user, accessToken } = response.data.data;
     
