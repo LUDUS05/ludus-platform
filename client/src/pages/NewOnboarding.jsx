@@ -857,12 +857,36 @@ export default function NewOnboarding() {
   // Store referral code when available
   useEffect(() => {
     console.log('NewOnboarding mounted, code from useParams:', code);
-    if (code) {
-      setReferralCode(code);
-      localStorage.setItem('referral_code', code);
-      console.log('Referral code captured and stored:', code);
+    
+    // Check multiple sources for referral code
+    let referralCode = code;
+    
+    // Check URL search parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const spaRedirect = urlParams.get('spa-redirect');
+    if (spaRedirect && spaRedirect.includes('/invite/')) {
+      const match = spaRedirect.match(/\/invite\/([^\/]+)/);
+      if (match) {
+        referralCode = match[1];
+        console.log('Referral code found in spa-redirect:', referralCode);
+      }
+    }
+    
+    // Check hash parameters
+    if (!referralCode && window.location.hash) {
+      const hashMatch = window.location.hash.match(/\/invite\/([^\/]+)/);
+      if (hashMatch) {
+        referralCode = hashMatch[1];
+        console.log('Referral code found in hash:', referralCode);
+      }
+    }
+    
+    if (referralCode) {
+      setReferralCode(referralCode);
+      localStorage.setItem('referral_code', referralCode);
+      console.log('Referral code captured and stored:', referralCode);
     } else {
-      console.log('No referral code found in URL parameters');
+      console.log('No referral code found in URL parameters, search params, or hash');
     }
   }, [code]);
 
