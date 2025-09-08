@@ -15,16 +15,16 @@ const logger = require('./utils/logger');
 // Load environment variables
 dotenv.config();
 
-// Memory optimization
+// Aggressive memory optimization for Render starter plan
 if (global.gc) {
-  // Force garbage collection every 5 minutes if available
+  // Force garbage collection every 2 minutes if available
   setInterval(() => {
     global.gc();
     logger.info('Garbage collection performed');
-  }, 300000);
+  }, 120000);
 }
 
-// Memory monitoring and cleanup
+// Aggressive memory monitoring and cleanup
 setInterval(() => {
   const memUsage = process.memoryUsage();
   const memUsageMB = {
@@ -34,17 +34,28 @@ setInterval(() => {
     external: Math.round(memUsage.external / 1024 / 1024)
   };
   
-  // Log memory usage every 10 minutes
+  // Log memory usage every 5 minutes
   logger.info({ memoryUsage: memUsageMB }, 'Memory usage report');
   
-  // Force cleanup if memory usage is high
-  if (memUsage.heapUsed / memUsage.heapTotal > 0.8) {
+  // Force cleanup if memory usage is high (lowered threshold)
+  if (memUsage.heapUsed / memUsage.heapTotal > 0.7) {
     if (global.gc) {
       global.gc();
       logger.warn('High memory usage detected, garbage collection performed');
     }
   }
-}, 600000); // Every 10 minutes
+}, 300000); // Every 5 minutes
+
+// Additional memory optimization
+process.on('uncaughtException', (err) => {
+  logger.error('Uncaught Exception:', err);
+  if (global.gc) global.gc();
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  logger.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  if (global.gc) global.gc();
+});
 
 // Initialize express app
 const app = express();
