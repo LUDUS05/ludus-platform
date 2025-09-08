@@ -40,6 +40,14 @@ const SmartRoute = ({ children, path }) => {
     return children;
   }
 
+  // For root path "/": redirect to /hi for non-logged-in users
+  if (path === '/') {
+    if (!isAuthenticated) {
+      return <Navigate to="/hi" replace />;
+    }
+    return children;
+  }
+
   // For all other pages:
   // - Non-admins: show Coming Soon page
   // - Admins: allow access to all pages
