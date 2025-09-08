@@ -98,7 +98,7 @@ const interests = [
   {
     id: "social_events",
     icon: "🎉",
-    titleKey: "onboarding.interests.socialEvents",
+    titleKey: "interests.socialEvents",
     color: "bg-yellow-400"
   }
 ];
