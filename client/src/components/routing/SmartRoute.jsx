@@ -32,6 +32,14 @@ const SmartRoute = ({ children, path }) => {
     return children;
   }
 
+  // For /share: redirect to /hi for non-logged-in users, allow access for logged-in users
+  if (path === '/share') {
+    if (!isAuthenticated) {
+      return <Navigate to="/hi" replace />;
+    }
+    return children;
+  }
+
   // For all other pages:
   // - Non-admins: show Coming Soon page
   // - Admins: allow access to all pages

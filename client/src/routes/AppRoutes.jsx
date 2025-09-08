@@ -32,6 +32,7 @@ import UserProfilePage from '../components/user/UserProfilePage';
 import OnboardingWrapper from '../components/onboarding/OnboardingWrapper';
 import OnboardingTest from '../components/onboarding/OnboardingTest';
 import NewOnboarding from '../pages/NewOnboarding';
+import SharePage from '../pages/SharePage';
 import NeoLayout from '../neoui/Layout';
 import NeoHome from '../neoui/pages/Home';
 import NeoSearch from '../neoui/pages/Search';
@@ -73,6 +74,13 @@ const AppRoutes = () => {
         </SmartRoute>
       } />
       <Route path="/hi" element={<NewOnboarding />} />
+      <Route path="/share" element={
+        <SmartRoute path="/share">
+          <ProtectedRoute>
+            <SharePage />
+          </ProtectedRoute>
+        </SmartRoute>
+      } />
       
       {/* Routes with main layout */}
       <Route path="/" element={<MainLayout />}>

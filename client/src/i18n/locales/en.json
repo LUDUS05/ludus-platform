@@ -1231,7 +1231,7 @@
     },
     "interests": {
       "title": "CHOOSE INTERESTS",
-      "subtitle": "Select 3-12 activities you love",
+      "subtitle": "Select activities you love",
       "continueBtn": "CONTINUE",
       "skipBtn": "SKIP FOR NOW",
       "minError": "Select at least 3 interests",
@@ -1243,6 +1243,14 @@
       "learningWorkshops": "LEARNING & WORKSHOPS",
       "outdoorAdventures": "OUTDOOR ADVENTURES",
       "socialEvents": "SOCIAL EVENTS"
+    },
+    "findDiscover": {
+      "title": "FIND & DISCOVER",
+      "subtitle": "Explore activities near you"
+    },
+    "connectParticipate": {
+      "title": "CONNECT & PARTICIPATE",
+      "subtitle": "Join others with shared interests"
     },
     "referral": {
       "title": "SHARE LUDUS",
@@ -1257,6 +1265,26 @@
       "shareText": "Join me on LUDUS - discover amazing activities near you!",
       "whatsapp": "SHARE ON WHATSAPP",
       "share": "SHARE LINK"
+    },
+    "comingSoon": {
+      "badge": "COMING SOON",
+      "title": "LUDUS IS COMING SOON",
+      "subtitle": "We're building something amazing. Get ready to discover incredible activities and experiences in your city!",
+      "userRegistration": {
+        "title": "JOIN AS USER",
+        "description": "Be the first to discover amazing activities and experiences when we launch.",
+        "cta": "SIGN UP NOW"
+      },
+      "partnerRegistration": {
+        "title": "JOIN AS PARTNER",
+        "description": "List your business and connect with customers looking for great experiences.",
+        "cta": "BECOME A PARTNER"
+      },
+      "followUs": "FOLLOW US FOR UPDATES",
+      "footer": "Questions? Contact us at",
+      "newsletter": "NEWSLETTER",
+      "instagram": "INSTAGRAM",
+      "twitter": "TWITTER"
     },
     "welcomeTaglineAr": "اكتشف. احجز. تواصل",
     "welcomeTaglineEn": "Discover. Book. Connect",

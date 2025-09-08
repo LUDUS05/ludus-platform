@@ -1260,7 +1260,7 @@
     },
     "interests": {
       "title": "اختر اهتماماتك",
-      "subtitle": "اختر من 3-12 نشاط تحبه",
+      "subtitle": "اختر الأنشطة التي تحبها",
       "continueBtn": "متابعة",
       "skipBtn": "تخطي الآن",
       "minError": "اختر على الأقل 3 اهتمامات",
@@ -1272,6 +1272,14 @@
       "learningWorkshops": "التعلم وورش العمل",
       "outdoorAdventures": "المغامرات الخارجية",
       "socialEvents": "الفعاليات الاجتماعية"
+    },
+    "findDiscover": {
+      "title": "ابحث واكتشف",
+      "subtitle": "استكشف الأنشطة القريبة منك"
+    },
+    "connectParticipate": {
+      "title": "تواصل وشارك",
+      "subtitle": "انضم إلى الآخرين الذين يشاركونك نفس الاهتمامات"
     },
     "referral": {
       "title": "شارك LUDUS",
@@ -1286,6 +1294,26 @@
       "shareText": "انضم إلي على LUDUS - اكتشف أنشطة رائعة بالقرب منك!",
       "whatsapp": "مشاركة عبر الواتساب",
       "share": "مشاركة الرابط"
+    },
+    "comingSoon": {
+      "badge": "قريباً",
+      "title": "LUDUS قادم قريباً",
+      "subtitle": "نحن نبني شيئاً مذهلاً. استعد لاكتشاف أنشطة وتجارب لا تُنسى في مدينتك!",
+      "userRegistration": {
+        "title": "انضم كمستخدم",
+        "description": "كن أول من يكتشف أنشطة وتجارب مذهلة عند إطلاقنا.",
+        "cta": "سجل الآن"
+      },
+      "partnerRegistration": {
+        "title": "انضم كشريك",
+        "description": "اعرض عملك وتواصل مع العملاء الذين يبحثون عن تجارب رائعة.",
+        "cta": "كن شريكاً"
+      },
+      "followUs": "تابعنا للحصول على التحديثات",
+      "footer": "أسئلة؟ اتصل بنا على",
+      "newsletter": "النشرة الإخبارية",
+      "instagram": "إنستغرام",
+      "twitter": "تويتر"
     },
     "welcomeTaglineAr": "اكتشف. احجز. تواصل",
     "welcomeTaglineEn": "Discover. Book. Connect",

@@ -368,15 +368,15 @@ const ComingSoonPage = () => {
           <div className="social-links">
             <a href="mailto:hi@letsludus.com" className="social-link">
               <span className="social-icon">📧</span>
-              Newsletter
+              {t('comingSoon.newsletter', 'Newsletter')}
             </a>
             <a href="https://instagram.com/letsludus" className="social-link" target="_blank" rel="noopener noreferrer">
               <span className="social-icon">📱</span>
-              Instagram
+              {t('comingSoon.instagram', 'Instagram')}
             </a>
             <a href="https://twitter.com/letsludus" className="social-link" target="_blank" rel="noopener noreferrer">
               <span className="social-icon">💬</span>
-              Twitter
+              {t('comingSoon.twitter', 'Twitter')}
             </a>
           </div>
         </div>
