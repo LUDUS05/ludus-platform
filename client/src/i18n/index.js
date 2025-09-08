@@ -19,13 +19,16 @@ i18n
     },
     fallbackLng: 'ar',
     lng: 'ar', // Set Arabic as default
-    debug: false,
+    debug: true,
     
     detection: {
       order: ['localStorage', 'navigator', 'htmlTag'],
       caches: ['localStorage'],
       lookupLocalStorage: 'preferred-language'
     },
+    
+    // Clear cache to force reload of translations
+    initImmediate: false,
 
     interpolation: {
       escapeValue: false

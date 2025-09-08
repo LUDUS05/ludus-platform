@@ -109,6 +109,13 @@ const WelcomeStep = ({ onNext }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const isRTL = i18n.language === 'ar';
 
+  // Clear translation cache on component mount
+  useEffect(() => {
+    console.log('Clearing translation cache...');
+    localStorage.removeItem('preferred-language');
+    i18n.reloadResources();
+  }, []);
+
   // Debug: Log translation status
   console.log('WelcomeStep Debug:', {
     language: i18n.language,
@@ -118,8 +125,17 @@ const WelcomeStep = ({ onNext }) => {
     titleTranslation: t(steps[currentStep]?.titleKey),
     descriptionKey: steps[currentStep]?.descriptionKey,
     descriptionTranslation: t(steps[currentStep]?.descriptionKey),
-    hasResourceBundle: i18n.hasResourceBundle(i18n.language, 'translation')
+    hasResourceBundle: i18n.hasResourceBundle(i18n.language, 'translation'),
+    allResources: i18n.getResourceBundle(i18n.language, 'translation')
   });
+
+  // Force reload translations if they're not working
+  useEffect(() => {
+    if (i18n.isInitialized && !t(steps[currentStep]?.titleKey)?.includes('.')) {
+      console.log('Forcing translation reload...');
+      i18n.reloadResources();
+    }
+  }, [i18n, t, currentStep]);
 
   useEffect(() => {
     const interval = setInterval(() => {
