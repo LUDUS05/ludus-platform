@@ -841,6 +841,12 @@ export default function NewOnboarding() {
   const [currentStep, setCurrentStep] = useState(0);
   const [referralCode, setReferralCode] = useState(code || null); // Store incoming referral code
 
+  // Debug: Log component mount and URL info
+  console.log('🚀 NewOnboarding Component Mounted!');
+  console.log('📍 Current URL:', window.location.href);
+  console.log('📍 Current Pathname:', window.location.pathname);
+  console.log('📍 Referral Code from useParams:', code);
+
   // Set Arabic as default language
   useEffect(() => {
     if (i18n.language !== 'ar') {
