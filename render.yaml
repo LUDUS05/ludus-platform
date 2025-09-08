@@ -33,6 +33,9 @@ services:
         sync: false # Set in Render dashboard
       - key: GOOGLE_CLIENT_SECRET
         sync: false # Set in Render dashboard
+      # Render MCP API Configuration
+      - key: RENDER_API_TOKEN
+        sync: false # Set in Render dashboard
 
   # Frontend Service (Static React App) - Standard
   - type: web
@@ -92,6 +95,9 @@ services:
       - key: GOOGLE_CLIENT_ID
         sync: false # Set in Render dashboard
       - key: GOOGLE_CLIENT_SECRET
+        sync: false # Set in Render dashboard
+      # Render MCP API Configuration
+      - key: RENDER_API_TOKEN
         sync: false # Set in Render dashboard
 
   # Frontend Service (Static React App) - Enhanced for ATHENA
