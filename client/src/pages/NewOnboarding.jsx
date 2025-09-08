@@ -228,13 +228,23 @@ const RegistrationStep = ({ onNext, onBack }) => {
   const handleGoogleSignIn = async () => {
     setLoading(true);
     try {
+      const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+      if (!clientId || clientId === 'your_google_client_id_here') {
+        console.error('Google Client ID not configured. Please set REACT_APP_GOOGLE_CLIENT_ID environment variable.');
+        alert('Google login is not configured. Please contact support.');
+        setLoading(false);
+        return;
+      }
+      
       if (window.google) {
         window.google.accounts.id.prompt();
       } else {
         console.error('Google Identity Services not loaded');
+        alert('Google login service is not available. Please try again.');
       }
     } catch (error) {
       console.error("Google sign in error:", error);
+      alert('Google login failed. Please try again.');
     }
     setLoading(false);
   };
@@ -899,14 +909,20 @@ export default function NewOnboarding() {
     script.defer = true;
     document.head.appendChild(script);
 
-    script.onload = () => {
-      if (window.google) {
-        window.google.accounts.id.initialize({
-          client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-          callback: handleGoogleResponse,
-        });
-      }
-    };
+                script.onload = () => {
+                  if (window.google) {
+                    const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+                    if (!clientId || clientId === 'your_google_client_id_here') {
+                      console.error('Google Client ID not configured. Please set REACT_APP_GOOGLE_CLIENT_ID environment variable.');
+                      return;
+                    }
+                    
+                    window.google.accounts.id.initialize({
+                      client_id: clientId,
+                      callback: handleGoogleResponse,
+                    });
+                  }
+                };
 
     return () => {
       if (document.head.contains(script)) {
