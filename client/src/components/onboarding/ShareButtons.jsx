@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "../ui/Button";
 import { MessageCircle, Share } from "lucide-react";
 
-export default function ShareButtons({ url, text, language, t }) {
+export default function ShareButtons({ url, text, language }) {
   const shareViaWhatsApp = () => {
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(`${text} ${url}`)}`;
     window.open(whatsappUrl, '_blank');
@@ -32,7 +32,7 @@ export default function ShareButtons({ url, text, language, t }) {
         className="w-full bg-green-500 hover:bg-green-600 brutalist-border brutalist-shadow brutalist-shadow-hover brutalist-text h-12 text-white transition-all duration-200"
       >
         <MessageCircle className="w-5 h-5 mr-2" />
-        {t('onboarding.referral.whatsapp')}
+        {language === 'ar' ? 'شارك عبر واتساب' : 'Share via WhatsApp'}
       </Button>
       
       <Button
@@ -40,7 +40,7 @@ export default function ShareButtons({ url, text, language, t }) {
         className="w-full bg-blue-500 hover:bg-blue-600 brutalist-border brutalist-shadow brutalist-shadow-hover brutalist-text h-12 text-white transition-all duration-200"
       >
         <Share className="w-5 h-5 mr-2" />
-        {t('onboarding.referral.share')}
+        {language === 'ar' ? 'مشاركة عامة' : 'Share'}
       </Button>
     </div>
   );
