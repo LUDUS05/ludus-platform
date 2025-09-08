@@ -7,6 +7,14 @@ import NewOnboarding from '../../pages/NewOnboarding';
 const SmartRoute = ({ children, path }) => {
   const { isAuthenticated, user, isLoading } = useAuth();
   
+  // Debug logging
+  console.log('SmartRoute Debug:', {
+    path,
+    isAuthenticated,
+    user: user ? { id: user.id, role: user.role } : null,
+    isLoading
+  });
+  
   // Show loading spinner while checking authentication
   if (isLoading) {
     return (

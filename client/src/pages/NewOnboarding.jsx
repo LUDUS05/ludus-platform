@@ -117,7 +117,8 @@ const WelcomeStep = ({ onNext }) => {
     titleKey: steps[currentStep]?.titleKey,
     titleTranslation: t(steps[currentStep]?.titleKey),
     descriptionKey: steps[currentStep]?.descriptionKey,
-    descriptionTranslation: t(steps[currentStep]?.descriptionKey)
+    descriptionTranslation: t(steps[currentStep]?.descriptionKey),
+    hasResourceBundle: i18n.hasResourceBundle(i18n.language, 'translation')
   });
 
   useEffect(() => {
@@ -126,6 +127,15 @@ const WelcomeStep = ({ onNext }) => {
     }, 3000);
     return () => clearInterval(interval);
   }, []);
+
+  // Don't render until i18n is initialized
+  if (!i18n.isInitialized) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-yellow-300 via-pink-300 to-blue-300">
+        <div className="animate-spin rounded-full h-12 w-12 border-2 border-black border-t-transparent"></div>
+      </div>
+    );
+  }
 
   return (
     <div className={`min-h-screen bg-gradient-to-br from-yellow-400 via-pink-400 to-blue-400 neo-brutalist-bg relative overflow-hidden ${isRTL ? 'rtl' : 'ltr'}`} dir={isRTL ? 'rtl' : 'ltr'}>
@@ -177,11 +187,11 @@ const WelcomeStep = ({ onNext }) => {
                 </div>
                 
                 <h2 className="text-2xl brutalist-text mb-4 text-black">
-                  {t(steps[currentStep].titleKey, steps[currentStep].titleKey)}
+                  {t(steps[currentStep].titleKey) || steps[currentStep].titleKey}
                 </h2>
                 
                 <p className="text-lg text-black font-bold max-w-xs mx-auto">
-                  {t(steps[currentStep].descriptionKey, steps[currentStep].descriptionKey)}
+                  {t(steps[currentStep].descriptionKey) || steps[currentStep].descriptionKey}
                 </p>
               </motion.div>
             </AnimatePresence>

@@ -19,7 +19,7 @@ i18n
     },
     fallbackLng: 'ar',
     lng: 'ar', // Set Arabic as default
-    debug: false,
+    debug: true,
     
     detection: {
       order: ['localStorage', 'navigator', 'htmlTag'],
