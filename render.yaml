@@ -44,6 +44,10 @@ services:
     plan: starter
     buildCommand: cd client && npm install --legacy-peer-deps && npm run build
     staticPublishPath: client/build
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
     envVars:
       # Core API Configuration - REQUIRED
       - key: REACT_APP_API_URL
@@ -107,6 +111,10 @@ services:
     plan: starter
     buildCommand: cd client && npm install --legacy-peer-deps && npm run build
     staticPublishPath: client/build
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
     envVars:
       # Core API Configuration - REQUIRED
       - key: REACT_APP_API_URL
