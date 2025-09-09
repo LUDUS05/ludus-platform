@@ -256,7 +256,12 @@ const RegistrationStep = ({ onNext, onBack, referralCode }) => {
         if (storedReferralCode) {
           localStorage.removeItem('referral_code');
         }
-        onNext();
+        
+        // Add a small delay to ensure state updates are processed
+        setTimeout(() => {
+          console.log('🚀 Proceeding to next onboarding step');
+          onNext();
+        }, 100);
       } else {
         console.error('Google login failed:', result.message);
         alert('Google login failed. Please try again.');
@@ -923,7 +928,7 @@ export default function NewOnboarding() {
   const { i18n } = useTranslation();
   const navigate = useNavigate();
   const { code } = useParams(); // Get referral code from URL
-  const { loginWithSocial } = useAuth(); // Get Google login function
+  const { loginWithSocial, isAuthenticated, user } = useAuth(); // Get Google login function and auth state
   const [currentStep, setCurrentStep] = useState(0);
   const [referralCode, setReferralCode] = useState(code || null); // Store incoming referral code
 
@@ -998,67 +1003,25 @@ export default function NewOnboarding() {
     console.log('🔄 Referral code state updated:', referralCode);
   }, [referralCode]);
 
-  // Load Google Identity Services script
+  // Debug: Log authentication state changes
   useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://accounts.google.com/gsi/client';
-    script.async = true;
-    script.defer = true;
-    document.head.appendChild(script);
+    console.log('🔐 Authentication state changed:', {
+      isAuthenticated,
+      user: user ? { id: user.id, onboarding_completed: user.onboarding_completed } : null,
+      currentStep
+    });
+  }, [isAuthenticated, user, currentStep]);
 
-    script.onload = () => {
-      if (window.google) {
-        const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
-        if (!clientId || clientId === 'your_google_client_id_here') {
-          console.error('Google Client ID not configured. Please set REACT_APP_GOOGLE_CLIENT_ID environment variable.');
-          return;
-        }
-        
-        window.google.accounts.id.initialize({
-          client_id: clientId,
-          callback: handleGoogleResponse,
-        });
-      }
-    };
-
-    return () => {
-      if (document.head.contains(script)) {
-        document.head.removeChild(script);
-      }
-    };
-  }, []);
-
-  // Handle Google login response
-  const handleGoogleResponse = async (response) => {
-    try {
-      // Get referral code from localStorage if available
-      const storedReferralCode = localStorage.getItem('referral_code');
-      
-      // Create user data with referral code if available
-      const userData = {
-        referralCode: storedReferralCode || referralCode,
-        referralSource: 'google_oauth',
-        referralPlatform: 'web'
-      };
-      
-      console.log('🔐 Attempting Google login with referral data:', userData);
-      
-      const result = await loginWithSocial('google', response.credential, userData);
-      console.log('Google login successful:', result);
-      
-      // Clear stored referral code after successful login
-      if (storedReferralCode) {
-        localStorage.removeItem('referral_code');
-        console.log('Referral code processed and cleared:', storedReferralCode);
-      }
-      
-      // Navigate to share page after successful login
-      navigate('/share');
-    } catch (error) {
-      console.error('Google login error:', error);
-      alert('Google login failed. Please try again.');
+  // Auto-advance to profile step if user is authenticated and on registration step
+  useEffect(() => {
+    if (isAuthenticated && user && currentStep === 1) {
+      console.log('🚀 User authenticated, advancing to profile step');
+      setCurrentStep(2); // Skip to profile step (index 2)
     }
-  };
+  }, [isAuthenticated, user, currentStep]);
+
+  // Note: Google Identity Services is handled by individual step components
+  // to avoid conflicts between different handlers
 
   const steps = [
     { component: WelcomeStep, name: 'welcome' },

@@ -29,8 +29,13 @@ const SmartRoute = ({ children, path }) => {
   // Check if user is admin
   const isAdmin = user && user.role === 'admin';
 
-  // Always allow access to /hi (new onboarding page)
+  // Handle /hi (new onboarding page)
   if (path === '/hi') {
+    // If user is authenticated and has completed onboarding, redirect to dashboard
+    if (isAuthenticated && user && user.onboarding_completed) {
+      return <Navigate to="/dashboard" replace />;
+    }
+    // Otherwise, show onboarding (for both authenticated and non-authenticated users)
     return <NewOnboarding />;
   }
 
