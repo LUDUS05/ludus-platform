@@ -13,7 +13,7 @@ class PerformanceMonitoringService {
     
     this.thresholds = {
       responseTime: 2000, // 2 seconds
-      memoryUsage: 0.8, // 80% of available memory
+      memoryUsage: 0.95, // 95% of available memory (adjusted for Render starter plan)
       cpuUsage: 0.7, // 70% CPU usage
       errorRate: 0.05, // 5% error rate
       databaseQueryTime: 1000 // 1 second

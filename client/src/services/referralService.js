@@ -339,4 +339,5 @@ class ReferralService {
 
 }
 
-export default new ReferralService();
+const referralService = new ReferralService();
+export default referralService;
