@@ -74,7 +74,8 @@ class UnsplashService {
         }
         
         // Wait before retry
-        await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
+        const currentRetryCount = retryCount;
+        await new Promise(resolve => setTimeout(resolve, 1000 * currentRetryCount));
       }
     }
   }

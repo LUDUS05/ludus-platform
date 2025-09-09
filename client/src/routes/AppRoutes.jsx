@@ -22,7 +22,7 @@ import UserRegistrationPage from '../pages/UserRegistrationPage';
 import OnboardTestPage from '../pages/OnboardTestPage';
 import ComingSoonPage from '../pages/ComingSoonPage';
 import MaintenancePage from '../pages/MaintenancePage';
-import MapPage from '../pages/MapPage';
+// import MapPage from '../pages/MapPage'; // Temporarily disabled
 import WalletPage from '../pages/WalletPage';
 import ReferralDashboard from '../pages/ReferralDashboard';
 import ReferralTestPage from '../pages/ReferralTestPage';

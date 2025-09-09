@@ -1,6 +1,6 @@
 // frontend/src/services/notificationService.js
 import { gsap } from '../utils/gsap-setup';
-import { animationPresets, rtlAware } from '../utils/gsap-setup';
+import { rtlAware } from '../utils/gsap-setup';
 
 class LUDUSNotificationService {
   constructor() {

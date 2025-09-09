@@ -62,4 +62,5 @@ class FeatureService {
   }
 }
 
-export default new FeatureService();
+const featureService = new FeatureService();
+export default featureService;

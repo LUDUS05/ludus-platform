@@ -219,11 +219,11 @@ class OnboardingService {
    * Generate QR code data URL for referral
    */
   generateQRCodeData(referralCode) {
-    const qrData = {
-      type: 'referral',
-      code: referralCode,
-      url: `${window.location.origin}/register?ref=${referralCode}`
-    };
+    // const qrData = {
+    //   type: 'referral',
+    //   code: referralCode,
+    //   url: `${window.location.origin}/register?ref=${referralCode}`
+    // };
     
     // This would typically use a QR code library like qrcode.js
     // For now, return a placeholder
@@ -283,4 +283,5 @@ class OnboardingService {
   }
 }
 
-export default new OnboardingService();
+const onboardingService = new OnboardingService();
+export default onboardingService;
