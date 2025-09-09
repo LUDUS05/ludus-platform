@@ -50,6 +50,12 @@ const SmartRoute = ({ children, path }) => {
     return children;
   }
 
+  // Handle /login (dedicated login page)
+  if (path === '/login') {
+    // Always allow access to login page, even in coming soon mode
+    return children;
+  }
+
   // Handle /hi (new onboarding page)
   if (path === '/hi') {
     // If user is authenticated and has completed onboarding, redirect to dashboard

@@ -1331,6 +1331,22 @@
       "topN": "Top {{n}}",
       "points": "{{points}} pts",
       "streak": "🔥 {{n}}"
+    },
+    "auth": {
+      "login": {
+        "title": "Login",
+        "subtitle": "Welcome back",
+        "email": "Email",
+        "password": "Password",
+        "emailPlaceholder": "Enter your email",
+        "passwordPlaceholder": "Enter your password",
+        "submit": "Login",
+        "google": "Login with Google",
+        "noAccount": "Don't have an account? Sign up now",
+        "forgotPassword": "Forgot password?",
+        "privacy": "By using this service, you agree to our Terms of Use and Privacy Policy",
+        "error": "Login failed. Please check your credentials and try again."
+      }
     }
   }
 }
