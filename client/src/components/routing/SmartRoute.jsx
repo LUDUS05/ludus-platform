@@ -52,6 +52,7 @@ const SmartRoute = ({ children, path }) => {
 
   // Handle /login (dedicated login page)
   if (path === '/login') {
+    console.log('🔐 Login route detected, allowing access');
     // Always allow access to login page, even in coming soon mode
     return children;
   }
