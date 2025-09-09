@@ -4,7 +4,6 @@ import MainLayout from '../components/layout/MainLayout';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
 import SmartRoute from '../components/routing/SmartRoute';
 import HomePage from '../pages/HomePage';
-import LoginForm from '../components/auth/LoginForm';
 import RegisterForm from '../components/auth/RegisterForm';
 import AdminRoutes from '../pages/admin/AdminRoutes';
 import ActivitiesPageComponent from '../pages/ActivitiesPage';
@@ -98,11 +97,6 @@ const AppRoutes = () => {
         <Route index element={
           <SmartRoute path="/">
             <HomePage />
-          </SmartRoute>
-        } />
-        <Route path="login" element={
-          <SmartRoute path="/login">
-            <LoginForm />
           </SmartRoute>
         } />
         <Route path="register-form" element={
