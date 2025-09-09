@@ -27,7 +27,28 @@ const SmartRoute = ({ children, path }) => {
   }
 
   // Check if user is admin
-  const isAdmin = user && user.role === 'admin';
+  const isAdmin = user && (user.role === 'admin' || user.email === 'admin@ludusapp.com');
+
+  // Handle admin routes specifically
+  if (path && path.startsWith('/admin')) {
+    console.log('🔐 Admin route access check:', {
+      path,
+      isAuthenticated,
+      user: user ? { id: user.id, role: user.role, adminRole: user.adminRole } : null,
+      isAdmin
+    });
+    
+    if (!isAuthenticated) {
+      console.log('❌ Not authenticated, redirecting to /hi');
+      return <Navigate to="/hi" replace />;
+    }
+    if (!isAdmin) {
+      console.log('❌ Not admin user, showing Coming Soon page');
+      return <ComingSoonPage />;
+    }
+    console.log('✅ Admin access granted');
+    return children;
+  }
 
   // Handle /hi (new onboarding page)
   if (path === '/hi') {
