@@ -10,7 +10,8 @@ const {
   forgotPassword,
   resetPassword,
   changePassword,
-  socialLogin
+  socialLogin,
+  createAdminUser
 } = require('../controllers/authController');
 const { authenticate, authenticateWithFullUser } = require('../middleware/auth');
 const {
@@ -26,6 +27,7 @@ router.post('/refresh', refreshToken);
 router.post('/verify-email', verifyEmail);
 router.post('/forgot-password', forgotPassword);
 router.post('/reset-password', resetPassword);
+router.post('/create-admin', createAdminUser); // Development endpoint to create admin user
 
 // Protected routes
 router.post('/logout', authenticate, logout);

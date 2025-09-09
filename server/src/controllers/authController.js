@@ -723,6 +723,88 @@ const socialLogin = async (req, res, next) => {
 };
 
 
+/**
+ * Create an admin user (for development/setup purposes)
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} next - The Express next middleware function.
+ * @returns {Promise<void>}
+ */
+const createAdminUser = async (req, res, next) => {
+  try {
+    const { email, password, firstName, lastName } = req.body;
+
+    // Check if admin user already exists
+    const existingAdmin = await User.findOne({ 
+      email: email || 'admin@ludusapp.com' 
+    });
+
+    if (existingAdmin) {
+      // Update to admin if not already
+      if (existingAdmin.role !== 'admin') {
+        existingAdmin.role = 'admin';
+        existingAdmin.adminRole = 'SA'; // Super Admin
+        await existingAdmin.save();
+        console.log('✅ Updated user to admin role');
+      }
+      
+      return res.json({
+        success: true,
+        message: 'Admin user already exists',
+        data: {
+          email: existingAdmin.email,
+          role: existingAdmin.role,
+          adminRole: existingAdmin.adminRole
+        }
+      });
+    }
+
+    // Create admin user
+    const adminUser = new User({
+      firstName: firstName || 'Admin',
+      lastName: lastName || 'User',
+      email: email || 'admin@ludusapp.com',
+      password: password || 'AdminPassword123!',
+      role: 'admin',
+      adminRole: 'SA', // Super Admin
+      isEmailVerified: true,
+      location: {
+        address: 'Riyadh, Saudi Arabia',
+        city: 'Riyadh',
+        state: 'Riyadh Province',
+        zipCode: '11564',
+        coordinates: [46.6753, 24.7136] // [longitude, latitude] for Riyadh
+      },
+      preferences: {
+        categories: ['fitness', 'arts', 'food', 'outdoor', 'unique', 'wellness'],
+        priceRange: {
+          min: 0,
+          max: 1000
+        },
+        radius: 50
+      }
+    });
+
+    await adminUser.save();
+    
+    console.log('✅ Admin user created successfully:', adminUser.email);
+    
+    res.status(201).json({
+      success: true,
+      message: 'Admin user created successfully',
+      data: {
+        email: adminUser.email,
+        role: adminUser.role,
+        adminRole: adminUser.adminRole,
+        name: adminUser.firstName + ' ' + adminUser.lastName
+      }
+    });
+  } catch (error) {
+    console.error('❌ Error creating admin user:', error);
+    next(error);
+  }
+};
+
 module.exports = {
   register,
   login,
@@ -733,5 +815,6 @@ module.exports = {
   forgotPassword,
   resetPassword,
   changePassword,
-  socialLogin
+  socialLogin,
+  createAdminUser
 };
