@@ -46,14 +46,14 @@ const AppRoutes = () => {
   return (
     <Routes>
       {/* Routes without layout (standalone pages) */}
-      <Route path="/register" element={
-        <SmartRoute path="/register">
-          <UserRegistrationPage />
-        </SmartRoute>
-      } />
       <Route path="/login" element={
         <SmartRoute path="/login">
           <LoginPage />
+        </SmartRoute>
+      } />
+      <Route path="/register" element={
+        <SmartRoute path="/register">
+          <UserRegistrationPage />
         </SmartRoute>
       } />
       <Route path="/onboard-test" element={

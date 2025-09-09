@@ -21,6 +21,8 @@ const LoginPage = () => {
   const { login, isAuthenticated, user, isLoading } = useAuth();
   const navigate = useNavigate();
   
+  console.log('🔐 LoginPage component mounted!');
+  
   const [formData, setFormData] = useState({
     email: "",
     password: ""
