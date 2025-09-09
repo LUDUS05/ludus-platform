@@ -32,6 +32,7 @@ import UserProfilePage from '../components/user/UserProfilePage';
 import OnboardingWrapper from '../components/onboarding/OnboardingWrapper';
 import OnboardingTest from '../components/onboarding/OnboardingTest';
 import NewOnboarding from '../pages/NewOnboarding';
+import LoginPage from '../pages/LoginPage';
 import SharePage from '../pages/SharePage';
 import NeoLayout from '../neoui/Layout';
 import NeoHome from '../neoui/pages/Home';
@@ -49,6 +50,11 @@ const AppRoutes = () => {
       <Route path="/register" element={
         <SmartRoute path="/register">
           <UserRegistrationPage />
+        </SmartRoute>
+      } />
+      <Route path="/login" element={
+        <SmartRoute path="/login">
+          <LoginPage />
         </SmartRoute>
       } />
       <Route path="/onboard-test" element={
