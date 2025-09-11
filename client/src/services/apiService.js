@@ -1,8 +1,98 @@
-// frontend/src/services/apiService.js - Enhanced API service with animation triggers
+/**
+ * @fileoverview Enhanced API service for LUDUS platform frontend with animation triggers.
+ * 
+ * Purpose: Centralized API service that handles all HTTP communications between the
+ * frontend and backend, providing enhanced user experience through animation triggers,
+ * comprehensive error handling, and optimized request/response management for the
+ * LUDUS social activity platform.
+ * 
+ * Business Context: This service is the primary interface for all platform operations
+ * including user authentication, activity management, booking systems, payment processing,
+ * and social interactions. It enhances user experience through strategic animation
+ * triggers and provides consistent error handling across the application.
+ * 
+ * Implementation Notes:
+ * - Axios-based HTTP client with interceptors
+ * - Automatic authentication token management
+ * - Animation trigger integration for enhanced UX
+ * - Comprehensive error handling and user feedback
+ * - Request/response transformation
+ * - Timeout and retry logic
+ * 
+ * Dependencies:
+ * - Axios for HTTP requests
+ * - Notification service for user feedback
+ * - Local storage for token management
+ * 
+ * Evolution: Originally basic API service, evolved to include animation triggers,
+ * enhanced error handling, and comprehensive user experience features.
+ * 
+ * @version 1.0.0
+ * @since 2024-01-01
+ * @modified 2025-01-08 - Added animation triggers and enhanced error handling
+ */
+
 import axios from 'axios';
 import { notificationService } from './notificationService';
 
+/**
+ * Enhanced API service class for LUDUS platform with animation triggers.
+ * 
+ * Purpose: Provides comprehensive API communication with enhanced user experience
+ * through animation triggers, automatic authentication, and robust error handling
+ * for all platform operations.
+ * 
+ * Business Context: Serves as the primary communication layer between frontend
+ * and backend, ensuring consistent user experience across all platform features
+ * including activities, bookings, payments, and social interactions.
+ * 
+ * Implementation Notes:
+ * - Singleton pattern for consistent instance usage
+ * - Automatic base URL configuration for different environments
+ * - Request/response interceptors for authentication and animations
+ * - Comprehensive error handling with user-friendly messages
+ * - Animation trigger integration for enhanced UX
+ * 
+ * Dependencies:
+ * - Axios for HTTP client functionality
+ * - Notification service for user feedback
+ * - Environment variables for configuration
+ * 
+ * Evolution: Started as basic API service, evolved to include animation triggers,
+ * enhanced error handling, and comprehensive user experience features.
+ * 
+ * @class LUDUSAPIService
+ * @since 2024-01-01
+ * @modified 2025-01-08 - Added animation triggers and enhanced error handling
+ */
 class LUDUSAPIService {
+  /**
+   * Initializes the API service with configuration and interceptors.
+   * 
+   * Purpose: Sets up the HTTP client with proper configuration, base URL,
+   * and request/response interceptors for enhanced functionality.
+   * 
+   * Business Context: Ensures consistent API communication across all
+   * platform features with proper authentication and user experience
+   * enhancements.
+   * 
+   * Implementation Notes:
+   * - Configures base URL from environment variables
+   * - Sets up Axios client with timeout and headers
+   * - Initializes request/response interceptors
+   * - Enables animation triggers by default
+   * 
+   * Dependencies:
+   * - Environment variables for API URL configuration
+   * - Axios for HTTP client setup
+   * 
+   * Evolution: Originally simple constructor, evolved to include
+   * comprehensive interceptor setup and environment configuration.
+   * 
+   * @constructor
+   * @since 2024-01-01
+   * @modified 2025-01-08 - Added interceptor setup and environment configuration
+   */
   constructor() {
     // Default to athena backend; append /api if not provided
     const envUrl = process.env.REACT_APP_API_URL || 'https://ludus-backend-athena.onrender.com';
