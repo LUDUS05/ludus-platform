@@ -1,3 +1,23 @@
+/**
+ * @fileoverview Authentication Context for LUDUS platform frontend.
+ * 
+ * This module provides a comprehensive authentication context using React Context API
+ * and useReducer for state management. It handles user authentication, registration,
+ * social login, and session management with automatic token validation and refresh.
+ * 
+ * Key Features:
+ * - JWT-based authentication with automatic token validation
+ * - Social authentication (Google, Facebook, Apple)
+ * - Automatic session restoration on app load
+ * - Error handling and user feedback
+ * - User profile management
+ * - Secure token storage and management
+ * 
+ * @version 1.0.0
+ * @author LUDUS Development Team
+ * @since 2025-01-01
+ */
+
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import { authService } from '../services/authService';
 
@@ -69,7 +89,23 @@ const authReducer = (state, action) => {
 // Create context
 const AuthContext = createContext();
 
-// Auth provider component
+/**
+ * Authentication Provider component that wraps the application with auth context.
+ * 
+ * This component provides authentication state and methods to all child components
+ * through React Context. It handles initialization, login, logout, registration,
+ * and social authentication with comprehensive error handling.
+ * 
+ * @component AuthProvider
+ * @param {Object} props - Component props
+ * @param {React.ReactNode} props.children - Child components to wrap
+ * @returns {JSX.Element} Provider component with auth context
+ * 
+ * @example
+ * <AuthProvider>
+ *   <App />
+ * </AuthProvider>
+ */
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 

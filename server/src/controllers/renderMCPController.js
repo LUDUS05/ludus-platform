@@ -1,9 +1,41 @@
+/**
+ * @fileoverview Render MCP (Model Context Protocol) Controller for LUDUS platform.
+ * 
+ * This controller provides comprehensive integration with Render's API for managing
+ * services, deployments, logs, metrics, and environment variables. It serves as
+ * the backend interface for AI agents to interact with Render services.
+ * 
+ * Key Features:
+ * - Service listing and status monitoring
+ * - Deployment triggering and history tracking
+ * - Log retrieval and analysis
+ * - Performance metrics collection
+ * - Environment variable management
+ * - Health monitoring and status checks
+ * - Error handling and response formatting
+ * 
+ * @version 1.0.0
+ * @author LUDUS Development Team
+ * @since 2025-01-01
+ * @see {@link https://api.render.com/v1} Render API Documentation
+ */
+
 const axios = require('axios');
 
 // Render API configuration
 const RENDER_API_TOKEN = process.env.RENDER_API_TOKEN || 'rnd_AjWyMGFA2vmtx6KidKj4TPVLZwpU';
 const RENDER_API_BASE = 'https://api.render.com/v1';
 
+/**
+ * Render MCP Controller class for managing Render services.
+ * 
+ * Provides a comprehensive interface for AI agents to interact with Render
+ * services through the Model Context Protocol. Handles service management,
+ * deployment operations, monitoring, and configuration.
+ * 
+ * @class RenderMCPController
+ * @version 1.0.0
+ */
 class RenderMCPController {
   constructor() {
     this.apiClient = axios.create({
@@ -16,7 +48,31 @@ class RenderMCPController {
     });
   }
 
-  // List all Render services
+  /**
+   * List all Render services for the authenticated account.
+   * 
+   * Retrieves a comprehensive list of all services associated with the Render
+   * account, including their status, URLs, types, and metadata. This endpoint
+   * is used by AI agents to get an overview of the deployment infrastructure.
+   * 
+   * @async
+   * @method listServices
+   * @param {Object} req - Express request object
+   * @param {Object} res - Express response object
+   * @returns {Promise<void>} JSON response with services list
+   * 
+   * @example
+   * GET /api/render-mcp/services
+   * 
+   * Response:
+   * {
+   *   "success": true,
+   *   "data": {
+   *     "services": [...],
+   *     "total": 5
+   *   }
+   * }
+   */
   async listServices(req, res) {
     try {
       const response = await this.apiClient.get('/services');
