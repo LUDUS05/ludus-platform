@@ -1,7 +1,25 @@
 /**
- * @fileoverview Main application entry point.
+ * @fileoverview Main application entry point for LUDUS platform backend.
+ * 
+ * This is the core Express.js application that serves as the backend API for the LUDUS
+ * social activity platform. It handles authentication, database connections, middleware
+ * setup, route configuration, and memory optimization for Render deployment.
+ * 
+ * Key Features:
+ * - Express.js server with comprehensive middleware stack
+ * - MongoDB connection with Mongoose ODM
+ * - JWT-based authentication system
+ * - Memory optimization for Render starter plan (512MB limit)
+ * - Comprehensive API routes for all platform features
+ * - Health monitoring and performance tracking
+ * - Partner terms page auto-creation
+ * - CORS configuration for production deployment
+ * 
  * @version 1.0.0
- * @author Your Name
+ * @author LUDUS Development Team
+ * @since 2025-01-01
+ * @see {@link https://app.letsludus.com} Production URL
+ * @see {@link https://ludus-backend-athena.onrender.com} Staging URL
  */
 
 const express = require('express');
@@ -78,10 +96,26 @@ if (process.env.NODE_ENV !== 'test' && process.env.MONGODB_URI) {
 
 /**
  * Creates the partner terms and conditions page if it doesn't already exist.
- * This function is idempotent and can be safely called multiple times.
+ * 
+ * This function is idempotent and can be safely called multiple times. It creates
+ * a comprehensive terms and conditions page for partners with bilingual content
+ * (Arabic and English) that includes partnership agreements, quality standards,
+ * payment terms, and contact information.
+ * 
+ * The page is automatically created during server startup to ensure it's always
+ * available for partner registration and legal compliance.
+ * 
  * @async
  * @function createPartnerTermsPage
  * @returns {Promise<void>} A promise that resolves when the page is created or if it already exists.
+ * @throws {Error} If there's an error creating the page in the database
+ * 
+ * @example
+ * // Called automatically during server startup
+ * await createPartnerTermsPage();
+ * 
+ * @see {@link Page} Model for page structure
+ * @see {@link https://app.letsludus.com/partner-terms-and-conditions} Live page
  */
 async function createPartnerTermsPage() {
   try {
