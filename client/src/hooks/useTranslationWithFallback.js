@@ -1,3 +1,26 @@
+/**
+ * @fileoverview Enhanced translation hook with fallbacks and analytics for LUDUS platform.
+ * 
+ * This module provides an advanced translation hook that extends react-i18next with
+ * comprehensive fallback mechanisms, usage analytics, validation, and utility functions.
+ * It's specifically designed for the LUDUS platform's bilingual (Arabic/English) needs.
+ * 
+ * Key Features:
+ * - Multi-level fallback system (namespace → fallback namespace → fallback key → default value)
+ * - Translation usage analytics and tracking
+ * - Missing translation detection and logging
+ * - Batch translation support
+ * - Safe translation with error handling
+ * - Currency and date formatting with locale support
+ * - RTL/LTR direction detection
+ * - Development-time warnings and debugging
+ * 
+ * @version 1.0.0
+ * @author LUDUS Development Team
+ * @since 2025-01-01
+ * @see {@link https://react.i18next.com/} react-i18next documentation
+ */
+
 import { useTranslation } from 'react-i18next';
 import { useCallback, useRef } from 'react';
 
