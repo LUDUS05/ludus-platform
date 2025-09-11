@@ -1,3 +1,25 @@
+/**
+ * @fileoverview User model for LUDUS platform.
+ * 
+ * This model defines the comprehensive user schema for the LUDUS social activity platform.
+ * It includes user authentication, profile management, preferences, social features,
+ * referral system, rating profiles, and admin role management.
+ * 
+ * Key Features:
+ * - JWT-based authentication with password hashing
+ * - Social authentication (Google, Facebook, Apple)
+ * - Comprehensive user preferences and settings
+ * - Referral system integration
+ * - Rating profile management
+ * - Admin role system with granular permissions
+ * - Payment method management
+ * - Onboarding gamification
+ * 
+ * @version 1.0.0
+ * @author LUDUS Development Team
+ * @since 2025-01-01
+ */
+
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
@@ -332,7 +354,23 @@ const userSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Hash password before saving
+/**
+ * Pre-save middleware to hash user passwords.
+ * 
+ * Automatically hashes the password using bcrypt with a salt rounds of 12
+ * before saving the user to the database. Only hashes if the password
+ * field has been modified to avoid unnecessary re-hashing.
+ * 
+ * @async
+ * @function
+ * @param {Function} next - Express middleware next function
+ * @returns {Promise<void>} Continues to next middleware
+ * 
+ * @example
+ * // Automatically called when saving a user with a new password
+ * const user = new User({ email: 'test@example.com', password: 'plaintext' });
+ * await user.save(); // Password is automatically hashed
+ */
 userSchema.pre('save', async function(next) {
   if (!this.isModified('password')) return next();
   
@@ -340,7 +378,24 @@ userSchema.pre('save', async function(next) {
   next();
 });
 
-// Compare password method
+/**
+ * Compare a candidate password with the user's hashed password.
+ * 
+ * Uses bcrypt to securely compare the provided password with the stored
+ * hashed password. This method is used during login authentication.
+ * 
+ * @async
+ * @method comparePassword
+ * @param {string} candidatePassword - The plain text password to compare
+ * @returns {Promise<boolean>} True if passwords match, false otherwise
+ * 
+ * @example
+ * const user = await User.findOne({ email: 'test@example.com' });
+ * const isValid = await user.comparePassword('userPassword123');
+ * if (isValid) {
+ *   // User authentication successful
+ * }
+ */
 userSchema.methods.comparePassword = async function(candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
 };

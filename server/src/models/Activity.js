@@ -1,3 +1,26 @@
+/**
+ * @fileoverview Activity model for LUDUS platform.
+ * 
+ * This model defines the comprehensive activity schema for the LUDUS social activity platform.
+ * It includes activity management, pricing, scheduling, location, requirements, policies,
+ * ratings, and statistics tracking.
+ * 
+ * Key Features:
+ * - Comprehensive activity information and metadata
+ * - Flexible pricing models (per person, per group, per hour)
+ * - Advanced scheduling system (fixed, flexible, recurring)
+ * - Location management with coordinates and online support
+ * - Requirements and policies management
+ * - Rating and review system
+ * - Statistics tracking and analytics
+ * - SEO optimization fields
+ * - Vendor relationship management
+ * 
+ * @version 1.0.0
+ * @author LUDUS Development Team
+ * @since 2025-01-01
+ */
+
 const mongoose = require('mongoose');
 
 const activitySchema = new mongoose.Schema({
@@ -239,7 +262,24 @@ activitySchema.pre('validate', function(next) {
   next();
 });
 
-// Update rating when new review is added
+/**
+ * Update activity rating when a new review is added.
+ * 
+ * Calculates the new average rating by incorporating the new rating into
+ * the existing average. This method maintains the running average without
+ * needing to recalculate from all reviews.
+ * 
+ * @method updateRating
+ * @param {number} newRating - The new rating value (1-5)
+ * @returns {Promise<Activity>} The updated activity document
+ * @throws {Error} If newRating is not a valid number between 1-5
+ * 
+ * @example
+ * const activity = await Activity.findById(activityId);
+ * await activity.updateRating(4.5);
+ * console.log(activity.rating.average); // Updated average
+ * console.log(activity.rating.count); // Incremented count
+ */
 activitySchema.methods.updateRating = function(newRating) {
   const totalRating = (this.rating.average * this.rating.count) + newRating;
   this.rating.count += 1;
