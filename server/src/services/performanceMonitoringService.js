@@ -1,6 +1,14 @@
+/**
+ * @fileoverview Service for monitoring performance.
+ * @module services/performanceMonitoringService
+ */
+
 const logger = require('../utils/logger');
 
 class PerformanceMonitoringService {
+  /**
+   * Creates an instance of PerformanceMonitoringService.
+   */
   constructor() {
     this.metrics = {
       requests: new Map(),
@@ -28,7 +36,9 @@ class PerformanceMonitoringService {
     }
   }
 
-  // Start performance monitoring
+  /**
+   * Start performance monitoring.
+   */
   startMonitoring() {
     // Monitor memory usage every 30 seconds
     setInterval(() => {
@@ -48,7 +58,14 @@ class PerformanceMonitoringService {
     logger.info('Performance monitoring started');
   }
 
-  // Record request metrics
+  /**
+   * Record request metrics.
+   * @param {string} endpoint - The endpoint of the request.
+   * @param {string} method - The HTTP method of the request.
+   * @param {number} responseTime - The response time of the request in milliseconds.
+   * @param {number} statusCode - The status code of the response.
+   * @param {string} [userId=null] - The ID of the user making the request.
+   */
   recordRequest(endpoint, method, responseTime, statusCode, userId = null) {
     const key = `${method}:${endpoint}`;
     const timestamp = Date.now();
@@ -94,7 +111,9 @@ class PerformanceMonitoringService {
     this.checkPerformanceIssues(key, responseTime, statusCode);
   }
 
-  // Record memory usage
+  /**
+   * Record memory usage.
+   */
   recordMemoryUsage() {
     const usage = process.memoryUsage();
     const timestamp = Date.now();
@@ -126,7 +145,9 @@ class PerformanceMonitoringService {
     }
   }
 
-  // Record CPU usage (simplified - would need more sophisticated monitoring in production)
+  /**
+   * Record CPU usage.
+   */
   recordCPUUsage() {
     const startUsage = process.cpuUsage();
     const timestamp = Date.now();
@@ -148,7 +169,14 @@ class PerformanceMonitoringService {
     }
   }
 
-  // Record database query performance
+  /**
+   * Record database query performance.
+   * @param {string} operation - The database operation (e.g., 'find', 'update').
+   * @param {string} collection - The collection the query was run on.
+   * @param {number} queryTime - The execution time of the query in milliseconds.
+   * @param {boolean} success - Whether the query was successful.
+   * @param {Error} [error=null] - The error object if the query failed.
+   */
   recordDatabaseQuery(operation, collection, queryTime, success, error = null) {
     const key = `${operation}:${collection}`;
     const timestamp = Date.now();
@@ -203,7 +231,12 @@ class PerformanceMonitoringService {
     }
   }
 
-  // Record referral system specific metrics
+  /**
+   * Record a referral system-specific metric.
+   * @param {string} metricType - The type of metric.
+   * @param {*} value - The value of the metric.
+   * @param {object} [context={}] - Additional context for the metric.
+   */
   recordReferralMetric(metricType, value, context = {}) {
     const timestamp = Date.now();
     
@@ -227,7 +260,12 @@ class PerformanceMonitoringService {
     this.checkReferralSystemPatterns(metricType, value, context);
   }
 
-  // Check for performance issues
+  /**
+   * Check for performance issues.
+   * @param {string} endpoint - The endpoint to check.
+   * @param {number} responseTime - The response time of the request.
+   * @param {number} statusCode - The status code of the response.
+   */
   checkPerformanceIssues(endpoint, responseTime, statusCode) {
     // Check response time threshold
     if (responseTime > this.thresholds.responseTime) {
@@ -244,7 +282,10 @@ class PerformanceMonitoringService {
     }
   }
 
-  // Check error rate for an endpoint
+  /**
+   * Check the error rate for an endpoint.
+   * @param {string} endpoint - The endpoint to check.
+   */
   checkErrorRate(endpoint) {
     const responseTimes = this.metrics.responseTimes.get(endpoint) || [];
     const recentRequests = responseTimes.filter(r => 
@@ -267,7 +308,12 @@ class PerformanceMonitoringService {
     }
   }
 
-  // Check referral system patterns
+  /**
+   * Check for unusual patterns in the referral system.
+   * @param {string} metricType - The type of metric.
+   * @param {*} value - The value of the metric.
+   * @param {object} context - Additional context for the metric.
+   */
   checkReferralSystemPatterns(metricType, value, context) {
     const metricData = this.metrics.referralSystemMetrics.get(metricType) || [];
     const recentMetrics = metricData.filter(m => 
@@ -293,7 +339,12 @@ class PerformanceMonitoringService {
     }
   }
 
-  // Send performance alert
+  /**
+   * Send a performance alert.
+   * @param {string} alertType - The type of alert.
+   * @param {object} data - The alert data.
+   * @returns {object} The alert object.
+   */
   sendPerformanceAlert(alertType, data) {
     const alert = {
       id: `perf_${alertType}_${Date.now()}`,
@@ -311,7 +362,10 @@ class PerformanceMonitoringService {
     return alert;
   }
 
-  // Send performance notification
+  /**
+   * Send a performance notification.
+   * @param {object} alert - The alert object.
+   */
   sendPerformanceNotification(alert) {
     try {
       // This would integrate with your notification system
@@ -326,7 +380,11 @@ class PerformanceMonitoringService {
     }
   }
 
-  // Get performance statistics
+  /**
+   * Get performance statistics.
+   * @param {string} [timeRange='24h'] - The time range for the statistics.
+   * @returns {object} An object containing performance statistics.
+   */
   getPerformanceStats(timeRange = '24h') {
     const now = Date.now();
     const cutoff = now - this.getTimeRangeMs(timeRange);
@@ -418,14 +476,23 @@ class PerformanceMonitoringService {
     return stats;
   }
 
-  // Calculate percentile
+  /**
+   * Calculate a percentile value from an array of numbers.
+   * @param {number[]} values - The array of numbers.
+   * @param {number} percentile - The percentile to calculate.
+   * @returns {number} The percentile value.
+   */
   calculatePercentile(values, percentile) {
     const sorted = values.sort((a, b) => a - b);
     const index = Math.ceil((percentile / 100) * sorted.length) - 1;
     return sorted[index] || 0;
   }
 
-  // Get time range in milliseconds
+  /**
+   * Get the time range in milliseconds.
+   * @param {string} timeRange - The time range string.
+   * @returns {number} The time range in milliseconds.
+   */
   getTimeRangeMs(timeRange) {
     const timeRanges = {
       '1h': 60 * 60 * 1000,
@@ -438,7 +505,9 @@ class PerformanceMonitoringService {
     return timeRanges[timeRange] || timeRanges['24h'];
   }
 
-  // Clean up old metrics
+  /**
+   * Clean up old performance metrics.
+   */
   cleanupOldMetrics() {
     const cutoff = Date.now() - (7 * 24 * 60 * 60 * 1000); // 7 days
     
@@ -472,7 +541,12 @@ class PerformanceMonitoringService {
     logger.info('Old performance metrics cleaned up');
   }
 
-  // Export performance data
+  /**
+   * Export performance data.
+   * @param {string} [format='json'] - The format to export the data in.
+   * @param {string} [timeRange='24h'] - The time range for the data.
+   * @returns {object|string} The exported data.
+   */
   exportPerformanceData(format = 'json', timeRange = '24h') {
     const data = this.getPerformanceStats(timeRange);
     
@@ -483,7 +557,11 @@ class PerformanceMonitoringService {
     return data;
   }
 
-  // Convert performance data to CSV
+  /**
+   * Convert performance data to a CSV string.
+   * @param {object} data - The performance data.
+   * @returns {string} The CSV string.
+   */
   convertPerformanceToCSV(data) {
     const csvRows = [];
     

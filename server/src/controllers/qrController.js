@@ -1,10 +1,18 @@
+/**
+ * @fileoverview Controller for generating QR codes.
+ * @module controllers/qrController
+ */
+
 const QRCode = require('qrcode');
 const path = require('path');
 const fs = require('fs').promises;
 
-// @desc    Generate QR code for referral link
-// @route   GET /api/qr/:referralCode
-// @access  Public
+/**
+ * Generate a QR code for a referral link.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const generateQRCode = async (req, res) => {
   try {
     const { referralCode } = req.params;
@@ -71,9 +79,12 @@ const generateQRCode = async (req, res) => {
   }
 };
 
-// @desc    Download QR code as file
-// @route   GET /api/qr/:referralCode/download
-// @access  Public
+/**
+ * Download a QR code as a file.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const downloadQRCode = async (req, res) => {
   try {
     const { referralCode } = req.params;

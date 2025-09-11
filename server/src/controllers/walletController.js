@@ -1,9 +1,18 @@
+/**
+ * @fileoverview Controller for handling user wallets.
+ * @module controllers/walletController
+ */
+
 const Wallet = require('../models/Wallet');
 const { moyasarService } = require('../services/moyasarService');
 
-// @desc    Get user wallet
-// @route   GET /api/wallet
-// @access  Private
+/**
+ * Get the wallet for the authenticated user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} _next - The Express next middleware function.
+ * @returns {Promise<void>}
+ */
 const getUserWallet = async (req, res, _next) => {
   try {
     const userId = req.user.id;
@@ -28,9 +37,13 @@ const getUserWallet = async (req, res, _next) => {
   }
 };
 
-// @desc    Get wallet transaction history
-// @route   GET /api/wallet/transactions
-// @access  Private
+/**
+ * Get the transaction history for the authenticated user's wallet.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} _next - The Express next middleware function.
+ * @returns {Promise<void>}
+ */
 const getWalletTransactions = async (req, res, _next) => {
   try {
     const userId = req.user.id;
@@ -83,9 +96,13 @@ const getWalletTransactions = async (req, res, _next) => {
   }
 };
 
-// @desc    Add funds to wallet
-// @route   POST /api/wallet/deposit
-// @access  Private
+/**
+ * Add funds to the authenticated user's wallet.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} _next - The Express next middleware function.
+ * @returns {Promise<void>}
+ */
 const depositFunds = async (req, res, _next) => {
   try {
     const userId = req.user.id;
@@ -181,9 +198,13 @@ const depositFunds = async (req, res, _next) => {
   }
 };
 
-// @desc    Process successful deposit (webhook/callback)
-// @route   POST /api/wallet/deposit/confirm
-// @access  Private
+/**
+ * Confirm a successful deposit (from webhook or callback).
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} _next - The Express next middleware function.
+ * @returns {Promise<void>}
+ */
 const confirmDeposit = async (req, res, _next) => {
   try {
     const { paymentId, status } = req.body;
@@ -262,9 +283,13 @@ const confirmDeposit = async (req, res, _next) => {
   }
 };
 
-// @desc    Withdraw funds from wallet
-// @route   POST /api/wallet/withdraw
-// @access  Private
+/**
+ * Withdraw funds from the authenticated user's wallet.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} _next - The Express next middleware function.
+ * @returns {Promise<void>}
+ */
 const withdrawFunds = async (req, res, _next) => {
   try {
     const userId = req.user.id;
@@ -338,9 +363,13 @@ const withdrawFunds = async (req, res, _next) => {
   }
 };
 
-// @desc    Use wallet funds for payment
-// @route   POST /api/wallet/pay
-// @access  Private
+/**
+ * Pay for a booking using the authenticated user's wallet.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} _next - The Express next middleware function.
+ * @returns {Promise<void>}
+ */
 const payWithWallet = async (req, res, _next) => {
   try {
     const userId = req.user.id;
@@ -406,9 +435,13 @@ const payWithWallet = async (req, res, _next) => {
   }
 };
 
-// @desc    Process refund to wallet
-// @route   POST /api/wallet/refund
-// @access  Private (typically called by booking system)
+/**
+ * Process a refund to the user's wallet.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} _next - The Express next middleware function.
+ * @returns {Promise<void>}
+ */
 const processRefund = async (req, res, _next) => {
   try {
     const { userId, amount, bookingId, description = 'Booking refund' } = req.body;
@@ -464,9 +497,13 @@ const processRefund = async (req, res, _next) => {
   }
 };
 
-// @desc    Update wallet settings
-// @route   PUT /api/wallet/settings
-// @access  Private
+/**
+ * Update the settings for the authenticated user's wallet.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} _next - The Express next middleware function.
+ * @returns {Promise<void>}
+ */
 const updateWalletSettings = async (req, res, _next) => {
   try {
     const userId = req.user.id;
@@ -501,9 +538,13 @@ const updateWalletSettings = async (req, res, _next) => {
   }
 };
 
-// @desc    Get wallet statistics
-// @route   GET /api/wallet/stats
-// @access  Private
+/**
+ * Get statistics for the authenticated user's wallet.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} _next - The Express next middleware function.
+ * @returns {Promise<void>}
+ */
 const getWalletStats = async (req, res, _next) => {
   try {
     const userId = req.user.id;

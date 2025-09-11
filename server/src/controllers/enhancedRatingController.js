@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Controller for the enhanced rating system.
+ * @module controllers/enhancedRatingController
+ */
+
 const ratingSystemService = require('../services/ratingSystemService');
 const RatingSystemConfig = require('../models/RatingSystemConfig');
 const UserRatingProfile = require('../models/UserRatingProfile');
@@ -7,9 +12,12 @@ const User = require('../models/User');
 const Activity = require('../models/Activity');
 const Booking = require('../models/Booking');
 
-// @desc    Get rating system configuration
-// @route   GET /api/rating-system/config
-// @access  Private (Admin)
+/**
+ * Get the current configuration of the rating system.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getRatingSystemConfig = async (req, res) => {
   try {
     const config = await RatingSystemConfig.getConfig();
@@ -27,9 +35,12 @@ const getRatingSystemConfig = async (req, res) => {
   }
 };
 
-// @desc    Update rating system configuration
-// @route   PUT /api/rating-system/config
-// @access  Private (Admin)
+/**
+ * Update the configuration of the rating system.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const updateRatingSystemConfig = async (req, res) => {
   try {
     const { ratingCriteria, tierThresholds, creditRewards, activityBonus, systemSettings } = req.body;
@@ -60,9 +71,12 @@ const updateRatingSystemConfig = async (req, res) => {
   }
 };
 
-// @desc    Get user rating profile
-// @route   GET /api/rating-system/profile/:userId
-// @access  Private
+/**
+ * Get the rating profile for a specific user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getUserRatingProfile = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -91,9 +105,12 @@ const getUserRatingProfile = async (req, res) => {
   }
 };
 
-// @desc    Create rating assignments for an event
-// @route   POST /api/rating-system/assignments/:eventId
-// @access  Private (Admin)
+/**
+ * Create rating assignments for a specific event.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const createRatingAssignments = async (req, res) => {
   try {
     const { eventId } = req.params;
@@ -121,9 +138,12 @@ const createRatingAssignments = async (req, res) => {
   }
 };
 
-// @desc    Get rating assignments for a user
-// @route   GET /api/rating-system/assignments
-// @access  Private
+/**
+ * Get all rating assignments for the authenticated user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getUserRatingAssignments = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -144,9 +164,12 @@ const getUserRatingAssignments = async (req, res) => {
   }
 };
 
-// @desc    Get specific rating assignment
-// @route   GET /api/rating-system/assignments/:assignmentId
-// @access  Private
+/**
+ * Get a specific rating assignment by its ID.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getRatingAssignment = async (req, res) => {
   try {
     const { assignmentId } = req.params;
@@ -189,9 +212,12 @@ const getRatingAssignment = async (req, res) => {
   }
 };
 
-// @desc    Submit a rating
-// @route   POST /api/rating-system/ratings
-// @access  Private
+/**
+ * Submit a new rating.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const submitRating = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -236,9 +262,12 @@ const submitRating = async (req, res) => {
   }
 };
 
-// @desc    Get ratings for a user
-// @route   GET /api/rating-system/ratings/user/:userId
-// @access  Private
+/**
+ * Get all ratings for a specific user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getUserRatings = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -269,9 +298,12 @@ const getUserRatings = async (req, res) => {
   }
 };
 
-// @desc    Get ratings by a user
-// @route   GET /api/rating-system/ratings/by/:userId
-// @access  Private
+/**
+ * Get all ratings submitted by a specific user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getRatingsByUser = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -303,9 +335,12 @@ const getRatingsByUser = async (req, res) => {
   }
 };
 
-// @desc    Get rating statistics
-// @route   GET /api/rating-system/statistics
-// @access  Private (Admin)
+/**
+ * Get statistics for the rating system.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getRatingStatistics = async (req, res) => {
   try {
     const { dateRange, status } = req.query;
@@ -342,9 +377,12 @@ const getRatingStatistics = async (req, res) => {
   }
 };
 
-// @desc    Get top rated users
-// @route   GET /api/rating-system/top-users
-// @access  Public
+/**
+ * Get the top-rated users.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getTopRatedUsers = async (req, res) => {
   try {
     const { limit = 10, tier } = req.query;
@@ -367,9 +405,12 @@ const getTopRatedUsers = async (req, res) => {
   }
 };
 
-// @desc    Flag a rating
-// @route   POST /api/rating-system/ratings/:ratingId/flag
-// @access  Private
+/**
+ * Flag a rating for review.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const flagRating = async (req, res) => {
   try {
     const { ratingId } = req.params;
@@ -400,9 +441,12 @@ const flagRating = async (req, res) => {
   }
 };
 
-// @desc    Review a flagged rating
-// @route   POST /api/rating-system/ratings/:ratingId/review
-// @access  Private (Admin)
+/**
+ * Review a flagged rating (approve or reject).
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const reviewRating = async (req, res) => {
   try {
     const { ratingId } = req.params;
@@ -433,9 +477,12 @@ const reviewRating = async (req, res) => {
   }
 };
 
-// @desc    Get flagged ratings
-// @route   GET /api/rating-system/ratings/flagged
-// @access  Private (Admin)
+/**
+ * Get all flagged ratings.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getFlaggedRatings = async (req, res) => {
   try {
     const { limit = 50, page = 1 } = req.query;
@@ -470,9 +517,12 @@ const getFlaggedRatings = async (req, res) => {
   }
 };
 
-// @desc    Process monthly bonuses
-// @route   POST /api/rating-system/process-bonuses
-// @access  Private (Admin)
+/**
+ * Process monthly bonuses for all users.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const processMonthlyBonuses = async (req, res) => {
   try {
     const processedCount = await ratingSystemService.processMonthlyBonuses();
@@ -491,9 +541,12 @@ const processMonthlyBonuses = async (req, res) => {
   }
 };
 
-// @desc    Get rating system health
-// @route   GET /api/rating-system/health
-// @access  Private (Admin)
+/**
+ * Get the health status of the rating system.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getRatingSystemHealth = async (req, res) => {
   try {
     const [
@@ -537,9 +590,12 @@ const getRatingSystemHealth = async (req, res) => {
   }
 };
 
-// @desc    Generate advanced rating assignments with algorithm selection
-// @route   POST /api/rating-system/assignments/advanced/:eventId
-// @access  Private (Admin)
+/**
+ * Generate advanced rating assignments using a specific algorithm strategy.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const generateAdvancedRatingAssignments = async (req, res) => {
   try {
     const { eventId } = req.params;
@@ -572,9 +628,12 @@ const generateAdvancedRatingAssignments = async (req, res) => {
   }
 };
 
-// @desc    Recalculate user rating with advanced engine
-// @route   POST /api/rating-system/recalculate/:userId
-// @access  Private (Admin)
+/**
+ * Recalculate a user's rating with an advanced engine.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const recalculateWithAdvancedEngine = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -600,9 +659,12 @@ const recalculateWithAdvancedEngine = async (req, res) => {
   }
 };
 
-// @desc    Batch recalculate multiple users
-// @route   POST /api/rating-system/batch-recalculate
-// @access  Private (Admin)
+/**
+ * Recalculate ratings for a batch of users.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const batchRecalculateUsers = async (req, res) => {
   try {
     const { userIds, options } = req.body;
@@ -631,9 +693,12 @@ const batchRecalculateUsers = async (req, res) => {
   }
 };
 
-// @desc    Get calculation statistics
-// @route   GET /api/rating-system/statistics
-// @access  Private (Admin)
+/**
+ * Get statistics about rating calculations.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getCalculationStatistics = async (req, res) => {
   try {
     const { options } = req.query;
@@ -655,9 +720,12 @@ const getCalculationStatistics = async (req, res) => {
   }
 };
 
-// @desc    Select optimal algorithm strategy
-// @route   POST /api/rating-system/strategy/select
-// @access  Private (Admin)
+/**
+ * Select the optimal algorithm strategy for a given set of participants.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const selectOptimalStrategy = async (req, res) => {
   try {
     const { participants, options } = req.body;

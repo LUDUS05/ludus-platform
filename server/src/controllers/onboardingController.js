@@ -1,9 +1,19 @@
+/**
+ * @fileoverview Controller for handling user onboarding.
+ * @module controllers/onboardingController
+ */
+
 const OnboardingConfig = require('../models/OnboardingConfig');
 const User = require('../models/User');
 const { validationResult } = require('express-validator');
 const mongoose = require('mongoose');
 
-// Get onboarding configuration (public)
+/**
+ * Get the public onboarding configuration.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 exports.getOnboardingConfig = async (req, res) => {
   try {
     const config = await OnboardingConfig.getConfig();
@@ -41,7 +51,12 @@ exports.getOnboardingConfig = async (req, res) => {
   }
 };
 
-// Leaderboard: top users by onboarding points (last 30 days optional later)
+/**
+ * Get the onboarding leaderboard.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 exports.getOnboardingLeaderboard = async (req, res) => {
   try {
     const limit = Math.min(parseInt(req.query.limit || '10', 10), 50);
@@ -65,7 +80,12 @@ exports.getOnboardingLeaderboard = async (req, res) => {
   }
 };
 
-// Get full onboarding configuration (admin only)
+/**
+ * Get the full onboarding configuration (admin only).
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 exports.getFullOnboardingConfig = async (req, res) => {
   try {
     console.log('Admin user info:', {
@@ -96,7 +116,12 @@ exports.getFullOnboardingConfig = async (req, res) => {
   }
 };
 
-// Update onboarding configuration (admin only)
+/**
+ * Update the onboarding configuration (admin only).
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 exports.updateOnboardingConfig = async (req, res) => {
   try {
     console.log('Update config - Admin user info:', {
@@ -164,7 +189,12 @@ exports.updateOnboardingConfig = async (req, res) => {
   }
 };
 
-// Toggle onboarding system (admin only)
+/**
+ * Toggle the onboarding system on or off (admin only).
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 exports.toggleOnboarding = async (req, res) => {
   try {
     const config = await OnboardingConfig.getConfig();
@@ -187,7 +217,12 @@ exports.toggleOnboarding = async (req, res) => {
   }
 };
 
-// Complete onboarding step
+/**
+ * Complete a single step of the onboarding process for the authenticated user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 exports.completeOnboardingStep = async (req, res) => {
   try {
     const { stepId, stepData } = req.body;
@@ -320,7 +355,12 @@ exports.completeOnboardingStep = async (req, res) => {
   }
 };
 
-// Complete entire onboarding
+/**
+ * Complete the entire onboarding process for the authenticated user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 exports.completeOnboarding = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -379,7 +419,12 @@ exports.completeOnboarding = async (req, res) => {
   }
 };
 
-// Get user onboarding progress
+/**
+ * Get the onboarding progress for the authenticated user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 exports.getOnboardingProgress = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -415,7 +460,12 @@ exports.getOnboardingProgress = async (req, res) => {
   }
 };
 
-// Reset user onboarding (admin only)
+/**
+ * Reset the onboarding progress for a user (admin only).
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 exports.resetUserOnboarding = async (req, res) => {
   try {
     const { userId } = req.params;

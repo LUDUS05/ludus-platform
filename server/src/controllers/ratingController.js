@@ -1,11 +1,20 @@
+/**
+ * @fileoverview Controller for handling ratings.
+ * @module controllers/ratingController
+ */
+
 const Rating = require('../models/Rating');
 const User = require('../models/User');
 const Activity = require('../models/Activity');
 const Booking = require('../models/Booking');
 
-// @desc    Submit post-event rating
-// @route   POST /api/ratings
-// @access  Private
+/**
+ * Submit a new rating for an event.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} _next - The Express next middleware function.
+ * @returns {Promise<void>}
+ */
 const submitRating = async (req, res, _next) => {
   try {
     const userId = req.user.id;
@@ -102,9 +111,13 @@ const submitRating = async (req, res, _next) => {
   }
 };
 
-// @desc    Get user's community rating
-// @route   GET /api/ratings/community/:userId
-// @access  Public
+/**
+ * Get the community rating for a specific user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} _next - The Express next middleware function.
+ * @returns {Promise<void>}
+ */
 const getUserCommunityRating = async (req, res, _next) => {
   try {
     const { userId } = req.params;
@@ -164,9 +177,13 @@ const getUserCommunityRating = async (req, res, _next) => {
   }
 };
 
-// @desc    Get event rating statistics
-// @route   GET /api/ratings/event/:eventId
-// @access  Public
+/**
+ * Get rating statistics for a specific event.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} _next - The Express next middleware function.
+ * @returns {Promise<void>}
+ */
 const getEventRatings = async (req, res, _next) => {
   try {
     const { eventId } = req.params;
@@ -200,9 +217,13 @@ const getEventRatings = async (req, res, _next) => {
   }
 };
 
-// @desc    Get user's submitted ratings
-// @route   GET /api/ratings/my-ratings
-// @access  Private
+/**
+ * Get all ratings submitted by the authenticated user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} _next - The Express next middleware function.
+ * @returns {Promise<void>}
+ */
 const getMyRatings = async (req, res, _next) => {
   try {
     const userId = req.user.id;
@@ -241,9 +262,13 @@ const getMyRatings = async (req, res, _next) => {
   }
 };
 
-// @desc    Check if user needs to rate an event
-// @route   GET /api/ratings/check/:eventId
-// @access  Private
+/**
+ * Check if the authenticated user needs to rate a specific event.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} _next - The Express next middleware function.
+ * @returns {Promise<void>}
+ */
 const checkRatingStatus = async (req, res, _next) => {
   try {
     const userId = req.user.id;
@@ -306,9 +331,13 @@ const checkRatingStatus = async (req, res, _next) => {
   }
 };
 
-// @desc    Get rating statistics for admin
-// @route   GET /api/ratings/admin/stats
-// @access  Private (Admin only)
+/**
+ * Get rating statistics for admin users.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} _next - The Express next middleware function.
+ * @returns {Promise<void>}
+ */
 const getAdminRatingStats = async (req, res, _next) => {
   try {
     // Verify admin access
