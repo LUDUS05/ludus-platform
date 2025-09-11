@@ -1,9 +1,20 @@
+/**
+ * @fileoverview Controller for handling payments.
+ * @module controllers/paymentController
+ */
+
 const moyasarService = require('../services/moyasarService');
 const emailService = require('../services/emailService');
 const Booking = require('../models/Booking');
 const User = require('../models/User');
 const Vendor = require('../models/Vendor');
 
+/**
+ * Create a new payment for a booking.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const createPayment = async (req, res) => {
   try {
     const { bookingId, paymentMethod, cardData, savedTokenId } = req.body;
@@ -146,6 +157,12 @@ const createPayment = async (req, res) => {
   }
 };
 
+/**
+ * Confirm a payment after a redirect.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const confirmPayment = async (req, res) => {
   try {
     const { paymentId } = req.params;
@@ -219,6 +236,12 @@ const confirmPayment = async (req, res) => {
   }
 };
 
+/**
+ * Get the status of a payment.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getPaymentStatus = async (req, res) => {
   try {
     const { paymentId } = req.params;
@@ -246,6 +269,12 @@ const getPaymentStatus = async (req, res) => {
   }
 };
 
+/**
+ * Process a refund for a booking.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const processRefund = async (req, res) => {
   try {
     const { bookingId } = req.params;
@@ -329,6 +358,12 @@ const processRefund = async (req, res) => {
   }
 };
 
+/**
+ * Save a new payment method for the authenticated user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const savePaymentMethod = async (req, res) => {
   try {
     const { cardData, isDefault } = req.body;
@@ -405,6 +440,12 @@ const savePaymentMethod = async (req, res) => {
   }
 };
 
+/**
+ * Get all saved payment methods for the authenticated user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getUserPaymentMethods = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -439,6 +480,12 @@ const getUserPaymentMethods = async (req, res) => {
   }
 };
 
+/**
+ * Handle incoming webhooks from Moyasar.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const handleWebhook = async (req, res) => {
   try {
     const signature = req.headers['x-moyasar-signature'];
@@ -479,7 +526,11 @@ const handleWebhook = async (req, res) => {
   }
 };
 
-// Helper functions for webhook processing
+/**
+ * Handle a successful payment event from a webhook.
+ * @param {object} payment - The payment object from the webhook.
+ * @returns {Promise<void>}
+ */
 const handlePaymentSuccess = async (payment) => {
   const booking = await Booking.findOne({
     'payment.moyasarPaymentId': payment.id
@@ -507,6 +558,11 @@ const handlePaymentSuccess = async (payment) => {
   }
 };
 
+/**
+ * Handle a failed payment event from a webhook.
+ * @param {object} payment - The payment object from the webhook.
+ * @returns {Promise<void>}
+ */
 const handlePaymentFailed = async (payment) => {
   const booking = await Booking.findOne({
     'payment.moyasarPaymentId': payment.id
@@ -521,6 +577,11 @@ const handlePaymentFailed = async (payment) => {
   }
 };
 
+/**
+ * Handle a refunded payment event from a webhook.
+ * @param {object} payment - The payment object from the webhook.
+ * @returns {Promise<void>}
+ */
 const handlePaymentRefunded = async (payment) => {
   const booking = await Booking.findOne({
     'payment.moyasarPaymentId': payment.id

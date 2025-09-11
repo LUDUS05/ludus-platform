@@ -1,7 +1,17 @@
+/**
+ * @fileoverview Controller for handling pages.
+ * @module controllers/pageController
+ */
+
 const Page = require('../models/Page');
 const { validationResult } = require('express-validator');
 
-// Get all pages with advanced filtering and pagination
+/**
+ * Get all pages with advanced filtering and pagination.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getPages = async (req, res) => {
   try {
     const { 
@@ -135,7 +145,12 @@ const getPages = async (req, res) => {
   }
 };
 
-// Get single page by ID with full content
+/**
+ * Get a single page by its ID.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getPage = async (req, res) => {
   try {
     const { id } = req.params;
@@ -186,7 +201,12 @@ const getPage = async (req, res) => {
   }
 };
 
-// Get page by slug (public endpoint)
+/**
+ * Get a published page by its slug.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getPageBySlug = async (req, res) => {
   try {
     const { slug } = req.params;
@@ -229,7 +249,12 @@ const getPageBySlug = async (req, res) => {
   }
 };
 
-// Create new page
+/**
+ * Create a new page.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const createPage = async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -334,7 +359,12 @@ const createPage = async (req, res) => {
   }
 };
 
-// Update existing page
+/**
+ * Update an existing page.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const updatePage = async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -447,7 +477,12 @@ const updatePage = async (req, res) => {
   }
 };
 
-// Delete page
+/**
+ * Delete a page.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const deletePage = async (req, res) => {
   try {
     const { id } = req.params;
@@ -490,7 +525,12 @@ const deletePage = async (req, res) => {
   }
 };
 
-// Duplicate page
+/**
+ * Duplicate a page.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const duplicatePage = async (req, res) => {
   try {
     const { id } = req.params;
@@ -556,7 +596,12 @@ const duplicatePage = async (req, res) => {
   }
 };
 
-// Get page analytics
+/**
+ * Get analytics for all pages.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getPageAnalytics = async (req, res) => {
   try {
     const { period = '30d' } = req.query;

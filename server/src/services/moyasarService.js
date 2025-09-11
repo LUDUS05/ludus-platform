@@ -1,7 +1,15 @@
+/**
+ * @fileoverview Service for interacting with the Moyasar payment gateway.
+ * @module services/moyasarService
+ */
+
 const axios = require('axios');
 const crypto = require('crypto');
 
 class MoyasarService {
+  /**
+   * Creates an instance of MoyasarService.
+   */
   constructor() {
     this.apiKey = process.env.MOYASAR_SECRET_KEY;
     this.baseURL = process.env.MOYASAR_BASE_URL || 'https://api.moyasar.com/v1';
@@ -16,6 +24,11 @@ class MoyasarService {
     });
   }
 
+  /**
+   * Create a new payment.
+   * @param {object} paymentData - The payment data.
+   * @returns {Promise<object>} A promise that resolves to the Moyasar payment object.
+   */
   async createPayment(paymentData) {
     try {
       const payload = {
@@ -39,6 +52,11 @@ class MoyasarService {
     }
   }
 
+  /**
+   * Retrieve a payment by its ID.
+   * @param {string} paymentId - The ID of the payment to retrieve.
+   * @returns {Promise<object>} A promise that resolves to the Moyasar payment object.
+   */
   async retrievePayment(paymentId) {
     try {
       const response = await this.client.get(`/payments/${paymentId}`);
@@ -48,6 +66,12 @@ class MoyasarService {
     }
   }
 
+  /**
+   * Refund a payment.
+   * @param {string} paymentId - The ID of the payment to refund.
+   * @param {object} refundData - The refund data.
+   * @returns {Promise<object>} A promise that resolves to the Moyasar refund object.
+   */
   async refundPayment(paymentId, refundData) {
     try {
       const payload = {
@@ -62,6 +86,11 @@ class MoyasarService {
     }
   }
 
+  /**
+   * Create a new invoice.
+   * @param {object} invoiceData - The invoice data.
+   * @returns {Promise<object>} A promise that resolves to the Moyasar invoice object.
+   */
   async createInvoice(invoiceData) {
     try {
       const payload = {
@@ -79,6 +108,12 @@ class MoyasarService {
     }
   }
 
+  /**
+   * Verify the signature of a Moyasar webhook.
+   * @param {string} payload - The webhook payload.
+   * @param {string} signature - The webhook signature.
+   * @returns {boolean} True if the signature is valid, false otherwise.
+   */
   verifyWebhookSignature(payload, signature) {
     if (!this.webhookSecret) {
       console.warn('Moyasar webhook secret not configured');
@@ -98,6 +133,11 @@ class MoyasarService {
     }
   }
 
+  /**
+   * Tokenize a credit card.
+   * @param {object} cardData - The card data.
+   * @returns {Promise<object>} A promise that resolves to the Moyasar token object.
+   */
   async tokenizeCard(cardData) {
     try {
       const payload = {
@@ -115,19 +155,39 @@ class MoyasarService {
     }
   }
 
+  /**
+   * Validate a payment method.
+   * @param {string} method - The payment method to validate.
+   * @returns {boolean} True if the payment method is valid, false otherwise.
+   */
   validatePaymentMethod(method) {
     const validMethods = ['creditcard', 'mada', 'applepay', 'stcpay', 'sadad'];
     return validMethods.includes(method);
   }
 
+  /**
+   * Format an amount to halalas.
+   * @param {number} amount - The amount in SAR.
+   * @returns {number} The amount in halalas.
+   */
   formatAmount(amount) {
     return Math.round(amount * 100); // Convert SAR to halalas
   }
 
+  /**
+   * Parse an amount from halalas to SAR.
+   * @param {number} halalas - The amount in halalas.
+   * @returns {number} The amount in SAR.
+   */
   parseAmount(halalas) {
     return halalas / 100; // Convert halalas to SAR
   }
 
+  /**
+   * Get the payment status from a Moyasar status.
+   * @param {string} moyasarStatus - The Moyasar status.
+   * @returns {string} The payment status.
+   */
   getPaymentStatus(moyasarStatus) {
     const statusMap = {
       'paid': 'paid',
@@ -142,6 +202,11 @@ class MoyasarService {
     return statusMap[moyasarStatus] || 'pending';
   }
 
+  /**
+   * Create a credit card payment source.
+   * @param {object} cardData - The card data.
+   * @returns {object} The credit card payment source object.
+   */
   createCardSource(cardData) {
     return {
       type: 'creditcard',
@@ -153,6 +218,11 @@ class MoyasarService {
     };
   }
 
+  /**
+   * Create a token payment source.
+   * @param {string} token - The payment token.
+   * @returns {object} The token payment source object.
+   */
   createTokenSource(token) {
     return {
       type: 'token',
@@ -160,6 +230,11 @@ class MoyasarService {
     };
   }
 
+  /**
+   * Create an Apple Pay payment source.
+   * @param {string} token - The Apple Pay token.
+   * @returns {object} The Apple Pay payment source object.
+   */
   createApplePaySource(token) {
     return {
       type: 'applepay',
@@ -167,6 +242,11 @@ class MoyasarService {
     };
   }
 
+  /**
+   * Create an STC Pay payment source.
+   * @param {string} mobile - The mobile number.
+   * @returns {object} The STC Pay payment source object.
+   */
   createSTCPaySource(mobile) {
     return {
       type: 'stcpay',
@@ -174,6 +254,11 @@ class MoyasarService {
     };
   }
 
+  /**
+   * Get an error message from a Moyasar error.
+   * @param {Error} error - The error object.
+   * @returns {string} The error message.
+   */
   getErrorMessage(error) {
     if (error.response?.data?.message) {
       return error.response.data.message;

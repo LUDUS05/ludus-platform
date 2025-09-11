@@ -1,5 +1,5 @@
 /**
- * Comprehensive Monitoring Service
+ * @fileoverview Comprehensive Monitoring Service
  * 
  * This service integrates all monitoring components:
  * - Performance monitoring
@@ -7,6 +7,7 @@
  * - Health checks
  * - Alert system
  * - Configuration management
+ * @module services/monitoringService
  */
 
 const errorTrackingService = require('./errorTrackingService');
@@ -15,6 +16,9 @@ const monitoringConfig = require('../monitoring/monitoring-config');
 const logger = require('../utils/logger');
 
 class MonitoringService {
+  /**
+   * Creates an instance of MonitoringService.
+   */
   constructor() {
     this.isActive = false;
     this.healthCheckInterval = null;
@@ -36,7 +40,7 @@ class MonitoringService {
   // ===== MONITORING CONTROL =====
 
   /**
-   * Start the monitoring service
+   * Start the monitoring service.
    */
   startMonitoring() {
     if (this.isActive) {
@@ -72,7 +76,7 @@ class MonitoringService {
   }
 
   /**
-   * Stop the monitoring service
+   * Stop the monitoring service.
    */
   stopMonitoring() {
     if (!this.isActive) {
@@ -113,7 +117,7 @@ class MonitoringService {
   }
 
   /**
-   * Restart the monitoring service
+   * Restart the monitoring service.
    */
   restartMonitoring() {
     logger.info('Restarting monitoring service...');
@@ -124,7 +128,7 @@ class MonitoringService {
   // ===== HEALTH CHECKS =====
 
   /**
-   * Start periodic health checks
+   * Start periodic health checks.
    */
   startHealthChecks() {
     const interval = this.config.health.intervals.system;
@@ -143,7 +147,8 @@ class MonitoringService {
   }
 
   /**
-   * Perform comprehensive health check
+   * Perform a comprehensive health check of all monitored services.
+   * @returns {Promise<object>} A promise that resolves to an object containing the health status.
    */
   async performHealthCheck() {
     const healthChecks = {
@@ -173,7 +178,8 @@ class MonitoringService {
   }
 
   /**
-   * Check database health
+   * Check the health of the database connection.
+   * @returns {Promise<object>} A promise that resolves to an object containing the database health status.
    */
   async checkDatabaseHealth() {
     try {
@@ -204,7 +210,8 @@ class MonitoringService {
   }
 
   /**
-   * Check referral system health
+   * Check the health of the referral system.
+   * @returns {Promise<object>} A promise that resolves to an object containing the referral system health status.
    */
   async checkReferralSystemHealth() {
     try {
@@ -231,7 +238,8 @@ class MonitoringService {
   }
 
   /**
-   * Check analytics service health
+   * Check the health of the analytics service.
+   * @returns {Promise<object>} A promise that resolves to an object containing the analytics service health status.
    */
   async checkAnalyticsHealth() {
     try {
@@ -251,7 +259,8 @@ class MonitoringService {
   }
 
   /**
-   * Check notifications service health
+   * Check the health of the notifications service.
+   * @returns {Promise<object>} A promise that resolves to an object containing the notifications service health status.
    */
   async checkNotificationsHealth() {
     try {
@@ -274,7 +283,8 @@ class MonitoringService {
   }
 
   /**
-   * Check performance monitoring health
+   * Check the health of the performance monitoring service.
+   * @returns {Promise<object>} A promise that resolves to an object containing the performance monitoring health status.
    */
   async checkPerformanceHealth() {
     try {
@@ -296,7 +306,8 @@ class MonitoringService {
   }
 
   /**
-   * Check error tracking health
+   * Check the health of the error tracking service.
+   * @returns {Promise<object>} A promise that resolves to an object containing the error tracking health status.
    */
   async checkErrorTrackingHealth() {
     try {
@@ -320,7 +331,7 @@ class MonitoringService {
   // ===== METRICS COLLECTION =====
 
   /**
-   * Start periodic metrics collection
+   * Start periodic metrics collection.
    */
   startMetricsCollection() {
     const interval = this.config.intervals.collection.metrics;
@@ -339,7 +350,8 @@ class MonitoringService {
   }
 
   /**
-   * Collect system metrics
+   * Collect system metrics.
+   * @returns {Promise<void>}
    */
   async collectMetrics() {
     try {
@@ -369,7 +381,8 @@ class MonitoringService {
   }
 
   /**
-   * Collect system-level metrics
+   * Collect system-level metrics.
+   * @returns {object} An object containing system-level metrics.
    */
   collectSystemMetrics() {
     const usage = process.memoryUsage();
@@ -397,7 +410,8 @@ class MonitoringService {
   }
 
   /**
-   * Get CPU usage (simplified)
+   * Get CPU usage (simplified).
+   * @returns {number} The CPU usage percentage.
    */
   getCPUUsage() {
     // This is a simplified CPU usage calculation
@@ -415,7 +429,9 @@ class MonitoringService {
   }
 
   /**
-   * Store metrics for historical analysis
+   * Store metrics for historical analysis.
+   * @param {object} metrics - The metrics object to store.
+   * @returns {Promise<void>}
    */
   async storeMetrics(metrics) {
     try {
@@ -436,7 +452,7 @@ class MonitoringService {
   // ===== CLEANUP PROCESS =====
 
   /**
-   * Start periodic cleanup process
+   * Start the periodic cleanup process.
    */
   startCleanupProcess() {
     const interval = this.config.intervals.collection.cleanup;
@@ -455,7 +471,8 @@ class MonitoringService {
   }
 
   /**
-   * Perform cleanup tasks
+   * Perform cleanup tasks.
+   * @returns {Promise<void>}
    */
   async performCleanup() {
     try {
@@ -477,7 +494,8 @@ class MonitoringService {
   }
 
   /**
-   * Clean up old metrics
+   * Clean up old metrics.
+   * @returns {Promise<void>}
    */
   async cleanupOldMetrics() {
     try {
@@ -493,7 +511,8 @@ class MonitoringService {
   }
 
   /**
-   * Clean up old errors
+   * Clean up old errors.
+   * @returns {Promise<void>}
    */
   async cleanupOldErrors() {
     try {
@@ -509,7 +528,8 @@ class MonitoringService {
   }
 
   /**
-   * Clean up old alerts
+   * Clean up old alerts.
+   * @returns {Promise<void>}
    */
   async cleanupOldAlerts() {
     try {
@@ -527,7 +547,10 @@ class MonitoringService {
   // ===== ERROR TRACKING INTEGRATION =====
 
   /**
-   * Track an error through the monitoring system
+   * Track an error through the monitoring system.
+   * @param {string} errorType - The type of error.
+   * @param {Error} error - The error object.
+   * @param {object} [context={}] - Additional context for the error.
    */
   trackError(errorType, error, context = {}) {
     try {
@@ -549,7 +572,8 @@ class MonitoringService {
   // ===== CONFIGURATION MANAGEMENT =====
 
   /**
-   * Get monitoring configuration
+   * Get the current monitoring configuration.
+   * @returns {object} The monitoring configuration.
    */
   getConfiguration() {
     return {
@@ -566,7 +590,8 @@ class MonitoringService {
   }
 
   /**
-   * Update monitoring configuration
+   * Update the monitoring configuration.
+   * @param {object} newConfig - The new configuration object.
    */
   updateConfiguration(newConfig) {
     try {
@@ -594,7 +619,8 @@ class MonitoringService {
   // ===== STATUS AND HEALTH =====
 
   /**
-   * Get monitoring service status
+   * Get the status of the monitoring service.
+   * @returns {object} The status of the monitoring service.
    */
   getStatus() {
     return {
@@ -608,7 +634,8 @@ class MonitoringService {
   }
 
   /**
-   * Get monitoring service health
+   * Get the health of the monitoring service.
+   * @returns {Promise<object>} A promise that resolves to an object containing the health status.
    */
   async getHealth() {
     try {

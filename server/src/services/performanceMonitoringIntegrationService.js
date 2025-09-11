@@ -1,15 +1,6 @@
 /**
- * Performance Monitoring Integration Service
- * 
- * This service integrates all performance monitoring components:
- * - Performance monitoring service
- * - Error tracking service
- * - Rate limiting service
- * - Caching service
- * - Database optimization service
- * - QR code optimization service
- * 
- * Provides unified monitoring, alerts, and performance insights
+ * @fileoverview Service for integrating all performance monitoring components.
+ * @module services/performanceMonitoringIntegrationService
  */
 
 const performanceMonitoringService = require('./performanceMonitoringService');
@@ -21,6 +12,9 @@ const qrCodeOptimizationService = require('./qrCodeOptimizationService');
 const logger = require('../utils/logger');
 
 class PerformanceMonitoringIntegrationService {
+  /**
+   * Creates an instance of PerformanceMonitoringIntegrationService.
+   */
   constructor() {
     this.services = {
       performance: performanceMonitoringService,
@@ -47,7 +41,8 @@ class PerformanceMonitoringIntegrationService {
   // ===== INITIALIZATION =====
 
   /**
-   * Initialize performance monitoring integration
+   * Initialize the performance monitoring integration.
+   * @returns {Promise<void>}
    */
   async initializeIntegration() {
     try {
@@ -71,7 +66,8 @@ class PerformanceMonitoringIntegrationService {
   }
 
   /**
-   * Start monitoring for all services
+   * Start monitoring for all integrated services.
+   * @returns {Promise<void>}
    */
   async startAllMonitoring() {
     try {
@@ -114,7 +110,7 @@ class PerformanceMonitoringIntegrationService {
   }
 
   /**
-   * Start periodic integration checks
+   * Start periodic integration checks.
    */
   startPeriodicChecks() {
     // Health check every 5 minutes
@@ -138,7 +134,8 @@ class PerformanceMonitoringIntegrationService {
   // ===== INTEGRATION HEALTH CHECKS =====
 
   /**
-   * Perform comprehensive integration health check
+   * Perform a comprehensive health check of all integrated services.
+   * @returns {Promise<object>} A promise that resolves to an object containing the integration health status.
    */
   async performIntegrationHealthCheck() {
     try {
@@ -208,7 +205,8 @@ class PerformanceMonitoringIntegrationService {
   }
 
   /**
-   * Check performance service health
+   * Check the health of the performance service.
+   * @returns {Promise<object>} A promise that resolves to the health status of the performance service.
    */
   async checkPerformanceServiceHealth() {
     try {
@@ -222,7 +220,8 @@ class PerformanceMonitoringIntegrationService {
   }
 
   /**
-   * Check error tracking health
+   * Check the health of the error tracking service.
+   * @returns {Promise<object>} A promise that resolves to the health status of the error tracking service.
    */
   async checkErrorTrackingHealth() {
     try {
@@ -236,7 +235,8 @@ class PerformanceMonitoringIntegrationService {
   }
 
   /**
-   * Check rate limiting health
+   * Check the health of the rate limiting service.
+   * @returns {Promise<object>} A promise that resolves to the health status of the rate limiting service.
    */
   async checkRateLimitingHealth() {
     try {
@@ -250,7 +250,8 @@ class PerformanceMonitoringIntegrationService {
   }
 
   /**
-   * Check caching health
+   * Check the health of the caching service.
+   * @returns {Promise<object>} A promise that resolves to the health status of the caching service.
    */
   async checkCachingHealth() {
     try {
@@ -264,7 +265,8 @@ class PerformanceMonitoringIntegrationService {
   }
 
   /**
-   * Check database health
+   * Check the health of the database.
+   * @returns {Promise<object>} A promise that resolves to the health status of the database.
    */
   async checkDatabaseHealth() {
     try {
@@ -278,7 +280,8 @@ class PerformanceMonitoringIntegrationService {
   }
 
   /**
-   * Check QR code service health
+   * Check the health of the QR code service.
+   * @returns {Promise<object>} A promise that resolves to the health status of the QR code service.
    */
   async checkQRCodeServiceHealth() {
     try {
@@ -294,7 +297,8 @@ class PerformanceMonitoringIntegrationService {
   // ===== PERFORMANCE METRICS COLLECTION =====
 
   /**
-   * Collect performance metrics from all services
+   * Collect performance metrics from all integrated services.
+   * @returns {Promise<void>}
    */
   async collectPerformanceMetrics() {
     try {
@@ -352,7 +356,9 @@ class PerformanceMonitoringIntegrationService {
   }
 
   /**
-   * Analyze performance metrics for issues
+   * Analyze performance metrics for potential issues.
+   * @param {object} metrics - The collected performance metrics.
+   * @returns {Promise<void>}
    */
   async analyzePerformanceMetrics(metrics) {
     try {
@@ -425,7 +431,8 @@ class PerformanceMonitoringIntegrationService {
   // ===== ALERT MANAGEMENT =====
 
   /**
-   * Check for alerts across all services
+   * Check for alerts across all integrated services.
+   * @returns {Promise<void>}
    */
   async checkForAlerts() {
     try {
@@ -466,7 +473,9 @@ class PerformanceMonitoringIntegrationService {
   }
 
   /**
-   * Process alerts from all services
+   * Process alerts from all integrated services.
+   * @param {object[]} alerts - An array of alert objects.
+   * @returns {Promise<void>}
    */
   async processAlerts(alerts) {
     try {
@@ -493,7 +502,9 @@ class PerformanceMonitoringIntegrationService {
   }
 
   /**
-   * Send alert notification (placeholder)
+   * Send an alert notification (placeholder).
+   * @param {object} alert - The alert object.
+   * @returns {Promise<void>}
    */
   async sendAlertNotification(alert) {
     try {
@@ -507,7 +518,8 @@ class PerformanceMonitoringIntegrationService {
   // ===== UNIFIED MONITORING API =====
 
   /**
-   * Get comprehensive system status
+   * Get the comprehensive system status.
+   * @returns {Promise<object>} A promise that resolves to an object containing the system status.
    */
   async getSystemStatus() {
     try {
@@ -541,7 +553,8 @@ class PerformanceMonitoringIntegrationService {
   }
 
   /**
-   * Get performance summary
+   * Get a summary of the system's performance.
+   * @returns {Promise<object|null>} A promise that resolves to an object containing the performance summary, or null on error.
    */
   async getPerformanceSummary() {
     try {
@@ -568,7 +581,8 @@ class PerformanceMonitoringIntegrationService {
   }
 
   /**
-   * Calculate performance trends
+   * Calculate performance trends.
+   * @returns {Promise<object>} A promise that resolves to an object containing performance trends.
    */
   async calculateTrends() {
     try {
@@ -586,7 +600,8 @@ class PerformanceMonitoringIntegrationService {
   }
 
   /**
-   * Generate performance recommendations
+   * Generate performance recommendations.
+   * @returns {Promise<object[]>} A promise that resolves to an array of recommendation objects.
    */
   async generateRecommendations() {
     try {
@@ -634,7 +649,9 @@ class PerformanceMonitoringIntegrationService {
   // ===== SERVICE CONTROL =====
 
   /**
-   * Start monitoring for specific service
+   * Start monitoring for a specific service.
+   * @param {string} serviceName - The name of the service to start monitoring.
+   * @returns {Promise<boolean>} A promise that resolves to true if the service was started successfully.
    */
   async startServiceMonitoring(serviceName) {
     try {
@@ -651,7 +668,9 @@ class PerformanceMonitoringIntegrationService {
   }
 
   /**
-   * Stop monitoring for specific service
+   * Stop monitoring for a specific service.
+   * @param {string} serviceName - The name of the service to stop monitoring.
+   * @returns {Promise<boolean>} A promise that resolves to true if the service was stopped successfully.
    */
   async stopServiceMonitoring(serviceName) {
     try {
@@ -668,7 +687,9 @@ class PerformanceMonitoringIntegrationService {
   }
 
   /**
-   * Restart monitoring for specific service
+   * Restart monitoring for a specific service.
+   * @param {string} serviceName - The name of the service to restart monitoring for.
+   * @returns {Promise<boolean>} A promise that resolves to true if the service was restarted successfully.
    */
   async restartServiceMonitoring(serviceName) {
     try {
@@ -686,14 +707,17 @@ class PerformanceMonitoringIntegrationService {
   // ===== UTILITY METHODS =====
 
   /**
-   * Delay function
+   * Delay execution for a specified number of milliseconds.
+   * @param {number} ms - The number of milliseconds to delay.
+   * @returns {Promise<void>}
    */
   delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
   /**
-   * Get integration statistics
+   * Get integration statistics.
+   * @returns {object} An object containing integration statistics.
    */
   getIntegrationStats() {
     return {
@@ -705,7 +729,7 @@ class PerformanceMonitoringIntegrationService {
   }
 
   /**
-   * Reset integration statistics
+   * Reset integration statistics.
    */
   resetIntegrationStats() {
     this.integrationStats = {

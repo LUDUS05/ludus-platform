@@ -1,5 +1,5 @@
 /**
- * Database Optimization Service
+ * @fileoverview Service for database optimization.
  * 
  * This service provides:
  * - Query performance analysis
@@ -7,12 +7,16 @@
  * - Aggregation pipeline optimization
  * - Database connection pooling
  * - Query caching strategies
+ * @module services/databaseOptimizationService
  */
 
 const mongoose = require('mongoose');
 const logger = require('../utils/logger');
 
 class DatabaseOptimizationService {
+  /**
+   * Creates an instance of DatabaseOptimizationService.
+   */
   constructor() {
     this.queryStats = new Map();
     this.slowQueryThreshold = 1000; // 1 second
@@ -26,7 +30,8 @@ class DatabaseOptimizationService {
   // ===== INITIALIZATION =====
 
   /**
-   * Initialize database optimization
+   * Initialize database optimization.
+   * @returns {Promise<void>}
    */
   async initializeOptimization() {
     try {
@@ -52,7 +57,8 @@ class DatabaseOptimizationService {
   }
 
   /**
-   * Optimize connection pool
+   * Optimize the database connection pool.
+   * @returns {Promise<void>}
    */
   async optimizeConnectionPool() {
     try {
@@ -86,7 +92,8 @@ class DatabaseOptimizationService {
   // ===== INDEX OPTIMIZATION =====
 
   /**
-   * Create optimized indexes for referral system
+   * Create optimized indexes for all relevant collections.
+   * @returns {Promise<void>}
    */
   async createOptimizedIndexes() {
     try {
@@ -119,7 +126,8 @@ class DatabaseOptimizationService {
   }
 
   /**
-   * Create referral collection indexes
+   * Create indexes for the Referral collection.
+   * @returns {Promise<void>}
    */
   async createReferralIndexes() {
     try {
@@ -190,7 +198,8 @@ class DatabaseOptimizationService {
   }
 
   /**
-   * Create referral code indexes
+   * Create indexes for the ReferralCode collection.
+   * @returns {Promise<void>}
    */
   async createReferralCodeIndexes() {
     try {
@@ -244,7 +253,8 @@ class DatabaseOptimizationService {
   }
 
   /**
-   * Create invitation indexes
+   * Create indexes for the Invitation collection.
+   * @returns {Promise<void>}
    */
   async createInvitationIndexes() {
     try {
@@ -308,7 +318,8 @@ class DatabaseOptimizationService {
   }
 
   /**
-   * Create notification indexes
+   * Create indexes for the Notification collection.
+   * @returns {Promise<void>}
    */
   async createNotificationIndexes() {
     try {
@@ -365,7 +376,8 @@ class DatabaseOptimizationService {
   }
 
   /**
-   * Create user indexes
+   * Create indexes for the User collection.
+   * @returns {Promise<void>}
    */
   async createUserIndexes() {
     try {
@@ -409,7 +421,8 @@ class DatabaseOptimizationService {
   }
 
   /**
-   * Create wallet indexes
+   * Create indexes for the Wallet collection.
+   * @returns {Promise<void>}
    */
   async createWalletIndexes() {
     try {
@@ -455,7 +468,8 @@ class DatabaseOptimizationService {
   // ===== QUERY OPTIMIZATION =====
 
   /**
-   * Optimize referral queries
+   * Get optimized queries for the referral system.
+   * @returns {object} An object containing optimized query functions.
    */
   optimizeReferralQueries() {
     return {
@@ -557,7 +571,8 @@ class DatabaseOptimizationService {
   }
 
   /**
-   * Optimize invitation queries
+   * Get optimized queries for the invitation system.
+   * @returns {object} An object containing optimized query functions.
    */
   optimizeInvitationQueries() {
     return {
@@ -649,7 +664,9 @@ class DatabaseOptimizationService {
   }
 
   /**
-   * Get date filter for time periods
+   * Get a date filter for a given time period.
+   * @param {string} period - The time period (e.g., '24h', '7d').
+   * @returns {object} A MongoDB date filter object.
    */
   getDateFilter(period) {
     const now = new Date();
@@ -681,7 +698,10 @@ class DatabaseOptimizationService {
   // ===== QUERY PERFORMANCE MONITORING =====
 
   /**
-   * Track query performance
+   * Track the performance of a query.
+   * @param {string} queryName - The name of the query.
+   * @param {number} executionTime - The execution time of the query in milliseconds.
+   * @param {boolean} [success=true] - Whether the query was successful.
    */
   trackQueryPerformance(queryName, executionTime, success = true) {
     if (!this.queryStats.has(queryName)) {
@@ -714,7 +734,8 @@ class DatabaseOptimizationService {
   }
 
   /**
-   * Get query performance statistics
+   * Get performance statistics for all tracked queries.
+   * @returns {object} An object containing query performance statistics.
    */
   getQueryPerformanceStats() {
     const stats = {};
@@ -731,7 +752,8 @@ class DatabaseOptimizationService {
   }
 
   /**
-   * Get slow queries
+   * Get a list of slow queries.
+   * @returns {object[]} An array of slow query statistics.
    */
   getSlowQueries() {
     const slowQueries = [];
@@ -751,7 +773,7 @@ class DatabaseOptimizationService {
   // ===== QUERY PROFILING =====
 
   /**
-   * Enable query profiling (development only)
+   * Enable query profiling (development only).
    */
   enableQueryProfiling() {
     try {
@@ -768,7 +790,7 @@ class DatabaseOptimizationService {
   }
 
   /**
-   * Disable query profiling
+   * Disable query profiling.
    */
   disableQueryProfiling() {
     try {
@@ -787,7 +809,8 @@ class DatabaseOptimizationService {
   // ===== DATABASE MAINTENANCE =====
 
   /**
-   * Analyze database performance
+   * Analyze the performance of the database.
+   * @returns {Promise<object>} A promise that resolves to an object containing database performance statistics.
    */
   async analyzeDatabasePerformance() {
     try {
@@ -817,7 +840,8 @@ class DatabaseOptimizationService {
   }
 
   /**
-   * Compact collections (if supported)
+   * Compact all collections in the database.
+   * @returns {Promise<void>}
    */
   async compactCollections() {
     try {
@@ -842,7 +866,8 @@ class DatabaseOptimizationService {
   // ===== UTILITY METHODS =====
 
   /**
-   * Get database connection status
+   * Get the status of the database connection.
+   * @returns {object} An object containing database connection status information.
    */
   getConnectionStatus() {
     const connection = mongoose.connection;
@@ -858,7 +883,8 @@ class DatabaseOptimizationService {
   }
 
   /**
-   * Get index information
+   * Get information about all indexes in the database.
+   * @returns {Promise<object>} A promise that resolves to an object containing index information.
    */
   async getIndexInformation() {
     try {
