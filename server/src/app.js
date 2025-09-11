@@ -1,23 +1,38 @@
 /**
  * @fileoverview Main application entry point for LUDUS platform backend.
  * 
- * This is the core Express.js application that serves as the backend API for the LUDUS
- * social activity platform. It handles authentication, database connections, middleware
- * setup, route configuration, and memory optimization for Render deployment.
+ * Purpose: Central Express.js application that orchestrates all backend services including
+ * authentication, API routing, database connections, and middleware configuration for the
+ * LUDUS social activity platform serving the Saudi Arabian market.
  * 
- * Key Features:
- * - Express.js server with comprehensive middleware stack
- * - MongoDB connection with Mongoose ODM
- * - JWT-based authentication system
- * - Memory optimization for Render starter plan (512MB limit)
- * - Comprehensive API routes for all platform features
- * - Health monitoring and performance tracking
- * - Partner terms page auto-creation
- * - CORS configuration for production deployment
+ * Business Context: This is the core server that powers the LUDUS platform, handling
+ * user authentication, activity management, payment processing, referral systems, and
+ * AI agent integrations. It's optimized for Render deployment with aggressive memory
+ * management for the starter plan constraints.
+ * 
+ * Implementation Notes: 
+ * - Aggressive memory optimization with garbage collection intervals
+ * - Comprehensive error handling and logging
+ * - Security middleware with CORS, Helmet, and rate limiting
+ * - Database connection with automatic partner terms page creation
+ * - Health check endpoints for monitoring
+ * - Backward compatibility routes for frontend deployment
+ * 
+ * Dependencies: 
+ * - Express.js for web framework
+ * - MongoDB with Mongoose for database operations
+ * - Firebase for authentication integration
+ * - Moyasar for payment processing
+ * - Render MCP for AI agent management
+ * 
+ * Evolution: Originally built as a simple Express server, evolved to include
+ * comprehensive memory management, AI integrations, and production optimizations
+ * for Render deployment.
  * 
  * @version 1.0.0
+ * @since 2024-01-01
+ * @modified 2025-01-08 - Added aggressive memory management and Render optimizations
  * @author LUDUS Development Team
- * @since 2025-01-01
  * @see {@link https://app.letsludus.com} Production URL
  * @see {@link https://ludus-backend-athena.onrender.com} Staging URL
  */
@@ -97,23 +112,38 @@ if (process.env.NODE_ENV !== 'test' && process.env.MONGODB_URI) {
 /**
  * Creates the partner terms and conditions page if it doesn't already exist.
  * 
- * This function is idempotent and can be safely called multiple times. It creates
- * a comprehensive terms and conditions page for partners with bilingual content
- * (Arabic and English) that includes partnership agreements, quality standards,
- * payment terms, and contact information.
+ * Purpose: Automatically provisions the partner terms page during server startup to ensure
+ * all partners have access to the legal terms and conditions required for platform participation.
  * 
- * The page is automatically created during server startup to ensure it's always
- * available for partner registration and legal compliance.
+ * Business Context: This function ensures compliance with Saudi Arabian business regulations
+ * by providing clear terms and conditions for partner onboarding. It's called during server
+ * initialization to guarantee the page exists before any partner registration attempts.
+ * 
+ * Implementation Notes:
+ * - Idempotent function that can be safely called multiple times
+ * - Creates bilingual content (Arabic/English) for Saudi market compliance
+ * - Uses system user ID for audit trail
+ * - Includes comprehensive partner agreement terms
+ * - Automatically sets proper SEO metadata
+ * 
+ * Dependencies:
+ * - Page model for database operations
+ * - Mongoose for ObjectId generation
+ * - Logger for operation tracking
+ * 
+ * Evolution: Originally manual page creation, evolved to automatic provisioning
+ * during server startup for better user experience and compliance.
  * 
  * @async
  * @function createPartnerTermsPage
  * @returns {Promise<void>} A promise that resolves when the page is created or if it already exists.
- * @throws {Error} If there's an error creating the page in the database
  * 
  * @example
  * // Called automatically during server startup
  * await createPartnerTermsPage();
  * 
+ * @since 2024-06-01
+ * @modified 2025-01-08 - Added comprehensive bilingual content and SEO optimization
  * @see {@link Page} Model for page structure
  * @see {@link https://app.letsludus.com/partner-terms-and-conditions} Live page
  */
@@ -419,4 +449,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = app;// Trigger restart
+module.exports = app;
