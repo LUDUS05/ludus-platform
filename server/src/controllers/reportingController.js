@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Controller for generating reports.
+ * @module controllers/reportingController
+ */
+
 const Referral = require('../models/Referral');
 const ReferralCode = require('../models/ReferralCode');
 const ReferralConversion = require('../models/ReferralConversion');
@@ -8,9 +13,12 @@ const Notification = require('../models/Notification');
 const ExcelJS = require('exceljs');
 const PDFDocument = require('pdfkit');
 
-// @desc    Generate comprehensive referral report
-// @route   POST /api/reports/generate
-// @access  Private (Admin)
+/**
+ * Generate a comprehensive referral report.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const generateReferralReport = async (req, res) => {
   try {
     const {
@@ -102,9 +110,12 @@ const generateReferralReport = async (req, res) => {
   }
 };
 
-// @desc    Export referral data in various formats
-// @route   POST /api/reports/export
-// @access  Private (Admin)
+/**
+ * Export referral data in various formats.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const exportReferralData = async (req, res) => {
   try {
     const {
@@ -198,9 +209,12 @@ const exportReferralData = async (req, res) => {
   }
 };
 
-// @desc    Get report templates
-// @route   GET /api/reports/templates
-// @access  Private (Admin)
+/**
+ * Get available report templates.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getReportTemplates = async (req, res) => {
   try {
     const templates = [

@@ -1,8 +1,16 @@
+/**
+ * @fileoverview Controller for handling user-related operations.
+ * @module controllers/userController
+ */
+
 const User = require('../models/User');
 
-// @desc    Get user profile
-// @route   GET /api/users/profile
-// @access  Private
+/**
+ * Get the profile of the authenticated user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getUserProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
@@ -27,9 +35,12 @@ const getUserProfile = async (req, res) => {
   }
 };
 
-// @desc    Update user profile
-// @route   PUT /api/users/profile
-// @access  Private
+/**
+ * Update the profile of the authenticated user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const updateUserProfile = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -111,9 +122,12 @@ const updateUserProfile = async (req, res) => {
   }
 };
 
-// @desc    Update user preferences
-// @route   PUT /api/users/preferences
-// @access  Private
+/**
+ * Update the preferences of the authenticated user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const updateUserPreferences = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -169,9 +183,12 @@ const updateUserPreferences = async (req, res) => {
   }
 };
 
-// @desc    Get user bookings
-// @route   GET /api/users/bookings
-// @access  Private
+/**
+ * Get all bookings for the authenticated user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getUserBookings = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -211,9 +228,12 @@ const getUserBookings = async (req, res) => {
   }
 };
 
-// @desc    Get user favorites
-// @route   GET /api/users/favorites
-// @access  Private
+/**
+ * Get all favorite activities for the authenticated user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getUserFavorites = async (req, res) => {
   try {
     // For now, return empty array since favorites feature is not implemented yet
@@ -233,9 +253,12 @@ const getUserFavorites = async (req, res) => {
   }
 };
 
-// @desc    Add activity to favorites
-// @route   POST /api/users/favorites/:activityId
-// @access  Private
+/**
+ * Add an activity to the authenticated user's favorites.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const addToFavorites = async (req, res) => {
   try {
   const { activityId: _activityId } = req.params;
@@ -255,9 +278,12 @@ const addToFavorites = async (req, res) => {
   }
 };
 
-// @desc    Remove activity from favorites
-// @route   DELETE /api/users/favorites/:activityId
-// @access  Private
+/**
+ * Remove an activity from the authenticated user's favorites.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const removeFromFavorites = async (req, res) => {
   try {
   const { activityId: _activityId } = req.params;
@@ -277,9 +303,12 @@ const removeFromFavorites = async (req, res) => {
   }
 };
 
-// @desc    Get user dashboard stats
-// @route   GET /api/users/dashboard-stats
-// @access  Private
+/**
+ * Get dashboard statistics for the authenticated user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getDashboardStats = async (req, res) => {
   try {
     const _userId = req.user.id;
@@ -307,9 +336,12 @@ const getDashboardStats = async (req, res) => {
   }
 };
 
-// @desc    Search users (Admin only)
-// @route   GET /api/users/search
-// @access  Private (Admin)
+/**
+ * Search for users (admin only).
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const searchUsers = async (req, res) => {
   try {
     const { q, role = 'user', limit = 20 } = req.query;

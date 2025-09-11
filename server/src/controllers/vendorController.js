@@ -1,10 +1,18 @@
+/**
+ * @fileoverview Controller for handling vendor-related operations.
+ * @module controllers/vendorController
+ */
+
 const mongoose = require('mongoose');
 const Vendor = require('../models/Vendor');
 const Activity = require('../models/Activity');
 
-// @desc    Register new vendor
-// @route   POST /api/vendors
-// @access  Public
+/**
+ * Register a new vendor.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const registerVendor = async (req, res) => {
   try {
     const {
@@ -88,9 +96,12 @@ const registerVendor = async (req, res) => {
   }
 };
 
-// @desc    Get vendor profile by ID or slug
-// @route   GET /api/vendors/:id
-// @access  Public
+/**
+ * Get a vendor's profile by their ID or slug.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getVendorProfile = async (req, res) => {
   try {
     const { id } = req.params;
@@ -151,9 +162,12 @@ const getVendorProfile = async (req, res) => {
   }
 };
 
-// @desc    Get vendor activities
-// @route   GET /api/vendors/:id/activities
-// @access  Public
+/**
+ * Get all activities for a specific vendor.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getVendorActivities = async (req, res) => {
   try {
     const { id } = req.params;
@@ -234,9 +248,12 @@ const getVendorActivities = async (req, res) => {
   }
 };
 
-// @desc    Get all vendors with filters
-// @route   GET /api/vendors
-// @access  Public
+/**
+ * Get all vendors with filtering and pagination.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getVendors = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -304,9 +321,12 @@ const getVendors = async (req, res) => {
   }
 };
 
-// @desc    Get vendor reviews
-// @route   GET /api/vendors/:id/reviews
-// @access  Public
+/**
+ * Get all reviews for a specific vendor.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getVendorReviews = async (req, res) => {
   try {
     const { id } = req.params;

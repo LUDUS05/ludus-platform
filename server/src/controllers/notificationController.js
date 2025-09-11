@@ -1,9 +1,17 @@
+/**
+ * @fileoverview Controller for handling notifications.
+ * @module controllers/notificationController
+ */
+
 const Notification = require('../models/Notification');
 const User = require('../models/User');
 
-// @desc    Get user notifications
-// @route   GET /api/notifications
-// @access  Private
+/**
+ * Get all notifications for the authenticated user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getNotifications = async (req, res) => {
   try {
     const { page = 1, limit = 20, status = 'unread', type, priority, category } = req.query;
@@ -32,9 +40,12 @@ const getNotifications = async (req, res) => {
   }
 };
 
-// @desc    Get unread notification count
-// @route   GET /api/notifications/unread-count
-// @access  Private
+/**
+ * Get the number of unread notifications for the authenticated user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getUnreadCount = async (req, res) => {
   try {
     const userId = req.user.id || req.user._id;
@@ -54,9 +65,12 @@ const getUnreadCount = async (req, res) => {
   }
 };
 
-// @desc    Mark notification as read
-// @route   PUT /api/notifications/:id/read
-// @access  Private
+/**
+ * Mark a notification as read.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const markAsRead = async (req, res) => {
   try {
     const { id } = req.params;
@@ -87,9 +101,12 @@ const markAsRead = async (req, res) => {
   }
 };
 
-// @desc    Mark all notifications as read
-// @route   PUT /api/notifications/mark-all-read
-// @access  Private
+/**
+ * Mark all notifications as read for the authenticated user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const markAllAsRead = async (req, res) => {
   try {
     const userId = req.user.id || req.user._id;
@@ -110,9 +127,12 @@ const markAllAsRead = async (req, res) => {
   }
 };
 
-// @desc    Mark notification as archived
-// @route   PUT /api/notifications/:id/archive
-// @access  Private
+/**
+ * Mark a notification as archived.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const markAsArchived = async (req, res) => {
   try {
     const { id } = req.params;
@@ -143,9 +163,12 @@ const markAsArchived = async (req, res) => {
   }
 };
 
-// @desc    Delete notification
-// @route   DELETE /api/notifications/:id
-// @access  Private
+/**
+ * Delete a notification.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const deleteNotification = async (req, res) => {
   try {
     const { id } = req.params;
@@ -175,9 +198,12 @@ const deleteNotification = async (req, res) => {
   }
 };
 
-// @desc    Create system notification
-// @route   POST /api/notifications/system
-// @access  Private (Admin only)
+/**
+ * Create a system-wide notification (for admins).
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const createSystemNotification = async (req, res) => {
   try {
     const {
@@ -276,9 +302,12 @@ const createSystemNotification = async (req, res) => {
   }
 };
 
-// @desc    Get notification statistics
-// @route   GET /api/notifications/stats
-// @access  Private
+/**
+ * Get notification statistics for the authenticated user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getNotificationStats = async (req, res) => {
   try {
     const userId = req.user.id || req.user._id;

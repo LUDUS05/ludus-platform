@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Controller for handling forms and form responses.
+ * @module controllers/formController
+ */
+
 const Form = require('../models/Form');
 const FormResponse = require('../models/FormResponse');
 const { validationResult } = require('express-validator');
@@ -5,9 +10,12 @@ const fs = require('fs').promises;
 const path = require('path');
 const csv = require('csv-writer').createObjectCsvWriter;
 
-// @desc    Get all forms (Admin)
-// @route   GET /api/admin/forms
-// @access  Private (Admin)
+/**
+ * Get all forms (for admin).
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getAllForms = async (req, res) => {
   try {
     const { status, page = 1, limit = 10, search } = req.query;
@@ -51,9 +59,12 @@ const getAllForms = async (req, res) => {
   }
 };
 
-// @desc    Get single form
-// @route   GET /api/admin/forms/:id
-// @access  Private (Admin)
+/**
+ * Get a single form by its ID.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getForm = async (req, res) => {
   try {
     const form = await Form.findById(req.params.id)
@@ -80,9 +91,12 @@ const getForm = async (req, res) => {
   }
 };
 
-// @desc    Create new form
-// @route   POST /api/admin/forms
-// @access  Private (Admin)
+/**
+ * Create a new form.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const createForm = async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -132,9 +146,12 @@ const createForm = async (req, res) => {
   }
 };
 
-// @desc    Update form
-// @route   PUT /api/admin/forms/:id
-// @access  Private (Admin)
+/**
+ * Update an existing form.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const updateForm = async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -201,9 +218,12 @@ const updateForm = async (req, res) => {
   }
 };
 
-// @desc    Delete form
-// @route   DELETE /api/admin/forms/:id
-// @access  Private (Admin)
+/**
+ * Delete a form.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const deleteForm = async (req, res) => {
   try {
     const form = await Form.findById(req.params.id);
@@ -238,9 +258,12 @@ const deleteForm = async (req, res) => {
   }
 };
 
-// @desc    Get form responses
-// @route   GET /api/admin/forms/:id/responses
-// @access  Private (Admin)
+/**
+ * Get all responses for a specific form.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getFormResponses = async (req, res) => {
   try {
     const { status, page = 1, limit = 20, dateFrom, dateTo } = req.query;
@@ -289,9 +312,12 @@ const getFormResponses = async (req, res) => {
   }
 };
 
-// @desc    Get form response statistics
-// @route   GET /api/admin/forms/:id/stats
-// @access  Private (Admin)
+/**
+ * Get statistics for a specific form.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getFormStats = async (req, res) => {
   try {
     const form = await Form.findById(req.params.id);
@@ -344,9 +370,12 @@ const getFormStats = async (req, res) => {
   }
 };
 
-// @desc    Update response status
-// @route   PUT /api/admin/forms/responses/:id
-// @access  Private (Admin)
+/**
+ * Update the status of a form response.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const updateResponseStatus = async (req, res) => {
   try {
     const { status, reviewNotes } = req.body;
@@ -389,9 +418,12 @@ const updateResponseStatus = async (req, res) => {
   }
 };
 
-// @desc    Export form responses as CSV
-// @route   GET /api/admin/forms/:id/export
-// @access  Private (Admin)
+/**
+ * Export form responses as CSV.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const exportFormResponses = async (req, res) => {
   try {
     const { format = 'csv', status, dateFrom, dateTo } = req.query;
@@ -458,9 +490,12 @@ const exportFormResponses = async (req, res) => {
   }
 };
 
-// @desc    Submit form response (Public)
-// @route   POST /api/forms/:slug/submit
-// @access  Public
+/**
+ * Submit a response to a published form.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const submitFormResponse = async (req, res) => {
   try {
     const { slug } = req.params;
@@ -569,9 +604,12 @@ const submitFormResponse = async (req, res) => {
   }
 };
 
-// @desc    Get published form by slug
-// @route   GET /api/forms/:slug
-// @access  Public
+/**
+ * Get a published form by its slug.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getPublishedForm = async (req, res) => {
   try {
     const form = await Form.findOne({ 

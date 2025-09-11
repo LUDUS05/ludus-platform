@@ -1,11 +1,18 @@
-// frontend/src/controllers/socialController.js - Social interaction controller with animation triggers
+/**
+ * @fileoverview Controller for handling social interactions.
+ * @module controllers/socialController
+ */
+
 const Activity = require('../models/Activity');
 const User = require('../models/User');
 const Like = require('../models/Like');
 
-// @desc    Join an event
-// @route   POST /api/social/join
-// @access  Private
+/**
+ * Join an event.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const joinEvent = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -88,9 +95,12 @@ const joinEvent = async (req, res) => {
   }
 };
 
-// @desc    Leave an event
-// @route   POST /api/social/leave
-// @access  Private
+/**
+ * Leave an event.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const leaveEvent = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -155,9 +165,12 @@ const leaveEvent = async (req, res) => {
   }
 };
 
-// @desc    Toggle like on content
-// @route   POST /api/social/like
-// @access  Private
+/**
+ * Toggle like on a piece of content.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const toggleLike = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -240,9 +253,12 @@ const toggleLike = async (req, res) => {
   }
 };
 
-// @desc    Get event attendees
-// @route   GET /api/social/events/:eventId/attendees
-// @access  Public
+/**
+ * Get the attendees for a specific event.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getEventAttendees = async (req, res) => {
   try {
     const { eventId } = req.params;
@@ -289,9 +305,12 @@ const getEventAttendees = async (req, res) => {
   }
 };
 
-// @desc    Get user likes
-// @route   GET /api/social/likes
-// @access  Private
+/**
+ * Get all content liked by the authenticated user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getUserLikes = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -332,7 +351,13 @@ const getUserLikes = async (req, res) => {
   }
 };
 
-// Helper function to update like count
+/**
+ * Helper function to update the like count on a piece of content.
+ * @param {string} contentId - The ID of the content to update.
+ * @param {string} contentType - The type of content to update.
+ * @param {number} increment - The amount to increment the like count by.
+ * @returns {Promise<void>}
+ */
 const updateLikeCount = async (contentId, contentType, increment) => {
   try {
     let Model;
@@ -359,7 +384,12 @@ const updateLikeCount = async (contentId, contentType, increment) => {
   }
 };
 
-// Helper function to get like count
+/**
+ * Helper function to get the like count for a piece of content.
+ * @param {string} contentId - The ID of the content.
+ * @param {string} contentType - The type of content.
+ * @returns {Promise<number>} The like count.
+ */
 const getLikeCount = async (contentId, contentType) => {
   try {
     let Model;

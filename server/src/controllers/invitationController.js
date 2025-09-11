@@ -1,11 +1,19 @@
+/**
+ * @fileoverview Controller for handling invitations.
+ * @module controllers/invitationController
+ */
+
 const Invitation = require('../models/Invitation');
 const Referral = require('../models/Referral');
 const User = require('../models/User');
 const Activity = require('../models/Activity');
 
-// @desc    Create new invitation
-// @route   POST /api/invitations
-// @access  Private
+/**
+ * Create a new invitation.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const createInvitation = async (req, res) => {
   try {
     const {
@@ -68,9 +76,12 @@ const createInvitation = async (req, res) => {
   }
 };
 
-// @desc    Track invitation click
-// @route   POST /api/invitations/:id/click
-// @access  Public
+/**
+ * Track a click on an invitation.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const trackInvitationClick = async (req, res) => {
   try {
     const { id } = req.params;
@@ -114,9 +125,12 @@ const trackInvitationClick = async (req, res) => {
   }
 };
 
-// @desc    Record invitation conversion
-// @route   POST /api/invitations/:id/conversion
-// @access  Private
+/**
+ * Record a conversion for an invitation.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const recordInvitationConversion = async (req, res) => {
   try {
     const { id } = req.params;
@@ -152,9 +166,12 @@ const recordInvitationConversion = async (req, res) => {
   }
 };
 
-// @desc    Get invitation statistics for user
-// @route   GET /api/invitations/stats
-// @access  Private
+/**
+ * Get invitation statistics for the authenticated user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getInvitationStats = async (req, res) => {
   try {
     const { period = '30d' } = req.query;
@@ -182,9 +199,12 @@ const getInvitationStats = async (req, res) => {
   }
 };
 
-// @desc    Get invitation history for user
-// @route   GET /api/invitations/history
-// @access  Private
+/**
+ * Get the invitation history for the authenticated user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getInvitationHistory = async (req, res) => {
   try {
     const { page = 1, limit = 10, status, platform, invitationType } = req.query;
@@ -230,9 +250,12 @@ const getInvitationHistory = async (req, res) => {
   }
 };
 
-// @desc    Update invitation status
-// @route   PUT /api/invitations/:id/status
-// @access  Private
+/**
+ * Update the status of an invitation.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const updateInvitationStatus = async (req, res) => {
   try {
     const { id } = req.params;
@@ -265,9 +288,12 @@ const updateInvitationStatus = async (req, res) => {
   }
 };
 
-// @desc    Delete invitation
-// @route   DELETE /api/invitations/:id
-// @access  Private
+/**
+ * Delete an invitation (soft delete).
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const deleteInvitation = async (req, res) => {
   try {
     const { id } = req.params;
@@ -299,9 +325,12 @@ const deleteInvitation = async (req, res) => {
   }
 };
 
-// @desc    Get invitation analytics
-// @route   GET /api/invitations/analytics
-// @access  Private
+/**
+ * Get analytics for invitations.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getInvitationAnalytics = async (req, res) => {
   try {
     const { period = '30d' } = req.query;

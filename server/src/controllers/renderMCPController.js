@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Controller for interacting with the Render API.
+ * @module controllers/renderMCPController
+ */
+
 const axios = require('axios');
 
 // Render API configuration
@@ -5,6 +10,9 @@ const RENDER_API_TOKEN = process.env.RENDER_API_TOKEN || 'rnd_AjWyMGFA2vmtx6KidK
 const RENDER_API_BASE = 'https://api.render.com/v1';
 
 class RenderMCPController {
+  /**
+   * Creates an instance of RenderMCPController.
+   */
   constructor() {
     this.apiClient = axios.create({
       baseURL: RENDER_API_BASE,
@@ -16,7 +24,12 @@ class RenderMCPController {
     });
   }
 
-  // List all Render services
+  /**
+   * List all Render services.
+   * @param {import('express').Request} req - The Express request object.
+   * @param {import('express').Response} res - The Express response object.
+   * @returns {Promise<void>}
+   */
   async listServices(req, res) {
     try {
       const response = await this.apiClient.get('/services');
@@ -48,7 +61,12 @@ class RenderMCPController {
     }
   }
 
-  // Get service status
+  /**
+   * Get the status of a specific service.
+   * @param {import('express').Request} req - The Express request object.
+   * @param {import('express').Response} res - The Express response object.
+   * @returns {Promise<void>}
+   */
   async getServiceStatus(req, res) {
     try {
       const { serviceId } = req.params;
@@ -87,7 +105,12 @@ class RenderMCPController {
     }
   }
 
-  // Trigger deployment
+  /**
+   * Trigger a new deployment for a service.
+   * @param {import('express').Request} req - The Express request object.
+   * @param {import('express').Response} res - The Express response object.
+   * @returns {Promise<void>}
+   */
   async deployService(req, res) {
     try {
       const { serviceId } = req.params;
@@ -126,7 +149,12 @@ class RenderMCPController {
     }
   }
 
-  // Get service logs
+  /**
+   * Get the logs for a specific service.
+   * @param {import('express').Request} req - The Express request object.
+   * @param {import('express').Response} res - The Express response object.
+   * @returns {Promise<void>}
+   */
   async getServiceLogs(req, res) {
     try {
       const { serviceId } = req.params;
@@ -163,7 +191,12 @@ class RenderMCPController {
     }
   }
 
-  // Get service metrics
+  /**
+   * Get metrics for a specific service.
+   * @param {import('express').Request} req - The Express request object.
+   * @param {import('express').Response} res - The Express response object.
+   * @returns {Promise<void>}
+   */
   async getServiceMetrics(req, res) {
     try {
       const { serviceId } = req.params;
@@ -196,7 +229,12 @@ class RenderMCPController {
     }
   }
 
-  // Update service environment variables
+  /**
+   * Update environment variables for a service.
+   * @param {import('express').Request} req - The Express request object.
+   * @param {import('express').Response} res - The Express response object.
+   * @returns {Promise<void>}
+   */
   async updateServiceEnv(req, res) {
     try {
       const { serviceId } = req.params;
@@ -244,7 +282,12 @@ class RenderMCPController {
     }
   }
 
-  // Get deployment history
+  /**
+   * Get the deployment history for a service.
+   * @param {import('express').Request} req - The Express request object.
+   * @param {import('express').Response} res - The Express response object.
+   * @returns {Promise<void>}
+   */
   async getDeploymentHistory(req, res) {
     try {
       const { serviceId } = req.params;
@@ -281,7 +324,12 @@ class RenderMCPController {
     }
   }
 
-  // Health check for Render MCP
+  /**
+   * Health check for the Render MCP.
+   * @param {import('express').Request} req - The Express request object.
+   * @param {import('express').Response} res - The Express response object.
+   * @returns {Promise<void>}
+   */
   async healthCheck(req, res) {
     try {
       // Test API connectivity
