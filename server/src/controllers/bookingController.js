@@ -1,10 +1,18 @@
+/**
+ * @fileoverview Controller for handling bookings.
+ * @module controllers/bookingController
+ */
+
 const Booking = require('../models/Booking');
 const Activity = require('../models/Activity');
 const Vendor = require('../models/Vendor');
 
-// @desc    Create new booking
-// @route   POST /api/bookings
-// @access  Private
+/**
+ * Create a new booking.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const createBooking = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -132,9 +140,12 @@ const createBooking = async (req, res) => {
   }
 };
 
-// @desc    Get user bookings
-// @route   GET /api/bookings
-// @access  Private
+/**
+ * Get all bookings for the authenticated user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getUserBookings = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -181,9 +192,12 @@ const getUserBookings = async (req, res) => {
   }
 };
 
-// @desc    Get single booking
-// @route   GET /api/bookings/:id
-// @access  Private
+/**
+ * Get a single booking by its ID.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getBookingById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -218,9 +232,12 @@ const getBookingById = async (req, res) => {
   }
 };
 
-// @desc    Cancel booking
-// @route   PUT /api/bookings/:id/cancel
-// @access  Private
+/**
+ * Cancel a booking.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const cancelBooking = async (req, res) => {
   try {
     const { id } = req.params;
@@ -294,9 +311,12 @@ const cancelBooking = async (req, res) => {
   }
 };
 
-// @desc    Update booking status (for vendors/admin)
-// @route   PUT /api/bookings/:id/status
-// @access  Private (Admin/Vendor)
+/**
+ * Update the status of a booking (for vendors/admin).
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const updateBookingStatus = async (req, res) => {
   try {
     const { id } = req.params;
@@ -360,9 +380,12 @@ const updateBookingStatus = async (req, res) => {
   }
 };
 
-// @desc    Add review to booking
-// @route   POST /api/bookings/:id/review
-// @access  Private
+/**
+ * Add a review to a booking.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const addBookingReview = async (req, res) => {
   try {
     const { id } = req.params;

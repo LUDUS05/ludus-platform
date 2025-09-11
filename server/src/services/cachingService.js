@@ -1,5 +1,5 @@
 /**
- * Comprehensive Caching Service
+ * @fileoverview Comprehensive Caching Service
  * 
  * This service provides:
  * - Redis integration for distributed caching
@@ -7,12 +7,16 @@
  * - Cache invalidation strategies
  * - Cache warming and preloading
  * - Cache statistics and monitoring
+ * @module services/cachingService
  */
 
 const Redis = require('ioredis');
 const logger = require('../utils/logger');
 
 class CachingService {
+  /**
+   * Creates an instance of CachingService.
+   */
   constructor() {
     this.redis = null;
     this.memoryCache = new Map();
@@ -50,7 +54,8 @@ class CachingService {
   // ===== INITIALIZATION =====
 
   /**
-   * Initialize caching service
+   * Initialize caching service.
+   * @returns {Promise<void>}
    */
   async initializeCaching() {
     try {
@@ -76,7 +81,8 @@ class CachingService {
   }
 
   /**
-   * Initialize Redis connection
+   * Initialize Redis connection.
+   * @returns {Promise<void>}
    */
   async initializeRedis() {
     try {
@@ -121,7 +127,7 @@ class CachingService {
   }
 
   /**
-   * Initialize memory cache
+   * Initialize memory cache.
    */
   initializeMemoryCache() {
     this.memoryCache = new Map();
@@ -129,7 +135,7 @@ class CachingService {
   }
 
   /**
-   * Start cache cleanup process
+   * Start cache cleanup process.
    */
   startCacheCleanup() {
     setInterval(() => {
@@ -142,7 +148,11 @@ class CachingService {
   // ===== CACHE OPERATIONS =====
 
   /**
-   * Set cache value
+   * Set a value in the cache.
+   * @param {string} key - The cache key.
+   * @param {*} value - The value to cache.
+   * @param {number} [ttl=this.config.defaultTTL] - The time-to-live in seconds.
+   * @returns {Promise<boolean>} A promise that resolves to true if the value was set successfully, false otherwise.
    */
   async set(key, value, ttl = this.config.defaultTTL) {
     try {
@@ -170,7 +180,9 @@ class CachingService {
   }
 
   /**
-   * Get cache value
+   * Get a value from the cache.
+   * @param {string} key - The cache key.
+   * @returns {Promise<*>} A promise that resolves to the cached value, or null if not found.
    */
   async get(key) {
     try {
@@ -213,7 +225,9 @@ class CachingService {
   }
 
   /**
-   * Delete cache value
+   * Delete a value from the cache.
+   * @param {string} key - The cache key.
+   * @returns {Promise<boolean>} A promise that resolves to true if the value was deleted successfully, false otherwise.
    */
   async delete(key) {
     try {
@@ -240,7 +254,9 @@ class CachingService {
   }
 
   /**
-   * Check if key exists in cache
+   * Check if a key exists in the cache.
+   * @param {string} key - The cache key.
+   * @returns {Promise<boolean>} A promise that resolves to true if the key exists, false otherwise.
    */
   async exists(key) {
     try {
@@ -266,7 +282,9 @@ class CachingService {
   }
 
   /**
-   * Get multiple cache values
+   * Get multiple values from the cache.
+   * @param {string[]} keys - An array of cache keys.
+   * @returns {Promise<object>} A promise that resolves to an object of key-value pairs.
    */
   async mget(keys) {
     try {
@@ -325,7 +343,10 @@ class CachingService {
   }
 
   /**
-   * Set multiple cache values
+   * Set multiple values in the cache.
+   * @param {object} keyValuePairs - An object of key-value pairs to set.
+   * @param {number} [ttl=this.config.defaultTTL] - The time-to-live in seconds.
+   * @returns {Promise<object>} A promise that resolves to an object of keys and their set status.
    */
   async mset(keyValuePairs, ttl = this.config.defaultTTL) {
     try {
@@ -348,7 +369,10 @@ class CachingService {
   // ===== MEMORY CACHE OPERATIONS =====
 
   /**
-   * Set value in memory cache
+   * Set a value in the memory cache.
+   * @param {string} key - The cache key.
+   * @param {*} value - The value to cache.
+   * @param {number} ttl - The time-to-live in seconds.
    */
   setMemoryCache(key, value, ttl) {
     try {
@@ -370,7 +394,9 @@ class CachingService {
   }
 
   /**
-   * Get value from memory cache
+   * Get a value from the memory cache.
+   * @param {string} key - The cache key.
+   * @returns {*} The cached value, or null if not found or expired.
    */
   getMemoryCache(key) {
     try {
@@ -399,7 +425,8 @@ class CachingService {
   }
 
   /**
-   * Delete value from memory cache
+   * Delete a value from the memory cache.
+   * @param {string} key - The cache key.
    */
   deleteMemoryCache(key) {
     try {
@@ -410,7 +437,7 @@ class CachingService {
   }
 
   /**
-   * Evict oldest item from memory cache
+   * Evict the oldest item from the memory cache.
    */
   evictOldestFromMemory() {
     try {
@@ -435,7 +462,7 @@ class CachingService {
   }
 
   /**
-   * Cleanup expired items from memory cache
+   * Cleanup expired items from the memory cache.
    */
   cleanupMemoryCache() {
     try {
@@ -461,7 +488,11 @@ class CachingService {
   // ===== REFERRAL SYSTEM SPECIFIC CACHING =====
 
   /**
-   * Cache referral statistics
+   * Cache referral statistics.
+   * @param {string} userId - The ID of the user.
+   * @param {string} period - The time period for the stats (e.g., '24h', '7d').
+   * @param {object} stats - The statistics object to cache.
+   * @returns {Promise<boolean>} A promise that resolves to true if the stats were cached successfully.
    */
   async cacheReferralStats(userId, period, stats) {
     const key = `referral_stats:${userId}:${period}`;
@@ -471,7 +502,10 @@ class CachingService {
   }
 
   /**
-   * Get cached referral statistics
+   * Get cached referral statistics.
+   * @param {string} userId - The ID of the user.
+   * @param {string} period - The time period for the stats.
+   * @returns {Promise<object|null>} A promise that resolves to the cached stats, or null if not found.
    */
   async getCachedReferralStats(userId, period) {
     const key = `referral_stats:${userId}:${period}`;
@@ -479,7 +513,10 @@ class CachingService {
   }
 
   /**
-   * Cache referral leaderboard
+   * Cache the referral leaderboard.
+   * @param {string} period - The time period for the leaderboard.
+   * @param {object} leaderboard - The leaderboard data to cache.
+   * @returns {Promise<boolean>} A promise that resolves to true if the leaderboard was cached successfully.
    */
   async cacheReferralLeaderboard(period, leaderboard) {
     const key = `referral_leaderboard:${period}`;
@@ -489,7 +526,9 @@ class CachingService {
   }
 
   /**
-   * Get cached referral leaderboard
+   * Get the cached referral leaderboard.
+   * @param {string} period - The time period for the leaderboard.
+   * @returns {Promise<object|null>} A promise that resolves to the cached leaderboard, or null if not found.
    */
   async getCachedReferralLeaderboard(period) {
     const key = `referral_leaderboard:${period}`;
@@ -497,7 +536,11 @@ class CachingService {
   }
 
   /**
-   * Cache invitation analytics
+   * Cache invitation analytics.
+   * @param {string} userId - The ID of the user.
+   * @param {string} period - The time period for the analytics.
+   * @param {object} analytics - The analytics data to cache.
+   * @returns {Promise<boolean>} A promise that resolves to true if the analytics were cached successfully.
    */
   async cacheInvitationAnalytics(userId, period, analytics) {
     const key = `invitation_analytics:${userId}:${period}`;
@@ -507,7 +550,10 @@ class CachingService {
   }
 
   /**
-   * Get cached invitation analytics
+   * Get cached invitation analytics.
+   * @param {string} userId - The ID of the user.
+   * @param {string} period - The time period for the analytics.
+   * @returns {Promise<object|null>} A promise that resolves to the cached analytics, or null if not found.
    */
   async getCachedInvitationAnalytics(userId, period) {
     const key = `invitation_analytics:${userId}:${period}`;
@@ -515,7 +561,10 @@ class CachingService {
   }
 
   /**
-   * Cache QR code data
+   * Cache QR code data.
+   * @param {string} code - The referral code.
+   * @param {*} data - The QR code data to cache.
+   * @returns {Promise<boolean>} A promise that resolves to true if the data was cached successfully.
    */
   async cacheQRCodeData(code, data) {
     const key = `qr_code:${code}`;
@@ -525,7 +574,9 @@ class CachingService {
   }
 
   /**
-   * Get cached QR code data
+   * Get cached QR code data.
+   * @param {string} code - The referral code.
+   * @returns {Promise<*|null>} A promise that resolves to the cached QR code data, or null if not found.
    */
   async getCachedQRCodeData(code) {
     const key = `qr_code:${code}`;
@@ -535,7 +586,9 @@ class CachingService {
   // ===== CACHE INVALIDATION =====
 
   /**
-   * Invalidate cache by pattern
+   * Invalidate cache entries by a pattern.
+   * @param {string} pattern - The pattern to match against cache keys.
+   * @returns {Promise<boolean>} A promise that resolves to true if the invalidation was successful.
    */
   async invalidateByPattern(pattern) {
     try {
@@ -566,7 +619,9 @@ class CachingService {
   }
 
   /**
-   * Invalidate user-specific cache
+   * Invalidate all cache entries for a specific user.
+   * @param {string} userId - The ID of the user.
+   * @returns {Promise<void>}
    */
   async invalidateUserCache(userId) {
     const patterns = [
@@ -584,7 +639,8 @@ class CachingService {
   }
 
   /**
-   * Invalidate referral system cache
+   * Invalidate all cache entries for the referral system.
+   * @returns {Promise<void>}
    */
   async invalidateReferralCache() {
     const patterns = [
@@ -604,7 +660,8 @@ class CachingService {
   // ===== CACHE WARMING =====
 
   /**
-   * Warm up cache with frequently accessed data
+   * Warm up the cache with frequently accessed data.
+   * @returns {Promise<void>}
    */
   async warmCache() {
     try {
@@ -624,7 +681,8 @@ class CachingService {
   }
 
   /**
-   * Warm up referral leaderboards
+   * Warm up the referral leaderboards.
+   * @returns {Promise<void>}
    */
   async warmReferralLeaderboards() {
     try {
@@ -642,7 +700,8 @@ class CachingService {
   }
 
   /**
-   * Warm up system statistics
+   * Warm up system statistics.
+   * @returns {Promise<void>}
    */
   async warmSystemStats() {
     try {
@@ -657,14 +716,18 @@ class CachingService {
   // ===== UTILITY METHODS =====
 
   /**
-   * Get full cache key with prefix
+   * Get the full cache key with a prefix.
+   * @param {string} key - The cache key.
+   * @returns {string} The full cache key.
    */
   getFullKey(key) {
     return `${this.config.prefix}${key}`;
   }
 
   /**
-   * Serialize value for Redis storage
+   * Serialize a value for Redis storage.
+   * @param {*} value - The value to serialize.
+   * @returns {string} The serialized value.
    */
   serializeValue(value) {
     try {
@@ -676,7 +739,9 @@ class CachingService {
   }
 
   /**
-   * Deserialize value from Redis storage
+   * Deserialize a value from Redis storage.
+   * @param {string} value - The value to deserialize.
+   * @returns {*|null} The deserialized value, or null if deserialization fails.
    */
   deserializeValue(value) {
     try {
@@ -688,7 +753,9 @@ class CachingService {
   }
 
   /**
-   * Get TTL for specific time period
+   * Get the TTL for a specific time period.
+   * @param {string} period - The time period (e.g., '24h', '7d').
+   * @returns {number} The TTL in seconds.
    */
   getTTLForPeriod(period) {
     const ttlMap = {
@@ -705,7 +772,8 @@ class CachingService {
   // ===== STATISTICS AND MONITORING =====
 
   /**
-   * Get cache statistics
+   * Get cache statistics.
+   * @returns {object} An object containing cache statistics.
    */
   getCacheStats() {
     const hitRate = this.cacheStats.hits + this.cacheStats.misses > 0 
@@ -721,7 +789,7 @@ class CachingService {
   }
 
   /**
-   * Reset cache statistics
+   * Reset cache statistics.
    */
   resetCacheStats() {
     this.cacheStats = {
@@ -736,7 +804,8 @@ class CachingService {
   }
 
   /**
-   * Get memory cache information
+   * Get information about the memory cache.
+   * @returns {object} An object containing memory cache information.
    */
   getMemoryCacheInfo() {
     const now = Date.now();
@@ -761,7 +830,8 @@ class CachingService {
   // ===== HEALTH CHECK =====
 
   /**
-   * Check cache service health
+   * Check the health of the cache service.
+   * @returns {Promise<object>} A promise that resolves to an object containing the health status.
    */
   async getHealth() {
     try {

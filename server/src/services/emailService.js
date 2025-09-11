@@ -1,11 +1,22 @@
+/**
+ * @fileoverview Service for sending emails.
+ * @module services/emailService
+ */
+
 const nodemailer = require('nodemailer');
 
 class EmailService {
+  /**
+   * Creates an instance of EmailService.
+   */
   constructor() {
     this.transporter = null;
     this.initializeTransporter();
   }
 
+  /**
+   * Initializes the email transporter.
+   */
   initializeTransporter() {
     try {
       // Google Workspace SMTP Relay configuration
@@ -31,6 +42,15 @@ class EmailService {
     }
   }
 
+  /**
+   * Sends an email.
+   * @param {object} options - The email options.
+   * @param {string} options.to - The recipient's email address.
+   * @param {string} options.subject - The email subject.
+   * @param {string} options.html - The HTML body of the email.
+   * @param {string} options.text - The plain text body of the email.
+   * @returns {Promise<object>} A promise that resolves to the result of sending the email.
+   */
   async sendEmail(options) {
     try {
       if (!this.transporter) {
@@ -54,7 +74,13 @@ class EmailService {
     }
   }
 
-  // Password reset email template
+  /**
+   * Sends a password reset email.
+   * @param {string} email - The recipient's email address.
+   * @param {string} resetToken - The password reset token.
+   * @param {string} resetUrl - The password reset URL.
+   * @returns {Promise<object>} A promise that resolves to the result of sending the email.
+   */
   async sendPasswordResetEmail(email, resetToken, resetUrl) {
     const subject = 'Password Reset - LUDUS Platform';
     const html = `
@@ -169,7 +195,13 @@ This is an automated message, please do not reply.
     });
   }
 
-  // Booking confirmation email template
+  /**
+   * Sends a booking confirmation email.
+   * @param {object} booking - The booking object.
+   * @param {object} activity - The activity object.
+   * @param {object} vendor - The vendor object.
+   * @returns {Promise<object>} A promise that resolves to the result of sending the email.
+   */
   async sendBookingConfirmationEmail(booking, activity, vendor) {
     const subject = `Booking Confirmed - ${activity.title}`;
     const bookingDate = new Date(booking.bookingDate).toLocaleDateString('en-SA', {
@@ -320,7 +352,11 @@ Need help? Contact us at support@ludusapp.com
     });
   }
 
-  // Welcome email template
+  /**
+   * Sends a welcome email to a new user.
+   * @param {object} user - The user object.
+   * @returns {Promise<object>} A promise that resolves to the result of sending the email.
+   */
   async sendWelcomeEmail(user) {
     const subject = 'Welcome to LUDUS Platform! 🎉';
     const html = `
@@ -430,7 +466,11 @@ Follow us for the latest activities and updates!
     });
   }
 
-  // Send contact form notification to admin
+  /**
+   * Sends a notification email to the admin about a new contact form submission.
+   * @param {object} contactData - The contact form data.
+   * @returns {Promise<object>} A promise that resolves to the result of sending the email.
+   */
   async sendContactFormNotification(contactData) {
     try {
       const subject = `New Contact Form Submission - ${contactData.subject}`;
@@ -502,7 +542,13 @@ ${contactData.message}
     }
   }
 
-  // Send contact confirmation to user
+  /**
+   * Sends a confirmation email to the user after they submit a contact form.
+   * @param {string} email - The user's email address.
+   * @param {string} name - The user's name.
+   * @param {string} subject - The subject of the contact form submission.
+   * @returns {Promise<object>} A promise that resolves to the result of sending the email.
+   */
   async sendContactConfirmation(email, name, subject) {
     try {
       const emailSubject = 'Thank you for contacting LUDUS Platform';

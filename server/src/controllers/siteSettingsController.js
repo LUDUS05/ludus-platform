@@ -1,7 +1,17 @@
+/**
+ * @fileoverview Controller for handling site settings.
+ * @module controllers/siteSettingsController
+ */
+
 const SiteSettings = require('../models/SiteSettings');
 const { validationResult } = require('express-validator');
 
-// Get site settings
+/**
+ * Get the current site settings.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 exports.getSettings = async (req, res) => {
   try {
     const settings = await SiteSettings.getSettings();
@@ -12,7 +22,12 @@ exports.getSettings = async (req, res) => {
   }
 };
 
-// Update site settings (Admin only)
+/**
+ * Update the site settings (admin only).
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 exports.updateSettings = async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -38,7 +53,12 @@ exports.updateSettings = async (req, res) => {
   }
 };
 
-// Toggle coming soon mode
+/**
+ * Toggle the "coming soon" mode for the site.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 exports.toggleComingSoon = async (req, res) => {
   try {
     const settings = await SiteSettings.getSettings();
@@ -56,7 +76,12 @@ exports.toggleComingSoon = async (req, res) => {
   }
 };
 
-// Toggle maintenance mode
+/**
+ * Toggle the maintenance mode for the site.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 exports.toggleMaintenance = async (req, res) => {
   try {
     const settings = await SiteSettings.getSettings();

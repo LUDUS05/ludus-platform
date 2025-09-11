@@ -1,6 +1,14 @@
+/**
+ * @fileoverview Service for tracking and analyzing errors.
+ * @module services/errorTrackingService
+ */
+
 const logger = require('../utils/logger');
 
 class ErrorTrackingService {
+  /**
+   * Creates an instance of ErrorTrackingService.
+   */
   constructor() {
     this.errorCounts = new Map();
     this.errorHistory = [];
@@ -12,7 +20,12 @@ class ErrorTrackingService {
     this.maxHistorySize = 1000;
   }
 
-  // Track an error
+  /**
+   * Track an error.
+   * @param {Error} error - The error object.
+   * @param {object} [context={}] - Additional context for the error.
+   * @returns {object} The error information object.
+   */
   trackError(error, context = {}) {
     const errorInfo = {
       timestamp: new Date(),
@@ -51,7 +64,11 @@ class ErrorTrackingService {
     return errorInfo;
   }
 
-  // Categorize error types
+  /**
+   * Categorize an error based on its message and stack trace.
+   * @param {Error} error - The error object.
+   * @returns {string} The error category.
+   */
   categorizeError(error) {
     const message = error.message?.toLowerCase() || '';
     const stack = error.stack?.toLowerCase() || '';
@@ -95,7 +112,11 @@ class ErrorTrackingService {
     return 'general';
   }
 
-  // Calculate error severity
+  /**
+   * Calculate the severity of an error.
+   * @param {Error} error - The error object.
+   * @returns {string} The error severity ('critical', 'high', 'medium', 'low').
+   */
   calculateSeverity(error) {
     const message = error.message?.toLowerCase() || '';
     const type = this.categorizeError(error);
@@ -123,7 +144,10 @@ class ErrorTrackingService {
     return 'medium';
   }
 
-  // Check for alerts
+  /**
+   * Check if an error should trigger an alert.
+   * @param {object} errorInfo - The error information object.
+   */
   checkForAlerts(errorInfo) {
     const { type, severity } = errorInfo;
     
@@ -164,7 +188,12 @@ class ErrorTrackingService {
     }
   }
 
-  // Send alert
+  /**
+   * Send an alert.
+   * @param {string} alertType - The type of alert.
+   * @param {object} data - The alert data.
+   * @returns {object} The alert object.
+   */
   sendAlert(alertType, data) {
     const alert = {
       id: `${alertType}_${Date.now()}`,
@@ -186,7 +215,10 @@ class ErrorTrackingService {
     return alert;
   }
 
-  // Send notification
+  /**
+   * Send a notification for an alert.
+   * @param {object} alert - The alert object.
+   */
   sendNotification(alert) {
     // This would integrate with your notification system
     // Could send emails, Slack messages, etc.
@@ -206,14 +238,21 @@ class ErrorTrackingService {
     }
   }
 
-  // Store alert
+  /**
+   * Store an alert.
+   * @param {object} alert - The alert object.
+   */
   storeAlert(alert) {
     // This could save to database for persistence
     // For now, just log it
     logger.info('Alert stored', { alertId: alert.id });
   }
 
-  // Get error statistics
+  /**
+   * Get error statistics for a given time range.
+   * @param {string} [timeRange='24h'] - The time range (e.g., '1h', '6h', '24h', '7d', '30d').
+   * @returns {object} An object containing error statistics.
+   */
   getErrorStats(timeRange = '24h') {
     const now = new Date();
     const cutoff = new Date(now.getTime() - this.getTimeRangeMs(timeRange));
@@ -242,7 +281,11 @@ class ErrorTrackingService {
     return stats;
   }
 
-  // Get error history
+  /**
+   * Get the error history with optional filters.
+   * @param {object} [filters={}] - The filters to apply.
+   * @returns {object} An object containing the filtered errors and pagination information.
+   */
   getErrorHistory(filters = {}) {
     let filtered = [...this.errorHistory];
     
@@ -287,7 +330,11 @@ class ErrorTrackingService {
     };
   }
 
-  // Acknowledge alert
+  /**
+   * Acknowledge an alert.
+   * @param {string} alertId - The ID of the alert to acknowledge.
+   * @returns {object} An object indicating the success of the operation.
+   */
   acknowledgeAlert(alertId) {
     // Find and mark alert as acknowledged
     // This would typically update a database record
@@ -296,7 +343,11 @@ class ErrorTrackingService {
     return { success: true, alertId };
   }
 
-  // Get time range in milliseconds
+  /**
+   * Get the time range in milliseconds.
+   * @param {string} timeRange - The time range string (e.g., '1h', '24h').
+   * @returns {number} The time range in milliseconds.
+   */
   getTimeRangeMs(timeRange) {
     const timeRanges = {
       '1h': 60 * 60 * 1000,
@@ -309,14 +360,21 @@ class ErrorTrackingService {
     return timeRanges[timeRange] || timeRanges['24h'];
   }
 
-  // Get total requests (placeholder - would need to be implemented)
+  /**
+   * Get the total number of requests (placeholder).
+   * @returns {number} The total number of requests.
+   */
   getTotalRequests() {
     // This would typically come from your request tracking/metrics
     // For now, return a placeholder value
     return 1000;
   }
 
-  // Clear old errors
+  /**
+   * Clear old errors from the history.
+   * @param {number} [days=30] - The number of days to keep errors for.
+   * @returns {object} An object containing the number of cleared and remaining errors.
+   */
   clearOldErrors(days = 30) {
     const cutoff = new Date(Date.now() - (days * 24 * 60 * 60 * 1000));
     const initialCount = this.errorHistory.length;
@@ -329,7 +387,11 @@ class ErrorTrackingService {
     return { clearedCount, remainingCount: this.errorHistory.length };
   }
 
-  // Export error data
+  /**
+   * Export error data in a specified format.
+   * @param {string} [format='json'] - The format to export the data in ('json' or 'csv').
+   * @returns {object|string} The exported data.
+   */
   exportErrorData(format = 'json') {
     const data = {
       exportDate: new Date(),
@@ -345,7 +407,11 @@ class ErrorTrackingService {
     return data;
   }
 
-  // Convert to CSV
+  /**
+   * Convert an array of errors to a CSV string.
+   * @param {object[]} errors - The array of error objects.
+   * @returns {string} The CSV string.
+   */
   convertToCSV(errors) {
     if (errors.length === 0) return '';
     

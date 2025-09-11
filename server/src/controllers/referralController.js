@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Controller for handling referrals.
+ * @module controllers/referralController
+ */
+
 const Referral = require('../models/Referral');
 const ReferralCode = require('../models/ReferralCode');
 const ReferralReward = require('../models/ReferralReward');
@@ -5,9 +10,12 @@ const User = require('../models/User');
 const Wallet = require('../models/Wallet');
 const Notification = require('../models/Notification');
 
-// @desc    Generate unique referral code for user
-// @route   POST /api/referrals/generate-code
-// @access  Private
+/**
+ * Generate a unique referral code for the authenticated user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const generateReferralCode = async (req, res) => {
   try {
     const userId = req.user.id || req.user._id;
@@ -56,9 +64,12 @@ const generateReferralCode = async (req, res) => {
   }
 };
 
-// @desc    Process referral during user registration
-// @route   POST /api/referrals/process-registration
-// @access  Public
+/**
+ * Process a referral during user registration.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const processReferralRegistration = async (req, res) => {
   try {
     const { referralCode, newUserId, source, platform, userAgent, ipAddress } = req.body;
@@ -183,9 +194,12 @@ const processReferralRegistration = async (req, res) => {
   }
 };
 
-// @desc    Process referral reward for first booking
-// @route   POST /api/referrals/process-booking
-// @access  Private
+/**
+ * Process a referral reward for a user's first booking.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const processReferralBooking = async (req, res) => {
   try {
     const { userId } = req.body;
@@ -315,9 +329,12 @@ const processReferralBooking = async (req, res) => {
   }
 };
 
-// @desc    Get referral statistics for user
-// @route   GET /api/referrals/stats/:userId
-// @access  Private
+/**
+ * Get referral statistics for a specific user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getReferralStats = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -372,9 +389,12 @@ const getReferralStats = async (req, res) => {
   }
 };
 
-// @desc    Get referral history for user
-// @route   GET /api/referrals/history/:userId
-// @access  Private
+/**
+ * Get the referral history for a specific user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
 const getReferralHistory = async (req, res) => {
   try {
     const { userId } = req.params;
