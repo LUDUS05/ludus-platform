@@ -1,5 +1,7 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import ComingSoonPage from '../ComingSoonPage';
 import AdminLayout from '../../components/admin/AdminLayout';
 import AdminDashboard from '../../components/admin/AdminDashboard';
 import VendorManagement from '../../components/admin/VendorManagement';
@@ -20,6 +22,31 @@ import FormResponses from '../../components/admin/FormResponses';
 import OnboardingManagement from '../../components/admin/OnboardingManagement';
 
 const AdminRoutes = () => {
+  const { isAuthenticated, user, isLoading } = useAuth();
+  
+  // Show loading spinner while checking authentication
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-soft-white dark:dark-bg-primary">
+        <div className="animate-spin rounded-full h-12 w-12 border-2 border-ludus-orange dark:border-dark-ludus-orange border-t-transparent"></div>
+      </div>
+    );
+  }
+
+  // Check if user is admin
+  const isAdmin = user && (user.role === 'admin' || user.email === 'admin@ludusapp.com');
+  
+  if (!isAuthenticated) {
+    console.log('❌ Not authenticated, redirecting to /hi');
+    return <Navigate to="/hi" replace />;
+  }
+  
+  if (!isAdmin) {
+    console.log('❌ Not admin user, showing Coming Soon page');
+    return <ComingSoonPage />;
+  }
+  
+  console.log('✅ Admin access granted');
   return (
     <AdminLayout>
       <Routes>
