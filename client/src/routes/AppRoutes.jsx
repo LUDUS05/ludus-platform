@@ -47,6 +47,12 @@ const AppRoutes = () => {
     <Routes>
       {/* Routes without layout (standalone pages) */}
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/admin" element={<AdminRoutes />} />
+      <Route path="/share" element={
+        <ProtectedRoute>
+          <SharePage />
+        </ProtectedRoute>
+      } />
       <Route path="/register" element={
         <SmartRoute path="/register">
           <UserRegistrationPage />
@@ -80,13 +86,6 @@ const AppRoutes = () => {
         </SmartRoute>
       } />
       <Route path="/invite/:code" element={<NewOnboarding />} />
-      <Route path="/share" element={
-        <SmartRoute path="/share">
-          <ProtectedRoute>
-            <SharePage />
-          </ProtectedRoute>
-        </SmartRoute>
-      } />
       
       {/* Routes with main layout */}
       <Route path="/" element={<MainLayout />}>
