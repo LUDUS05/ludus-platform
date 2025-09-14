@@ -79,9 +79,15 @@ function FallbackHandler() {
       // Decode the original path and navigate to it
       const decodedPath = decodeURIComponent(spaRedirect);
       
+      console.log('🔄 FallbackHandler: Redirecting from', location.pathname, 'to', decodedPath);
+      
       // Navigate to the original path and replace the current history entry
       // This will clean up the URL parameters
       navigate(decodedPath, { replace: true });
+    } else if (location.pathname === '/' && !location.search) {
+      // If user is on root path with no search params, redirect to /hi
+      console.log('🔄 FallbackHandler: Redirecting from root to /hi');
+      navigate('/hi', { replace: true });
     }
   }, [location, navigate]);
   
