@@ -84,7 +84,18 @@ const SmartRoute = ({ children, path }) => {
   }
 
   // For root path "/": redirect to /hi for non-logged-in users
+  // BUT: Don't redirect if we're in a spa-redirect scenario (coming from /login)
   if (path === '/') {
+    // Check if we're in a spa-redirect scenario
+    const urlParams = new URLSearchParams(window.location.search);
+    const spaRedirect = urlParams.get('spa-redirect');
+    
+    if (spaRedirect) {
+      console.log('🔄 SmartRoute: Detected spa-redirect, not interfering with root path');
+      // Don't redirect, let FallbackHandler handle it
+      return children;
+    }
+    
     if (!isAuthenticated) {
       return <Navigate to="/hi" replace />;
     }
