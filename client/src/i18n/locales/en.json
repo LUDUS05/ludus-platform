@@ -1315,6 +1315,49 @@
       "networkError": "Network error. Please try again."
     },
 
+    "selena": {
+      "name": "Selena",
+      "title": "Your Personal LUDUS Guide",
+      "greeting": "Hello! I'm Selena 🌟",
+      "welcomeMessage": "Welcome to your journey of discovering amazing activities and like-minded communities!",
+      "howCanHelp": "How can I help you today?",
+      "readyToStart": "Are you ready to get started?",
+      "assistance": {
+        "registration": "Registration Help",
+        "profile": "Profile Setup",
+        "features": "Feature Explanation",
+        "technical": "Technical Support",
+        "cultural": "Cultural Guidance"
+      },
+      "tips": {
+        "security": "💡 Security Tip: Use a strong password and don't share it with anyone",
+        "cultural": "🇸🇦 Cultural Tip: LUDUS is designed specifically for Saudi culture",
+        "navigation": "🧭 Navigation Tip: Use the map to discover nearby activities",
+        "community": "👥 Community Tip: Be respectful and engaging with others"
+      },
+      "responses": {
+        "needMoreInfo": "I need more information to help you better",
+        "greatProgress": "Great progress! Keep it up",
+        "almostDone": "Almost done! One more step",
+        "completed": "Excellent! You've successfully completed the onboarding",
+        "needHelp": "If you need help at any time, just ask"
+      },
+      "culturalGuidance": {
+        "title": "Cultural Guidance",
+        "privacy": "In Saudi culture, respecting privacy is important",
+        "community": "Group participation and positive interaction are encouraged",
+        "timing": "Consideration of prayer times and appropriate timing for activities",
+        "family": "Family activities have special priority in our community"
+      },
+      "troubleshooting": {
+        "title": "Troubleshooting",
+        "loading": "If the page is slow, check your internet connection",
+        "forms": "If forms don't work, try refreshing the page",
+        "login": "For login issues, try resetting your password",
+        "contact": "For additional help, contact the support team"
+      }
+    },
+
     "gamification": {
       "pointsAwarded": "+{{points}} points",
       "onboardingCompleteBonus": "Onboarding complete! Bonus +{{points}}",

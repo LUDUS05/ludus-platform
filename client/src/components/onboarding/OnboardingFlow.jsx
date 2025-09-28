@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useOnboarding } from './OnboardingProvider';
 import { Globe } from 'lucide-react';
+import { SelenaChatButton } from './SelenaChat';
 
 // Import step components
 import WelcomeStep from './steps/WelcomeStep';
@@ -395,6 +396,12 @@ const OnboardingFlow = () => {
           </div>
         </div>
       )}
+      
+      {/* Selena Chat Assistant */}
+      <SelenaChatButton 
+        currentStep={config?.steps?.[currentStep]?.stepId}
+        className="onboarding-chat-button"
+      />
     </div>
   );
 };
