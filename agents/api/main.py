@@ -9,6 +9,13 @@ from datetime import datetime
 from .booking_agent import BookingAgent, BookingRequest
 from .vendor_agent import VendorAgent, VendorRequest
 from .search_agent import SearchAgent, SearchRequest
+from .discover_agent import (
+    SelenaDiscoverAgent, 
+    DiscoverSearchRequest, 
+    DiscoverSearchResponse,
+    DiscoverRecommendationRequest,
+    DiscoverRecommendationResponse
+)
 from .ui_ux_agent import UIUXAgent, DesignRequest, DesignType, DesignComplexity
 from .fullstack_agent import FullstackAgent, DevelopmentRequest, DevelopmentType, TechStack
 from .debugging_agent import DebuggingAgent, DebuggingRequest, IssueType, Severity
@@ -40,6 +47,7 @@ if REDIS_URL:
 booking_agent = BookingAgent(redis_client)
 vendor_agent = VendorAgent(redis_client)
 search_agent = SearchAgent(redis_client)
+discover_agent = SelenaDiscoverAgent(redis_client)
 
 # Initialize automated workflow agents
 ui_ux_agent = UIUXAgent(redis_client)
@@ -169,6 +177,26 @@ Be professional in dealing with vendors."""
 - Suggesting new activities
 
 Be creative and helpful in recommendations."""
+        },
+        "discover": {
+            "ar": """أنت سيلينا - وكيل الاستكشاف الذكي لمنصة LUDUS. أنت متخصص في:
+- الاستكشاف الذكي للأنشطة بالذكاء الاصطناعي
+- التوصيات الشخصية المتقدمة مع السياق الثقافي
+- تحليل المواقع الجغرافية والقرب المكاني
+- فهم اللغة الطبيعية بالعربية والإنجليزية
+- التعلم من سلوك المستخدمين وتفضيلاتهم
+- مراعاة الثقافة السعودية والتقاليد المحلية
+
+كن ذكياً ومتطوراً في اقتراحاتك مع مراعاة السياق الثقافي والجغرافي.""",
+            "en": """You are Selena - the intelligent discovery agent for LUDUS platform. You specialize in:
+- AI-powered intelligent activity discovery
+- Advanced personalized recommendations with cultural context
+- Geographic analysis and proximity intelligence
+- Natural language understanding in Arabic and English
+- Learning from user behavior and preferences
+- Respecting Saudi culture and local traditions
+
+Be intelligent and sophisticated in your suggestions while considering cultural and geographic context."""
         }
     }
     
@@ -249,6 +277,8 @@ async def chat(req: ChatRequest):
                 reply_text = vendor_agent.process_vendor_inquiry(req.message, session_id, language)
             elif agent_type == "search":
                 reply_text = search_agent.process_search_inquiry(req.message, session_id, language)
+            elif agent_type == "discover":
+                reply_text = discover_agent.process_discover_inquiry(req.message, session_id, language)
             else:
                 # Customer service fallback
                 fallback_responses = {
@@ -327,6 +357,15 @@ async def get_agents():
             "description_ar": "يجد ويوصي بالأنشطة",
             "icon": "🔍",
             "color": "#4facfe"
+        },
+        "discover": {
+            "id": "discover",
+            "name": "Selena-Discover AI Agent",
+            "name_ar": "سيلينا - وكيل الاستكشاف الذكي",
+            "description": "Intelligent activity discovery with AI and cultural context",
+            "description_ar": "استكشاف ذكي للأنشطة بالذكاء الاصطناعي والسياق الثقافي",
+            "icon": "🌟",
+            "color": "#00d4aa"
         }
     }
     return {"agents": agents}
@@ -416,6 +455,147 @@ async def search_activities(search_data: SearchRequest, user_id: str = "anonymou
 async def get_activity_categories(language: str = "ar"):
     """Get available activity categories"""
     return {"categories": search_agent.get_activity_categories(language)}
+
+
+# ============================================================================
+# SELENA-DISCOVER AI AGENT ENDPOINTS
+# ============================================================================
+
+@app.post("/agents/discover/search")
+async def discover_intelligent_search(search_data: DiscoverSearchRequest):
+    """Intelligent activity search with AI processing and cultural context"""
+    try:
+        response = discover_agent.intelligent_search(search_data)
+        return response.dict()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Search failed: {str(e)}")
+
+
+@app.post("/agents/discover/recommend")
+async def discover_personalized_recommendations(recommendation_data: DiscoverRecommendationRequest):
+    """Generate personalized activity recommendations using ML algorithms"""
+    try:
+        response = discover_agent.generate_intelligent_recommendations(recommendation_data)
+        return response.dict()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Recommendation failed: {str(e)}")
+
+
+@app.post("/agents/discover/filter")
+async def discover_advanced_filter(filter_data: dict):
+    """Advanced filtering with AI assistance and cultural context"""
+    try:
+        # Convert filter_data to DiscoverSearchRequest
+        search_request = DiscoverSearchRequest(
+            query=filter_data.get("query", ""),
+            user_id=filter_data.get("user_id"),
+            location=filter_data.get("location"),
+            filters=filter_data.get("filters"),
+            language=filter_data.get("language", "ar"),
+            search_type="filter",
+            cultural_preferences=filter_data.get("cultural_context")
+        )
+        
+        response = discover_agent.intelligent_search(search_request)
+        
+        # Format for filter response
+        return {
+            "filtered_results": response.results,
+            "alternative_suggestions": response.search_suggestions,
+            "applied_filters": response.processed_query.get("filters", {}),
+            "cultural_insights": response.cultural_insights,
+            "performance_metrics": response.performance_metrics
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Filtering failed: {str(e)}")
+
+
+@app.get("/agents/discover/trending")
+async def discover_trending_activities(location: str = None, timeframe: str = "week", 
+                                     cultural_context: str = "saudi_modern"):
+    """Get trending activities with cultural and geographic insights"""
+    try:
+        response = discover_agent.get_trending_activities(location, timeframe, cultural_context)
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Trending analysis failed: {str(e)}")
+
+
+@app.get("/agents/discover/nearby/{location}")
+async def discover_nearby_activities(location: str, radius: int = 25, user_id: str = None):
+    """Get nearby activities with intelligent proximity-based recommendations"""
+    try:
+        # Parse location (simplified - in production would use geocoding)
+        location_coords = {
+            "riyadh": [46.6753, 24.7136],
+            "jeddah": [39.1925, 21.4858],
+            "dammam": [50.0888, 26.4207]
+        }
+        
+        coordinates = location_coords.get(location.lower(), [46.6753, 24.7136])
+        
+        search_request = DiscoverSearchRequest(
+            query=f"activities near {location}",
+            user_id=user_id,
+            location={
+                "city": location,
+                "coordinates": coordinates,
+                "radius": radius
+            },
+            language="ar",
+            search_type="geographic"
+        )
+        
+        response = discover_agent.intelligent_search(search_request)
+        
+        return {
+            "location": location,
+            "radius_km": radius,
+            "nearby_activities": response.results,
+            "geographic_clusters": response.geographic_clusters,
+            "location_insights": response.cultural_insights,
+            "recommendations": response.recommendations
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Nearby search failed: {str(e)}")
+
+
+@app.post("/agents/discover/save-preferences")
+async def discover_save_user_preferences(preference_data: dict):
+    """Save and learn from user preferences and interactions"""
+    try:
+        user_id = preference_data.get("user_id")
+        interaction_data = preference_data.get("interaction_data", {})
+        
+        if not user_id:
+            raise HTTPException(status_code=400, detail="User ID is required")
+        
+        success = discover_agent.update_user_preferences(user_id, interaction_data)
+        
+        if success:
+            return {
+                "success": True,
+                "message": "User preferences updated successfully",
+                "learning_status": "preferences_updated"
+            }
+        else:
+            return {
+                "success": False,
+                "message": "Failed to update preferences",
+                "learning_status": "update_failed"
+            }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Preference update failed: {str(e)}")
+
+
+@app.get("/agents/discover/analytics")
+async def discover_analytics(timeframe: str = "week"):
+    """Get Selena-Discover agent analytics and performance metrics"""
+    try:
+        analytics = discover_agent.get_discover_analytics(timeframe)
+        return analytics
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Analytics failed: {str(e)}")
 
 
 # ============================================================================
