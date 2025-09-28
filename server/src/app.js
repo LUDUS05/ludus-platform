@@ -398,6 +398,7 @@ app.use('/api/users', require('./routes/users'));
 app.use('/users', require('./routes/users'));
 app.use('/api/activities', require('./routes/activities'));
 app.use('/activities', require('./routes/activities'));
+app.use('/api/discover', require('./routes/discover'));
 app.use('/api/vendors', require('./routes/vendors'));
 app.use('/vendors', require('./routes/vendors'));
 app.use('/api/bookings', require('./routes/bookings'));
