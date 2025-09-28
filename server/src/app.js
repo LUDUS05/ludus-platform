@@ -421,6 +421,7 @@ app.use('/api/reports', require('./routes/reports'));
 app.use('/api/monitoring', require('./routes/monitoring'));
 app.use('/api/qr', require('./routes/qr'));
 app.use('/api/onboarding', require('./routes/onboarding'));
+app.use('/api/onboard-agent', require('./routes/onboardAgent'));
 app.use('/api/social', require('./routes/social'));
 app.use('/api/setup', require('./routes/setup'));
 app.use('/api/render-mcp', require('./routes/renderMCP'));
