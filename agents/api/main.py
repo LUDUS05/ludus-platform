@@ -9,6 +9,7 @@ from datetime import datetime
 from .booking_agent import BookingAgent, BookingRequest
 from .vendor_agent import VendorAgent, VendorRequest
 from .search_agent import SearchAgent, SearchRequest
+from .selena_discover_agent import SelenaDiscoverAgent, SearchQuery, DiscoverResponse
 from .ui_ux_agent import UIUXAgent, DesignRequest, DesignType, DesignComplexity
 from .fullstack_agent import FullstackAgent, DevelopmentRequest, DevelopmentType, TechStack
 from .debugging_agent import DebuggingAgent, DebuggingRequest, IssueType, Severity
@@ -40,6 +41,7 @@ if REDIS_URL:
 booking_agent = BookingAgent(redis_client)
 vendor_agent = VendorAgent(redis_client)
 search_agent = SearchAgent(redis_client)
+selena_discover_agent = SelenaDiscoverAgent(redis_client)
 
 # Initialize automated workflow agents
 ui_ux_agent = UIUXAgent(redis_client)
@@ -249,6 +251,10 @@ async def chat(req: ChatRequest):
                 reply_text = vendor_agent.process_vendor_inquiry(req.message, session_id, language)
             elif agent_type == "search":
                 reply_text = search_agent.process_search_inquiry(req.message, session_id, language)
+            elif agent_type == "discover":
+                # Use Selena-Discover AI agent for intelligent discovery
+                user_context = getattr(req, 'user_context', {})
+                reply_text = selena_discover_agent.process_discover_inquiry(req.message, session_id, language, user_context)
             else:
                 # Customer service fallback
                 fallback_responses = {
@@ -327,6 +333,15 @@ async def get_agents():
             "description_ar": "يجد ويوصي بالأنشطة",
             "icon": "🔍",
             "color": "#4facfe"
+        },
+        "discover": {
+            "id": "discover",
+            "name": "Selena-Discover AI Agent",
+            "name_ar": "سيلينا - وكيل الاكتشاف الذكي",
+            "description": "AI-powered intelligent venue and game discovery with cultural insights",
+            "description_ar": "اكتشاف ذكي للأماكن والألعاب مع رؤى ثقافية مدعومة بالذكاء الاصطناعي",
+            "icon": "🤖",
+            "color": "#8B5CF6"
         }
     }
     return {"agents": agents}
@@ -416,6 +431,250 @@ async def search_activities(search_data: SearchRequest, user_id: str = "anonymou
 async def get_activity_categories(language: str = "ar"):
     """Get available activity categories"""
     return {"categories": search_agent.get_activity_categories(language)}
+
+
+# ============================================================================
+# SELENA-DISCOVER AI AGENT ENDPOINTS
+# ============================================================================
+
+@app.post("/discover/search")
+async def discover_search(search_data: dict, user_id: str = "anonymous"):
+    """Intelligent AI-powered activity discovery with cultural insights"""
+    try:
+        # Parse search data into SearchQuery model
+        search_query = SearchQuery(
+            query=search_data.get("query", ""),
+            location=search_data.get("location"),
+            price_range=tuple(search_data.get("price_range", [])) if search_data.get("price_range") else None,
+            date_preference=search_data.get("date_preference"),
+            group_size=search_data.get("group_size"),
+            activity_types=search_data.get("activity_types"),
+            cultural_preferences=search_data.get("cultural_preferences"),
+            user_context=search_data.get("user_context"),
+            language=search_data.get("language", "ar"),
+            search_intent=search_data.get("search_intent")
+        )
+        
+        # Perform intelligent discovery
+        discovery_response = selena_discover_agent.engine.discover_activities(search_query, user_id)
+        return discovery_response.dict()
+        
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.post("/discover/recommend")
+async def discover_recommend(recommendation_data: dict, user_id: str = "anonymous"):
+    """Get personalized recommendations based on user preferences and context"""
+    try:
+        # Get user's search history for personalization
+        search_history = selena_discover_agent.engine.get_user_search_history(user_id, limit=50)
+        
+        # Get trending insights
+        trending_data = selena_discover_agent.engine.get_trending_insights(
+            language=recommendation_data.get("language", "ar"),
+            location=recommendation_data.get("location")
+        )
+        
+        # Generate personalized recommendations
+        user_context = recommendation_data.get("user_context", {})
+        
+        # Create a recommendation query based on user context and trends
+        recommendation_query = SearchQuery(
+            query=recommendation_data.get("query", ""),
+            location=user_context.get("preferred_location"),
+            activity_types=recommendation_data.get("preferred_categories"),
+            cultural_preferences=user_context.get("cultural_preferences"),
+            user_context=user_context,
+            language=recommendation_data.get("language", "ar")
+        )
+        
+        # Get recommendations
+        recommendations = selena_discover_agent.engine.discover_activities(recommendation_query, user_id)
+        
+        return {
+            "recommendations": recommendations.dict(),
+            "trending_insights": trending_data,
+            "personalization_applied": len(search_history) > 0
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.post("/discover/filter")
+async def discover_filter(filter_data: dict, user_id: str = "anonymous"):
+    """Apply advanced filtering with AI-powered ranking"""
+    try:
+        # Build search query from filters
+        search_query = SearchQuery(
+            query=filter_data.get("query", ""),
+            location=filter_data.get("location"),
+            price_range=tuple(filter_data.get("price_range", [])) if filter_data.get("price_range") else None,
+            date_preference=filter_data.get("date_preference"),
+            group_size=filter_data.get("group_size"),
+            activity_types=filter_data.get("activity_types"),
+            cultural_preferences=filter_data.get("cultural_preferences"),
+            user_context=filter_data.get("user_context"),
+            language=filter_data.get("language", "ar")
+        )
+        
+        # Apply intelligent filtering
+        results = selena_discover_agent.engine.discover_activities(search_query, user_id)
+        
+        return {
+            "filtered_results": results.dict(),
+            "applied_filters": results.filters_applied,
+            "optimization_suggestions": results.search_suggestions
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.get("/discover/trending")
+async def discover_trending(language: str = "ar", location: str = None):
+    """Get trending activities and cultural insights"""
+    try:
+        trending_data = selena_discover_agent.engine.get_trending_insights(language, location)
+        
+        # Get additional trending context
+        trending_response = {
+            "trending_data": trending_data,
+            "cultural_events": [],
+            "seasonal_recommendations": trending_data.get("seasonal_recommendations", []),
+            "popular_searches": []
+        }
+        
+        # Add current cultural events
+        current_month = datetime.now().month
+        if current_month == 9:  # Saudi National Day season
+            if language.startswith("ar"):
+                trending_response["cultural_events"].append({
+                    "name": "موسم اليوم الوطني",
+                    "description": "فعاليات وأنشطة خاصة بمناسبة اليوم الوطني السعودي",
+                    "boost_categories": ["cultural", "entertainment", "social"]
+                })
+            else:
+                trending_response["cultural_events"].append({
+                    "name": "National Day Season",
+                    "description": "Special activities and events for Saudi National Day",
+                    "boost_categories": ["cultural", "entertainment", "social"]
+                })
+        
+        return trending_response
+        
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.get("/discover/nearby/{location}")
+async def discover_nearby(location: str, radius: float = 10.0, language: str = "ar", user_id: str = "anonymous"):
+    """Discover activities near a specific location"""
+    try:
+        # Create location-based search query
+        search_query = SearchQuery(
+            query=f"أنشطة قريبة من {location}" if language.startswith("ar") else f"activities near {location}",
+            location=location,
+            user_context={"search_radius": radius},
+            language=language
+        )
+        
+        # Get nearby activities
+        nearby_results = selena_discover_agent.engine.discover_activities(search_query, user_id)
+        
+        # Filter results by proximity and enhance with distance information
+        enhanced_results = nearby_results.dict()
+        enhanced_results["search_radius"] = radius
+        enhanced_results["location_center"] = location
+        
+        return enhanced_results
+        
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.post("/discover/save-preferences")
+async def save_user_preferences(preferences_data: dict, user_id: str):
+    """Save user preferences for personalized recommendations"""
+    try:
+        if user_id == "anonymous":
+            raise HTTPException(status_code=401, detail="Authentication required")
+        
+        # Learn from user interaction data
+        selena_discover_agent.engine.learn_user_preferences(user_id, preferences_data)
+        
+        return {
+            "success": True,
+            "message": "Preferences saved successfully" if preferences_data.get("language", "ar") == "en" 
+                      else "تم حفظ التفضيلات بنجاح"
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.post("/discover/chat")
+async def discover_chat(chat_data: dict, user_id: str = "anonymous"):
+    """Natural language chat interface for discovery"""
+    try:
+        message = chat_data.get("message", "")
+        language = chat_data.get("language", "ar")
+        user_context = chat_data.get("user_context", {})
+        
+        # Process natural language query
+        response = selena_discover_agent.process_discover_inquiry(
+            message, user_id, language, user_context
+        )
+        
+        return {
+            "response": response,
+            "language": language,
+            "agent": "selena-discover",
+            "user_id": user_id
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.get("/discover/analytics/{user_id}")
+async def get_user_discovery_analytics(user_id: str, days: int = 30):
+    """Get user's discovery and search analytics"""
+    try:
+        if user_id == "anonymous":
+            raise HTTPException(status_code=401, detail="Authentication required")
+        
+        # Get user's search history
+        search_history = selena_discover_agent.engine.get_user_search_history(user_id, limit=100)
+        
+        # Calculate analytics
+        analytics = {
+            "total_searches": len(search_history),
+            "search_frequency": len(search_history) / max(days, 1),
+            "popular_categories": {},
+            "location_preferences": {},
+            "avg_search_time": 0,
+            "language_usage": {"ar": 0, "en": 0},
+            "recommendation_accuracy": 0
+        }
+        
+        # Process search history for insights
+        for search in search_history:
+            # Language usage
+            lang = search.get("language", "ar")
+            analytics["language_usage"][lang] = analytics["language_usage"].get(lang, 0) + 1
+            
+            # Search time
+            analytics["avg_search_time"] += search.get("search_time_ms", 0)
+        
+        if search_history:
+            analytics["avg_search_time"] /= len(search_history)
+        
+        return analytics
+        
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 # ============================================================================
