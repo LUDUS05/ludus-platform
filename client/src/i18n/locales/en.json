@@ -1347,6 +1347,48 @@
         "privacy": "By using this service, you agree to our Terms of Use and Privacy Policy",
         "error": "Login failed. Please check your credentials and try again."
       }
+    },
+    "selena": {
+      "widget": {
+        "title": "Selena - Your Personal Assistant",
+        "subtitle": "I'm here to help you set up your account",
+        "placeholder": "Type your message here...",
+        "send": "Send",
+        "typing": "Selena is typing...",
+        "suggestions": "Suggestions",
+        "nextSteps": "Next Steps",
+        "helpfulTips": "Helpful Tips",
+        "progress": "Progress",
+        "quickActions": {
+          "registration": "Registration Help",
+          "profile": "Profile Setup",
+          "tour": "Platform Tour", 
+          "culture": "Cultural Guide"
+        },
+        "errors": {
+          "sessionFailed": "Failed to start session with Selena",
+          "messageFailed": "Failed to send message",
+          "connectionLost": "Lost connection with Selena",
+          "tryAgain": "You can try again or contact support"
+        },
+        "status": {
+          "online": "Online",
+          "offline": "Offline",
+          "connecting": "Connecting..."
+        }
+      },
+      "introduction": {
+        "greeting": "Hello! I'm Selena 🌟",
+        "role": "Your personal LUDUS assistant",
+        "helpWith": "I can help you with:",
+        "capabilities": [
+          "Creating a new account",
+          "Setting up your profile",
+          "Learning about platform features",
+          "Cultural guidance for Saudi market",
+          "Support in Arabic and English"
+        ]
+      }
     }
   }
 }

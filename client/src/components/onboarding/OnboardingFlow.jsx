@@ -14,6 +14,9 @@ import PreferencesStep from './steps/PreferencesStep';
 import SuccessStep from './steps/SuccessStep';
 import SocialProofStep from './steps/SocialProofStep';
 
+// Import Selena chat widget
+import SelenaChatWidget from './SelenaChatWidget';
+
 // Import UI components
 import { Button } from '../ui/Button';
 import Alert from '../ui/Alert';
@@ -36,6 +39,9 @@ const OnboardingFlow = () => {
     getProgressPercentage,
     t: onboardingT
   } = useOnboarding();
+
+  // Selena chat widget state
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   // Set Arabic as default language on component mount
   useEffect(() => {
@@ -395,6 +401,17 @@ const OnboardingFlow = () => {
           </div>
         </div>
       )}
+
+      {/* Selena-Onboard Chat Widget */}
+      <SelenaChatWidget
+        isOpen={isChatOpen}
+        onToggle={() => setIsChatOpen(!isChatOpen)}
+        currentOnboardingStep={getCurrentStepConfig()?.stepId || 'welcome'}
+        language={i18n.language}
+        onLanguageChange={(newLang) => {
+          i18n.changeLanguage(newLang);
+        }}
+      />
     </div>
   );
 };

@@ -22,6 +22,7 @@ from .agents_creation_agent import (
 from .monitoring import MonitoringSystem
 from .notion_project_manager_agent import router as notion_pm_router
 from .recommendation_agent import router as recommendation_router
+from .onboard_agent import SelenaOnboardAgent, OnboardingSessionRequest, OnboardingResponse, OnboardingProgressRequest
 
 app = FastAPI(title="LUDUS Agents API")
 
@@ -40,6 +41,7 @@ if REDIS_URL:
 booking_agent = BookingAgent(redis_client)
 vendor_agent = VendorAgent(redis_client)
 search_agent = SearchAgent(redis_client)
+onboard_agent = SelenaOnboardAgent(redis_client)
 
 # Initialize automated workflow agents
 ui_ux_agent = UIUXAgent(redis_client)
@@ -169,6 +171,24 @@ Be professional in dealing with vendors."""
 - Suggesting new activities
 
 Be creative and helpful in recommendations."""
+        },
+        "onboard": {
+            "ar": """أنت سيلينا، وكيلة الإعداد والترحيب المتخصصة لمنصة LUDUS. أنت متخصصة في:
+- مساعدة المستخدمين الجدد في إنشاء حساباتهم
+- إرشاد المستخدمين خلال إعداد الملف الشخصي
+- تقديم جولة شاملة في ميزات المنصة
+- التوجيه الثقافي للمستخدمين السعوديين
+- الدعم بالعربية والإنجليزية مع حساسية ثقافية
+
+كوني ودودة ومفيدة ومتفهمة للثقافة السعودية. ساعدي المستخدمين خطوة بخطوة واجعلي تجربة الإعداد سهلة وممتعة.""",
+            "en": """You are Selena, the specialized onboarding and welcome agent for LUDUS platform. You specialize in:
+- Helping new users create their accounts
+- Guiding users through profile setup
+- Providing comprehensive platform feature tours
+- Cultural guidance for Saudi Arabian users
+- Bilingual support (Arabic/English) with cultural sensitivity
+
+Be friendly, helpful, and culturally aware. Guide users step by step and make the onboarding experience easy and enjoyable."""
         }
     }
     
@@ -249,6 +269,8 @@ async def chat(req: ChatRequest):
                 reply_text = vendor_agent.process_vendor_inquiry(req.message, session_id, language)
             elif agent_type == "search":
                 reply_text = search_agent.process_search_inquiry(req.message, session_id, language)
+            elif agent_type == "onboard":
+                reply_text = onboard_agent.process_onboarding_inquiry(req.message, session_id, language)
             else:
                 # Customer service fallback
                 fallback_responses = {
@@ -327,6 +349,15 @@ async def get_agents():
             "description_ar": "يجد ويوصي بالأنشطة",
             "icon": "🔍",
             "color": "#4facfe"
+        },
+        "onboard": {
+            "id": "onboard",
+            "name": "Selena-Onboard Agent",
+            "name_ar": "سيلينا - وكيلة الإعداد والترحيب",
+            "description": "Assists with registration, profile setup, and platform orientation",
+            "description_ar": "تساعد في التسجيل وإعداد الملف الشخصي والتعرف على المنصة",
+            "icon": "🌟",
+            "color": "#e879f9"
         }
     }
     return {"agents": agents}
@@ -416,6 +447,126 @@ async def search_activities(search_data: SearchRequest, user_id: str = "anonymou
 async def get_activity_categories(language: str = "ar"):
     """Get available activity categories"""
     return {"categories": search_agent.get_activity_categories(language)}
+
+
+# ============================================================================
+# SELENA-ONBOARD AGENT ENDPOINTS
+# ============================================================================
+
+@app.post("/agents/onboard/start-session")
+async def start_onboard_session(request_data: dict):
+    """Start a new onboarding session"""
+    try:
+        request = OnboardingSessionRequest(
+            user_id=request_data.get("user_id"),
+            language=request_data.get("language", "ar"),
+            registration_step=request_data.get("registration_step"),
+            cultural_context=request_data.get("cultural_context", "saudi")
+        )
+        
+        response = onboard_agent.start_onboarding_session(request)
+        return response.dict()
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.post("/agents/onboard/registration-help")
+async def registration_help(request_data: dict):
+    """Get registration assistance"""
+    try:
+        message = request_data.get("message", "")
+        session_id = request_data.get("session_id", "")
+        language = request_data.get("language", "ar")
+        
+        if not session_id:
+            # Start new session if none provided
+            session_response = onboard_agent.start_onboarding_session(
+                OnboardingSessionRequest(language=language)
+            )
+            session_id = session_response.session_id
+        
+        response = onboard_agent.process_registration_help(message, session_id, language)
+        return response.dict()
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.post("/agents/onboard/profile-setup")
+async def profile_setup_help(request_data: dict):
+    """Get profile setup assistance"""
+    try:
+        message = request_data.get("message", "")
+        session_id = request_data.get("session_id", "")
+        language = request_data.get("language", "ar")
+        
+        if not session_id:
+            raise HTTPException(status_code=400, detail="Session ID required for profile setup")
+        
+        response = onboard_agent.process_profile_setup(message, session_id, language)
+        return response.dict()
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.post("/agents/onboard/feature-tour")
+async def feature_tour_help(request_data: dict):
+    """Get platform feature tour"""
+    try:
+        message = request_data.get("message", "")
+        session_id = request_data.get("session_id", "")
+        language = request_data.get("language", "ar")
+        
+        if not session_id:
+            raise HTTPException(status_code=400, detail="Session ID required for feature tour")
+        
+        response = onboard_agent.process_feature_tour(message, session_id, language)
+        return response.dict()
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.post("/agents/onboard/complete-onboarding")
+async def complete_onboarding_process(request_data: dict):
+    """Complete the onboarding process"""
+    try:
+        session_id = request_data.get("session_id", "")
+        final_data = request_data.get("final_data")
+        language = request_data.get("language", "ar")
+        
+        if not session_id:
+            raise HTTPException(status_code=400, detail="Session ID required to complete onboarding")
+        
+        response = onboard_agent.complete_onboarding(session_id, final_data, language)
+        return response.dict()
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.get("/agents/onboard/progress/{user_id}")
+async def get_onboard_progress(user_id: str):
+    """Get user's onboarding progress"""
+    try:
+        progress = onboard_agent.get_onboarding_progress(user_id)
+        return {"success": True, "progress": progress}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.post("/agents/onboard/cultural-guidance")
+async def cultural_guidance_help(request_data: dict):
+    """Get cultural guidance for Saudi market"""
+    try:
+        message = request_data.get("message", "")
+        session_id = request_data.get("session_id", "")
+        language = request_data.get("language", "ar")
+        
+        if not session_id:
+            raise HTTPException(status_code=400, detail="Session ID required for cultural guidance")
+        
+        response = onboard_agent.process_cultural_guidance(message, session_id, language)
+        return response.dict()
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 # ============================================================================
