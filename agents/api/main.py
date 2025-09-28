@@ -1,11 +1,19 @@
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from fastapi import FastAPI, HTTPException, Request, status
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel, ValidationError
 import os
 import json
 import uuid
 import requests
 import redis
+import time
+import asyncio
+import logging
 from datetime import datetime
+from typing import Optional, Dict, Any
+from .config import settings, logger
 from .booking_agent import BookingAgent, BookingRequest
 from .vendor_agent import VendorAgent, VendorRequest
 from .search_agent import SearchAgent, SearchRequest
@@ -22,12 +30,80 @@ from .agents_creation_agent import (
 from .monitoring import MonitoringSystem
 from .notion_project_manager_agent import router as notion_pm_router
 from .recommendation_agent import router as recommendation_router
+from .performance_monitor import SelenaPerformanceMonitor, PerformanceMetrics, performance_monitor
+from .selena_agents import (
+    SelenaAgentManager, 
+    AgentType, 
+    AgentRequest, 
+    AgentResponse,
+    OnboardAgent,
+    DiscoverAgent,
+    SupportAgent,
+    CommunityAgent
+)
 
-app = FastAPI(title="LUDUS Agents API")
+# Enhanced FastAPI app with performance optimizations
+app = FastAPI(
+    title=settings.app_name,
+    description="High-performance AI service orchestrating Onboard, Discover, Support, and Community agents",
+    version=settings.app_version,
+    docs_url="/docs" if settings.debug_mode else None,
+    redoc_url="/redoc" if settings.debug_mode else None
+)
 
-REDIS_URL = os.environ.get("REDIS_URL")
-OLLAMA_HOST = os.environ.get("OLLAMA_HOST", "http://localhost:11434")
-OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "llama3.1")
+# Add middleware for performance and CORS
+app.add_middleware(GZipMiddleware, minimum_size=1000)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.cors_origins,
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE"],
+    allow_headers=["*"],
+)
+
+# Global error handler
+@app.exception_handler(ValidationError)
+async def validation_exception_handler(request: Request, exc: ValidationError):
+    """Handle Pydantic validation errors"""
+    return JSONResponse(
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        content={
+            "error": "Validation Error",
+            "detail": exc.errors(),
+            "timestamp": datetime.now().isoformat()
+        }
+    )
+
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request: Request, exc: HTTPException):
+    """Handle HTTP exceptions with structured response"""
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "error": "HTTP Error",
+            "detail": exc.detail,
+            "status_code": exc.status_code,
+            "timestamp": datetime.now().isoformat()
+        }
+    )
+
+@app.exception_handler(Exception)
+async def general_exception_handler(request: Request, exc: Exception):
+    """Handle general exceptions"""
+    logger.error(f"Unhandled exception: {str(exc)}", exc_info=True)
+    return JSONResponse(
+        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        content={
+            "error": "Internal Server Error",
+            "detail": "An unexpected error occurred",
+            "timestamp": datetime.now().isoformat()
+        }
+    )
+
+# Use configuration values
+REDIS_URL = settings.redis_url
+OLLAMA_HOST = settings.ollama_host
+OLLAMA_MODEL = settings.ollama_model
 
 redis_client = None
 if REDIS_URL:
@@ -48,8 +124,67 @@ debugging_agent = DebuggingAgent(redis_client)
 workflow_engine = WorkflowEngine(redis_client)
 monitoring_system = MonitoringSystem(redis_client)
 agents_creator = AgentsCreationAgent(redis_client)
+
+# Initialize Selena Agent Manager for high-performance routing
+selena_manager = SelenaAgentManager(redis_client)
+
 app.include_router(notion_pm_router)
 app.include_router(recommendation_router)
+
+
+# Performance tracking middleware
+@app.middleware("http")
+async def track_performance(request: Request, call_next):
+    """Enhanced performance tracking with detailed metrics"""
+    start_time = time.time()
+    
+    try:
+        response = await call_next(request)
+        process_time = (time.time() - start_time) * 1000
+        success = True
+        
+    except Exception as e:
+        process_time = (time.time() - start_time) * 1000
+        success = False
+        logger.error(f"Request failed: {request.url.path} - {str(e)}")
+        raise
+    
+    # Add performance headers
+    response.headers["X-Process-Time"] = f"{process_time:.2f}"
+    response.headers["X-Service-Version"] = settings.app_version
+    
+    # Record metrics for Selena endpoints
+    if "/selena/" in str(request.url.path):
+        try:
+            # Extract agent type from path
+            path_parts = str(request.url.path).split("/")
+            agent_type = None
+            endpoint = str(request.url.path)
+            
+            if len(path_parts) >= 3 and path_parts[1] == "selena":
+                agent_type = path_parts[2]
+            
+            if agent_type and agent_type in ["onboard", "discover", "support", "community"]:
+                metrics = PerformanceMetrics(
+                    agent_type=agent_type,
+                    response_time_ms=process_time,
+                    success=success,
+                    timestamp=datetime.now(),
+                    endpoint=endpoint,
+                    user_id=None,  # Could extract from headers/auth
+                    session_id=None  # Could extract from request body
+                )
+                
+                performance_monitor.record_request(metrics)
+        
+        except Exception as e:
+            logger.error(f"Failed to record performance metrics: {e}")
+    
+    # Log slow requests (>200ms target)
+    if process_time > settings.slow_request_threshold_ms:
+        logger.warning(f"Slow request: {request.url.path} took {process_time:.2f}ms")
+    
+    return response
 
 
 class ChatRequest(BaseModel):
@@ -83,7 +218,14 @@ def save_history(session_id: str, history: list[dict]) -> None:
 
 @app.get("/health")
 async def health():
-    status = {"status": "ok"}
+    """Enhanced health check including Selena agents status"""
+    status = {
+        "status": "ok",
+        "timestamp": datetime.now().isoformat(),
+        "service": "LUDUS Selena AI Service",
+        "version": "2.0.0"
+    }
+    
     # Redis check
     if redis_client:
         try:
@@ -93,13 +235,76 @@ async def health():
             status["redis"] = "down"
     else:
         status["redis"] = "not_configured"
+        
     # Ollama check
     try:
         r = requests.get(f"{OLLAMA_HOST}/api/tags", timeout=2)
         status["ollama"] = "ok" if r.ok else "down"
     except Exception:
         status["ollama"] = "down"
+    
+    # Selena agents status and performance
+    selena_health = performance_monitor.get_system_health()
+    status["selena_agents"] = selena_health.get("agents_performance", {})
+    status["performance_targets"] = selena_health.get("performance_targets", {})
+    status["system_performance"] = selena_health.get("system_performance", {})
+    
     return status
+
+
+# ============================================================================
+# SELENA AI AGENTS - HIGH PERFORMANCE ENDPOINTS
+# ============================================================================
+
+@app.post("/selena/onboard", response_model=AgentResponse)
+async def onboard_agent_endpoint(request: AgentRequest):
+    """Selena Onboard Agent - User onboarding and guidance"""
+    return await selena_manager.route_request(AgentType.ONBOARD, request)
+
+
+@app.post("/selena/discover", response_model=AgentResponse)
+async def discover_agent_endpoint(request: AgentRequest):
+    """Selena Discover Agent - Activity discovery and recommendations"""
+    return await selena_manager.route_request(AgentType.DISCOVER, request)
+
+
+@app.post("/selena/support", response_model=AgentResponse)
+async def support_agent_endpoint(request: AgentRequest):
+    """Selena Support Agent - Customer support and issue resolution"""
+    return await selena_manager.route_request(AgentType.SUPPORT, request)
+
+
+@app.post("/selena/community", response_model=AgentResponse)
+async def community_agent_endpoint(request: AgentRequest):
+    """Selena Community Agent - Community management and social interactions"""
+    return await selena_manager.route_request(AgentType.COMMUNITY, request)
+
+
+@app.get("/selena/agents")
+async def get_selena_agents(language: str = "ar"):
+    """Get information about all Selena AI agents"""
+    return {"agents": selena_manager.get_agent_info(language)}
+
+
+@app.get("/selena/performance")
+async def get_selena_performance():
+    """Get comprehensive performance metrics for all Selena agents"""
+    return performance_monitor.get_system_health()
+
+
+@app.get("/selena/performance/{agent_type}")
+async def get_agent_performance_details(agent_type: str, hours: int = 24):
+    """Get detailed performance metrics for a specific Selena agent"""
+    if agent_type not in ["onboard", "discover", "support", "community"]:
+        raise HTTPException(status_code=404, detail="Agent type not found")
+    
+    return performance_monitor.get_agent_performance(agent_type, hours)
+
+
+@app.post("/selena/chat")
+async def selena_unified_chat(request: AgentRequest, agent_type: AgentType):
+    """Unified chat endpoint that routes to appropriate Selena agent"""
+    return await selena_manager.route_request(agent_type, request)
 
 
 def get_agent_context(agent_type: str, language: str) -> str:
@@ -289,9 +494,11 @@ async def chat(req: ChatRequest):
 
 
 @app.get("/agents")
-async def get_agents():
-    """Get available agents and their information."""
-    agents = {
+async def get_agents(language: str = "ar"):
+    """Get available agents and their information, including new Selena agents."""
+    
+    # Legacy agents (backward compatibility)
+    legacy_agents = {
         "customer_service": {
             "id": "customer_service",
             "name": "Customer Service Agent",
@@ -299,7 +506,8 @@ async def get_agents():
             "description": "Helps with general inquiries and support",
             "description_ar": "يساعد في الاستفسارات العامة والدعم",
             "icon": "🎧",
-            "color": "#667eea"
+            "color": "#667eea",
+            "type": "legacy"
         },
         "booking": {
             "id": "booking",
@@ -308,7 +516,8 @@ async def get_agents():
             "description": "Manages bookings and reservations",
             "description_ar": "يدير الحجوزات والمواعيد",
             "icon": "📅",
-            "color": "#764ba2"
+            "color": "#764ba2",
+            "type": "legacy"
         },
         "vendor": {
             "id": "vendor",
@@ -317,7 +526,8 @@ async def get_agents():
             "description": "Coordinates with service providers",
             "description_ar": "يتنسق مع مقدمي الخدمات",
             "icon": "🤝",
-            "color": "#f093fb"
+            "color": "#f093fb",
+            "type": "legacy"
         },
         "search": {
             "id": "search",
@@ -326,10 +536,26 @@ async def get_agents():
             "description": "Finds and recommends activities",
             "description_ar": "يجد ويوصي بالأنشطة",
             "icon": "🔍",
-            "color": "#4facfe"
+            "color": "#4facfe",
+            "type": "legacy"
         }
     }
-    return {"agents": agents}
+    
+    # New Selena agents (high-performance)
+    selena_agents = selena_manager.get_agent_info(language)
+    for agent_id, agent_info in selena_agents.items():
+        agent_info["type"] = "selena"
+        agent_info["performance_optimized"] = True
+    
+    # Combine all agents
+    all_agents = {**legacy_agents, **selena_agents}
+    
+    return {
+        "agents": all_agents,
+        "total_agents": len(all_agents),
+        "selena_agents_count": len(selena_agents),
+        "legacy_agents_count": len(legacy_agents)
+    }
 
 
 @app.post("/booking/create")

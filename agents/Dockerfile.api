@@ -1,15 +1,41 @@
 FROM python:3.11-slim
 
+# Performance optimizations for Selena AI Service
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PYTHONPATH=/app
+    PYTHONPATH=/app \
+    PYTHONHASHSEED=random \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
 
 WORKDIR /app
-COPY agents/requirements.txt /app/requirements.txt
-RUN pip install --no-cache-dir -r /app/requirements.txt
 
+# Install system dependencies for performance
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy and install Python dependencies
+COPY agents/requirements.txt /app/requirements.txt
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r /app/requirements.txt
+
+# Copy application code
 COPY agents /app/agents
 
+# Create non-root user for security
+RUN adduser --disabled-password --gecos '' --shell /bin/bash selena && \
+    chown -R selena:selena /app
+USER selena
+
+# Configure for high-performance production deployment
 ENV PORT=8081
 EXPOSE 8081
-CMD ["sh", "-c", "uvicorn agents.api.main:app --host 0.0.0.0 --port ${PORT:-8081}"]
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 \
+    CMD python -c "import requests; requests.get('http://localhost:8081/health', timeout=5)"
+
+# High-performance startup command with Gunicorn for production
+CMD ["sh", "-c", "if [ \"$RENDER_ENVIRONMENT\" = \"production\" ]; then gunicorn agents.api.main:app -w 4 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:${PORT:-8081} --timeout 30 --keep-alive 2 --max-requests 1000 --max-requests-jitter 100; else uvicorn agents.api.main:app --host 0.0.0.0 --port ${PORT:-8081} --reload; fi"]
