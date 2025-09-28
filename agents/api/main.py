@@ -5,6 +5,7 @@ import json
 import uuid
 import requests
 import redis
+import time
 from datetime import datetime
 from .booking_agent import BookingAgent, BookingRequest
 from .vendor_agent import VendorAgent, VendorRequest
@@ -22,8 +23,13 @@ from .agents_creation_agent import (
 from .monitoring import MonitoringSystem
 from .notion_project_manager_agent import router as notion_pm_router
 from .recommendation_agent import router as recommendation_router
+from .selena_agents import SelenaAgentOrchestrator, SelenaRequest, SelenaResponse
 
-app = FastAPI(title="LUDUS Agents API")
+app = FastAPI(
+    title="LUDUS Agents API - Enhanced with Selena AI",
+    description="FastAPI service orchestrating specialized agents including 4 Selena AI agents",
+    version="2.0.0"
+)
 
 REDIS_URL = os.environ.get("REDIS_URL")
 OLLAMA_HOST = os.environ.get("OLLAMA_HOST", "http://localhost:11434")
@@ -48,6 +54,10 @@ debugging_agent = DebuggingAgent(redis_client)
 workflow_engine = WorkflowEngine(redis_client)
 monitoring_system = MonitoringSystem(redis_client)
 agents_creator = AgentsCreationAgent(redis_client)
+
+# Initialize Selena Agent Orchestrator
+selena_orchestrator = SelenaAgentOrchestrator(redis_client)
+
 app.include_router(notion_pm_router)
 app.include_router(recommendation_router)
 
@@ -83,22 +93,56 @@ def save_history(session_id: str, history: list[dict]) -> None:
 
 @app.get("/health")
 async def health():
-    status = {"status": "ok"}
+    status = {"status": "ok", "timestamp": datetime.utcnow().isoformat()}
+    
     # Redis check
     if redis_client:
         try:
+            start_time = time.time()
             pong = redis_client.ping()
-            status["redis"] = "ok" if pong else "down"
-        except Exception:
-            status["redis"] = "down"
+            redis_time = (time.time() - start_time) * 1000
+            status["redis"] = {
+                "status": "ok" if pong else "down",
+                "response_time_ms": redis_time
+            }
+        except Exception as e:
+            status["redis"] = {"status": "down", "error": str(e)}
     else:
-        status["redis"] = "not_configured"
-    # Ollama check
+        status["redis"] = {"status": "not_configured"}
+    
+    # Ollama check  
     try:
+        start_time = time.time()
         r = requests.get(f"{OLLAMA_HOST}/api/tags", timeout=2)
-        status["ollama"] = "ok" if r.ok else "down"
-    except Exception:
-        status["ollama"] = "down"
+        ollama_time = (time.time() - start_time) * 1000
+        status["ollama"] = {
+            "status": "ok" if r.ok else "down",
+            "response_time_ms": ollama_time,
+            "model": OLLAMA_MODEL
+        }
+    except Exception as e:
+        status["ollama"] = {"status": "down", "error": str(e)}
+    
+    # Selena agents status
+    try:
+        selena_performance = await selena_orchestrator.get_performance_summary()
+        status["selena_agents"] = {
+            "status": "active",
+            "total_agents": selena_performance["total_agents"],
+            "performance_target": selena_performance["performance_target"]
+        }
+    except Exception as e:
+        status["selena_agents"] = {"status": "error", "error": str(e)}
+    
+    # Overall status
+    services_ok = all(
+        service.get("status") == "ok" if isinstance(service, dict) else service == "ok"
+        for key, service in status.items() 
+        if key not in ["status", "timestamp"]
+    )
+    
+    status["status"] = "ok" if services_ok else "degraded"
+    
     return status
 
 
@@ -329,8 +373,73 @@ async def get_agents():
             "color": "#4facfe"
         }
     }
+    # Add Selena agents to the existing agents list
+    selena_agents = selena_orchestrator.get_agent_info()
+    agents.update(selena_agents)
+    
     return {"agents": agents}
 
+
+# ============================================================================
+# SELENA AI AGENTS ENDPOINTS (NEW)
+# ============================================================================
+
+@app.post("/selena/chat", response_model=SelenaResponse)
+async def chat_with_selena(request: SelenaRequest):
+    """
+    Enhanced chat endpoint for Selena AI agents
+    Supports: onboard, discover, support, community
+    """
+    try:
+        response = await selena_orchestrator.process_selena_request(request)
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/selena/agents")
+async def get_selena_agents():
+    """Get information about all 4 Selena AI agents"""
+    return {"selena_agents": selena_orchestrator.get_agent_info()}
+
+
+@app.get("/selena/performance")
+async def get_selena_performance():
+    """Get performance summary for Selena agents"""
+    return await selena_orchestrator.get_performance_summary()
+
+
+@app.post("/agents/onboard")
+async def selena_onboard(request: SelenaRequest):
+    """Dedicated Selena Onboard agent endpoint"""
+    request.agent_type = "onboard"
+    return await chat_with_selena(request)
+
+
+@app.post("/agents/discover") 
+async def selena_discover(request: SelenaRequest):
+    """Dedicated Selena Discover agent endpoint"""
+    request.agent_type = "discover"
+    return await chat_with_selena(request)
+
+
+@app.post("/agents/support")
+async def selena_support(request: SelenaRequest):
+    """Dedicated Selena Support agent endpoint"""
+    request.agent_type = "support"
+    return await chat_with_selena(request)
+
+
+@app.post("/agents/community")
+async def selena_community(request: SelenaRequest):
+    """Dedicated Selena Community agent endpoint"""
+    request.agent_type = "community"
+    return await chat_with_selena(request)
+
+
+# ============================================================================
+# EXISTING ENDPOINTS (PRESERVED)
+# ============================================================================
 
 @app.post("/booking/create")
 async def create_booking(booking_data: BookingRequest):
