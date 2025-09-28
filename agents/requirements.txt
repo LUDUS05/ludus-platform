@@ -5,3 +5,11 @@ streamlit==1.37.1
 requests==2.32.3
 pydantic==2.9.1
 notion-client==2.2.1
+
+# Performance and monitoring enhancements for Selena agents
+gunicorn==21.2.0
+python-multipart==0.0.6
+asyncio-throttle==1.0.2
+aioredis==2.0.1
+prometheus-client==0.19.0
+python-json-logger==2.0.7

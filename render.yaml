@@ -153,9 +153,43 @@ services:
       # - key: REACT_APP_SENTRY_DSN
       #   sync: false # Set in Render dashboard
 
-  # Agents API (FastAPI)
+  # Selena AI Service (Enhanced FastAPI)
   - type: web
-    name: ludus-agents-api
+    name: ludus-selena-ai
+    env: docker
+    plan: starter
+    dockerfilePath: agents/Dockerfile.api
+    healthCheckPath: /health
+    healthCheckGracePeriod: 60s
+    envVars:
+      # Performance Configuration
+      - key: MAX_WORKERS
+        value: "4"
+      - key: RESPONSE_TIME_TARGET_MS
+        value: "200"
+      - key: CONCURRENT_REQUESTS_TARGET
+        value: "1000"
+      # Redis Configuration
+      - key: REDIS_URL
+        sync: false
+      # Ollama Configuration
+      - key: OLLAMA_HOST
+        value: https://ludus-ollama.onrender.com
+      - key: OLLAMA_TIMEOUT
+        value: "5"
+      # Service Configuration
+      - key: RENDER_ENVIRONMENT
+        value: production
+      - key: DEBUG_MODE
+        value: "false"
+      - key: ENABLE_PERFORMANCE_TRACKING
+        value: "true"
+      - key: ENABLE_METRICS_EXPORT
+        value: "true"
+
+  # Legacy Agents API (Backward Compatibility)
+  - type: web
+    name: ludus-agents-api-legacy
     env: docker
     plan: starter
     dockerfilePath: agents/Dockerfile.api
