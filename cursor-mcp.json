@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "render-mcp": {
+      "command": "node",
+      "args": ["scripts/render-mcp-server.js"],
+      "env": {
+        "RENDER_API_TOKEN": "rnd_AjWyMGFA2vmtx6KidKj4TPVLZwpU"
+      }
+    }
+  }
+}

@@ -1,0 +1,38 @@
+# Cursor AI Rules for LUDUS Platform
+
+## Project Overview
+This is the LUDUS social activity platform - a comprehensive full-stack application built with React frontend and Node.js backend, deployed on Render.
+
+## MCP (Model Context Protocol) Integration
+The project includes a comprehensive MCP server for Render API integration that allows AI agents to:
+- List and manage Render services
+- Trigger deployments
+- Monitor service logs and metrics
+- Update environment variables
+- Get deployment history
+
+## Available MCP Tools
+- `list_render_services`: List all Render services
+- `get_service_status`: Get status of a specific service
+- `deploy_service`: Trigger manual deployment
+- `get_service_logs`: Retrieve service logs
+- `get_service_metrics`: Get performance metrics
+- `update_service_env`: Update environment variables
+
+## MCP Server Location
+- Main server: `scripts/render-mcp-server.js`
+- API routes: `server/src/routes/renderMCP.js`
+- Controller: `server/src/controllers/renderMCPController.js`
+
+## Development Guidelines
+1. Always use the MCP tools when working with Render services
+2. Test MCP functionality before deploying changes
+3. Use proper authentication when calling MCP endpoints
+4. Follow the established error handling patterns
+
+## Key Files
+- MCP Server: `scripts/render-mcp-server.js`
+- MCP Routes: `server/src/routes/renderMCP.js`
+- MCP Controller: `server/src/controllers/renderMCPController.js`
+- Test Scripts: `test-render-mcp.js`
+- Documentation: `docs_archive/RENDER_MCP_INTEGRATION_GUIDE.md`

@@ -1,0 +1,23 @@
+{
+  "name": "@ludus/ai-agents",
+  "version": "1.0.0",
+  "description": "AI Agents for LUDUS platform",
+  "main": "src/main.py",
+  "scripts": {
+    "dev": "python -m uvicorn src.main:app --reload --host 0.0.0.0 --port 8001",
+    "start": "python -m uvicorn src.main:app --host 0.0.0.0 --port 8001",
+    "build": "echo 'AI agents build completed'",
+    "test": "python -m pytest tests/",
+    "lint": "python -m flake8 src/",
+    "format": "python -m black src/",
+    "clean": "rm -rf __pycache__ .pytest_cache"
+  },
+  "dependencies": {
+    "@ludus/shared-types": "workspace:*",
+    "@ludus/shared-utils": "workspace:*"
+  },
+  "devDependencies": {},
+  "engines": {
+    "python": ">=3.9.0"
+  }
+}
