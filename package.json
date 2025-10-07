@@ -1,19 +1,59 @@
 {
+  "name": "ludus-platform",
+  "version": "1.0.0",
+  "description": "LUDUS Social Activity Platform - Monorepo",
+  "private": true,
+  "packageManager": "pnpm@8.0.0",
   "scripts": {
-    "dev": "concurrently \"cd server && npm run dev\" \"cd client && npm start\"",
-    "build": "npm ci --prefix client && npm run build --prefix client",
-    "start": "npx serve -s client/build",
+    "dev": "pnpm run --parallel dev",
+    "dev:web": "pnpm --filter @ludus/web dev",
+    "dev:api": "pnpm --filter @ludus/api dev",
+    "dev:ai": "pnpm --filter @ludus/ai-agents dev",
+    "dev:docker": "docker-compose -f docker-compose.dev.yml up -d",
+    "dev:docker:logs": "docker-compose -f docker-compose.dev.yml logs -f",
+    "dev:docker:down": "docker-compose -f docker-compose.dev.yml down",
+    "build": "pnpm run --recursive build",
+    "build:web": "pnpm --filter @ludus/web build",
+    "build:api": "pnpm --filter @ludus/api build",
+    "build:ai": "pnpm --filter @ludus/ai-agents build",
+    "build:packages": "pnpm --filter './packages/*' build",
+    "start": "pnpm run --parallel start",
+    "start:web": "pnpm --filter @ludus/web start",
+    "start:api": "pnpm --filter @ludus/api start",
+    "test": "pnpm run --recursive test",
+    "test:web": "pnpm --filter @ludus/web test",
+    "test:api": "pnpm --filter @ludus/api test",
+    "test:packages": "pnpm --filter './packages/*' test",
+    "lint": "pnpm run --recursive lint",
+    "lint:fix": "pnpm run --recursive lint:fix",
+    "type-check": "pnpm run --recursive type-check",
+    "clean": "pnpm run --recursive clean && rm -rf node_modules",
+    "clean:install": "pnpm run clean && pnpm install",
+    "setup": "./setup-dev-environment.sh",
     "setup-demo-users": "node scripts/setup-demo-users.js",
-    "demo-users": "npm run setup-demo-users"
+    "demo-users": "pnpm run setup-demo-users",
+    "seed": "pnpm --filter @ludus/api seed",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "changeset publish"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.26.0",
+    "@types/node": "^20.0.0",
     "concurrently": "^8.2.0",
     "eslint": "^8.57.1",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "mongodb-memory-server": "^10.1.4",
-    "shadcn": "^3.2.1"
+    "shadcn": "^3.2.1",
+    "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.17.5"
+    "@modelcontextprotocol/sdk": "^1.19.1",
+    "@notionhq/notion-mcp-server": "^1.9.0",
+    "axios": "^1.11.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
   }
 }
