@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { paymentService } from '../../services/paymentService';
+import { useTranslationWithFallback } from '../../hooks/useTranslationWithFallback';
 
 const PaymentForm = ({ 
   amount, 
@@ -10,7 +11,7 @@ const PaymentForm = ({
   metadata = {},
   showSavedMethods = true 
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslationWithFallback();
   const [paymentMethod, setPaymentMethod] = useState('creditcard');
   const [cardData, setCardData] = useState({
     number: '',
@@ -164,13 +165,20 @@ const PaymentForm = ({
   }
 
   return (
-    <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-      <h2 className="text-xl font-semibold text-gray-900 mb-6">Payment Information</h2>
+    <div 
+      className="bg-white rounded-lg shadow border border-gray-200 p-6"
+      dir={t('common.direction') || 'ltr'}
+    >
+      <h2 className="text-xl font-semibold text-gray-900 mb-6">
+        {t('payment.paymentInformation', 'Payment Information')}
+      </h2>
 
       {/* Payment Summary */}
       <div className="bg-gray-50 rounded-lg p-4 mb-6">
         <div className="flex justify-between items-center">
-          <span className="text-gray-700">Total Amount</span>
+          <span className="text-gray-700">
+            {t('payment.totalAmount', 'Total Amount')}
+          </span>
           <span className="text-2xl font-bold text-ludus-orange">
             {paymentService.formatCurrency(amount)}
           </span>

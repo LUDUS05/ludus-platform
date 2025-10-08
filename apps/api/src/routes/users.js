@@ -10,7 +10,14 @@ const {
   addToFavorites,
   removeFromFavorites,
   getDashboardStats,
-  searchUsers
+  searchUsers,
+  getUserStats,
+  updateProfileImage,
+  getUserActivityHistory,
+  getUserPreferences,
+  updateUserLocation,
+  getDashboardData,
+  searchUsersAdvanced
 } = require('../controllers/userController');
 const { requireAdminRole } = require('../middleware/rbac');
 
@@ -58,5 +65,40 @@ router.get('/dashboard-stats', authenticate, getDashboardStats);
 // @route   GET /api/users/search
 // @access  Private (Admin)
 router.get('/search', authenticate, requireAdminRole(), searchUsers);
+
+// @desc    Get user statistics
+// @route   GET /api/users/stats
+// @access  Private
+router.get('/stats', authenticate, getUserStats);
+
+// @desc    Update profile image
+// @route   PUT /api/users/profile-image
+// @access  Private
+router.put('/profile-image', authenticate, updateProfileImage);
+
+// @desc    Get user activity history
+// @route   GET /api/users/activity-history
+// @access  Private
+router.get('/activity-history', authenticate, getUserActivityHistory);
+
+// @desc    Get user preferences with options
+// @route   GET /api/users/preferences
+// @access  Private
+router.get('/preferences', authenticate, getUserPreferences);
+
+// @desc    Update user location
+// @route   PUT /api/users/location
+// @access  Private
+router.put('/location', authenticate, updateUserLocation);
+
+// @desc    Get comprehensive dashboard data
+// @route   GET /api/users/dashboard
+// @access  Private
+router.get('/dashboard', authenticate, getDashboardData);
+
+// @desc    Advanced user search
+// @route   GET /api/users/search-advanced
+// @access  Private
+router.get('/search-advanced', authenticate, searchUsersAdvanced);
 
 module.exports = router;

@@ -434,6 +434,103 @@ const validateSavePaymentMethod = [
   handleValidationErrors
 ];
 
+// Enhanced booking validation rules
+const validateEnhancedBooking = [
+  body('activityId')
+    .isMongoId()
+    .withMessage('Valid activity ID is required'),
+  body('schedule.date')
+    .isISO8601()
+    .withMessage('Valid booking date is required')
+    .custom((value) => {
+      const bookingDate = new Date(value);
+      const now = new Date();
+      if (bookingDate <= now) {
+        throw new Error('Booking date must be in the future');
+      }
+      return true;
+    }),
+  body('schedule.timeSlot')
+    .notEmpty()
+    .withMessage('Time slot is required')
+    .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)
+    .withMessage('Time slot must be in HH:MM format'),
+  body('participants')
+    .isArray({ min: 1 })
+    .withMessage('At least one participant is required'),
+  body('participants.*.type')
+    .isIn(['adult', 'child', 'senior'])
+    .withMessage('Participant type must be adult, child, or senior'),
+  body('participants.*.name')
+    .notEmpty()
+    .withMessage('Participant name is required')
+    .isLength({ max: 100 })
+    .withMessage('Participant name cannot exceed 100 characters'),
+  body('participants.*.age')
+    .isInt({ min: 0, max: 120 })
+    .withMessage('Participant age must be between 0 and 120'),
+  body('participants.*.idNumber')
+    .notEmpty()
+    .withMessage('ID number is required')
+    .isLength({ min: 10, max: 20 })
+    .withMessage('ID number must be between 10 and 20 characters'),
+  body('contactInfo.phone')
+    .notEmpty()
+    .withMessage('Contact phone is required')
+    .matches(/^\+966[0-9]{9}$/)
+    .withMessage('Phone must be a valid Saudi number (+966XXXXXXXXX)'),
+  body('contactInfo.email')
+    .isEmail()
+    .withMessage('Valid email is required'),
+  body('contactInfo.emergencyContact.name')
+    .notEmpty()
+    .withMessage('Emergency contact name is required'),
+  body('contactInfo.emergencyContact.phone')
+    .notEmpty()
+    .withMessage('Emergency contact phone is required')
+    .matches(/^\+966[0-9]{9}$/)
+    .withMessage('Emergency contact phone must be a valid Saudi number'),
+  body('contactInfo.emergencyContact.relationship')
+    .notEmpty()
+    .withMessage('Emergency contact relationship is required'),
+  body('specialRequests')
+    .optional()
+    .isLength({ max: 1000 })
+    .withMessage('Special requests cannot exceed 1000 characters'),
+  body('waiverSigned')
+    .isBoolean()
+    .withMessage('Waiver signed must be a boolean value'),
+  handleValidationErrors
+];
+
+const validateBookingCancellation = [
+  body('reason')
+    .notEmpty()
+    .withMessage('Cancellation reason is required')
+    .isLength({ max: 500 })
+    .withMessage('Cancellation reason cannot exceed 500 characters'),
+  handleValidationErrors
+];
+
+const validateBookingReview = [
+  body('rating')
+    .isInt({ min: 1, max: 5 })
+    .withMessage('Rating must be between 1 and 5'),
+  body('comment')
+    .optional()
+    .isLength({ max: 1000 })
+    .withMessage('Review comment cannot exceed 1000 characters'),
+  handleValidationErrors
+];
+
+const validateCheckIn = [
+  body('checkInBy')
+    .optional()
+    .isIn(['customer', 'vendor', 'admin'])
+    .withMessage('Check-in by must be customer, vendor, or admin'),
+  handleValidationErrors
+];
+
 // ObjectId validation
 const validateObjectId = (paramName) => [
   param(paramName)
@@ -452,6 +549,10 @@ module.exports = {
   validateVendorUpdate,
   validateActivityCreation,
   validateBookingCreation,
+  validateEnhancedBooking,
+  validateBookingCancellation,
+  validateBookingReview,
+  validateCheckIn,
   validatePayment,
   validateRefund,
   validateSavePaymentMethod,

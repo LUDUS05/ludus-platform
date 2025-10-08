@@ -1,13 +1,28 @@
 /**
- * @fileoverview Controller for handling payments.
+ * @fileoverview Enhanced Controller for handling payments with Moyasar integration.
  * @module controllers/paymentController
+ * 
+ * This controller provides comprehensive payment processing capabilities including:
+ * - Payment creation and processing
+ * - Payment confirmation and status tracking
+ * - Refund processing
+ * - Payment method management
+ * - Webhook handling
+ * - Payment analytics and reporting
+ * 
+ * @version 2.0.0
+ * @author LUDUS Development Team
+ * @since 2025-01-27
  */
 
 const moyasarService = require('../services/moyasarService');
 const emailService = require('../services/emailService');
 const Booking = require('../models/Booking');
+const BookingEnhanced = require('../models/BookingEnhanced');
 const User = require('../models/User');
+const UserEnhanced = require('../models/UserEnhanced');
 const Vendor = require('../models/Vendor');
+const PaymentEnhanced = require('../models/PaymentEnhanced');
 
 /**
  * Create a new payment for a booking.
@@ -596,6 +611,340 @@ const handlePaymentRefunded = async (payment) => {
   }
 };
 
+/**
+ * Get payment history for a user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
+const getPaymentHistory = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { page = 1, limit = 10, status, method } = req.query;
+
+    // Build query
+    const query = { 'user.id': userId };
+    if (status) query.status = status;
+    if (method) query.method = method;
+
+    // Calculate pagination
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+
+    // Get payments with pagination
+    const payments = await PaymentEnhanced.find(query)
+      .populate('booking.id', 'bookingNumber activity.title')
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(parseInt(limit));
+
+    // Get total count
+    const total = await PaymentEnhanced.countDocuments(query);
+
+    res.status(200).json({
+      success: true,
+      data: {
+        payments: payments.map(payment => ({
+          id: payment._id,
+          paymentNumber: payment.paymentNumber,
+          amount: payment.amount,
+          currency: payment.currency,
+          method: payment.method,
+          status: payment.status,
+          createdAt: payment.createdAt,
+          completedAt: payment.completedAt,
+          booking: payment.booking
+        })),
+        pagination: {
+          page: parseInt(page),
+          limit: parseInt(limit),
+          total,
+          pages: Math.ceil(total / parseInt(limit))
+        }
+      }
+    });
+
+  } catch (error) {
+    console.error('Get payment history error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to retrieve payment history'
+    });
+  }
+};
+
+/**
+ * Get payment analytics for admin.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
+const getPaymentAnalytics = async (req, res) => {
+  try {
+    const { startDate, endDate, groupBy = 'day' } = req.query;
+
+    // Build date filter
+    const dateFilter = {};
+    if (startDate) dateFilter.$gte = new Date(startDate);
+    if (endDate) dateFilter.$lte = new Date(endDate);
+
+    // Get payment statistics
+    const pipeline = [
+      { $match: { ...dateFilter } },
+      {
+        $group: {
+          _id: null,
+          totalPayments: { $sum: 1 },
+          totalAmount: { $sum: '$amount' },
+          completedPayments: {
+            $sum: { $cond: [{ $eq: ['$status', 'completed'] }, 1, 0] }
+          },
+          completedAmount: {
+            $sum: { $cond: [{ $eq: ['$status', 'completed'] }, '$amount', 0] }
+          },
+          failedPayments: {
+            $sum: { $cond: [{ $eq: ['$status', 'failed'] }, 1, 0] }
+          },
+          refundedPayments: {
+            $sum: { $cond: [{ $eq: ['$status', 'refunded'] }, 1, 0] }
+          },
+          refundedAmount: {
+            $sum: { $cond: [{ $eq: ['$status', 'refunded'] }, '$refund.amount', 0] }
+          }
+        }
+      }
+    ];
+
+    const stats = await PaymentEnhanced.aggregate(pipeline);
+
+    // Get payment methods breakdown
+    const methodBreakdown = await PaymentEnhanced.aggregate([
+      { $match: { ...dateFilter } },
+      {
+        $group: {
+          _id: '$method',
+          count: { $sum: 1 },
+          totalAmount: { $sum: '$amount' }
+        }
+      }
+    ]);
+
+    // Get daily/weekly/monthly trends
+    let groupFormat;
+    switch (groupBy) {
+      case 'day':
+        groupFormat = { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } };
+        break;
+      case 'week':
+        groupFormat = { $dateToString: { format: '%Y-%U', date: '$createdAt' } };
+        break;
+      case 'month':
+        groupFormat = { $dateToString: { format: '%Y-%m', date: '$createdAt' } };
+        break;
+      default:
+        groupFormat = { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } };
+    }
+
+    const trends = await PaymentEnhanced.aggregate([
+      { $match: { ...dateFilter } },
+      {
+        $group: {
+          _id: groupFormat,
+          count: { $sum: 1 },
+          amount: { $sum: '$amount' }
+        }
+      },
+      { $sort: { _id: 1 } }
+    ]);
+
+    res.status(200).json({
+      success: true,
+      data: {
+        summary: stats[0] || {
+          totalPayments: 0,
+          totalAmount: 0,
+          completedPayments: 0,
+          completedAmount: 0,
+          failedPayments: 0,
+          refundedPayments: 0,
+          refundedAmount: 0
+        },
+        methodBreakdown,
+        trends
+      }
+    });
+
+  } catch (error) {
+    console.error('Get payment analytics error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to retrieve payment analytics'
+    });
+  }
+};
+
+/**
+ * Delete a saved payment method.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
+const deletePaymentMethod = async (req, res) => {
+  try {
+    const { methodId } = req.params;
+    const userId = req.user.id;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    // Find and remove the payment method
+    const methodIndex = user.paymentMethods.findIndex(
+      method => method._id.toString() === methodId
+    );
+
+    if (methodIndex === -1) {
+      return res.status(404).json({
+        success: false,
+        message: 'Payment method not found'
+      });
+    }
+
+    user.paymentMethods.splice(methodIndex, 1);
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'Payment method deleted successfully'
+    });
+
+  } catch (error) {
+    console.error('Delete payment method error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to delete payment method'
+    });
+  }
+};
+
+/**
+ * Set default payment method.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
+const setDefaultPaymentMethod = async (req, res) => {
+  try {
+    const { methodId } = req.params;
+    const userId = req.user.id;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    // Find the payment method
+    const method = user.paymentMethods.find(
+      method => method._id.toString() === methodId
+    );
+
+    if (!method) {
+      return res.status(404).json({
+        success: false,
+        message: 'Payment method not found'
+      });
+    }
+
+    // Set all methods to non-default
+    user.paymentMethods.forEach(m => m.isDefault = false);
+    
+    // Set selected method as default
+    method.isDefault = true;
+    
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'Default payment method updated successfully'
+    });
+
+  } catch (error) {
+    console.error('Set default payment method error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to update default payment method'
+    });
+  }
+};
+
+/**
+ * Get payment methods configuration.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
+const getPaymentMethodsConfig = async (req, res) => {
+  try {
+    const SiteSettings = require('../models/SiteSettings');
+    const settings = await SiteSettings.getSettings();
+
+    const paymentMethods = [
+      {
+        id: 'creditcard',
+        name: 'Credit/Debit Card',
+        icon: '💳',
+        enabled: settings.paymentMethodControls?.creditCardEnabled || true
+      },
+      {
+        id: 'mada',
+        name: 'MADA',
+        icon: '🏦',
+        enabled: settings.paymentMethodControls?.madaEnabled || true
+      },
+      {
+        id: 'applepay',
+        name: 'Apple Pay',
+        icon: '🍎',
+        enabled: settings.paymentMethodControls?.applePayEnabled || true
+      },
+      {
+        id: 'stcpay',
+        name: 'STC Pay',
+        icon: '📱',
+        enabled: settings.paymentMethodControls?.stcPayEnabled || true
+      },
+      {
+        id: 'sadad',
+        name: 'SADAD',
+        icon: '🏪',
+        enabled: settings.paymentMethodControls?.sadadEnabled || true
+      }
+    ];
+
+    res.status(200).json({
+      success: true,
+      data: {
+        methods: paymentMethods.filter(method => method.enabled),
+        currency: 'SAR',
+        supportedCurrencies: ['SAR', 'USD', 'EUR']
+      }
+    });
+
+  } catch (error) {
+    console.error('Get payment methods config error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to retrieve payment methods configuration'
+    });
+  }
+};
+
 module.exports = {
   createPayment,
   confirmPayment,
@@ -603,5 +952,10 @@ module.exports = {
   processRefund,
   savePaymentMethod,
   getUserPaymentMethods,
+  deletePaymentMethod,
+  setDefaultPaymentMethod,
+  getPaymentHistory,
+  getPaymentAnalytics,
+  getPaymentMethodsConfig,
   handleWebhook
 };

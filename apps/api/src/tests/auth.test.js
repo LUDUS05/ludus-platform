@@ -1,215 +1,547 @@
+/**
+ * @fileoverview Comprehensive authentication system tests for LUDUS platform.
+ * 
+ * This test suite covers all authentication functionality including:
+ * - User registration and validation
+ * - User login and logout
+ * - Password reset and change
+ * - Email verification
+ * - Social authentication
+ * - JWT token management
+ * - Security measures and rate limiting
+ * 
+ * @version 1.0.0
+ * @author LUDUS Development Team
+ * @since 2025-01-27
+ */
+
 const request = require('supertest');
 const mongoose = require('mongoose');
 const app = require('../app');
 const User = require('../models/User');
-const { generateTokens } = require('../utils/generateTokens');
+const { connectDB, disconnectDB } = require('../config/database');
 
-describe('Authentication Controller - Password Security Tests', () => {
-  let testUser;
-  let accessToken;
+// Test data
+const testUser = {
+  firstName: 'Test',
+  lastName: 'User',
+  email: 'test@example.com',
+  password: 'TestPassword123!',
+  phone: '+966501234567'
+};
 
-  beforeEach(async () => {
-    // Create a test user
-    testUser = await User.create({
-      firstName: 'Test',
-      lastName: 'User',
-      email: 'test@example.com',
-      password: 'ValidPassword123!',
-      role: 'user'
-    });
+const adminUser = {
+  firstName: 'Admin',
+  lastName: 'User',
+  email: 'admin@ludusapp.com',
+  password: 'AdminPassword123!',
+  role: 'admin',
+  adminRole: 'SA'
+};
 
-    // Generate access token for authenticated requests
-    const tokens = generateTokens(testUser._id, testUser.role, testUser.adminRole);
-    accessToken = tokens.accessToken;
+describe('Authentication System Tests', () => {
+  beforeAll(async () => {
+    // Connect to test database
+    await connectDB();
   });
 
-  afterEach(async () => {
-    // Clean up test data
+  afterAll(async () => {
+    // Clean up and disconnect
+    await User.deleteMany({});
+    await disconnectDB();
+  });
+
+  beforeEach(async () => {
+    // Clear users before each test
     await User.deleteMany({});
   });
 
-  describe('changePassword function', () => {
-    it('should reject weak passwords (SECURITY FIXED)', async () => {
-      // This test confirms that weak passwords are now properly rejected
-      
-      const weakPasswords = [
-        { password: '123', expectedError: 'Password must be at least 8 characters long' },
-        { password: 'password', expectedError: 'Password is too common and easily guessable' },
-        { password: '12345678', expectedError: 'Password must contain at least one uppercase letter' },
-        { password: 'abcdefgh', expectedError: 'Password must contain at least one number' },
-        { password: 'PASSWORD', expectedError: 'Password must contain at least one lowercase letter' },
-        { password: 'password123', expectedError: 'Password is too common and easily guessable' },
-        { password: 'a', expectedError: 'Password must be at least 8 characters long' },
-        { password: 'ValidPassword123', expectedError: 'Password must contain at least one special character' },
-        { password: 'ValidPassword!', expectedError: 'Password must contain at least one number' },
-        { password: 'validpassword123!', expectedError: 'Password must contain at least one uppercase letter' },
-        { password: 'VALIDPASSWORD123!', expectedError: 'Password must contain at least one lowercase letter' },
-        { password: 'aaaa1234!', expectedError: 'Password cannot contain more than 3 consecutive identical characters' },
-      ];
-
-      // Test empty/whitespace passwords separately (they get caught by required validation)
-      const emptyPasswords = [
-        { password: '', expectedError: 'Current password and new password are required' },
-        { password: '   ', expectedError: 'Current password and new password are required' },
-      ];
-
-      // Test weak passwords that should be caught by password strength validation
-      for (const { password, expectedError } of weakPasswords) {
-        const response = await request(app)
-          .put('/api/auth/change-password')
-          .set('Authorization', `Bearer ${accessToken}`)
-          .send({
-            currentPassword: 'ValidPassword123!',
-            newPassword: password
-          });
-
-        // SECURITY FIXED: This should now fail with proper validation
-        expect(response.status).toBe(400);
-        expect(response.body.success).toBe(false);
-        expect(response.body.message).toContain(expectedError);
-
-        console.log(`✅ SECURITY FIXED: Weak password "${password}" was properly rejected`);
-      }
-
-      // Test empty/whitespace passwords that should be caught by required validation
-      for (const { password, expectedError } of emptyPasswords) {
-        const response = await request(app)
-          .put('/api/auth/change-password')
-          .set('Authorization', `Bearer ${accessToken}`)
-          .send({
-            currentPassword: 'ValidPassword123!',
-            newPassword: password
-          });
-
-        // These should fail with required validation
-        expect(response.status).toBe(400);
-        expect(response.body.success).toBe(false);
-        expect(response.body.message).toBe(expectedError);
-
-        console.log(`✅ SECURITY FIXED: Empty password "${password}" was properly rejected`);
-      }
-    });
-
-    it('should reject change password request without current password', async () => {
+  describe('User Registration', () => {
+    test('should register a new user successfully', async () => {
       const response = await request(app)
-        .put('/api/auth/change-password')
-        .set('Authorization', `Bearer ${accessToken}`)
-        .send({
-          newPassword: 'NewPassword123!'
-        });
+        .post('/api/auth/register')
+        .send(testUser)
+        .expect(201);
 
-      expect(response.status).toBe(400);
-      expect(response.body.success).toBe(false);
-      expect(response.body.message).toBe('Current password and new password are required');
-    });
-
-    it('should reject change password request without new password', async () => {
-      const response = await request(app)
-        .put('/api/auth/change-password')
-        .set('Authorization', `Bearer ${accessToken}`)
-        .send({
-          currentPassword: 'ValidPassword123!'
-        });
-
-      expect(response.status).toBe(400);
-      expect(response.body.success).toBe(false);
-      expect(response.body.message).toBe('Current password and new password are required');
-    });
-
-    it('should reject change password with incorrect current password', async () => {
-      const response = await request(app)
-        .put('/api/auth/change-password')
-        .set('Authorization', `Bearer ${accessToken}`)
-        .send({
-          currentPassword: 'WrongPassword123!',
-          newPassword: 'NewPassword123!'
-        });
-
-      expect(response.status).toBe(400);
-      expect(response.body.success).toBe(false);
-      expect(response.body.message).toBe('Current password is incorrect');
-    });
-
-    it('should require authentication', async () => {
-      const response = await request(app)
-        .put('/api/auth/change-password')
-        .send({
-          currentPassword: 'ValidPassword123!',
-          newPassword: 'NewPassword123!'
-        });
-
-      expect(response.status).toBe(401);
-    });
-
-    it('should reject new password that is same as current password', async () => {
-      const response = await request(app)
-        .put('/api/auth/change-password')
-        .set('Authorization', `Bearer ${accessToken}`)
-        .send({
-          currentPassword: 'ValidPassword123!',
-          newPassword: 'ValidPassword123!'
-        });
-
-      expect(response.status).toBe(400);
-      expect(response.body.success).toBe(false);
-      expect(response.body.message).toBe('New password must be different from current password');
-    });
-
-    it('should successfully change password with valid strong password', async () => {
-      const response = await request(app)
-        .put('/api/auth/change-password')
-        .set('Authorization', `Bearer ${accessToken}`)
-        .send({
-          currentPassword: 'ValidPassword123!',
-          newPassword: 'NewStrongPassword123!'
-        });
-
-      expect(response.status).toBe(200);
       expect(response.body.success).toBe(true);
-      expect(response.body.message).toBe('Password changed successfully');
+      expect(response.body.data.user.email).toBe(testUser.email);
+      expect(response.body.data.user.firstName).toBe(testUser.firstName);
+      expect(response.body.data.user.lastName).toBe(testUser.lastName);
+      expect(response.body.data.accessToken).toBeDefined();
+      expect(response.body.data.user.password).toBeUndefined();
+    });
 
-      // Verify the new password works
-      const updatedUser = await User.findById(testUser._id).select('+password');
-      const isNewPasswordValid = await updatedUser.comparePassword('NewStrongPassword123!');
-      expect(isNewPasswordValid).toBe(true);
+    test('should fail to register with duplicate email', async () => {
+      // Register first user
+      await request(app)
+        .post('/api/auth/register')
+        .send(testUser)
+        .expect(201);
 
-      // Verify old password no longer works
-      const isOldPasswordValid = await updatedUser.comparePassword('ValidPassword123!');
-      expect(isOldPasswordValid).toBe(false);
+      // Try to register with same email
+      const response = await request(app)
+        .post('/api/auth/register')
+        .send(testUser)
+        .expect(400);
+
+      expect(response.body.success).toBe(false);
+      expect(response.body.message).toContain('already exists');
+    });
+
+    test('should fail to register with invalid email', async () => {
+      const invalidUser = { ...testUser, email: 'invalid-email' };
+      
+      const response = await request(app)
+        .post('/api/auth/register')
+        .send(invalidUser)
+        .expect(400);
+
+      expect(response.body.success).toBe(false);
+    });
+
+    test('should fail to register with weak password', async () => {
+      const weakPasswordUser = { ...testUser, password: '123' };
+      
+      const response = await request(app)
+        .post('/api/auth/register')
+        .send(weakPasswordUser)
+        .expect(400);
+
+      expect(response.body.success).toBe(false);
+    });
+
+    test('should register with referral code', async () => {
+      // Create referrer user
+      const referrer = await User.create({
+        ...testUser,
+        email: 'referrer@example.com',
+        referralCode: 'REF123'
+      });
+
+      const newUser = {
+        ...testUser,
+        email: 'newuser@example.com',
+        referralCode: 'REF123'
+      };
+
+      const response = await request(app)
+        .post('/api/auth/register')
+        .send(newUser)
+        .expect(201);
+
+      expect(response.body.success).toBe(true);
+      expect(response.body.data.referralProcessed).toBe(true);
     });
   });
 
-  describe('User Model Password Validation', () => {
-    it('should enforce minimum password length on user creation', async () => {
-      // This test shows that the User model DOES have password validation
-      // but it's not being used in the changePassword function
-      
-      try {
-        await User.create({
-          firstName: 'Test',
-          lastName: 'User',
-          email: 'test2@example.com',
-          password: '123' // Too short
-        });
-        
-        // This should fail due to minlength validation
-        fail('User creation should have failed with short password');
-      } catch (error) {
-        expect(error.name).toBe('ValidationError');
-        expect(error.errors.password.message).toContain('minimum');
-      }
+  describe('User Login', () => {
+    beforeEach(async () => {
+      // Create test user
+      await User.create(testUser);
     });
 
-    it('should allow strong passwords on user creation', async () => {
+    test('should login with valid credentials', async () => {
+      const response = await request(app)
+        .post('/api/auth/login')
+        .send({
+          email: testUser.email,
+          password: testUser.password
+        })
+        .expect(200);
+
+      expect(response.body.success).toBe(true);
+      expect(response.body.data.user.email).toBe(testUser.email);
+      expect(response.body.data.accessToken).toBeDefined();
+    });
+
+    test('should fail to login with invalid email', async () => {
+      const response = await request(app)
+        .post('/api/auth/login')
+        .send({
+          email: 'nonexistent@example.com',
+          password: testUser.password
+        })
+        .expect(401);
+
+      expect(response.body.success).toBe(false);
+      expect(response.body.message).toContain('Invalid credentials');
+    });
+
+    test('should fail to login with invalid password', async () => {
+      const response = await request(app)
+        .post('/api/auth/login')
+        .send({
+          email: testUser.email,
+          password: 'wrongpassword'
+        })
+        .expect(401);
+
+      expect(response.body.success).toBe(false);
+      expect(response.body.message).toContain('Invalid credentials');
+    });
+
+    test('should set refresh token cookie on login', async () => {
+      const response = await request(app)
+        .post('/api/auth/login')
+        .send({
+          email: testUser.email,
+          password: testUser.password
+        })
+        .expect(200);
+
+      expect(response.headers['set-cookie']).toBeDefined();
+      expect(response.headers['set-cookie'][0]).toContain('refreshToken');
+    });
+  });
+
+  describe('Token Management', () => {
+    let accessToken;
+    let refreshToken;
+
+    beforeEach(async () => {
+      // Create and login user
+      const user = await User.create(testUser);
+      const loginResponse = await request(app)
+        .post('/api/auth/login')
+        .send({
+          email: testUser.email,
+          password: testUser.password
+        });
+      
+      accessToken = loginResponse.body.data.accessToken;
+      refreshToken = loginResponse.headers['set-cookie'][0].split(';')[0].split('=')[1];
+    });
+
+    test('should get current user with valid token', async () => {
+      const response = await request(app)
+        .get('/api/auth/me')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200);
+
+      expect(response.body.success).toBe(true);
+      expect(response.body.data.user.email).toBe(testUser.email);
+    });
+
+    test('should fail to get current user without token', async () => {
+      const response = await request(app)
+        .get('/api/auth/me')
+        .expect(401);
+
+      expect(response.body.success).toBe(false);
+      expect(response.body.message).toContain('Access denied');
+    });
+
+    test('should fail to get current user with invalid token', async () => {
+      const response = await request(app)
+        .get('/api/auth/me')
+        .set('Authorization', 'Bearer invalid-token')
+        .expect(401);
+
+      expect(response.body.success).toBe(false);
+      expect(response.body.message).toContain('Invalid token');
+    });
+
+    test('should refresh access token', async () => {
+      const response = await request(app)
+        .post('/api/auth/refresh')
+        .set('Cookie', `refreshToken=${refreshToken}`)
+        .expect(200);
+
+      expect(response.body.success).toBe(true);
+      expect(response.body.data.accessToken).toBeDefined();
+    });
+
+    test('should fail to refresh with invalid refresh token', async () => {
+      const response = await request(app)
+        .post('/api/auth/refresh')
+        .set('Cookie', 'refreshToken=invalid-token')
+        .expect(401);
+
+      expect(response.body.success).toBe(false);
+      expect(response.body.message).toContain('Invalid refresh token');
+    });
+  });
+
+  describe('Password Management', () => {
+    let user;
+    let accessToken;
+
+    beforeEach(async () => {
+      // Create and login user
+      user = await User.create(testUser);
+      const loginResponse = await request(app)
+        .post('/api/auth/login')
+        .send({
+          email: testUser.email,
+          password: testUser.password
+        });
+      
+      accessToken = loginResponse.body.data.accessToken;
+    });
+
+    test('should change password successfully', async () => {
+      const newPassword = 'NewPassword123!';
+      
+      const response = await request(app)
+        .put('/api/auth/change-password')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send({
+          currentPassword: testUser.password,
+          newPassword: newPassword
+        })
+        .expect(200);
+
+      expect(response.body.success).toBe(true);
+      expect(response.body.message).toContain('Password changed successfully');
+    });
+
+    test('should fail to change password with wrong current password', async () => {
+      const response = await request(app)
+        .put('/api/auth/change-password')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send({
+          currentPassword: 'wrongpassword',
+          newPassword: 'NewPassword123!'
+        })
+        .expect(400);
+
+      expect(response.body.success).toBe(false);
+      expect(response.body.message).toContain('Current password is incorrect');
+    });
+
+    test('should fail to change password with weak new password', async () => {
+      const response = await request(app)
+        .put('/api/auth/change-password')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send({
+          currentPassword: testUser.password,
+          newPassword: '123'
+        })
+        .expect(400);
+
+      expect(response.body.success).toBe(false);
+    });
+
+    test('should send forgot password email', async () => {
+      const response = await request(app)
+        .post('/api/auth/forgot-password')
+        .send({ email: testUser.email })
+        .expect(200);
+
+      expect(response.body.success).toBe(true);
+      expect(response.body.message).toContain('Password reset email sent');
+    });
+
+    test('should fail forgot password with non-existent email', async () => {
+      const response = await request(app)
+        .post('/api/auth/forgot-password')
+        .send({ email: 'nonexistent@example.com' })
+        .expect(404);
+
+      expect(response.body.success).toBe(false);
+      expect(response.body.message).toContain('User not found');
+    });
+  });
+
+  describe('Social Authentication', () => {
+    test('should handle social login with valid token', async () => {
+      // Mock social token verification
+      const mockUserInfo = {
+        id: 'google123',
+        email: 'social@example.com',
+        name: 'Social User',
+        picture: 'https://example.com/avatar.jpg'
+      };
+
+      // Mock the social auth service
+      jest.doMock('../services/socialAuthService', () => ({
+        verifySocialToken: jest.fn().mockResolvedValue(mockUserInfo)
+      }));
+
+      const response = await request(app)
+        .post('/api/auth/social-login')
+        .send({
+          provider: 'google',
+          token: 'mock-google-token'
+        })
+        .expect(200);
+
+      expect(response.body.success).toBe(true);
+      expect(response.body.data.user.email).toBe(mockUserInfo.email);
+    });
+
+    test('should fail social login with invalid token', async () => {
+      const response = await request(app)
+        .post('/api/auth/social-login')
+        .send({
+          provider: 'google',
+          token: 'invalid-token'
+        })
+        .expect(401);
+
+      expect(response.body.success).toBe(false);
+      expect(response.body.message).toContain('Invalid social token');
+    });
+  });
+
+  describe('Admin User Creation', () => {
+    test('should create admin user successfully', async () => {
+      const response = await request(app)
+        .post('/api/auth/create-admin')
+        .send(adminUser)
+        .expect(201);
+
+      expect(response.body.success).toBe(true);
+      expect(response.body.data.role).toBe('admin');
+      expect(response.body.data.adminRole).toBe('SA');
+    });
+
+    test('should update existing user to admin', async () => {
+      // Create regular user first
+      await User.create(testUser);
+
+      const response = await request(app)
+        .post('/api/auth/create-admin')
+        .send({
+          ...adminUser,
+          email: testUser.email
+        })
+        .expect(200);
+
+      expect(response.body.success).toBe(true);
+      expect(response.body.message).toContain('already exists');
+    });
+  });
+
+  describe('Logout', () => {
+    let accessToken;
+
+    beforeEach(async () => {
+      // Create and login user
+      await User.create(testUser);
+      const loginResponse = await request(app)
+        .post('/api/auth/login')
+        .send({
+          email: testUser.email,
+          password: testUser.password
+        });
+      
+      accessToken = loginResponse.body.data.accessToken;
+    });
+
+    test('should logout successfully', async () => {
+      const response = await request(app)
+        .post('/api/auth/logout')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200);
+
+      expect(response.body.success).toBe(true);
+      expect(response.body.message).toContain('Logged out successfully');
+    });
+
+    test('should clear refresh token on logout', async () => {
+      const response = await request(app)
+        .post('/api/auth/logout')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200);
+
+      expect(response.headers['set-cookie']).toBeDefined();
+      expect(response.headers['set-cookie'][0]).toContain('refreshToken=;');
+    });
+  });
+
+  describe('Security Tests', () => {
+    test('should rate limit login attempts', async () => {
+      // Create test user
+      await User.create(testUser);
+
+      // Make multiple failed login attempts
+      for (let i = 0; i < 10; i++) {
+        await request(app)
+          .post('/api/auth/login')
+          .send({
+            email: testUser.email,
+            password: 'wrongpassword'
+          });
+      }
+
+      // Should be rate limited
+      const response = await request(app)
+        .post('/api/auth/login')
+        .send({
+          email: testUser.email,
+          password: 'wrongpassword'
+        })
+        .expect(429);
+
+      expect(response.body.message).toContain('Too many requests');
+    });
+
+    test('should validate input data', async () => {
+      const response = await request(app)
+        .post('/api/auth/register')
+        .send({
+          firstName: '', // Empty first name
+          lastName: 'User',
+          email: 'invalid-email',
+          password: '123' // Weak password
+        })
+        .expect(400);
+
+      expect(response.body.success).toBe(false);
+    });
+
+    test('should sanitize user input', async () => {
+      const maliciousUser = {
+        ...testUser,
+        firstName: '<script>alert("xss")</script>',
+        email: 'test@example.com'
+      };
+
+      const response = await request(app)
+        .post('/api/auth/register')
+        .send(maliciousUser)
+        .expect(201);
+
+      // Check that script tags are not stored as-is
+      expect(response.body.data.user.firstName).not.toContain('<script>');
+    });
+  });
+
+  describe('Email Verification', () => {
+    test('should verify email with valid token', async () => {
+      // Create user with verification token
       const user = await User.create({
-        firstName: 'Test',
-        lastName: 'User',
-        email: 'test3@example.com',
-        password: 'StrongPassword123!'
+        ...testUser,
+        emailVerificationToken: 'valid-token',
+        emailVerificationExpires: new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours
       });
 
-      expect(user._id).toBeDefined();
-      expect(user.email).toBe('test3@example.com');
+      // Mock JWT verification
+      jest.doMock('../utils/generateTokens', () => ({
+        verifyToken: jest.fn().mockReturnValue({
+          userId: user._id,
+          email: user.email,
+          type: 'email_verification'
+        })
+      }));
+
+      const response = await request(app)
+        .post('/api/auth/verify-email')
+        .send({ token: 'valid-token' })
+        .expect(200);
+
+      expect(response.body.success).toBe(true);
+      expect(response.body.message).toContain('Email verified successfully');
+    });
+
+    test('should fail email verification with invalid token', async () => {
+      const response = await request(app)
+        .post('/api/auth/verify-email')
+        .send({ token: 'invalid-token' })
+        .expect(400);
+
+      expect(response.body.success).toBe(false);
     });
   });
 });

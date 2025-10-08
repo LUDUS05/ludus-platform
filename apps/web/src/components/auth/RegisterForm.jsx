@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
 import Logo from '../common/Logo';
+import { useTranslationWithFallback } from '../../hooks/useTranslationWithFallback';
 
 const RegisterForm = () => {
   const { t } = useTranslation();
+  const { t: tFallback } = useTranslationWithFallback();
   const { register } = useAuth();
   const navigate = useNavigate();
   
@@ -21,26 +23,73 @@ const RegisterForm = () => {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [validationErrors, setValidationErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  // Clear validation errors when user starts typing
+  useEffect(() => {
+    if (Object.keys(validationErrors).length > 0) {
+      setValidationErrors({});
+    }
+  }, [formData]);
+
+  const validateForm = () => {
+    const errors = {};
+    
+    if (!formData.firstName.trim()) {
+      errors.firstName = tFallback('auth.firstNameRequired', 'First name is required');
+    } else if (formData.firstName.length < 2) {
+      errors.firstName = tFallback('auth.firstNameMinLength', 'First name must be at least 2 characters');
+    }
+    
+    if (!formData.lastName.trim()) {
+      errors.lastName = tFallback('auth.lastNameRequired', 'Last name is required');
+    } else if (formData.lastName.length < 2) {
+      errors.lastName = tFallback('auth.lastNameMinLength', 'Last name must be at least 2 characters');
+    }
+    
+    if (!formData.email) {
+      errors.email = tFallback('auth.emailRequired', 'Email is required');
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      errors.email = tFallback('auth.emailInvalid', 'Please enter a valid email address');
+    }
+    
+    if (formData.phone && !/^(\+966|0)?[5-9][0-9]{8}$/.test(formData.phone.replace(/\s/g, ''))) {
+      errors.phone = tFallback('auth.phoneInvalid', 'Please enter a valid Saudi phone number');
+    }
+    
+    if (!formData.password) {
+      errors.password = tFallback('auth.passwordRequired', 'Password is required');
+    } else if (formData.password.length < 8) {
+      errors.password = tFallback('auth.passwordMinLength', 'Password must be at least 8 characters');
+    } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
+      errors.password = tFallback('auth.passwordComplexity', 'Password must contain uppercase, lowercase, and number');
+    }
+    
+    if (!formData.confirmPassword) {
+      errors.confirmPassword = tFallback('auth.confirmPasswordRequired', 'Please confirm your password');
+    } else if (formData.password !== formData.confirmPassword) {
+      errors.confirmPassword = tFallback('auth.passwordsDoNotMatch', 'Passwords do not match');
+    }
+    
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
+    if (error) setError('');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     
-    // Validation
-    if (formData.password !== formData.confirmPassword) {
-      setError(t('auth.passwordsDoNotMatch'));
-      return;
-    }
-    
-    if (formData.password.length < 6) {
-      setError(t('auth.passwordMinLength'));
+    if (!validateForm()) {
       return;
     }
 
@@ -56,29 +105,29 @@ const RegisterForm = () => {
       });
       navigate('/dashboard');
     } catch (error) {
-      setError(error.response?.data?.message || t('auth.registrationFailed'));
+      setError(error.response?.data?.message || tFallback('auth.registrationFailed', 'Registration failed'));
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8" dir={t('common.direction') || 'ltr'}>
       <div className="max-w-md w-full space-y-8">
         <div>
           <div className="flex justify-center">
             <Logo className="h-12 w-auto" />
           </div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            {t('auth.register')}
+            {tFallback('auth.register', 'Create your account')}
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            {t('common.or')}{' '}
+            {tFallback('common.or', 'Or')}{' '}
             <Link
               to="/login"
-              className="font-medium text-ludus-orange hover:text-ludus-orange-dark"
+              className="font-medium text-ludus-orange hover:text-ludus-orange-dark transition-colors"
             >
-              {t('auth.login')}
+              {tFallback('auth.login', 'sign in to existing account')}
             </Link>
           </p>
         </div>
