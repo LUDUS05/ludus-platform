@@ -7,6 +7,11 @@ const {
   processRefund,
   savePaymentMethod,
   getUserPaymentMethods,
+  deletePaymentMethod,
+  setDefaultPaymentMethod,
+  getPaymentHistory,
+  getPaymentAnalytics,
+  getPaymentMethodsConfig,
   handleWebhook
 } = require('../controllers/paymentController');
 const { authenticate } = require('../middleware/auth');
@@ -30,6 +35,21 @@ router.post('/save-method', authenticate, validateSavePaymentMethod, savePayment
 
 // Get user's saved payment methods
 router.get('/methods', authenticate, getUserPaymentMethods);
+
+// Delete payment method
+router.delete('/methods/:methodId', authenticate, deletePaymentMethod);
+
+// Set default payment method
+router.put('/methods/:methodId/default', authenticate, setDefaultPaymentMethod);
+
+// Get payment history
+router.get('/history', authenticate, getPaymentHistory);
+
+// Get payment analytics (admin only)
+router.get('/analytics', authenticate, getPaymentAnalytics);
+
+// Get payment methods configuration
+router.get('/config', getPaymentMethodsConfig);
 
 // Moyasar webhook endpoint (no auth required)
 router.post('/webhook', express.raw({ type: 'application/json' }), handleWebhook);

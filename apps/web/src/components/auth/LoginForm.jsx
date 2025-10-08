@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
@@ -6,20 +6,50 @@ import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
 import SocialLogin from './SocialLogin';
 import Logo from '../common/Logo';
+import { useTranslationWithFallback } from '../../hooks/useTranslationWithFallback';
 
 const LoginForm = () => {
   const { t } = useTranslation();
+  const { t: tFallback } = useTranslationWithFallback();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [validationErrors, setValidationErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   const { login, isLoading, error, clearError } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   
   const from = location.state?.from?.pathname || '/dashboard';
+
+  // Clear validation errors when user starts typing
+  useEffect(() => {
+    if (Object.keys(validationErrors).length > 0) {
+      setValidationErrors({});
+    }
+  }, [formData]);
+
+  const validateForm = () => {
+    const errors = {};
+    
+    if (!formData.email) {
+      errors.email = tFallback('auth.emailRequired', 'Email is required');
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      errors.email = tFallback('auth.emailInvalid', 'Please enter a valid email address');
+    }
+    
+    if (!formData.password) {
+      errors.password = tFallback('auth.passwordRequired', 'Password is required');
+    } else if (formData.password.length < 6) {
+      errors.password = tFallback('auth.passwordMinLength', 'Password must be at least 6 characters');
+    }
+    
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,12 +63,20 @@ const LoginForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    if (!validateForm()) {
+      return;
+    }
+    
+    setIsSubmitting(true);
+    
     try {
       await login(formData);
       navigate(from, { replace: true });
     } catch (error) {
       // Error is handled by the auth context
       console.error('Login error:', error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -51,37 +89,37 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8" dir={t('common.direction') || 'ltr'}>
       <div className="max-w-md w-full space-y-8">
         <div>
           <div className="flex justify-center">
             <Logo className="h-12 w-auto" />
           </div>
           <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
-            {t('auth.signInToAccount')}
+            {tFallback('auth.signInToAccount', 'Sign in to your account')}
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            {t('common.or')}{' '}
+            {tFallback('common.or', 'Or')}{' '}
             <Link
               to="/register"
-              className="font-medium text-ludus-orange hover:text-ludus-orange-dark"
+              className="font-medium text-ludus-orange hover:text-ludus-orange-dark transition-colors"
             >
-              {t('auth.createNewAccount')}
+              {tFallback('auth.createNewAccount', 'create a new account')}
             </Link>
           </p>
         </div>
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          {error && (
+          {(error || Object.keys(validationErrors).length > 0) && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-              {error}
+              {error || Object.values(validationErrors)[0]}
             </div>
           )}
 
           <div className="space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                {t('auth.email')}
+                {tFallback('auth.email', 'Email')}
               </label>
               <input
                 id="email"
@@ -89,17 +127,22 @@ const LoginForm = () => {
                 type="email"
                 autoComplete="email"
                 required
-                className="input-field"
-                placeholder={t('auth.enterEmail')}
+                className={`input-field w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ludus-orange/20 focus:border-ludus-orange transition-colors ${
+                  validationErrors.email ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20' : 'border-gray-300'
+                }`}
+                placeholder={tFallback('auth.enterEmail', 'Enter your email')}
                 value={formData.email}
                 onChange={handleChange}
-                disabled={isLoading}
+                disabled={isLoading || isSubmitting}
               />
+              {validationErrors.email && (
+                <p className="mt-1 text-sm text-red-600">{validationErrors.email}</p>
+              )}
             </div>
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                {t('auth.password')}
+                {tFallback('auth.password', 'Password')}
               </label>
               <div className="relative">
                 <input
@@ -108,16 +151,19 @@ const LoginForm = () => {
                   type={showPassword ? 'text' : 'password'}
                   autoComplete="current-password"
                   required
-                  className="input-field pr-10"
-                  placeholder={t('auth.enterPassword')}
+                  className={`input-field w-full px-4 py-3 pr-10 border rounded-lg focus:ring-2 focus:ring-ludus-orange/20 focus:border-ludus-orange transition-colors ${
+                    validationErrors.password ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20' : 'border-gray-300'
+                  }`}
+                  placeholder={tFallback('auth.enterPassword', 'Enter your password')}
                   value={formData.password}
                   onChange={handleChange}
-                  disabled={isLoading}
+                  disabled={isLoading || isSubmitting}
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center hover:text-gray-600 transition-colors"
                   onClick={() => setShowPassword(!showPassword)}
+                  disabled={isLoading || isSubmitting}
                 >
                   {showPassword ? (
                     <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -131,6 +177,9 @@ const LoginForm = () => {
                   )}
                 </button>
               </div>
+              {validationErrors.password && (
+                <p className="mt-1 text-sm text-red-600">{validationErrors.password}</p>
+              )}
             </div>
           </div>
 
@@ -141,18 +190,19 @@ const LoginForm = () => {
                 name="remember-me"
                 type="checkbox"
                 className="h-4 w-4 text-ludus-orange focus:ring-ludus-orange/20 border-gray-300 rounded"
+                disabled={isLoading || isSubmitting}
               />
               <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                {t('auth.rememberMe')}
+                {tFallback('auth.rememberMe', 'Remember me')}
               </label>
             </div>
 
             <div className="text-sm">
               <Link
                 to="/forgot-password"
-                className="font-medium text-ludus-orange hover:text-ludus-orange-dark"
+                className="font-medium text-ludus-orange hover:text-ludus-orange-dark transition-colors"
               >
-                {t('auth.forgotPassword')}
+                {tFallback('auth.forgotPassword', 'Forgot password?')}
               </Link>
             </div>
           </div>
@@ -160,19 +210,19 @@ const LoginForm = () => {
           <div>
             <button
               type="submit"
-              disabled={isLoading}
-              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-ludus-orange hover:bg-ludus-orange-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ludus-orange/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              disabled={isLoading || isSubmitting}
+              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-ludus-orange hover:bg-ludus-orange-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ludus-orange/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-105 disabled:hover:scale-100"
             >
-              {isLoading ? (
+              {(isLoading || isSubmitting) ? (
                 <div className="flex items-center">
                   <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  {t('common.loading')}
+                  {tFallback('common.loading', 'Loading...')}
                 </div>
               ) : (
-                t('auth.login')
+                tFallback('auth.login', 'Sign In')
               )}
             </button>
           </div>
