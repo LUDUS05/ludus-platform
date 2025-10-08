@@ -11,7 +11,7 @@ const ratingCalculationEngine = require('./ratingCalculationEngine');
 class RatingSystemService {
   constructor() {
     this.config = null;
-    this.initializeConfig();
+    // Don't initialize immediately - wait for database connection
   }
 
   // Initialize rating system configuration

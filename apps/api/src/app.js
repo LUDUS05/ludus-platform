@@ -96,8 +96,14 @@ const app = express();
 // Connect to MongoDB only if not in test mode or if MONGODB_URI is available
 if (process.env.NODE_ENV !== 'test' && process.env.MONGODB_URI) {
   connectDB().then(async () => {
+    // Wait a moment for connection to be fully established
+    await new Promise(resolve => setTimeout(resolve, 1000));
     // Create partner terms page if it doesn't exist
-    await createPartnerTermsPage();
+    try {
+      await createPartnerTermsPage();
+    } catch (err) {
+      logger.warn({ err }, 'Failed to create partner terms page, continuing...');
+    }
   }).catch(err => {
     logger.error({ err }, 'Failed to connect to database');
     logger.warn('Server will continue running without database');
