@@ -18,20 +18,6 @@
         </div>
     </div>
     
-    <script>
-        // Seamless SPA routing: Fast redirect with minimal URL visibility
-        const currentPath = window.location.pathname;
-        
-        // Only redirect if it's not the home page
-        if (currentPath !== '/') {
-            // Build redirect URL
-            const redirectUrl = '/?spa-redirect=' + encodeURIComponent(currentPath);
-            
-            // Fast redirect with minimal delay
-            setTimeout(() => {
-                window.location.href = redirectUrl;
-            }, 100); // Very short delay for better UX
-        }
-    </script>
+    <!-- SPA auto-redirect disabled intentionally: show static 404 page -->
 </body>
 </html>

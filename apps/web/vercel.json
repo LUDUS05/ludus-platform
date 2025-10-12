@@ -18,26 +18,7 @@
         "cache-control": "s-maxage=31536000,immutable"
       }
     },
-    {
-      "src": "/login",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/admin",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/share",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/hi",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
+    // SPA rewrites disabled to stop automatic redirects
   ],
   "env": {
     "SKIP_PREFLIGHT_CHECK": "true",
