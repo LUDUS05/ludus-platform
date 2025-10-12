@@ -204,24 +204,25 @@ const connectAtlas = async () => {
  */
 const setupConnectionListeners = (connection) => {
   // Connection events
-  connection.on('connected', () => {
+  const conn = mongoose.connection; // use the singleton connection
+  conn.on('connected', () => {
     console.log('🟢 MongoDB Atlas connection established');
     connectionState.isConnected = true;
     connectionState.lastConnected = new Date();
   });
 
-  connection.on('disconnected', () => {
+  conn.on('disconnected', () => {
     console.log('🔴 MongoDB Atlas connection lost');
     connectionState.isConnected = false;
   });
 
-  connection.on('reconnected', () => {
+  conn.on('reconnected', () => {
     console.log('🟡 MongoDB Atlas connection restored');
     connectionState.isConnected = true;
     connectionState.lastConnected = new Date();
   });
 
-  connection.on('error', (error) => {
+  conn.on('error', (error) => {
     console.error('❌ MongoDB Atlas connection error:', error.message);
     connectionState.isConnected = false;
     connectionState.lastError = error.message;
