@@ -42,8 +42,8 @@ services:
     name: ludus-frontend
     env: static
     plan: starter
-    buildCommand: cd client && npm install --legacy-peer-deps && npm run build
-    staticPublishPath: client/build
+    buildCommand: cd apps/web && npm install --legacy-peer-deps && npm run build:render
+    staticPublishPath: apps/web/build
     headers:
       - path: /*
         name: X-Frame-Options
@@ -121,8 +121,8 @@ services:
     name: ludus-frontend-athena
     env: static
     plan: starter
-    buildCommand: cd client && npm install --legacy-peer-deps && npm run build
-    staticPublishPath: client/build
+    buildCommand: cd apps/web && npm install --legacy-peer-deps && npm run build:render
+    staticPublishPath: apps/web/build
     envVars:
       # Core API Configuration - REQUIRED
       - key: REACT_APP_API_URL
