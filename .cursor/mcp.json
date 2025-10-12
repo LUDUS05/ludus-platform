@@ -1,34 +1,37 @@
 {
   "mcpServers": {
-    "git": {
+    "github-mcp-lightweight": {
       "command": "npx",
       "args": [
-        "-y",
-        "@cyanheads/git-mcp-server"
-      ]
-    },
-    "sequential-thinking": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-sequential-thinking"
-      ]
-    },
-    "render-integration": {
-      "command": "node",
-      "args": [
-        "./scripts/render-mcp-server.js"
+        "@wipiano/github-mcp-lightweight"
       ],
       "env": {
-        "RENDER_API_TOKEN": "rnd_oyTExRtWHAK8ECwOG4TTrfI1VVFl"
+        "GITHUB_TOKEN": ""
       }
     },
-    "shadcn": {
+    "notion-mcp": {
+      "command": "node",
+      "args": [
+        "node_modules/@notionhq/notion-mcp-server/bin/cli.mjs"
+      ],
+      "env": {
+        "NOTION_TOKEN": ""
+      }
+    },
+    "linear-mcp": {
       "command": "npx",
       "args": [
-        "shadcn@latest",
-        "mcp"
-      ]
+        "@mseep/linear-mcp"
+      ],
+      "env": {
+        "LINEAR_API_KEY": ""
+      }
+    },
+    "render-mcp-remote": {
+      "transport": {
+        "type": "http",
+        "url": "https://mcp.render.com/mcp"
+      }
     }
   }
 }
