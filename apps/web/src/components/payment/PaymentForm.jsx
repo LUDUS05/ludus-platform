@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { paymentService } from '../../services/paymentService';
-import { useTranslationWithFallback } from '../../hooks/useTranslationWithFallback';
+import useTranslationWithFallback from '../../hooks/useTranslationWithFallback';
 
 const PaymentForm = ({ 
   amount, 

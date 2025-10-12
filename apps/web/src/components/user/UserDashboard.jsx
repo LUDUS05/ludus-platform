@@ -17,7 +17,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useTranslationWithFallback } from '../../hooks/useTranslationWithFallback';
+import useTranslationWithFallback from '../../hooks/useTranslationWithFallback';
 import { userService } from '../../services/userService';
 import { Button, Card, CardHeader, CardTitle, CardDescription, CardContent, Alert } from '../ui';
 import { 
@@ -32,7 +32,8 @@ import {
   ArrowRight,
   Activity,
   Award,
-  Target
+  Target,
+  X
 } from 'lucide-react';
 
 const UserDashboard = () => {

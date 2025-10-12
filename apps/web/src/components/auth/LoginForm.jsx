@@ -6,7 +6,7 @@ import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
 import SocialLogin from './SocialLogin';
 import Logo from '../common/Logo';
-import { useTranslationWithFallback } from '../../hooks/useTranslationWithFallback';
+import useTranslationWithFallback from '../../hooks/useTranslationWithFallback';
 
 const LoginForm = () => {
   const { t } = useTranslation();

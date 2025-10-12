@@ -5,7 +5,7 @@ import { useAuth } from '../../context/AuthContext';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
 import Logo from '../common/Logo';
-import { useTranslationWithFallback } from '../../hooks/useTranslationWithFallback';
+import useTranslationWithFallback from '../../hooks/useTranslationWithFallback';
 
 const RegisterForm = () => {
   const { t } = useTranslation();

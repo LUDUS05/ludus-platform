@@ -16,7 +16,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useTranslationWithFallback } from '../../hooks/useTranslationWithFallback';
+import useTranslationWithFallback from '../../hooks/useTranslationWithFallback';
 import { userService } from '../../services/userService';
 import { Button, Card, CardHeader, CardTitle, CardDescription, CardContent, Input, Alert, Switch } from '../ui';
 import { Bell, Globe, MapPin, Users, Shield, Heart, Clock, DollarSign } from 'lucide-react';
