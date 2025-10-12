@@ -1,10 +1,11 @@
 [build]
   publish = "build"
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+## Disabled SPA catch-all redirect to stop automatic rewrites
+# [[redirects]]
+#   from = "/*"
+#   to = "/index.html"
+#   status = 200
 
 [[headers]]
   for = "/*"
