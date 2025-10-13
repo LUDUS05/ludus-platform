@@ -181,10 +181,16 @@ router.get('/menu/:placement', async (req, res) => {
       query.placement = { $in: [placement, 'both'] };
     }
     
-    const pages = await Page.find(query)
-      .select('title slug placement navigationOrder createdAt')
-      .sort({ navigationOrder: 1, createdAt: -1 })
-      .lean();
+    // Add timeout to prevent hanging
+    const pages = await Promise.race([
+      Page.find(query)
+        .select('title slug placement navigationOrder createdAt')
+        .sort({ navigationOrder: 1, createdAt: -1 })
+        .lean(),
+      new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Query timeout')), 5000)
+      )
+    ]);
     
     // Transform to include computed URL
     const pagesWithUrl = pages.map(page => ({
@@ -198,9 +204,12 @@ router.get('/menu/:placement', async (req, res) => {
     });
   } catch (error) {
     console.error('Get pages by placement error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Server error retrieving pages by placement'
+    
+    // Return empty data instead of error for better UX
+    res.json({
+      success: true,
+      data: [],
+      message: 'No menu pages found'
     });
   }
 });
