@@ -328,6 +328,22 @@ app.use(require('cookie-parser')());
 // Static file serving for uploads
 app.use('/uploads', express.static('uploads'));
 
+// Root route
+app.get('/', (req, res) => {
+  res.status(200).json({
+    message: 'LUDUS Platform API',
+    status: 'running',
+    timestamp: new Date().toISOString(),
+    version: process.env.npm_package_version || '1.0.1',
+    environment: process.env.NODE_ENV || 'development',
+    endpoints: {
+      health: '/health',
+      api_health: '/api/health',
+      docs: '/api/docs'
+    }
+  });
+});
+
 // Health check route
 app.get('/health', (req, res) => {
   res.status(200).json({
