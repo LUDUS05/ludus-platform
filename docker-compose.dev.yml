@@ -7,7 +7,7 @@ services:
   # =============================================================================
   # DATABASE SERVICES
   # =============================================================================
-  
+
   mongodb:
     image: mongo:7.0
     container_name: ludus-mongodb-dev
@@ -39,10 +39,10 @@ services:
   # =============================================================================
   # BACKEND SERVICE
   # =============================================================================
-  
+
   backend:
     build:
-      context: ./server
+      context: ./apps/api
       dockerfile: Dockerfile.dev
     container_name: ludus-backend-dev
     restart: unless-stopped
@@ -56,7 +56,7 @@ services:
       JWT_SECRET: your-super-secret-jwt-key-for-development-only
       CORS_ORIGIN: http://localhost:3000
     volumes:
-      - ./server:/app
+      - ./apps/api:/app
       - /app/node_modules
     depends_on:
       - mongodb
@@ -68,10 +68,10 @@ services:
   # =============================================================================
   # FRONTEND SERVICE
   # =============================================================================
-  
+
   frontend:
     build:
-      context: ./client
+      context: ./apps/web
       dockerfile: Dockerfile.dev
     container_name: ludus-frontend-dev
     restart: unless-stopped
@@ -83,7 +83,7 @@ services:
       CHOKIDAR_USEPOLLING: true
       WATCHPACK_POLLING: true
     volumes:
-      - ./client:/app
+      - ./apps/web:/app
       - /app/node_modules
     depends_on:
       - backend
@@ -94,10 +94,10 @@ services:
   # =============================================================================
   # AI SERVICES
   # =============================================================================
-  
+
   ai-services:
     build:
-      context: ./agents
+      context: ./apps/ai-agents
       dockerfile: Dockerfile.api
     container_name: ludus-ai-services-dev
     restart: unless-stopped
@@ -108,7 +108,7 @@ services:
       REDIS_URL: redis://redis:6379
       OLLAMA_BASE_URL: http://ollama:11434
     volumes:
-      - ./agents:/app
+      - ./apps/ai-agents:/app
     depends_on:
       - redis
       - ollama
@@ -118,7 +118,7 @@ services:
   # =============================================================================
   # OLLAMA SERVICE
   # =============================================================================
-  
+
   ollama:
     image: ollama/ollama:latest
     container_name: ludus-ollama-dev
@@ -137,7 +137,7 @@ services:
   # =============================================================================
   # MONITORING SERVICES
   # =============================================================================
-  
+
   mongo-express:
     image: mongo-express:1.0.2
     container_name: ludus-mongo-express-dev

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../LanguageSwitcher';
@@ -9,14 +9,13 @@ import useMenuPages from '../../hooks/useMenuPages';
 const Header = () => {
   const { user, isAuthenticated, logout } = useAuth();
   const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { pages: headerPages } = useMenuPages('header');
 
   const handleLogout = async () => {
     try {
       await logout();
-      navigate('/');
+      // No redirect after logout
     } catch (error) {
       console.error('Logout error:', error);
     }

@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Button } from '../ui/Button';
-import { Card } from '../ui/Card';
-import SocialLogin from './SocialLogin';
-import Logo from '../common/Logo';
 import useTranslationWithFallback from '../../hooks/useTranslationWithFallback';
+import Logo from '../common/Logo';
+import SocialLogin from './SocialLogin';
 
 const LoginForm = () => {
   const { t } = useTranslation();
@@ -18,12 +16,8 @@ const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   const { login, isLoading, error, clearError } = useAuth();
-  const navigate = useNavigate();
-  const location = useLocation();
-  
-  const from = location.state?.from?.pathname || '/dashboard';
 
   // Clear validation errors when user starts typing
   useEffect(() => {
@@ -34,19 +28,19 @@ const LoginForm = () => {
 
   const validateForm = () => {
     const errors = {};
-    
+
     if (!formData.email) {
       errors.email = tFallback('auth.emailRequired', 'Email is required');
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       errors.email = tFallback('auth.emailInvalid', 'Please enter a valid email address');
     }
-    
+
     if (!formData.password) {
       errors.password = tFallback('auth.passwordRequired', 'Password is required');
     } else if (formData.password.length < 6) {
       errors.password = tFallback('auth.passwordMinLength', 'Password must be at least 6 characters');
     }
-    
+
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -62,16 +56,16 @@ const LoginForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
-    
+
     setIsSubmitting(true);
-    
+
     try {
       await login(formData);
-      navigate(from, { replace: true });
+      // No redirect after login
     } catch (error) {
       // Error is handled by the auth context
       console.error('Login error:', error);
@@ -81,7 +75,7 @@ const LoginForm = () => {
   };
 
   const handleSocialSuccess = (result) => {
-    navigate(from, { replace: true });
+    // No redirect after social login
   };
 
   const handleSocialError = (error) => {
@@ -229,7 +223,7 @@ const LoginForm = () => {
 
           {/* Social Login */}
           <div className="mt-6">
-            <SocialLogin 
+            <SocialLogin
               onSuccess={handleSocialSuccess}
               onError={handleSocialError}
             />

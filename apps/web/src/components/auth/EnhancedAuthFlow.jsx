@@ -1,9 +1,8 @@
 // frontend/src/components/auth/EnhancedAuthFlow.jsx
-import React, { useState, useEffect } from 'react';
-import { gsap } from '../../utils/gsap-setup';
-import { animationPresets, rtlAware } from '../../utils/gsap-setup';
+import React, { useEffect, useState } from 'react';
 import { apiService } from '../../services/apiService';
 import { notificationService } from '../../services/notificationService';
+import { gsap } from '../../utils/gsap-setup';
 
 const EnhancedAuthFlow = ({ onAuthSuccess }) => {
   const [authState, setAuthState] = useState('login'); // login, signup, loading, success
@@ -21,7 +20,7 @@ const EnhancedAuthFlow = ({ onAuthSuccess }) => {
   useEffect(() => {
     // Initialize entrance animation
     const tl = gsap.timeline();
-    
+
     tl.from('.auth-container', {
       duration: 0.8,
       y: 50,
@@ -49,7 +48,7 @@ const EnhancedAuthFlow = ({ onAuthSuccess }) => {
       ...prev,
       [name]: value
     }));
-    
+
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
@@ -61,19 +60,19 @@ const EnhancedAuthFlow = ({ onAuthSuccess }) => {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!formData.email) {
       newErrors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'Email is invalid';
     }
-    
+
     if (!formData.password) {
       newErrors.password = 'Password is required';
     } else if (formData.password.length < 6) {
       newErrors.password = 'Password must be at least 6 characters';
     }
-    
+
     if (authState === 'signup') {
       if (!formData.firstName) {
         newErrors.firstName = 'First name is required';
@@ -85,26 +84,26 @@ const EnhancedAuthFlow = ({ onAuthSuccess }) => {
         newErrors.confirmPassword = 'Passwords do not match';
       }
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleAuthSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       // Animate error state
       animateFormErrors();
       return;
     }
-    
+
     setIsLoading(true);
     animateLoadingState();
 
     try {
       let response;
-      
+
       if (authState === 'login') {
         response = await apiService.authenticate({
           email: formData.email,
@@ -125,11 +124,11 @@ const EnhancedAuthFlow = ({ onAuthSuccess }) => {
         if (response.token) {
           localStorage.setItem('authToken', response.token);
         }
-        
+
         await animateAuthSuccess(response.user);
         onAuthSuccess?.(response.user);
       }
-      
+
     } catch (error) {
       animateAuthError(error.message);
     } finally {
@@ -139,21 +138,21 @@ const EnhancedAuthFlow = ({ onAuthSuccess }) => {
 
   const animateLoadingState = () => {
     const tl = gsap.timeline();
-    
-    tl.to('.auth-form', { 
-      duration: 0.3, 
-      scale: 0.98, 
-      opacity: 0.7 
+
+    tl.to('.auth-form', {
+      duration: 0.3,
+      scale: 0.98,
+      opacity: 0.7
     })
-    .to('.loading-overlay', { 
-      duration: 0.2, 
-      opacity: 1 
+    .to('.loading-overlay', {
+      duration: 0.2,
+      opacity: 1
     }, '-=0.1')
-    .from('.loading-dots', { 
-      duration: 0.8, 
-      scale: 0, 
-      stagger: 0.1, 
-      repeat: -1, 
+    .from('.loading-dots', {
+      duration: 0.8,
+      scale: 0,
+      stagger: 0.1,
+      repeat: -1,
       yoyo: true,
       ease: 'power2.inOut'
     });
@@ -161,29 +160,28 @@ const EnhancedAuthFlow = ({ onAuthSuccess }) => {
 
   const animateAuthSuccess = async (user) => {
     const tl = gsap.timeline();
-    
+
     tl.to('.loading-overlay', { duration: 0.2, opacity: 0 })
     .to('.auth-form', { duration: 0.4, scale: 1, opacity: 1 })
-    .from('.success-checkmark', { 
-      duration: 0.6, 
+    .from('.success-checkmark', {
+      duration: 0.6,
       scale: 0,
       rotation: 180,
       ease: 'back.out(1.7)'
     }, '-=0.2')
-    .to('.auth-container', { 
-      duration: 0.8, 
-      y: -20, 
+    .to('.auth-container', {
+      duration: 0.8,
+      y: -20,
       opacity: 0,
       onComplete: () => {
-        // Navigate to dashboard
-        window.location.href = '/dashboard';
+        // No redirect after auth success
       }
     });
   };
 
   const animateAuthError = (message) => {
     const tl = gsap.timeline();
-    
+
     tl.to('.loading-overlay', { duration: 0.2, opacity: 0 })
     .to('.auth-form', { duration: 0.4, scale: 1, opacity: 1 })
     .from('.error-message', {
@@ -199,18 +197,18 @@ const EnhancedAuthFlow = ({ onAuthSuccess }) => {
       yoyo: true,
       ease: 'power2.inOut'
     }, '-=0.1');
-    
+
     notificationService.show('error', message);
   };
 
   const animateFormErrors = () => {
     const errorElements = document.querySelectorAll('.error-message');
-    
-    gsap.fromTo(errorElements, 
+
+    gsap.fromTo(errorElements,
       { opacity: 0, y: -10 },
-      { 
-        duration: 0.3, 
-        opacity: 1, 
+      {
+        duration: 0.3,
+        opacity: 1,
         y: 0,
         stagger: 0.1,
         ease: 'power2.out'
@@ -221,11 +219,11 @@ const EnhancedAuthFlow = ({ onAuthSuccess }) => {
   const switchAuthMode = (mode) => {
     const isRTL = document.dir === 'rtl' || document.documentElement.dir === 'rtl';
     const slideDirection = isRTL ? (mode === 'login' ? 100 : -100) : (mode === 'login' ? -100 : 100);
-    
+
     const tl = gsap.timeline({
       onComplete: () => setAuthState(mode)
     });
-    
+
     tl.to('.auth-form', {
       duration: 0.3,
       x: slideDirection,
@@ -243,7 +241,7 @@ const EnhancedAuthFlow = ({ onAuthSuccess }) => {
   return (
     <div className="auth-container min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <div className="auth-form bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md relative overflow-hidden">
-        
+
         {/* Loading Overlay */}
         <div className="loading-overlay absolute inset-0 bg-white bg-opacity-90 flex items-center justify-center z-10 opacity-0">
           <div className="text-center">

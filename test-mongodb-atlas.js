@@ -15,7 +15,7 @@
  * @since 2025-10-06
  */
 
-const mongoose = require('mongoose');
+const mongoose = require('./apps/api/node_modules/mongoose');
 const { connectAtlas, healthCheck, getConnectionState } = require('./apps/api/src/config/mongodb-atlas');
 
 // Test configuration

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import MainLayout from '../components/layout/MainLayout';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
 import SmartRoute from '../components/routing/SmartRoute';
@@ -86,7 +86,7 @@ const AppRoutes = () => {
         </SmartRoute>
       } />
       <Route path="/invite/:code" element={<NewOnboarding />} />
-      
+
       {/* Routes with main layout */}
       <Route path="/" element={<MainLayout />}>
         <Route index element={
@@ -129,8 +129,8 @@ const AppRoutes = () => {
             <UIShowcasePage />
           </SmartRoute>
         } />
-        {/* Temporarily disabled map route - redirect to home */}
-        <Route path="map" element={<Navigate to="/" replace />} />
+        {/* Map route disabled */}
+        <Route path="map" element={<div>Map feature coming soon</div>} />
         <Route path="contact" element={
           <SmartRoute path="/contact">
             <ContactPage />
@@ -141,7 +141,7 @@ const AppRoutes = () => {
             <DynamicPage />
           </SmartRoute>
         } />
-        
+
         {/* Protected routes */}
         <Route path="booking/:id" element={
           <SmartRoute path="/booking/:id">
@@ -199,7 +199,7 @@ const AppRoutes = () => {
             </ProtectedRoute>
           </SmartRoute>
         } />
-        
+
         {/* Dynamic pages */}
         <Route path="pages/:url" element={
           <SmartRoute path="/pages/:url">
@@ -249,9 +249,9 @@ const AppRoutes = () => {
             <NeoWallet />
           </SmartRoute>
         } />
-        <Route index element={<Navigate to="home" replace />} />
+        <Route index element={<NeoHome />} />
       </Route>
-      
+
       {/* Admin routes (separate layout) */}
       <Route path="/admin/*" element={
         <SmartRoute path="/admin/*">
@@ -260,7 +260,7 @@ const AppRoutes = () => {
           </ProtectedRoute>
         </SmartRoute>
       } />
-      
+
       {/* Remove catch-all route to allow SPA routing to work */}
       {/* SPA routing will handle unknown routes by serving index.html */}
     </Routes>

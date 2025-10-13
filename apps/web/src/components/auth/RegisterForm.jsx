@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import { Button } from '../ui/Button';
@@ -11,8 +11,7 @@ const RegisterForm = () => {
   const { t } = useTranslation();
   const { t: tFallback } = useTranslationWithFallback();
   const { register } = useAuth();
-  const navigate = useNavigate();
-  
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -36,29 +35,29 @@ const RegisterForm = () => {
 
   const validateForm = () => {
     const errors = {};
-    
+
     if (!formData.firstName.trim()) {
       errors.firstName = tFallback('auth.firstNameRequired', 'First name is required');
     } else if (formData.firstName.length < 2) {
       errors.firstName = tFallback('auth.firstNameMinLength', 'First name must be at least 2 characters');
     }
-    
+
     if (!formData.lastName.trim()) {
       errors.lastName = tFallback('auth.lastNameRequired', 'Last name is required');
     } else if (formData.lastName.length < 2) {
       errors.lastName = tFallback('auth.lastNameMinLength', 'Last name must be at least 2 characters');
     }
-    
+
     if (!formData.email) {
       errors.email = tFallback('auth.emailRequired', 'Email is required');
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       errors.email = tFallback('auth.emailInvalid', 'Please enter a valid email address');
     }
-    
+
     if (formData.phone && !/^(\+966|0)?[5-9][0-9]{8}$/.test(formData.phone.replace(/\s/g, ''))) {
       errors.phone = tFallback('auth.phoneInvalid', 'Please enter a valid Saudi phone number');
     }
-    
+
     if (!formData.password) {
       errors.password = tFallback('auth.passwordRequired', 'Password is required');
     } else if (formData.password.length < 8) {
@@ -66,13 +65,13 @@ const RegisterForm = () => {
     } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
       errors.password = tFallback('auth.passwordComplexity', 'Password must contain uppercase, lowercase, and number');
     }
-    
+
     if (!formData.confirmPassword) {
       errors.confirmPassword = tFallback('auth.confirmPasswordRequired', 'Please confirm your password');
     } else if (formData.password !== formData.confirmPassword) {
       errors.confirmPassword = tFallback('auth.passwordsDoNotMatch', 'Passwords do not match');
     }
-    
+
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -88,13 +87,13 @@ const RegisterForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    
+
     if (!validateForm()) {
       return;
     }
 
     setLoading(true);
-    
+
     try {
       await register({
         firstName: formData.firstName,
@@ -103,7 +102,7 @@ const RegisterForm = () => {
         phone: formData.phone,
         password: formData.password
       });
-      navigate('/dashboard');
+      // No redirect after registration
     } catch (error) {
       setError(error.response?.data?.message || tFallback('auth.registrationFailed', 'Registration failed'));
     } finally {
@@ -131,14 +130,14 @@ const RegisterForm = () => {
             </Link>
           </p>
         </div>
-        
+
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           {error && (
             <div className="rounded-md bg-red-50 p-4">
               <div className="text-sm text-red-700">{error}</div>
             </div>
           )}
-          
+
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -170,7 +169,7 @@ const RegisterForm = () => {
                 />
               </div>
             </div>
-            
+
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                 {t('auth.email')}
@@ -185,7 +184,7 @@ const RegisterForm = () => {
                 onChange={handleChange}
               />
             </div>
-            
+
             <div>
               <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
                 {t('auth.phone')}
@@ -200,7 +199,7 @@ const RegisterForm = () => {
                 placeholder={t('auth.phonePlaceholder')}
               />
             </div>
-            
+
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                 {t('auth.password')}
@@ -215,7 +214,7 @@ const RegisterForm = () => {
                 onChange={handleChange}
               />
             </div>
-            
+
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
                 {t('auth.confirmPassword')}
