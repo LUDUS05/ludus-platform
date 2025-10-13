@@ -957,5 +957,6 @@ module.exports = {
   getRevenueAnalytics,
   getVendorAnalytics,
   getSearchAnalytics,
+  getPerformanceMetrics,
   getPerformanceMetricsDataData
 };

@@ -1,7 +1,7 @@
 /**
  * @fileoverview Enhanced Analytics Routes for LUDUS Platform - LDS-017 Implementation
  * @module routes/analytics
- * 
+ *
  * This module defines all analytics-related API endpoints including:
  * - Dashboard analytics with comprehensive metrics
  * - User behavior analytics
@@ -9,7 +9,7 @@
  * - Vendor performance analytics
  * - Search analytics and discovery insights
  * - Performance metrics and system health
- * 
+ *
  * @version 2.0.0
  * @author LUDUS Development Team
  * @since 2025-01-27
