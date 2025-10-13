@@ -1,6 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { optionalAuth } = require('../middleware/auth');
+const { optionalAuth, authenticate } = require('../middleware/auth');
+const { requireAdminRole } = require('../middleware/rbac');
+const {
+  validateActivityCreation,
+  validateObjectId
+} = require('../middleware/validation');
 const {
   getActivities,
   getActivityById,
@@ -8,7 +13,12 @@ const {
   getPopularActivities,
   getActivitiesByCategory,
   bulkUpdateActivities,
-  bulkDeleteActivities
+  bulkDeleteActivities,
+  createEnhancedActivity,
+  getActivityAnalytics,
+  updateActivityStatus,
+  getPartnerActivities,
+  duplicateActivity
 } = require('../controllers/activityController');
 
 // @desc    Search activities (must be before /:id route)
@@ -35,5 +45,30 @@ router.get('/', optionalAuth, getActivities);
 // @route   GET /api/activities/:id
 // @access  Public
 router.get('/:id', optionalAuth, getActivityById);
+
+// @desc    Create enhanced activity
+// @route   POST /api/activities/enhanced
+// @access  Private (Partners)
+router.post('/enhanced', authenticate, validateActivityCreation, createEnhancedActivity);
+
+// @desc    Get activity analytics
+// @route   GET /api/activities/:id/analytics
+// @access  Private (Partner/Admin)
+router.get('/:id/analytics', authenticate, validateObjectId('id'), getActivityAnalytics);
+
+// @desc    Update activity status
+// @route   PUT /api/activities/:id/status
+// @access  Private (Partner/Admin)
+router.put('/:id/status', authenticate, validateObjectId('id'), updateActivityStatus);
+
+// @desc    Get partner activities
+// @route   GET /api/activities/partner/my
+// @access  Private (Partners)
+router.get('/partner/my', authenticate, getPartnerActivities);
+
+// @desc    Duplicate activity
+// @route   POST /api/activities/:id/duplicate
+// @access  Private (Partner/Admin)
+router.post('/:id/duplicate', authenticate, validateObjectId('id'), duplicateActivity);
 
 module.exports = router;

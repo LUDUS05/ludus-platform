@@ -35,7 +35,34 @@
     "seed": "pnpm --filter @ludus/api seed",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "changeset publish"
+    "release": "changeset publish",
+    "link:linear-notion:dry": "node scripts/notion-linear-linker.js --dry-run --project LUDUS",
+    "link:linear-notion": "node scripts/notion-linear-linker.js --project LUDUS",
+    "workspace:setup": "node scripts/setup-complete-workspace.js",
+    "workspace:setup:dry": "node scripts/setup-complete-workspace.js --dry-run",
+    "workspace:setup:force": "node scripts/setup-complete-workspace.js --force",
+    "workspace": "node scripts/cli/ludus-workspace-cli.js",
+    "workspace:sync": "node scripts/cli/ludus-workspace-cli.js sync:all",
+    "workspace:status": "node scripts/cli/ludus-workspace-cli.js status",
+    "workspace:auto:daily": "node scripts/automation/daily-sync.js",
+    "workspace:auto:weekly": "node scripts/automation/weekly-reports.js",
+    "workspace:auto:budget": "node scripts/automation/budget-monitor.js",
+    "workspace:github:track": "node scripts/integrations/github-repo-tracker.js",
+    "workspace:github:reviews": "node scripts/integrations/github-review-dashboard.js",
+    "workspace:github:releases": "node scripts/integrations/github-release-manager.js",
+    "workspace:dashboard:exec": "node scripts/dashboards/create-executive-dashboard.js",
+    "workspace:dashboard:pm": "node scripts/dashboards/create-pm-dashboard.js",
+    "workspace:dashboard:roles": "node scripts/dashboards/create-role-dashboards.js",
+    "workspace:report:weekly": "node scripts/reporting/report-generator.js weekly",
+    "workspace:report:monthly": "node scripts/reporting/report-generator.js monthly",
+    "workspace:report:quarterly": "node scripts/reporting/report-generator.js quarterly",
+    "workspace:template:setup": "node scripts/templates/template-manager.js setup",
+    "workspace:template:list": "node scripts/templates/template-manager.js list",
+    "workspace:maintain:check": "node scripts/maintenance/workspace-monitor.js check",
+    "workspace:maintain:full": "node scripts/maintenance/workspace-monitor.js maintain",
+    "workspace:maintain:backup": "node scripts/maintenance/workspace-monitor.js backup",
+    "workspace:import:ludus-tasks": "node scripts/integrations/import-ludus-tasks.js",
+    "workspace:status:update": "node scripts/integrations/update-task-status.js"
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.0",
@@ -49,8 +76,10 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.19.1",
+    "@notionhq/client": "^5.1.0",
     "@notionhq/notion-mcp-server": "^1.9.0",
-    "axios": "^1.11.0"
+    "axios": "^1.11.0",
+    "dotenv": "^16.4.5"
   },
   "engines": {
     "node": ">=18.0.0",

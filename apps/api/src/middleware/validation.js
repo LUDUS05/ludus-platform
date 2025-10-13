@@ -540,6 +540,565 @@ const validateObjectId = (paramName) => [
   handleValidationErrors
 ];
 
+// Notification validation rules
+const validateEnhancedNotification = [
+  body('user')
+    .isMongoId()
+    .withMessage('Valid user ID is required'),
+  
+  body('type')
+    .isIn([
+      'booking_confirmed',
+      'booking_cancelled',
+      'booking_reminder',
+      'payment_success',
+      'payment_failed',
+      'review_request',
+      'review_received',
+      'promotion',
+      'system_announcement',
+      'activity_updated',
+      'activity_cancelled',
+      'partner_response',
+      'referral_reward',
+      'welcome',
+      'verification_required'
+    ])
+    .withMessage('Invalid notification type'),
+  
+  body('title')
+    .trim()
+    .notEmpty()
+    .withMessage('Notification title is required')
+    .isLength({ min: 1, max: 100 })
+    .withMessage('Title must be 1-100 characters'),
+  
+  body('titleAr')
+    .optional()
+    .trim()
+    .isLength({ min: 1, max: 100 })
+    .withMessage('Arabic title must be 1-100 characters'),
+  
+  body('message')
+    .trim()
+    .notEmpty()
+    .withMessage('Notification message is required')
+    .isLength({ min: 1, max: 500 })
+    .withMessage('Message must be 1-500 characters'),
+  
+  body('messageAr')
+    .optional()
+    .trim()
+    .isLength({ min: 1, max: 500 })
+    .withMessage('Arabic message must be 1-500 characters'),
+  
+  body('priority')
+    .optional()
+    .isIn(['low', 'normal', 'high', 'urgent'])
+    .withMessage('Invalid priority level'),
+  
+  body('isUrgent')
+    .optional()
+    .isBoolean()
+    .withMessage('isUrgent must be a boolean'),
+  
+  body('actionUrl')
+    .optional()
+    .isURL()
+    .withMessage('Action URL must be a valid URL'),
+  
+  body('imageUrl')
+    .optional()
+    .isURL()
+    .withMessage('Image URL must be a valid URL'),
+  
+  body('channels.email')
+    .optional()
+    .isBoolean()
+    .withMessage('Email channel must be a boolean'),
+  
+  body('channels.sms')
+    .optional()
+    .isBoolean()
+    .withMessage('SMS channel must be a boolean'),
+  
+  body('channels.push')
+    .optional()
+    .isBoolean()
+    .withMessage('Push channel must be a boolean'),
+  
+  body('expiresAt')
+    .optional()
+    .isISO8601()
+    .withMessage('Expiration date must be a valid ISO 8601 date'),
+  
+  handleValidationErrors
+];
+
+const validateBulkNotification = [
+  body('userIds')
+    .isArray({ min: 1 })
+    .withMessage('User IDs array is required and must not be empty'),
+  
+  body('userIds.*')
+    .isMongoId()
+    .withMessage('Each user ID must be a valid MongoDB ObjectId'),
+  
+  body('type')
+    .isIn([
+      'booking_confirmed',
+      'booking_cancelled',
+      'booking_reminder',
+      'payment_success',
+      'payment_failed',
+      'review_request',
+      'review_received',
+      'promotion',
+      'system_announcement',
+      'activity_updated',
+      'activity_cancelled',
+      'partner_response',
+      'referral_reward',
+      'welcome',
+      'verification_required'
+    ])
+    .withMessage('Invalid notification type'),
+  
+  body('title')
+    .trim()
+    .notEmpty()
+    .withMessage('Notification title is required')
+    .isLength({ min: 1, max: 100 })
+    .withMessage('Title must be 1-100 characters'),
+  
+  body('message')
+    .trim()
+    .notEmpty()
+    .withMessage('Notification message is required')
+    .isLength({ min: 1, max: 500 })
+    .withMessage('Message must be 1-500 characters'),
+  
+  handleValidationErrors
+];
+
+const validateNotificationPreferences = [
+  body('preferences')
+    .isObject()
+    .withMessage('Preferences must be an object'),
+  
+  body('preferences.email')
+    .optional()
+    .isObject()
+    .withMessage('Email preferences must be an object'),
+  
+  body('preferences.sms')
+    .optional()
+    .isObject()
+    .withMessage('SMS preferences must be an object'),
+  
+  body('preferences.push')
+    .optional()
+    .isObject()
+    .withMessage('Push preferences must be an object'),
+  
+  body('preferences.frequency')
+    .optional()
+    .isIn(['immediate', 'hourly', 'daily', 'weekly'])
+    .withMessage('Invalid frequency setting'),
+  
+  body('preferences.quietHours.enabled')
+    .optional()
+    .isBoolean()
+    .withMessage('Quiet hours enabled must be a boolean'),
+  
+  body('preferences.quietHours.start')
+    .optional()
+    .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)
+    .withMessage('Quiet hours start must be in HH:MM format'),
+  
+  body('preferences.quietHours.end')
+    .optional()
+    .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)
+    .withMessage('Quiet hours end must be in HH:MM format'),
+  
+  handleValidationErrors
+];
+
+const validateDeliveryStatus = [
+  body('channel')
+    .isIn(['email', 'sms', 'push'])
+    .withMessage('Channel must be email, sms, or push'),
+  
+  body('sent')
+    .isBoolean()
+    .withMessage('Sent status must be a boolean'),
+  
+  body('error')
+    .optional()
+    .isString()
+    .withMessage('Error message must be a string'),
+  
+  handleValidationErrors
+];
+
+// Review validation rules
+const validateReviewCreation = [
+  body('activityId')
+    .isMongoId()
+    .withMessage('Valid activity ID is required'),
+  
+  body('bookingId')
+    .isMongoId()
+    .withMessage('Valid booking ID is required'),
+  
+  body('rating.overall')
+    .isInt({ min: 1, max: 5 })
+    .withMessage('Overall rating must be between 1 and 5'),
+  
+  body('rating.value')
+    .optional()
+    .isInt({ min: 1, max: 5 })
+    .withMessage('Value rating must be between 1 and 5'),
+  
+  body('rating.service')
+    .optional()
+    .isInt({ min: 1, max: 5 })
+    .withMessage('Service rating must be between 1 and 5'),
+  
+  body('rating.location')
+    .optional()
+    .isInt({ min: 1, max: 5 })
+    .withMessage('Location rating must be between 1 and 5'),
+  
+  body('rating.communication')
+    .optional()
+    .isInt({ min: 1, max: 5 })
+    .withMessage('Communication rating must be between 1 and 5'),
+  
+  body('comment')
+    .optional()
+    .isLength({ max: 1000 })
+    .withMessage('Comment cannot exceed 1000 characters'),
+  
+  body('commentAr')
+    .optional()
+    .isLength({ max: 1000 })
+    .withMessage('Arabic comment cannot exceed 1000 characters'),
+  
+  body('images')
+    .optional()
+    .isArray()
+    .withMessage('Images must be an array'),
+  
+  body('images.*.url')
+    .optional()
+    .isURL()
+    .withMessage('Image URL must be valid'),
+  
+  body('images.*.caption')
+    .optional()
+    .isLength({ max: 200 })
+    .withMessage('Image caption cannot exceed 200 characters'),
+  
+  body('images.*.captionAr')
+    .optional()
+    .isLength({ max: 200 })
+    .withMessage('Arabic image caption cannot exceed 200 characters'),
+  
+  handleValidationErrors
+];
+
+const validateReviewUpdate = [
+  body('rating.overall')
+    .optional()
+    .isInt({ min: 1, max: 5 })
+    .withMessage('Overall rating must be between 1 and 5'),
+  
+  body('rating.value')
+    .optional()
+    .isInt({ min: 1, max: 5 })
+    .withMessage('Value rating must be between 1 and 5'),
+  
+  body('rating.service')
+    .optional()
+    .isInt({ min: 1, max: 5 })
+    .withMessage('Service rating must be between 1 and 5'),
+  
+  body('rating.location')
+    .optional()
+    .isInt({ min: 1, max: 5 })
+    .withMessage('Location rating must be between 1 and 5'),
+  
+  body('rating.communication')
+    .optional()
+    .isInt({ min: 1, max: 5 })
+    .withMessage('Communication rating must be between 1 and 5'),
+  
+  body('comment')
+    .optional()
+    .isLength({ max: 1000 })
+    .withMessage('Comment cannot exceed 1000 characters'),
+  
+  body('commentAr')
+    .optional()
+    .isLength({ max: 1000 })
+    .withMessage('Arabic comment cannot exceed 1000 characters'),
+  
+  body('images')
+    .optional()
+    .isArray()
+    .withMessage('Images must be an array'),
+  
+  body('images.*.url')
+    .optional()
+    .isURL()
+    .withMessage('Image URL must be valid'),
+  
+  body('images.*.caption')
+    .optional()
+    .isLength({ max: 200 })
+    .withMessage('Image caption cannot exceed 200 characters'),
+  
+  body('images.*.captionAr')
+    .optional()
+    .isLength({ max: 200 })
+    .withMessage('Arabic image caption cannot exceed 200 characters'),
+  
+  handleValidationErrors
+];
+
+const validatePartnerResponse = [
+  body('comment')
+    .notEmpty()
+    .withMessage('Response comment is required')
+    .isLength({ max: 1000 })
+    .withMessage('Response comment cannot exceed 1000 characters'),
+  
+  body('commentAr')
+    .optional()
+    .isLength({ max: 1000 })
+    .withMessage('Arabic response comment cannot exceed 1000 characters'),
+  
+  handleValidationErrors
+];
+
+const validateReviewModeration = [
+  body('status')
+    .isIn(['pending', 'approved', 'rejected', 'hidden'])
+    .withMessage('Invalid moderation status'),
+  
+  body('notes')
+    .optional()
+    .isLength({ max: 500 })
+    .withMessage('Moderation notes cannot exceed 500 characters'),
+  
+  handleValidationErrors
+];
+
+// Search validation rules
+const validateSearchQuery = [
+  query('query')
+    .optional()
+    .isLength({ min: 1, max: 100 })
+    .withMessage('Search query must be 1-100 characters'),
+  
+  query('category')
+    .optional()
+    .isLength({ min: 1, max: 50 })
+    .withMessage('Category must be 1-50 characters'),
+  
+  query('location')
+    .optional()
+    .isLength({ min: 1, max: 100 })
+    .withMessage('Location must be 1-100 characters'),
+  
+  query('priceMin')
+    .optional()
+    .isInt({ min: 0, max: 10000 })
+    .withMessage('Minimum price must be between 0 and 10000'),
+  
+  query('priceMax')
+    .optional()
+    .isInt({ min: 0, max: 10000 })
+    .withMessage('Maximum price must be between 0 and 10000'),
+  
+  query('rating')
+    .optional()
+    .isFloat({ min: 0, max: 5 })
+    .withMessage('Rating must be between 0 and 5'),
+  
+  query('dateFrom')
+    .optional()
+    .isISO8601()
+    .withMessage('Date from must be a valid ISO 8601 date'),
+  
+  query('dateTo')
+    .optional()
+    .isISO8601()
+    .withMessage('Date to must be a valid ISO 8601 date'),
+  
+  query('sortBy')
+    .optional()
+    .isIn(['relevance', 'price', 'rating', 'date', 'popularity', 'distance'])
+    .withMessage('Invalid sort option'),
+  
+  query('sortOrder')
+    .optional()
+    .isIn(['asc', 'desc'])
+    .withMessage('Sort order must be asc or desc'),
+  
+  query('page')
+    .optional()
+    .isInt({ min: 1, max: 100 })
+    .withMessage('Page must be between 1 and 100'),
+  
+  query('limit')
+    .optional()
+    .isInt({ min: 1, max: 100 })
+    .withMessage('Limit must be between 1 and 100'),
+  
+  query('radius')
+    .optional()
+    .isInt({ min: 1, max: 500 })
+    .withMessage('Radius must be between 1 and 500 km'),
+  
+  query('latitude')
+    .optional()
+    .isFloat({ min: -90, max: 90 })
+    .withMessage('Latitude must be between -90 and 90'),
+  
+  query('longitude')
+    .optional()
+    .isFloat({ min: -180, max: 180 })
+    .withMessage('Longitude must be between -180 and 180'),
+  
+  query('tags')
+    .optional()
+    .isArray()
+    .withMessage('Tags must be an array'),
+  
+  query('features')
+    .optional()
+    .isArray()
+    .withMessage('Features must be an array'),
+  
+  query('difficulty')
+    .optional()
+    .isIn(['beginner', 'intermediate', 'advanced', 'expert'])
+    .withMessage('Invalid difficulty level'),
+  
+  query('duration')
+    .optional()
+    .isIn(['short', 'medium', 'long', 'full-day'])
+    .withMessage('Invalid duration option'),
+  
+  query('groupSize')
+    .optional()
+    .isIn(['individual', 'small', 'medium', 'large'])
+    .withMessage('Invalid group size option'),
+  
+  query('language')
+    .optional()
+    .isIn(['ar', 'en'])
+    .withMessage('Language must be ar or en'),
+  
+  handleValidationErrors
+];
+
+const validateSearchFilters = [
+  query('language')
+    .optional()
+    .isIn(['ar', 'en'])
+    .withMessage('Language must be ar or en'),
+  
+  handleValidationErrors
+];
+
+const validateSearchAnalytics = [
+  query('period')
+    .optional()
+    .isIn(['7d', '30d', '90d', '1y'])
+    .withMessage('Period must be 7d, 30d, 90d, or 1y'),
+  
+  query('groupBy')
+    .optional()
+    .isIn(['category', 'location', 'difficulty', 'duration'])
+    .withMessage('Group by must be category, location, difficulty, or duration'),
+  
+  handleValidationErrors
+];
+
+// Analytics validation rules
+const validateAnalyticsQuery = [
+  query('period')
+    .optional()
+    .isIn(['7d', '30d', '90d', '1y'])
+    .withMessage('Period must be 7d, 30d, 90d, or 1y'),
+  
+  query('groupBy')
+    .optional()
+    .isIn(['day', 'week', 'month', 'year'])
+    .withMessage('Group by must be day, week, month, or year'),
+  
+  query('segment')
+    .optional()
+    .isIn(['all', 'new', 'returning', 'active', 'inactive'])
+    .withMessage('Invalid segment option'),
+  
+  query('vendorId')
+    .optional()
+    .isMongoId()
+    .withMessage('Vendor ID must be a valid MongoDB ObjectId'),
+  
+  query('category')
+    .optional()
+    .isLength({ min: 1, max: 50 })
+    .withMessage('Category must be 1-50 characters'),
+  
+  query('location')
+    .optional()
+    .isLength({ min: 1, max: 100 })
+    .withMessage('Location must be 1-100 characters'),
+  
+  query('startDate')
+    .optional()
+    .isISO8601()
+    .withMessage('Start date must be a valid ISO 8601 date'),
+  
+  query('endDate')
+    .optional()
+    .isISO8601()
+    .withMessage('End date must be a valid ISO 8601 date'),
+  
+  query('limit')
+    .optional()
+    .isInt({ min: 1, max: 1000 })
+    .withMessage('Limit must be between 1 and 1000'),
+  
+  query('offset')
+    .optional()
+    .isInt({ min: 0 })
+    .withMessage('Offset must be a non-negative integer'),
+  
+  handleValidationErrors
+];
+
+const validateAnalyticsPeriod = [
+  query('period')
+    .isIn(['7d', '30d', '90d', '1y'])
+    .withMessage('Period must be 7d, 30d, 90d, or 1y'),
+  
+  handleValidationErrors
+];
+
+const validateAnalyticsGroupBy = [
+  query('groupBy')
+    .isIn(['day', 'week', 'month', 'year'])
+    .withMessage('Group by must be day, week, month, or year'),
+  
+  handleValidationErrors
+];
+
 module.exports = {
   handleValidationErrors,
   validateUserRegistration,
@@ -557,5 +1116,19 @@ module.exports = {
   validateRefund,
   validateSavePaymentMethod,
   validateSearch,
-  validateObjectId
+  validateObjectId,
+  validateEnhancedNotification,
+  validateBulkNotification,
+  validateNotificationPreferences,
+  validateDeliveryStatus,
+  validateReviewCreation,
+  validateReviewUpdate,
+  validatePartnerResponse,
+  validateReviewModeration,
+  validateSearchQuery,
+  validateSearchFilters,
+  validateSearchAnalytics,
+  validateAnalyticsQuery,
+  validateAnalyticsPeriod,
+  validateAnalyticsGroupBy
 };

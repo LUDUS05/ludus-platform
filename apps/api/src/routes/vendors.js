@@ -1,12 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const { optionalAuth } = require('../middleware/auth');
+const { optionalAuth, authenticate } = require('../middleware/auth');
+const { requireAdminRole } = require('../middleware/rbac');
+const {
+  validateObjectId
+} = require('../middleware/validation');
 const {
   getVendorProfile,
   getVendorActivities,
   getVendors,
   getVendorReviews,
-  registerVendor
+  registerVendor,
+  getVendorAnalytics,
+  updateVendorStatus,
+  uploadVendorDocument,
+  getVendorDashboard
 } = require('../controllers/vendorController');
 
 // @desc    Register new vendor
@@ -33,5 +41,25 @@ router.get('/:id/activities', optionalAuth, getVendorActivities);
 // @route   GET /api/vendors/:id
 // @access  Public
 router.get('/:id', optionalAuth, getVendorProfile);
+
+// @desc    Get vendor analytics
+// @route   GET /api/vendors/:id/analytics
+// @access  Private (Vendor/Admin)
+router.get('/:id/analytics', authenticate, validateObjectId('id'), getVendorAnalytics);
+
+// @desc    Update vendor status
+// @route   PUT /api/vendors/:id/status
+// @access  Private (Admin)
+router.put('/:id/status', authenticate, requireAdminRole, validateObjectId('id'), updateVendorStatus);
+
+// @desc    Upload vendor document
+// @route   POST /api/vendors/:id/documents
+// @access  Private (Vendor/Admin)
+router.post('/:id/documents', authenticate, validateObjectId('id'), uploadVendorDocument);
+
+// @desc    Get vendor dashboard
+// @route   GET /api/vendors/dashboard
+// @access  Private (Vendor)
+router.get('/dashboard', authenticate, getVendorDashboard);
 
 module.exports = router;
