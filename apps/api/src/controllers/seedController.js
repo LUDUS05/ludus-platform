@@ -18,7 +18,7 @@ const seedSampleData = async (req, res) => {
       throw new Error('Admin user not found');
     }
 
-    // Create sample categories
+    // Create or find sample categories
     const categoryData = [
       {
         name: 'رياضة',
@@ -50,11 +50,21 @@ const seedSampleData = async (req, res) => {
     ];
     
     console.log('Category data:', JSON.stringify(categoryData, null, 2));
-    const categories = await Category.create(categoryData);
-    console.log('✅ Created categories:', categories.length);
+    
+    // Use upsert to create or update categories
+    const categories = [];
+    for (const catData of categoryData) {
+      const category = await Category.findOneAndUpdate(
+        { name: catData.name },
+        catData,
+        { upsert: true, new: true }
+      );
+      categories.push(category);
+    }
+    console.log('✅ Created/updated categories:', categories.length);
 
-    // Create sample users
-    const users = await User.create([
+    // Create or find sample users
+    const userData = [
       {
         firstName: 'أحمد',
         lastName: 'محمد',
@@ -82,11 +92,21 @@ const seedSampleData = async (req, res) => {
         isEmailVerified: true,
         location: { country: 'Saudi Arabia', city: 'Dammam' }
       }
-    ]);
-    console.log('✅ Created users:', users.length);
+    ];
+    
+    const users = [];
+    for (const userInfo of userData) {
+      const user = await User.findOneAndUpdate(
+        { email: userInfo.email },
+        userInfo,
+        { upsert: true, new: true }
+      );
+      users.push(user);
+    }
+    console.log('✅ Created/updated users:', users.length);
 
-    // Create sample vendors
-    const vendors = await Vendor.create([
+    // Create or find sample vendors
+    const vendorData = [
       {
         businessName: 'نادي الرياضة المثالي',
         businessNameEn: 'Perfect Sports Club',
@@ -121,11 +141,21 @@ const seedSampleData = async (req, res) => {
         isActive: true,
         isVerified: true
       }
-    ]);
-    console.log('✅ Created vendors:', vendors.length);
+    ];
+    
+    const vendors = [];
+    for (const vendorInfo of vendorData) {
+      const vendor = await Vendor.findOneAndUpdate(
+        { email: vendorInfo.email },
+        vendorInfo,
+        { upsert: true, new: true }
+      );
+      vendors.push(vendor);
+    }
+    console.log('✅ Created/updated vendors:', vendors.length);
 
-    // Create sample activities
-    const activities = await Activity.create([
+    // Create or find sample activities
+    const activityData = [
       {
         title: 'كرة القدم الأسبوعية',
         titleEn: 'Weekly Football',
@@ -192,11 +222,21 @@ const seedSampleData = async (req, res) => {
         status: 'published',
         isActive: true
       }
-    ]);
-    console.log('✅ Created activities:', activities.length);
+    ];
+    
+    const activities = [];
+    for (const activityInfo of activityData) {
+      const activity = await Activity.findOneAndUpdate(
+        { title: activityInfo.title },
+        activityInfo,
+        { upsert: true, new: true }
+      );
+      activities.push(activity);
+    }
+    console.log('✅ Created/updated activities:', activities.length);
 
-    // Create sample bookings
-    const bookings = await Booking.create([
+    // Create or find sample bookings
+    const bookingData = [
       {
         user: users[0]._id,
         activity: activities[0]._id,
@@ -227,8 +267,21 @@ const seedSampleData = async (req, res) => {
         paymentStatus: 'pending',
         bookingDate: new Date()
       }
-    ]);
-    console.log('✅ Created bookings:', bookings.length);
+    ];
+    
+    const bookings = [];
+    for (const bookingInfo of bookingData) {
+      const booking = await Booking.findOneAndUpdate(
+        { 
+          user: bookingInfo.user, 
+          activity: bookingInfo.activity 
+        },
+        bookingInfo,
+        { upsert: true, new: true }
+      );
+      bookings.push(booking);
+    }
+    console.log('✅ Created/updated bookings:', bookings.length);
 
     res.json({
       success: true,
