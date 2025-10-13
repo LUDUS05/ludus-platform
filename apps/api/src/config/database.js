@@ -89,6 +89,11 @@ const connectDB = async () => {
     if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'development') {
       if (process.env.MONGODB_URI) {
         console.log('🚀 Connecting to MongoDB Atlas...');
+        
+        // Set up query optimization
+        mongoose.set('lean', true); // Use lean queries by default for better performance
+        mongoose.set('maxTimeMS', 10000); // 10 second query timeout
+        
         return await connectAtlas();
       } else {
         console.error('MONGODB_URI environment variable not set');

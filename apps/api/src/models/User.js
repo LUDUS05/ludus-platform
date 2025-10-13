@@ -308,8 +308,7 @@ const userSchema = new mongoose.Schema({
     index: true
   },
   referredBy: {
-    type: String, // Referral code used during registration
-    index: true
+    type: String // Referral code used during registration
   },
   referralStats: {
     totalReferrals: {

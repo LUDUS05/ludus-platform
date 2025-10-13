@@ -38,8 +38,7 @@ const bookingSchema = new mongoose.Schema({
     id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: [true, 'User ID is required'],
-      index: true
+      required: [true, 'User ID is required']
     },
     name: {
       type: String,
@@ -63,8 +62,7 @@ const bookingSchema = new mongoose.Schema({
     id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Activity',
-      required: [true, 'Activity ID is required'],
-      index: true
+      required: [true, 'Activity ID is required']
     },
     title: {
       type: String,
@@ -99,8 +97,7 @@ const bookingSchema = new mongoose.Schema({
   schedule: {
     date: {
       type: Date,
-      required: [true, 'Booking date is required'],
-      index: true
+      required: [true, 'Booking date is required']
     },
     timeSlot: {
       type: String,
@@ -216,13 +213,11 @@ const bookingSchema = new mongoose.Schema({
     },
     status: {
       type: String,
-      enum: ['pending', 'processing', 'completed', 'failed', 'refunded'],
-      default: 'pending',
-      index: true
+    enum: ['pending', 'processing', 'completed', 'failed', 'refunded'],
+    default: 'pending'
     },
     transactionId: {
-      type: String,
-      index: true
+      type: String
     },
     paidAt: {
       type: Date
@@ -241,8 +236,7 @@ const bookingSchema = new mongoose.Schema({
   status: {
     type: String,
     enum: ['pending_payment', 'confirmed', 'cancelled', 'completed', 'no_show'],
-    default: 'pending_payment',
-    index: true
+    default: 'pending_payment'
   },
 
   // Cancellation Information
