@@ -14,6 +14,7 @@
 
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+require('dotenv').config({ path: '../../.env.production' });
 
 // Import the User model
 const User = require('./src/models/User');
