@@ -182,6 +182,20 @@
     "continueWithFacebook": "Continue with Facebook",
     "continueWithApple": "Continue with Apple",
     "login": "Login",
+    "login": {
+      "title": "Login",
+      "subtitle": "Welcome back",
+      "google": "Login with Google",
+      "email": "Email",
+      "password": "Password",
+      "emailPlaceholder": "Enter your email",
+      "passwordPlaceholder": "Enter your password",
+      "submit": "Login",
+      "noAccount": "Don't have an account? Sign up now",
+      "forgotPassword": "Forgot password?",
+      "privacy": "By using this service, you agree to our Terms of Use and Privacy Policy",
+      "error": "Login failed. Please check your credentials and try again."
+    },
     "register": "Create Account",
     "email": "Email",
     "password": "Password",
@@ -245,7 +259,27 @@
     "result_2": "2 results",
     "result_few": "{{count}} results",
     "result_many": "{{count}} results",
-    "result_other": "{{count}} results"
+    "result_other": "{{count}} results",
+    "hour_0": "Less than an hour",
+    "hour_1": "1 hour",
+    "hour_2": "2 hours",
+    "hour_few": "{{count}} hours",
+    "hour_many": "{{count}} hours",
+    "hour_other": "{{count}} hours",
+    "minute_0": "Less than a minute",
+    "minute_1": "1 minute",
+    "minute_2": "2 minutes",
+    "minute_few": "{{count}} minutes",
+    "minute_many": "{{count}} minutes",
+    "minute_other": "{{count}} minutes",
+    "categories": {
+      "adventure": "Adventure",
+      "cultural": "Cultural",
+      "educational": "Educational",
+      "entertainment": "Entertainment",
+      "sports": "Sports",
+      "wellness": "Wellness"
+    }
   },
   "booking": {
     "title": "Booking",
@@ -1108,12 +1142,21 @@
     "pluralization": {
       "rating_0": "No ratings",
       "rating_1": "One rating",
+      "rating_2": "Two ratings",
+      "rating_few": "{{count}} ratings",
+      "rating_many": "{{count}} ratings",
       "rating_other": "{{count}} ratings",
       "participant_0": "No participants",
       "participant_1": "One participant",
+      "participant_2": "Two participants",
+      "participant_few": "{{count}} participants",
+      "participant_many": "{{count}} participants",
       "participant_other": "{{count}} participants",
       "benefit_0": "No benefits",
       "benefit_1": "One benefit",
+      "benefit_2": "Two benefits",
+      "benefit_few": "{{count}} benefits",
+      "benefit_many": "{{count}} benefits",
       "benefit_other": "{{count}} benefits"
     }
   },
@@ -1215,6 +1258,7 @@
         "title": "What activities interest you?",
         "subtitle": "Select at least {{min}} categories to personalize your experience",
         "selectedCount": "{{count}} of {{total}} selected",
+        "continueBtn": "Continue",
         "categories": {
           "fitness": {
             "name": "Fitness & Sports",
