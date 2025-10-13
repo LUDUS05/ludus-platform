@@ -4,8 +4,8 @@ services:
     name: ludus-backend
     env: node
     plan: starter
-    buildCommand: cd server && npm install --legacy-peer-deps && npm run build
-    startCommand: cd server && node --max-old-space-size=512 --expose-gc src/app.js
+    buildCommand: cd apps/api && npm install --legacy-peer-deps
+    startCommand: cd apps/api && node --max-old-space-size=512 --expose-gc src/app.js
     healthCheckPath: /health
     envVars:
       - key: NODE_ENV
@@ -92,8 +92,8 @@ services:
     name: ludus-backend-athena
     env: node
     plan: starter
-    buildCommand: cd server && npm install --legacy-peer-deps && npm run build
-    startCommand: cd server && node --max-old-space-size=512 --expose-gc src/app.js
+    buildCommand: cd apps/api && npm install --legacy-peer-deps
+    startCommand: cd apps/api && node --max-old-space-size=512 --expose-gc src/app.js
     healthCheckPath: /health
     envVars:
       - key: NODE_ENV
