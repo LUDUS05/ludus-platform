@@ -14,7 +14,7 @@ try {
 }
 
 // Test 2: Check environment variables
-const renderToken = process.env.RENDER_API_TOKEN || 'rnd_AjWyMGFA2vmtx6KidKj4TPVLZwpU';
+const renderToken = process.env.RENDER_API_TOKEN;
 console.log('✅ Render API Token:', renderToken.substring(0, 10) + '...');
 
 // Test 3: Check if MCP server file exists
@@ -40,4 +40,4 @@ console.log('\n🎉 MCP setup verification complete!');
 console.log('\n📋 Next steps:');
 console.log('1. Restart Cursor to load MCP configuration');
 console.log('2. Look for "render-mcp" tools in Cursor');
-console.log('3. Test with: RENDER_API_TOKEN=rnd_AjWyMGFA2vmtx6KidKj4TPVLZwpU node scripts/render-mcp-server.js');
+console.log('3. Test with: RENDER_API_TOKEN=your_token_here node scripts/render-mcp-server.js');

@@ -33,7 +33,7 @@ const { spawn } = require('child_process');
 
 // Configuration
 const SERVER_URL = process.env.SERVER_URL || 'http://localhost:5000';
-const RENDER_API_TOKEN = process.env.RENDER_API_TOKEN || 'rnd_AjWyMGFA2vmtx6KidKj4TPVLZwpU';
+const RENDER_API_TOKEN = process.env.RENDER_API_TOKEN;
 
 // Test data
 const testServiceId = 'test-service-id'; // This will be replaced with actual service ID from API

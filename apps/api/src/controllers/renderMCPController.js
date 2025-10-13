@@ -24,7 +24,7 @@
 const axios = require('axios');
 
 // Render API configuration
-const RENDER_API_TOKEN = process.env.RENDER_API_TOKEN || 'rnd_AjWyMGFA2vmtx6KidKj4TPVLZwpU';
+const RENDER_API_TOKEN = process.env.RENDER_API_TOKEN;
 const RENDER_API_BASE = 'https://api.render.com/v1';
 
 /**
