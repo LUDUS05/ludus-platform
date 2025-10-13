@@ -11,6 +11,12 @@ const seedSampleData = async (req, res) => {
   try {
     console.log('🌱 Starting to seed sample data...');
 
+    // Get admin user for createdBy field
+    const adminUser = await User.findOne({ role: 'admin' });
+    if (!adminUser) {
+      throw new Error('Admin user not found');
+    }
+
     // Create sample categories
     const categories = await Category.create([
       {
@@ -19,7 +25,8 @@ const seedSampleData = async (req, res) => {
         description: 'الأنشطة الرياضية',
         descriptionEn: 'Sports activities',
         icon: 'sports',
-        isActive: true
+        isActive: true,
+        createdBy: adminUser._id
       },
       {
         name: 'ثقافة',
@@ -27,7 +34,8 @@ const seedSampleData = async (req, res) => {
         description: 'الأنشطة الثقافية',
         descriptionEn: 'Cultural activities',
         icon: 'culture',
-        isActive: true
+        isActive: true,
+        createdBy: adminUser._id
       },
       {
         name: 'ترفيه',
@@ -35,7 +43,8 @@ const seedSampleData = async (req, res) => {
         description: 'الأنشطة الترفيهية',
         descriptionEn: 'Entertainment activities',
         icon: 'entertainment',
-        isActive: true
+        isActive: true,
+        createdBy: adminUser._id
       }
     ]);
     console.log('✅ Created categories:', categories.length);
