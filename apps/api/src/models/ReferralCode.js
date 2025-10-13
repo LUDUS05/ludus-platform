@@ -7,7 +7,7 @@ const referralCodeSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
     unique: true,
-    index: true
+    
   },
   code: {
     type: String,

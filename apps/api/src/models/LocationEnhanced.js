@@ -1,11 +1,11 @@
 /**
  * @fileoverview Enhanced Location model for LUDUS platform - LDS-006 Implementation
- * 
+ *
  * This model defines the comprehensive location schema for the LUDUS social activity platform
  * based on the detailed database design specification. It includes location management,
  * hierarchical structure, geospatial support, and activity counting with cultural
  * sensitivity for the Saudi Arabian market.
- * 
+ *
  * Key Features:
  * - Hierarchical location structure (country, region, city, landmark)
  * - Arabic/English bilingual support
@@ -14,7 +14,7 @@
  * - Timezone support
  * - Active/inactive status management
  * - Search and filtering capabilities
- * 
+ *
  * @version 2.0.0
  * @author LUDUS Development Team
  * @since 2025-01-27
@@ -85,8 +85,8 @@ const locationSchema = new mongoose.Schema({
       index: '2dsphere',
       validate: {
         validator: function(coords) {
-          return coords.length === 2 && 
-                 coords[0] >= -180 && coords[0] <= 180 && 
+          return coords.length === 2 &&
+                 coords[0] >= -180 && coords[0] <= 180 &&
                  coords[1] >= -90 && coords[1] <= 90;
         },
         message: 'Invalid coordinates format'
@@ -221,10 +221,10 @@ const locationSchema = new mongoose.Schema({
 
 /**
  * Update location path before saving.
- * 
+ *
  * Updates the location path based on the parent hierarchy
  * for efficient querying and navigation.
- * 
+ *
  * @function
  * @param {Function} next - Express middleware next function
  * @returns {void}
@@ -247,10 +247,10 @@ locationSchema.pre('save', async function(next) {
 
 /**
  * Update parent's children after saving.
- * 
+ *
  * Updates the parent location's children array when
  * a new location is created or parent is changed.
- * 
+ *
  * @function
  * @param {Function} next - Express middleware next function
  * @returns {void}
@@ -267,10 +267,10 @@ locationSchema.post('save', async function(next) {
 
 /**
  * Remove from parent's children after deletion.
- * 
+ *
  * Removes the location from its parent's children array
  * when the location is deleted.
- * 
+ *
  * @function
  * @param {Function} next - Express middleware next function
  * @returns {void}
@@ -287,10 +287,10 @@ locationSchema.post('remove', async function(next) {
 
 /**
  * Get all child locations recursively.
- * 
+ *
  * Retrieves all child locations at all levels below this location
  * in the hierarchy.
- * 
+ *
  * @method getAllChildren
  * @returns {Promise<Array>} Array of all child location documents
  */
@@ -298,16 +298,16 @@ locationSchema.methods.getAllChildren = async function() {
   const children = await this.constructor.find({
     path: { $regex: `^${this.path}/` }
   }).sort({ sortOrder: 1, name: 1 });
-  
+
   return children;
 };
 
 /**
  * Get direct children only.
- * 
+ *
  * Retrieves only the direct children (one level down)
  * from this location.
- * 
+ *
  * @method getDirectChildren
  * @returns {Promise<Array>} Array of direct child location documents
  */
@@ -316,16 +316,16 @@ locationSchema.methods.getDirectChildren = async function() {
     parent: this._id,
     isActive: true
   }).sort({ sortOrder: 1, name: 1 });
-  
+
   return children;
 };
 
 /**
  * Update activity count.
- * 
+ *
  * Updates the activity count for this location and all
  * parent locations in the hierarchy.
- * 
+ *
  * @method updateActivityCount
  * @param {number} change - Change in activity count (positive or negative)
  * @returns {Promise<Location>} The updated location document
@@ -333,7 +333,7 @@ locationSchema.methods.getDirectChildren = async function() {
 locationSchema.methods.updateActivityCount = async function(change) {
   this.activityCount = Math.max(0, this.activityCount + change);
   await this.save();
-  
+
   // Update parent locations
   if (this.parent) {
     const parentLocation = await this.constructor.findById(this.parent);
@@ -341,23 +341,23 @@ locationSchema.methods.updateActivityCount = async function(change) {
       await parentLocation.updateActivityCount(change);
     }
   }
-  
+
   return this;
 };
 
 /**
  * Get location breadcrumb.
- * 
+ *
  * Retrieves the breadcrumb path from root to this location
  * for navigation purposes.
- * 
+ *
  * @method getBreadcrumb
  * @returns {Promise<Array>} Array of location documents in breadcrumb order
  */
 locationSchema.methods.getBreadcrumb = async function() {
   const breadcrumb = [];
   let current = this;
-  
+
   while (current) {
     breadcrumb.unshift(current);
     if (current.parent) {
@@ -366,15 +366,15 @@ locationSchema.methods.getBreadcrumb = async function() {
       current = null;
     }
   }
-  
+
   return breadcrumb;
 };
 
 /**
  * Check if location has children.
- * 
+ *
  * Determines if this location has any active child locations.
- * 
+ *
  * @method hasChildren
  * @returns {Promise<boolean>} True if has children, false otherwise
  */
@@ -388,9 +388,9 @@ locationSchema.methods.hasChildren = async function() {
 
 /**
  * Find locations within radius.
- * 
+ *
  * Finds locations within a specified radius of given coordinates.
- * 
+ *
  * @method findNearby
  * @param {number} longitude - Longitude coordinate
  * @param {number} latitude - Latitude coordinate
@@ -453,8 +453,8 @@ locationSchema.index({ activityCount: -1 });
 locationSchema.index({ 'coordinates.coordinates': '2dsphere' });
 
 // Text index for search
-locationSchema.index({ 
-  name: 'text', 
+locationSchema.index({
+  name: 'text',
   nameEn: 'text',
   description: 'text',
   descriptionEn: 'text'
