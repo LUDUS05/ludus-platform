@@ -1,0 +1,60 @@
+{
+  "startTime": "2025-10-13T08:02:53.146Z",
+  "checks": {
+    "databaseIntegrity": {
+      "total": 6,
+      "accessible": 6,
+      "issues": 0
+    },
+    "relationships": {
+      "total": 3,
+      "valid": 3,
+      "issues": 0
+    },
+    "duplicates": {
+      "projects": [],
+      "tasks": [],
+      "team": []
+    },
+    "requiredFields": {
+      "projects": 0,
+      "tasks": 0,
+      "team": 0
+    },
+    "apiUsage": {
+      "requests": 0,
+      "rateLimit": 3,
+      "remaining": "Unknown",
+      "resetTime": null
+    }
+  },
+  "healthReport": {
+    "timestamp": "2025-10-13T08:02:57.492Z",
+    "workspace": "Active",
+    "databases": {
+      "total": 6,
+      "accessible": 6,
+      "issues": 0
+    },
+    "relationships": {
+      "total": 3,
+      "valid": 3,
+      "issues": 0
+    },
+    "dataQuality": {
+      "orphanedEntries": 0,
+      "duplicates": 0,
+      "missingRequired": 0
+    },
+    "apiUsage": {
+      "status": "Normal",
+      "requests": 0
+    },
+    "issues": [],
+    "warnings": [],
+    "autoFixed": [],
+    "overallHealth": "Good"
+  },
+  "endTime": "2025-10-13T08:02:57.492Z",
+  "duration": 4.346
+}

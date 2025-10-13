@@ -1,0 +1,12 @@
+packages:
+  # Main applications
+  - 'apps/*'
+  
+  # Shared packages
+  - 'packages/*'
+  
+  # Tools and utilities
+  - 'tools/*'
+  
+  # Documentation
+  - 'docs/*'

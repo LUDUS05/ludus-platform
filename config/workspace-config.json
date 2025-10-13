@@ -1,0 +1,158 @@
+{
+  "workspace": {
+    "name": "LUDUS Platform Management",
+    "description": "Comprehensive project management and operations system for LUDUS Platform",
+    "version": "1.0.0",
+    "lastUpdated": "2025-10-12T16:44:54.275Z"
+  },
+  "databases": {
+    "projects": {
+      "id": "182e2320-460f-45ec-9d62-28006766467f",
+      "name": "LUDUS Projects Master",
+      "created": "2025-10-12T16:44:43.158Z",
+      "updated": "2025-10-12T16:44:43.158Z"
+    },
+    "tasks": {
+      "id": "b4085871-43d1-4d5a-8b95-e1762bdccd39",
+      "name": "Development Tasks",
+      "created": "2025-10-12T16:44:47.977Z",
+      "updated": "2025-10-12T16:44:47.977Z"
+    },
+    "operations": {
+      "id": "a7683d7e-aa91-4e09-86a6-b217b2d12085",
+      "name": "Operations & Team Tasks",
+      "created": "2025-10-12T16:44:49.170Z",
+      "updated": "2025-10-12T16:44:49.170Z"
+    },
+    "budget": {
+      "id": "8c0a2f34-7f50-4ab3-abec-cb7242190201",
+      "name": "Budget & Financial Tracking",
+      "created": "2025-10-12T16:44:50.823Z",
+      "updated": "2025-10-12T16:44:50.823Z"
+    },
+    "documents": {
+      "id": "12dd1fe5-1202-4b0c-9951-e5984a60ba71",
+      "name": "Documents Hub",
+      "created": "2025-10-12T16:44:51.814Z",
+      "updated": "2025-10-12T16:44:51.814Z"
+    },
+    "team": {
+      "id": "afbc1ce2-a00c-4f3a-b5f9-852de805ab5c",
+      "name": "Team Directory",
+      "created": "2025-10-12T16:44:53.186Z",
+      "updated": "2025-10-12T16:44:53.186Z"
+    },
+    "activities": {
+      "id": null,
+      "name": "Activities",
+      "created": null
+    },
+    "users": {
+      "id": null,
+      "name": "Users",
+      "created": null
+    },
+    "vendors": {
+      "id": null,
+      "name": "Vendors",
+      "created": null
+    },
+    "technical_tasks": {
+      "id": null,
+      "name": "Technical Tasks",
+      "created": null
+    }
+  },
+  "pages": {
+    "main": {
+      "id": "28ad89db-3f91-8182-87ba-ef00d74dc9d0",
+      "name": "LUDUS Platform - Social Activity Management",
+      "created": "2025-10-12T16:44:31.200Z",
+      "updated": "2025-10-12T16:44:31.200Z"
+    },
+    "project_management": {
+      "id": "28ad89db-3f91-81cd-a973-fcc863dd079e",
+      "name": "Project Management",
+      "created": "2025-10-12T16:44:33.470Z",
+      "updated": "2025-10-12T16:44:33.470Z"
+    },
+    "features": {
+      "id": "28ad89db-3f91-814a-a77d-d8d63c0a2d7b",
+      "name": "LUDUS Platform Features",
+      "created": "2025-10-12T16:44:35.736Z",
+      "updated": "2025-10-12T16:44:35.736Z"
+    },
+    "development": {
+      "id": "28ad89db-3f91-8115-b7e6-d78c2f54de6b",
+      "name": "Development",
+      "created": "2025-10-12T16:44:37.965Z",
+      "updated": "2025-10-12T16:44:37.965Z"
+    },
+    "documentation": {
+      "id": "28ad89db-3f91-8111-8d71-e0f7c78804bd",
+      "name": "Documentation",
+      "created": "2025-10-12T16:44:42.471Z",
+      "updated": "2025-10-12T16:44:42.471Z"
+    },
+    "archived_content": {
+      "id": null,
+      "name": "Archived Content",
+      "created": null
+    },
+    "executive_dashboard": {
+      "id": null,
+      "name": "Executive Dashboard",
+      "created": null
+    },
+    "pm_dashboard": {
+      "id": null,
+      "name": "Project Manager Dashboard",
+      "created": null
+    },
+    "parent": {
+      "id": "28ad89db3f91808eaee9f48c9619e2c5",
+      "name": "Parent Container",
+      "created": "2025-10-12T16:44:26.530Z",
+      "updated": "2025-10-12T16:44:26.530Z"
+    }
+  },
+  "integrations": {
+    "linear": {
+      "enabled": true,
+      "apiKey": null,
+      "defaultTeam": "LDS",
+      "syncInterval": "daily"
+    },
+    "github": {
+      "enabled": true,
+      "apiKey": null,
+      "organization": "ludus-platform",
+      "repositories": []
+    },
+    "render": {
+      "enabled": true,
+      "apiKey": null,
+      "services": []
+    }
+  },
+  "automation": {
+    "dailySync": {
+      "enabled": true,
+      "schedule": "0 9 * * *"
+    },
+    "weeklyReports": {
+      "enabled": true,
+      "schedule": "0 9 * * 1"
+    },
+    "budgetMonitoring": {
+      "enabled": true,
+      "schedule": "0 0 * * *"
+    }
+  },
+  "settings": {
+    "timezone": "Asia/Riyadh",
+    "currency": "SAR",
+    "dateFormat": "YYYY-MM-DD",
+    "locale": "ar-SA"
+  }
+}

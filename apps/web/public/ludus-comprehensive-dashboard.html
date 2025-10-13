@@ -1,0 +1,1801 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم منصة لودوس الشاملة - LUDUS Comprehensive Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+          /* Primitive Color Tokens */
+          --color-white: rgba(255, 255, 255, 1);
+          --color-black: rgba(0, 0, 0, 1);
+          --color-cream-50: rgba(252, 252, 249, 1);
+          --color-cream-100: rgba(255, 255, 253, 1);
+          --color-gray-200: rgba(245, 245, 245, 1);
+          --color-gray-300: rgba(167, 169, 169, 1);
+          --color-gray-400: rgba(119, 124, 124, 1);
+          --color-slate-500: rgba(98, 108, 113, 1);
+          --color-brown-600: rgba(94, 82, 64, 1);
+          --color-charcoal-700: rgba(31, 33, 33, 1);
+          --color-charcoal-800: rgba(38, 40, 40, 1);
+          --color-slate-900: rgba(19, 52, 59, 1);
+          --color-teal-300: rgba(50, 184, 198, 1);
+          --color-teal-400: rgba(45, 166, 178, 1);
+          --color-teal-500: rgba(33, 128, 141, 1);
+          --color-teal-600: rgba(29, 116, 128, 1);
+          --color-teal-700: rgba(26, 104, 115, 1);
+          --color-teal-800: rgba(41, 150, 161, 1);
+          --color-red-400: rgba(255, 84, 89, 1);
+          --color-red-500: rgba(192, 21, 47, 1);
+          --color-orange-400: rgba(230, 129, 97, 1);
+          --color-orange-500: rgba(168, 75, 47, 1);
+        
+          /* RGB versions for opacity control */
+          --color-brown-600-rgb: 94, 82, 64;
+          --color-teal-500-rgb: 33, 128, 141;
+          --color-slate-900-rgb: 19, 52, 59;
+          --color-slate-500-rgb: 98, 108, 113;
+          --color-red-500-rgb: 192, 21, 47;
+          --color-red-400-rgb: 255, 84, 89;
+          --color-orange-500-rgb: 168, 75, 47;
+          --color-orange-400-rgb: 230, 129, 97;
+        
+          /* Background color tokens (Light Mode) */
+          --color-bg-1: rgba(59, 130, 246, 0.08);
+          --color-bg-2: rgba(245, 158, 11, 0.08);
+          --color-bg-3: rgba(34, 197, 94, 0.08);
+          --color-bg-4: rgba(239, 68, 68, 0.08);
+          --color-bg-5: rgba(147, 51, 234, 0.08);
+          --color-bg-6: rgba(249, 115, 22, 0.08);
+          --color-bg-7: rgba(236, 72, 153, 0.08);
+          --color-bg-8: rgba(6, 182, 212, 0.08);
+        
+          /* Semantic Color Tokens (Light Mode) */
+          --color-background: var(--color-cream-50);
+          --color-surface: var(--color-cream-100);
+          --color-text: var(--color-slate-900);
+          --color-text-secondary: var(--color-slate-500);
+          --color-primary: var(--color-teal-500);
+          --color-primary-hover: var(--color-teal-600);
+          --color-primary-active: var(--color-teal-700);
+          --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
+          --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
+          --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.25);
+          --color-border: rgba(var(--color-brown-600-rgb), 0.2);
+          --color-btn-primary-text: var(--color-cream-50);
+          --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
+          --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12);
+          --color-error: var(--color-red-500);
+          --color-success: var(--color-teal-500);
+          --color-warning: var(--color-orange-500);
+          --color-info: var(--color-slate-500);
+          --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
+        
+          /* Typography */
+          --font-family-base: "Cairo", "FKGroteskNeue", "Geist", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+          --font-size-xs: 11px;
+          --font-size-sm: 12px;
+          --font-size-base: 14px;
+          --font-size-md: 14px;
+          --font-size-lg: 16px;
+          --font-size-xl: 18px;
+          --font-size-2xl: 20px;
+          --font-size-3xl: 24px;
+          --font-size-4xl: 30px;
+          --font-weight-light: 300;
+          --font-weight-normal: 400;
+          --font-weight-semibold: 600;
+          --font-weight-bold: 700;
+          --line-height-tight: 1.3;
+          --line-height-normal: 1.6;
+        
+          /* Spacing */
+          --space-4: 4px;
+          --space-8: 8px;
+          --space-12: 12px;
+          --space-16: 16px;
+          --space-20: 20px;
+          --space-24: 24px;
+          --space-32: 32px;
+          --space-48: 48px;
+        
+          /* Border Radius */
+          --radius-sm: 6px;
+          --radius-base: 8px;
+          --radius-md: 10px;
+          --radius-lg: 12px;
+          --radius-xl: 16px;
+        
+          /* Shadows */
+          --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+          --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+          --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+        
+          /* Animation */
+          --duration-fast: 150ms;
+          --duration-normal: 250ms;
+          --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+
+          /* LUDUS Brand Colors */
+          --ludus-primary: #E6814F;
+          --ludus-secondary: #D2473C;
+          --ludus-accent: #F4A261;
+          --ludus-gradient: linear-gradient(135deg, #E6814F 0%, #D2473C 100%);
+        }
+        
+        * {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+        }
+        
+        body {
+          font-family: var(--font-family-base);
+          background: var(--color-background);
+          color: var(--color-text);
+          line-height: var(--line-height-normal);
+          font-size: var(--font-size-base);
+          direction: rtl;
+        }
+
+        .header {
+          background: var(--ludus-gradient);
+          color: white;
+          padding: var(--space-48) var(--space-24);
+          text-align: center;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .header::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20"><circle cx="20" cy="10" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="60" cy="5" r="1.5" fill="rgba(255,255,255,0.08)"/><circle cx="80" cy="15" r="1" fill="rgba(255,255,255,0.06)"/></svg>') repeat;
+          pointer-events: none;
+        }
+
+        .logo {
+          font-size: 2.5rem;
+          font-weight: var(--font-weight-bold);
+          margin-bottom: var(--space-16);
+          position: relative;
+          z-index: 1;
+        }
+
+        .header h1 {
+          font-size: var(--font-size-4xl);
+          font-weight: var(--font-weight-bold);
+          margin-bottom: var(--space-12);
+          position: relative;
+          z-index: 1;
+        }
+
+        .header .subtitle {
+          font-size: var(--font-size-xl);
+          font-weight: var(--font-weight-normal);
+          opacity: 0.9;
+          position: relative;
+          z-index: 1;
+        }
+
+        .container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: var(--space-24);
+        }
+
+        .phases-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: var(--space-32);
+          margin-top: var(--space-48);
+        }
+
+        @media (min-width: 768px) {
+          .phases-grid {
+            grid-template-columns: 1fr 1fr;
+          }
+        }
+
+        .phase-card {
+          background: var(--color-surface);
+          border-radius: var(--radius-xl);
+          box-shadow: var(--shadow-lg);
+          overflow: hidden;
+          transition: transform var(--duration-normal) var(--ease-standard), box-shadow var(--duration-normal) var(--ease-standard);
+          border: 1px solid var(--color-card-border);
+        }
+
+        .phase-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .phase-header {
+          background: var(--ludus-gradient);
+          color: white;
+          padding: var(--space-24);
+          position: relative;
+        }
+
+        .phase-number {
+          position: absolute;
+          top: var(--space-12);
+          left: var(--space-24);
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.2);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: var(--font-weight-bold);
+          font-size: var(--font-size-xl);
+        }
+
+        .phase-title {
+          font-size: var(--font-size-2xl);
+          font-weight: var(--font-weight-bold);
+          margin-bottom: var(--space-8);
+          padding-right: 60px;
+        }
+
+        .phase-period {
+          display: inline-block;
+          background: rgba(255, 255, 255, 0.2);
+          padding: var(--space-4) var(--space-12);
+          border-radius: var(--radius-lg);
+          font-size: var(--font-size-sm);
+          font-weight: var(--font-weight-semibold);
+          margin-bottom: var(--space-16);
+        }
+
+        .phase-goal {
+          font-size: var(--font-size-base);
+          line-height: var(--line-height-normal);
+          opacity: 0.95;
+        }
+
+        .phase-content {
+          padding: var(--space-24);
+        }
+
+        .objectives-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: var(--space-12);
+          margin-bottom: var(--space-24);
+        }
+
+        @media (min-width: 480px) {
+          .objectives-grid {
+            grid-template-columns: 1fr 1fr;
+          }
+        }
+
+        .objective-item {
+          display: flex;
+          align-items: flex-start;
+          gap: var(--space-8);
+          padding: var(--space-12);
+          background: var(--color-bg-3);
+          border-radius: var(--radius-md);
+          border-right: 3px solid var(--ludus-primary);
+        }
+
+        .objective-icon {
+          color: var(--ludus-primary);
+          font-size: var(--font-size-lg);
+          margin-top: var(--space-4);
+        }
+
+        .sections-list {
+          display: flex;
+          flex-direction: column;
+          gap: var(--space-16);
+        }
+
+        .section-item {
+          border: 1px solid var(--color-card-border);
+          border-radius: var(--radius-lg);
+          overflow: hidden;
+          transition: all var(--duration-normal) var(--ease-standard);
+        }
+
+        .section-header {
+          display: flex;
+          align-items: center;
+          gap: var(--space-12);
+          padding: var(--space-16) var(--space-20);
+          background: var(--color-bg-1);
+          cursor: pointer;
+          transition: background-color var(--duration-fast) var(--ease-standard);
+          border: none;
+          width: 100%;
+          text-align: right;
+        }
+
+        .section-header:hover {
+          background: var(--color-bg-2);
+        }
+
+        .section-icon {
+          width: 40px;
+          height: 40px;
+          border-radius: var(--radius-base);
+          background: var(--ludus-gradient);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-size: var(--font-size-lg);
+        }
+
+        .section-title {
+          font-size: var(--font-size-lg);
+          font-weight: var(--font-weight-semibold);
+          color: var(--color-text);
+        }
+
+        .expand-icon {
+          margin-right: auto;
+          color: var(--color-text-secondary);
+          transition: transform var(--duration-normal) var(--ease-standard);
+        }
+
+        .section-item.expanded .expand-icon {
+          transform: rotate(180deg);
+        }
+
+        .section-content {
+          max-height: 0;
+          overflow: hidden;
+          transition: max-height var(--duration-normal) var(--ease-standard);
+        }
+
+        .section-item.expanded .section-content {
+          max-height: 1000px;
+        }
+
+        .section-body {
+          padding: var(--space-20);
+          background: var(--color-surface);
+        }
+
+        .subsection {
+          margin-bottom: var(--space-20);
+        }
+
+        .subsection:last-child {
+          margin-bottom: 0;
+        }
+
+        .subsection-title {
+          font-size: var(--font-size-base);
+          font-weight: var(--font-weight-semibold);
+          color: var(--ludus-secondary);
+          margin-bottom: var(--space-12);
+          display: flex;
+          align-items: center;
+          gap: var(--space-8);
+        }
+
+        .subsection-title i {
+          font-size: var(--font-size-sm);
+        }
+
+        .item-list {
+          list-style: none;
+          display: flex;
+          flex-direction: column;
+          gap: var(--space-8);
+        }
+
+        .item-list li {
+          display: flex;
+          align-items: flex-start;
+          gap: var(--space-8);
+          padding: var(--space-8) var(--space-12);
+          background: var(--color-bg-8);
+          border-radius: var(--radius-base);
+          font-size: var(--font-size-sm);
+          line-height: var(--line-height-normal);
+        }
+
+        .item-list li::before {
+          content: '●';
+          color: var(--ludus-primary);
+          font-weight: var(--font-weight-bold);
+          margin-top: 2px;
+        }
+
+        .kpi-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: var(--space-12);
+        }
+
+        @media (min-width: 480px) {
+          .kpi-grid {
+            grid-template-columns: 1fr 1fr;
+          }
+        }
+
+        .kpi-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: var(--space-12) var(--space-16);
+          background: var(--color-bg-6);
+          border-radius: var(--radius-md);
+          border-right: 3px solid var(--ludus-accent);
+        }
+
+        .kpi-label {
+          font-size: var(--font-size-sm);
+          color: var(--color-text-secondary);
+          font-weight: var(--font-weight-normal);
+        }
+
+        .kpi-value {
+          font-size: var(--font-size-base);
+          font-weight: var(--font-weight-bold);
+          color: var(--ludus-secondary);
+        }
+
+        .budget-breakdown {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: var(--space-8);
+        }
+
+        .budget-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: var(--space-8) var(--space-12);
+          background: var(--color-bg-4);
+          border-radius: var(--radius-base);
+        }
+
+        .budget-label {
+          font-size: var(--font-size-sm);
+          color: var(--color-text);
+        }
+
+        .budget-amount {
+          font-weight: var(--font-weight-semibold);
+          color: var(--ludus-secondary);
+        }
+
+        .timeline-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: var(--space-12);
+        }
+
+        .timeline-item {
+          display: flex;
+          align-items: center;
+          gap: var(--space-12);
+          padding: var(--space-12);
+          background: var(--color-bg-5);
+          border-radius: var(--radius-md);
+        }
+
+        .timeline-month {
+          font-weight: var(--font-weight-bold);
+          color: var(--ludus-primary);
+          min-width: 80px;
+        }
+
+        .timeline-desc {
+          font-size: var(--font-size-sm);
+          color: var(--color-text);
+        }
+
+        @media (max-width: 767px) {
+          .header {
+            padding: var(--space-32) var(--space-16);
+          }
+
+          .header h1 {
+            font-size: var(--font-size-3xl);
+          }
+
+          .phase-title {
+            font-size: var(--font-size-xl);
+            padding-right: 50px;
+          }
+
+          .objectives-grid,
+          .kpi-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .container {
+            padding: var(--space-16);
+          }
+        }
+
+        .fade-in {
+          opacity: 0;
+          transform: translateY(20px);
+          animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        @keyframes fadeInUp {
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .phase-card:nth-child(1) {
+          animation-delay: 0.1s;
+        }
+
+        .phase-card:nth-child(2) {
+          animation-delay: 0.3s;
+        }
+
+        /* Navigation Page Styles */
+        .nav-page {
+          display: block;
+        }
+
+        .nav-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: var(--space-32);
+          margin-top: var(--space-48);
+          max-width: 800px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        @media (min-width: 768px) {
+          .nav-grid {
+            grid-template-columns: 1fr 1fr;
+          }
+        }
+
+        .nav-card {
+          background: var(--color-surface);
+          border-radius: var(--radius-xl);
+          box-shadow: var(--shadow-lg);
+          overflow: hidden;
+          transition: all var(--duration-normal) var(--ease-standard);
+          border: 1px solid var(--color-card-border);
+          cursor: pointer;
+        }
+
+        .nav-card:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+
+        .nav-card-header {
+          background: var(--ludus-gradient);
+          color: white;
+          padding: var(--space-32);
+          text-align: center;
+          position: relative;
+        }
+
+        .nav-card-icon {
+          width: 80px;
+          height: 80px;
+          margin: 0 auto var(--space-16);
+          background: rgba(255, 255, 255, 0.2);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 2.5rem;
+        }
+
+        .nav-card-title {
+          font-size: var(--font-size-3xl);
+          font-weight: var(--font-weight-bold);
+          margin-bottom: var(--space-8);
+        }
+
+        .nav-card-desc {
+          font-size: var(--font-size-lg);
+          opacity: 0.9;
+        }
+
+        .nav-card-body {
+          padding: var(--space-24);
+          text-align: center;
+        }
+
+        .nav-card-features {
+          list-style: none;
+          display: flex;
+          flex-direction: column;
+          gap: var(--space-12);
+        }
+
+        .nav-card-features li {
+          display: flex;
+          align-items: center;
+          gap: var(--space-8);
+          font-size: var(--font-size-base);
+          color: var(--color-text-secondary);
+        }
+
+        .nav-card-features i {
+          color: var(--ludus-primary);
+          font-size: var(--font-size-lg);
+        }
+
+        /* Page States */
+        .page {
+          display: none;
+        }
+
+        .page.active {
+          display: block;
+        }
+
+        /* Financial Dashboard Styles */
+        .financial-header {
+          background: var(--ludus-gradient);
+          color: white;
+          padding: var(--space-32) var(--space-24);
+          text-align: center;
+          position: relative;
+        }
+
+        .back-button {
+          position: absolute;
+          top: var(--space-16);
+          right: var(--space-24);
+          background: rgba(255, 255, 255, 0.2);
+          border: none;
+          color: white;
+          padding: var(--space-8) var(--space-16);
+          border-radius: var(--radius-base);
+          cursor: pointer;
+          font-size: var(--font-size-base);
+          transition: background var(--duration-fast);
+        }
+
+        .back-button:hover {
+          background: rgba(255, 255, 255, 0.3);
+        }
+
+        .metrics-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: var(--space-20);
+          margin-bottom: var(--space-32);
+        }
+
+        @media (min-width: 640px) {
+          .metrics-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+
+        @media (min-width: 1024px) {
+          .metrics-grid {
+            grid-template-columns: repeat(4, 1fr);
+          }
+        }
+
+        .metric-card {
+          background: var(--color-surface);
+          padding: var(--space-24);
+          border-radius: var(--radius-lg);
+          box-shadow: var(--shadow-sm);
+          border: 1px solid var(--color-card-border);
+          text-align: center;
+          transition: transform var(--duration-fast);
+        }
+
+        .metric-card:hover {
+          transform: translateY(-2px);
+        }
+
+        .metric-icon {
+          width: 50px;
+          height: 50px;
+          margin: 0 auto var(--space-12);
+          background: var(--ludus-gradient);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-size: var(--font-size-xl);
+        }
+
+        .metric-value {
+          font-size: var(--font-size-3xl);
+          font-weight: var(--font-weight-bold);
+          color: var(--ludus-primary);
+          margin-bottom: var(--space-4);
+        }
+
+        .metric-label {
+          font-size: var(--font-size-sm);
+          color: var(--color-text-secondary);
+          font-weight: var(--font-weight-semibold);
+        }
+
+        .section-title-main {
+          font-size: var(--font-size-3xl);
+          font-weight: var(--font-weight-bold);
+          color: var(--color-text);
+          margin-bottom: var(--space-24);
+          display: flex;
+          align-items: center;
+          gap: var(--space-12);
+        }
+
+        .section-title-main i {
+          color: var(--ludus-primary);
+        }
+
+        .chart-container {
+          background: var(--color-surface);
+          padding: var(--space-24);
+          border-radius: var(--radius-lg);
+          box-shadow: var(--shadow-sm);
+          border: 1px solid var(--color-card-border);
+          margin-bottom: var(--space-32);
+          height: 400px;
+        }
+
+        .chart-container canvas {
+          max-height: 350px;
+        }
+
+        .revenue-streams {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: var(--space-16);
+          margin-bottom: var(--space-32);
+        }
+
+        @media (min-width: 768px) {
+          .revenue-streams {
+            grid-template-columns: repeat(3, 1fr);
+          }
+        }
+
+        .revenue-stream {
+          background: var(--color-surface);
+          padding: var(--space-20);
+          border-radius: var(--radius-lg);
+          border: 1px solid var(--color-card-border);
+          text-align: center;
+        }
+
+        .stream-percentage {
+          font-size: var(--font-size-4xl);
+          font-weight: var(--font-weight-bold);
+          color: var(--ludus-primary);
+          margin-bottom: var(--space-8);
+        }
+
+        .stream-name {
+          font-size: var(--font-size-base);
+          font-weight: var(--font-weight-semibold);
+          margin-bottom: var(--space-8);
+        }
+
+        .stream-desc {
+          font-size: var(--font-size-sm);
+          color: var(--color-text-secondary);
+          line-height: var(--line-height-normal);
+        }
+
+        .expenses-breakdown {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: var(--space-12);
+        }
+
+        @media (min-width: 640px) {
+          .expenses-breakdown {
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+
+        .expense-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: var(--space-16);
+          background: var(--color-bg-2);
+          border-radius: var(--radius-md);
+          border-right: 4px solid var(--ludus-primary);
+        }
+
+        .expense-label {
+          font-size: var(--font-size-base);
+          font-weight: var(--font-weight-medium);
+        }
+
+        .expense-amount {
+          font-size: var(--font-size-lg);
+          font-weight: var(--font-weight-bold);
+          color: var(--ludus-secondary);
+        }
+
+        .profitability-table {
+          width: 100%;
+          border-collapse: collapse;
+          background: var(--color-surface);
+          border-radius: var(--radius-lg);
+          overflow: hidden;
+          box-shadow: var(--shadow-sm);
+          margin-bottom: var(--space-32);
+        }
+
+        .profitability-table th,
+        .profitability-table td {
+          padding: var(--space-16);
+          text-align: center;
+          border-bottom: 1px solid var(--color-card-border);
+        }
+
+        .profitability-table th {
+          background: var(--ludus-gradient);
+          color: white;
+          font-weight: var(--font-weight-bold);
+        }
+
+        .profitability-table td {
+          font-weight: var(--font-weight-medium);
+        }
+
+        .positive {
+          color: var(--color-success);
+        }
+
+        .negative {
+          color: var(--color-error);
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Navigation Page -->
+    <div id="nav-page" class="page nav-page active">
+        <div class="header">
+            <div class="logo">لودوس LUDUS</div>
+            <h1>لوحة تحكم منصة لودوس الشاملة</h1>
+            <div class="subtitle">النظام المالي والتشغيلي المتكامل</div>
+        </div>
+
+        <div class="container">
+            <div class="nav-grid">
+                <!-- Financial Card -->
+                <div class="nav-card fade-in" onclick="showPage('financial-page')">
+                    <div class="nav-card-header">
+                        <div class="nav-card-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h2 class="nav-card-title">المالية</h2>
+                        <p class="nav-card-desc">الخطة المالية الشاملة والتوقعات</p>
+                    </div>
+                    <div class="nav-card-body">
+                        <ul class="nav-card-features">
+                            <li><i class="fas fa-money-bill-wave"></i> نموذج الإيرادات والتمويل</li>
+                            <li><i class="fas fa-chart-pie"></i> توزيع الميزانية والمصروفات</li>
+                            <li><i class="fas fa-trending-up"></i> توقعات النمو والربحية</li>
+                            <li><i class="fas fa-calculator"></i> مؤشرات الوحدة الاقتصادية</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Operations Card -->
+                <div class="nav-card fade-in" onclick="showPage('operations-page')">
+                    <div class="nav-card-header">
+                        <div class="nav-card-icon">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <h2 class="nav-card-title">التشغيل</h2>
+                        <p class="nav-card-desc">خطط التشغيل والمراحل</p>
+                    </div>
+                    <div class="nav-card-body">
+                        <ul class="nav-card-features">
+                            <li><i class="fas fa-rocket"></i> مرحلة الإطلاق التجريبي</li>
+                            <li><i class="fas fa-expand-arrows-alt"></i> خطة التوسع والتحسين</li>
+                            <li><i class="fas fa-users"></i> استراتيجية اكتساب المستخدمين</li>
+                            <li><i class="fas fa-bullhorn"></i> الخطط التسويقية</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Financial Page -->
+    <div id="financial-page" class="page">
+        <div class="financial-header">
+            <button class="back-button" onclick="showPage('nav-page')">
+                <i class="fas fa-arrow-right"></i> العودة للرئيسية
+            </button>
+            <div class="logo">لودوس LUDUS</div>
+            <h1>الخطة المالية الشاملة</h1>
+            <div class="subtitle">سبتمبر 2025 – أغسطس 2026</div>
+        </div>
+
+        <div class="container">
+            <!-- Financial Overview -->
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-icon"><i class="fas fa-coins"></i></div>
+                    <div class="metric-value">750,000</div>
+                    <div class="metric-label">إجمالي التمويل (ريال)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon"><i class="fas fa-target"></i></div>
+                    <div class="metric-value">1,000,000</div>
+                    <div class="metric-label">هدف الإيرادات (ريال)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon"><i class="fas fa-chart-line"></i></div>
+                    <div class="metric-value">2,200,000</div>
+                    <div class="metric-label">إجمالي GMV (ريال)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon"><i class="fas fa-calendar-check"></i></div>
+                    <div class="metric-value">16</div>
+                    <div class="metric-label">شهور للتعادل</div>
+                </div>
+            </div>
+
+            <!-- Funding Distribution -->
+            <h2 class="section-title-main"><i class="fas fa-chart-pie"></i> توزيع التمويل</h2>
+            <div class="chart-container">
+                <canvas id="fundingChart"></canvas>
+            </div>
+
+            <!-- Revenue Model -->
+            <h2 class="section-title-main"><i class="fas fa-money-bill-wave"></i> نموذج الإيرادات</h2>
+            <div class="revenue-streams">
+                <div class="revenue-stream">
+                    <div class="stream-percentage">50%</div>
+                    <div class="stream-name">العمولات المباشرة على الحجوزات</div>
+                    <div class="stream-desc">تحصل المنصة على نسبة 15% إلى 20% من قيمة كل حجز يتم عبر LUDUS</div>
+                </div>
+                <div class="revenue-stream">
+                    <div class="stream-percentage">30%</div>
+                    <div class="stream-name">الظهور المموّل للمزودين</div>
+                    <div class="stream-desc">خدمة ترويجية مدفوعة للمزودين لزيادة ظهورهم في نتائج البحث</div>
+                </div>
+                <div class="revenue-stream">
+                    <div class="stream-percentage">20%</div>
+                    <div class="stream-name">رعاية الفعاليات والمناسبات</div>
+                    <div class="stream-desc">عقود رعاية محددة مع جهات راعية للأحداث أو الأنشطة الترفيهية</div>
+                </div>
+            </div>
+
+            <!-- GMV Projection -->
+            <h2 class="section-title-main"><i class="fas fa-chart-line"></i> توقعات GMV الشهرية</h2>
+            <div class="chart-container">
+                <canvas id="gmvChart"></canvas>
+            </div>
+
+            <!-- Operating Expenses -->
+            <h2 class="section-title-main"><i class="fas fa-receipt"></i> المصروفات التشغيلية</h2>
+            <div class="card">
+                <div class="card__body">
+                    <div class="expenses-breakdown">
+                        <div class="expense-item">
+                            <span class="expense-label">الرواتب والفريق</span>
+                            <span class="expense-amount">25,000 ريال/شهر</span>
+                        </div>
+                        <div class="expense-item">
+                            <span class="expense-label">التسويق والإعلانات</span>
+                            <span class="expense-amount">15,000 ريال/شهر</span>
+                        </div>
+                        <div class="expense-item">
+                            <span class="expense-label">التقنية والصيانة</span>
+                            <span class="expense-amount">10,000 ريال/شهر</span>
+                        </div>
+                        <div class="expense-item">
+                            <span class="expense-label">القانونية والإدارة</span>
+                            <span class="expense-amount">5,000 ريال/شهر</span>
+                        </div>
+                    </div>
+                    <div style="margin-top: var(--space-20); padding-top: var(--space-20); border-top: 2px solid var(--ludus-primary); text-align: center;">
+                        <div style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: var(--ludus-secondary);">إجمالي شهري: 55,000 ريال</div>
+                        <div style="font-size: var(--font-size-lg); color: var(--color-text-secondary); margin-top: var(--space-8);">إجمالي سنوي: 660,000 ريال</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unit Economics -->
+            <h2 class="section-title-main"><i class="fas fa-calculator"></i> مؤشرات الوحدة الاقتصادية</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-icon"><i class="fas fa-ticket-alt"></i></div>
+                    <div class="metric-value">250</div>
+                    <div class="metric-label">متوسط قيمة الحجز (ريال)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon"><i class="fas fa-percentage"></i></div>
+                    <div class="metric-value">45</div>
+                    <div class="metric-label">العمولة لكل حجز (ريال)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon"><i class="fas fa-user-plus"></i></div>
+                    <div class="metric-value">40</div>
+                    <div class="metric-label">تكلفة اكتساب العميل (ريال)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon"><i class="fas fa-heart"></i></div>
+                    <div class="metric-value">180</div>
+                    <div class="metric-label">القيمة مدى الحياة (ريال)</div>
+                </div>
+            </div>
+
+            <!-- Profitability Projection -->
+            <h2 class="section-title-main"><i class="fas fa-chart-bar"></i> توقعات الربحية الفصلية</h2>
+            <table class="profitability-table">
+                <thead>
+                    <tr>
+                        <th>الربع</th>
+                        <th>الإيرادات (ريال)</th>
+                        <th>المصروفات (ريال)</th>
+                        <th>صافي الربح/الخسارة (ريال)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>الربع الأول</td>
+                        <td>100,000</td>
+                        <td>165,000</td>
+                        <td class="negative">-65,000</td>
+                    </tr>
+                    <tr>
+                        <td>الربع الثاني</td>
+                        <td>250,000</td>
+                        <td>165,000</td>
+                        <td class="positive">+85,000</td>
+                    </tr>
+                    <tr>
+                        <td>الربع الثالث</td>
+                        <td>350,000</td>
+                        <td>165,000</td>
+                        <td class="positive">+185,000</td>
+                    </tr>
+                    <tr>
+                        <td>الربع الرابع</td>
+                        <td>300,000</td>
+                        <td>165,000</td>
+                        <td class="positive">+135,000</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="card" style="text-align: center; background: var(--color-bg-3);">
+                <div class="card__body">
+                    <h3 style="color: var(--ludus-primary); margin-bottom: var(--space-12);">النتيجة النهائية للعام الأول</h3>
+                    <div style="font-size: var(--font-size-3xl); font-weight: var(--font-weight-bold); color: var(--color-success);">صافي ربح تقريبي 340,000 ريال</div>
+                    <p style="margin-top: var(--space-8); color: var(--color-text-secondary);">بعد خصم المصروفات التشغيلية</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Operations Page -->
+    <div id="operations-page" class="page">
+        <div class="header">
+            <button class="back-button" onclick="showPage('nav-page')">
+                <i class="fas fa-arrow-right"></i> العودة للرئيسية
+            </button>
+            <div class="logo">لودوس LUDUS</div>
+            <h1>خطة مراحل منصة لودوس</h1>
+            <div class="subtitle">استراتيجية الإطلاق والتوسع 2025-2026</div>
+        </div>
+
+    <div class="container">
+        <div class="phases-grid">
+            <!-- Phase 1 Card -->
+            <div class="phase-card fade-in">
+                <div class="phase-header">
+                    <div class="phase-number">1</div>
+                    <h2 class="phase-title">الإطلاق التجريبي المغلق</h2>
+                    <div class="phase-period">سبتمبر 2025</div>
+                    <p class="phase-goal">إطلاق المنصة على نطاق محدود للتأكد من جاهزية التجربة وجودة العمليات وبناء قاعدة أولى من المستخدمين والمزودين.</p>
+                </div>
+                <div class="phase-content">
+                    <div class="objectives-grid">
+                        <div class="objective-item">
+                            <i class="fas fa-users objective-icon"></i>
+                            <span>ضم 200 مستخدم نشط في أول شهر</span>
+                        </div>
+                        <div class="objective-item">
+                            <i class="fas fa-handshake objective-icon"></i>
+                            <span>التعاقد مع 100 مزود خدمات</span>
+                        </div>
+                        <div class="objective-item">
+                            <i class="fas fa-heart objective-icon"></i>
+                            <span>تحقيق رضا المستخدمين بنسبة لا تقل عن 90%</span>
+                        </div>
+                        <div class="objective-item">
+                            <i class="fas fa-chart-line objective-icon"></i>
+                            <span>اختبار منظومة الدعم والتقييم وجمع ملاحظات التحسين</span>
+                        </div>
+                    </div>
+
+                    <div class="sections-list">
+                        <div class="section-item">
+                            <button class="section-header" onclick="toggleSection(this)">
+                                <div class="section-icon">
+                                    <i class="fas fa-user-plus"></i>
+                                </div>
+                                <div class="section-title">اكتساب المستخدمين</div>
+                                <i class="fas fa-chevron-down expand-icon"></i>
+                            </button>
+                            <div class="section-content">
+                                <div class="section-body">
+                                    <div class="subsection">
+                                        <h4 class="subsection-title">
+                                            <i class="fas fa-bullseye"></i>
+                                            الشرائح المستهدفة
+                                        </h4>
+                                        <ul class="item-list">
+                                            <li>الشباب 18-35 عامًا المهتمون بالأنشطة الجماعية</li>
+                                            <li>الفرق الصغيرة والمجتمعات الطلابية</li>
+                                            <li>المجموعات المهتمة بالتجارب التفاعلية</li>
+                                        </ul>
+                                    </div>
+                                    <div class="subsection">
+                                        <h4 class="subsection-title">
+                                            <i class="fas fa-tactics"></i>
+                                            التكتيكات
+                                        </h4>
+                                        <ul class="item-list">
+                                            <li>نظام الدعوات المغلق لتفعيل الانطباع الحصري</li>
+                                            <li>رصيد مجاني بقيمة 100 ريال لأول 200 مستخدم</li>
+                                            <li>برنامج إحالة يمنح 50 ريال للمستخدم الذي يجلب صديقًا فعّالًا</li>
+                                            <li>شراكات مع النوادي والمجتمعات المحلية</li>
+                                            <li>حملات مؤثرين محدودة ضمن دوائر صغيرة</li>
+                                        </ul>
+                                    </div>
+                                    <div class="subsection">
+                                        <h4 class="subsection-title">
+                                            <i class="fas fa-chart-bar"></i>
+                                            مؤشرات الأداء الرئيسية
+                                        </h4>
+                                        <div class="kpi-grid">
+                                            <div class="kpi-item">
+                                                <span class="kpi-label">المستخدمون المسجلون</span>
+                                                <span class="kpi-value">200</span>
+                                            </div>
+                                            <div class="kpi-item">
+                                                <span class="kpi-label">معدل التفعيل</span>
+                                                <span class="kpi-value">≥60%</span>
+                                            </div>
+                                            <div class="kpi-item">
+                                                <span class="kpi-label">نقاط الترشيح الصافية</span>
+                                                <span class="kpi-value">≥4.5</span>
+                                            </div>
+                                            <div class="kpi-item">
+                                                <span class="kpi-label">معدل الإحالة</span>
+                                                <span class="kpi-value">≥10%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-item">
+                            <button class="section-header" onclick="toggleSection(this)">
+                                <div class="section-icon">
+                                    <i class="fas fa-store"></i>
+                                </div>
+                                <div class="section-title">اكتساب الشركاء</div>
+                                <i class="fas fa-chevron-down expand-icon"></i>
+                            </button>
+                            <div class="section-content">
+                                <div class="section-body">
+                                    <div class="subsection">
+                                        <h4 class="subsection-title">
+                                            <i class="fas fa-bullseye"></i>
+                                            المزودون المستهدفون
+                                        </h4>
+                                        <ul class="item-list">
+                                            <li>مراكز الألعاب والمغامرات</li>
+                                            <li>المقاهي التفاعلية</li>
+                                            <li>أماكن الأنشطة الجماعية</li>
+                                        </ul>
+                                    </div>
+                                    <div class="subsection">
+                                        <h4 class="subsection-title">
+                                            <i class="fas fa-gift"></i>
+                                            القيمة المقترحة
+                                        </h4>
+                                        <ul class="item-list">
+                                            <li>الانضمام مجانًا لمدة 4 أشهر</li>
+                                            <li>وصول حصري إلى عملاء مختارين</li>
+                                            <li>ظهور مميز في واجهة المنصة</li>
+                                        </ul>
+                                    </div>
+                                    <div class="subsection">
+                                        <h4 class="subsection-title">
+                                            <i class="fas fa-chart-bar"></i>
+                                            مؤشرات الأداء الرئيسية
+                                        </h4>
+                                        <div class="kpi-grid">
+                                            <div class="kpi-item">
+                                                <span class="kpi-label">المزودون المُفعّلون</span>
+                                                <span class="kpi-value">100</span>
+                                            </div>
+                                            <div class="kpi-item">
+                                                <span class="kpi-label">معدل التحويل</span>
+                                                <span class="kpi-value">≥30%</span>
+                                            </div>
+                                            <div class="kpi-item">
+                                                <span class="kpi-label">وقت الإعداد</span>
+                                                <span class="kpi-value">≤7 أيام</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-item">
+                            <button class="section-header" onclick="toggleSection(this)">
+                                <div class="section-icon">
+                                    <i class="fas fa-cogs"></i>
+                                </div>
+                                <div class="section-title">العمليات</div>
+                                <i class="fas fa-chevron-down expand-icon"></i>
+                            </button>
+                            <div class="section-content">
+                                <div class="section-body">
+                                    <div class="subsection">
+                                        <h4 class="subsection-title">
+                                            <i class="fas fa-tasks"></i>
+                                            المهام الأساسية
+                                        </h4>
+                                        <ul class="item-list">
+                                            <li>تشغيل نظام الحجز والمدفوعات والرصيد</li>
+                                            <li>تشغيل مركز الدعم الفني عبر الدردشة</li>
+                                            <li>إطلاق برنامج السفراء لمراقبة الجودة</li>
+                                            <li>تحليل البيانات أسبوعيًا واستخلاص التحسينات</li>
+                                        </ul>
+                                    </div>
+                                    <div class="subsection">
+                                        <h4 class="subsection-title">
+                                            <i class="fas fa-users-cog"></i>
+                                            الفريق
+                                        </h4>
+                                        <ul class="item-list">
+                                            <li>مدير عمليات</li>
+                                            <li>مسؤول دعم فني (2)</li>
+                                            <li>ممثل مبيعات ميدانية</li>
+                                            <li>مدير منتج</li>
+                                            <li>مشرف جودة</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-item">
+                            <button class="section-header" onclick="toggleSection(this)">
+                                <div class="section-icon">
+                                    <i class="fas fa-bullhorn"></i>
+                                </div>
+                                <div class="section-title">التسويق</div>
+                                <i class="fas fa-chevron-down expand-icon"></i>
+                            </button>
+                            <div class="section-content">
+                                <div class="section-body">
+                                    <div class="subsection">
+                                        <h4 class="subsection-title">
+                                            <i class="fas fa-quote-right"></i>
+                                            الرسالة الأساسية
+                                        </h4>
+                                        <div style="background: var(--color-bg-2); padding: var(--space-16); border-radius: var(--radius-md); font-style: italic; text-align: center; font-weight: var(--font-weight-semibold); color: var(--ludus-secondary);">"لودوس — تجارب مختارة لمن يحبون القيام بالأشياء فعلاً."</div>
+                                    </div>
+                                    <div class="subsection">
+                                        <h4 class="subsection-title">
+                                            <i class="fas fa-chart-bar"></i>
+                                            مؤشرات الأداء الرئيسية
+                                        </h4>
+                                        <div class="kpi-grid">
+                                            <div class="kpi-item">
+                                                <span class="kpi-label">تفعيل المستخدمين</span>
+                                                <span class="kpi-value">≥60%</span>
+                                            </div>
+                                            <div class="kpi-item">
+                                                <span class="kpi-label">معدل الإحالة</span>
+                                                <span class="kpi-value">≥10%</span>
+                                            </div>
+                                            <div class="kpi-item">
+                                                <span class="kpi-label">رضا المستخدمين</span>
+                                                <span class="kpi-value">≥90%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="subsection">
+                                        <h4 class="subsection-title">
+                                            <i class="fas fa-money-bill-wave"></i>
+                                            الميزانية
+                                        </h4>
+                                        <div class="budget-breakdown">
+                                            <div class="budget-item">
+                                                <span class="budget-label">رصيد المستخدمين</span>
+                                                <span class="budget-amount">20,000 ريال</span>
+                                            </div>
+                                            <div class="budget-item">
+                                                <span class="budget-label">عمليات التسويق</span>
+                                                <span class="budget-amount">30,000 ريال</span>
+                                            </div>
+                                            <div class="budget-item" style="background: var(--color-bg-1); font-weight: var(--font-weight-bold);">
+                                                <span class="budget-label">المجموع</span>
+                                                <span class="budget-amount">50,000 ريال</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phase 2 Card -->
+            <div class="phase-card fade-in">
+                <div class="phase-header">
+                    <div class="phase-number">2</div>
+                    <h2 class="phase-title">التوسع والتحسين قبل الإطلاق الكامل</h2>
+                    <div class="phase-period">أكتوبر – ديسمبر 2025</div>
+                    <p class="phase-goal">توسيع قاعدة المستخدمين والمزودين وتحسين البنية التشغيلية والتجربة استعدادًا للإطلاق الكامل في يناير 2026.</p>
+                </div>
+                <div class="phase-content">
+                    <div class="objectives-grid">
+                        <div class="objective-item">
+                            <i class="fas fa-users objective-icon"></i>
+                            <span>الوصول إلى 1000 مستخدم نشط</span>
+                        </div>
+                        <div class="objective-item">
+                            <i class="fas fa-store objective-icon"></i>
+                            <span>ضم 250 مزود خدمات</span>
+                        </div>
+                        <div class="objective-item">
+                            <i class="fas fa-tools objective-icon"></i>
+                            <span>تحسين البنية التشغيلية وتوسيع فريق الدعم</span>
+                        </div>
+                        <div class="objective-item">
+                            <i class="fas fa-coins objective-icon"></i>
+                            <span>اختبار نموذج الإيرادات الجديد (الظهور المموّل)</span>
+                        </div>
+                    </div>
+
+                    <div class="sections-list">
+                        <div class="section-item">
+                            <button class="section-header" onclick="toggleSection(this)">
+                                <div class="section-icon">
+                                    <i class="fas fa-user-plus"></i>
+                                </div>
+                                <div class="section-title">اكتساب المستخدمين</div>
+                                <i class="fas fa-chevron-down expand-icon"></i>
+                            </button>
+                            <div class="section-content">
+                                <div class="section-body">
+                                    <div class="subsection">
+                                        <h4 class="subsection-title">
+                                            <i class="fas fa-chart-line"></i>
+                                            خطة النمو الشهرية
+                                        </h4>
+                                        <div class="timeline-grid">
+                                            <div class="timeline-item">
+                                                <div class="timeline-month">أكتوبر</div>
+                                                <div class="timeline-desc">300 مستخدم جديد</div>
+                                            </div>
+                                            <div class="timeline-item">
+                                                <div class="timeline-month">نوفمبر</div>
+                                                <div class="timeline-desc">250 مستخدم جديد</div>
+                                            </div>
+                                            <div class="timeline-item">
+                                                <div class="timeline-month">ديسمبر</div>
+                                                <div class="timeline-desc">250 مستخدم جديد</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="subsection">
+                                        <h4 class="subsection-title">
+                                            <i class="fas fa-redo"></i>
+                                            مبادرات الاحتفاظ
+                                        </h4>
+                                        <ul class="item-list">
+                                            <li>مكافأة 50 ريال للحجز الثاني خلال 30 يومًا</li>
+                                            <li>تفعيل نظام التوصيات الذكي</li>
+                                            <li>تحليل سلوك المستخدمين لتخصيص التجارب</li>
+                                        </ul>
+                                    </div>
+                                    <div class="subsection">
+                                        <h4 class="subsection-title">
+                                            <i class="fas fa-chart-bar"></i>
+                                            مؤشرات الأداء الرئيسية
+                                        </h4>
+                                        <div class="kpi-grid">
+                                            <div class="kpi-item">
+                                                <span class="kpi-label">معدل الاحتفاظ</span>
+                                                <span class="kpi-value">40-50%</span>
+                                            </div>
+                                            <div class="kpi-item">
+                                                <span class="kpi-label">تكلفة الاكتساب</span>
+                                                <span class="kpi-value">ضمن الحد المحدد</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-item">
+                            <button class="section-header" onclick="toggleSection(this)">
+                                <div class="section-icon">
+                                    <i class="fas fa-store"></i>
+                                </div>
+                                <div class="section-title">اكتساب الشركاء</div>
+                                <i class="fas fa-chevron-down expand-icon"></i>
+                            </button>
+                            <div class="section-content">
+                                <div class="section-body">
+                                    <div class="subsection">
+                                        <h4 class="subsection-title">
+                                            <i class="fas fa-plus-circle"></i>
+                                            التحسينات
+                                        </h4>
+                                        <ul class="item-list">
+                                            <li>لوحة تحكم المزودين مع أدوات إدارة المواعيد</li>
+                                            <li>تقارير الأداء والعروض الترويجية</li>
+                                            <li>إطلاق تجربة الظهور المموّل</li>
+                                        </ul>
+                                    </div>
+                                    <div class="subsection">
+                                        <h4 class="subsection-title">
+                                            <i class="fas fa-chart-bar"></i>
+                                            مؤشرات الأداء الرئيسية
+                                        </h4>
+                                        <div class="kpi-grid">
+                                            <div class="kpi-item">
+                                                <span class="kpi-label">المزودون النشطون</span>
+                                                <span class="kpi-value">250</span>
+                                            </div>
+                                            <div class="kpi-item">
+                                                <span class="kpi-label">مستوى الرضا</span>
+                                                <span class="kpi-value">≥4.2</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-item">
+                            <button class="section-header" onclick="toggleSection(this)">
+                                <div class="section-icon">
+                                    <i class="fas fa-cogs"></i>
+                                </div>
+                                <div class="section-title">العمليات</div>
+                                <i class="fas fa-chevron-down expand-icon"></i>
+                            </button>
+                            <div class="section-content">
+                                <div class="section-body">
+                                    <div class="subsection">
+                                        <h4 class="subsection-title">
+                                            <i class="fas fa-tasks"></i>
+                                            المهام الأساسية
+                                        </h4>
+                                        <ul class="item-list">
+                                            <li>تحليل ملاحظات المرحلة الأولى وتنفيذ التحسينات</li>
+                                            <li>توسيع فريق الدعم الفني</li>
+                                            <li>تحويل السفراء إلى موظفين جزئيين</li>
+                                            <li>تفعيل لوحة متابعة الأداء Dashboard</li>
+                                            <li>إعداد العقود والسياسات الرسمية</li>
+                                        </ul>
+                                    </div>
+                                    <div class="subsection">
+                                        <h4 class="subsection-title">
+                                            <i class="fas fa-check-circle"></i>
+                                            قائمة المراجعة
+                                        </h4>
+                                        <ul class="item-list">
+                                            <li>6 تحسينات رئيسية في النظام</li>
+                                            <li>تشغيل نظام الظهور المموّل</li>
+                                            <li>إصدار دليل تدريب المزودين والسفراء</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-item">
+                            <button class="section-header" onclick="toggleSection(this)">
+                                <div class="section-icon">
+                                    <i class="fas fa-bullhorn"></i>
+                                </div>
+                                <div class="section-title">التسويق</div>
+                                <i class="fas fa-chevron-down expand-icon"></i>
+                            </button>
+                            <div class="section-content">
+                                <div class="section-body">
+                                    <div class="subsection">
+                                        <h4 class="subsection-title">
+                                            <i class="fas fa-calendar-alt"></i>
+                                            الجدول الزمني
+                                        </h4>
+                                        <div class="timeline-grid">
+                                            <div class="timeline-item">
+                                                <div class="timeline-month">أكتوبر</div>
+                                                <div class="timeline-desc">توسيع الحملة المجتمعية والإحالات</div>
+                                            </div>
+                                            <div class="timeline-item">
+                                                <div class="timeline-month">نوفمبر</div>
+                                                <div class="timeline-desc">اختبار الإعلانات الرقمية</div>
+                                            </div>
+                                            <div class="timeline-item">
+                                                <div class="timeline-month">ديسمبر</div>
+                                                <div class="timeline-desc">التحضير الإعلامي والإطلاق المبدئي</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="subsection">
+                                        <h4 class="subsection-title">
+                                            <i class="fas fa-chart-bar"></i>
+                                            مؤشرات الأداء الرئيسية
+                                        </h4>
+                                        <div class="kpi-grid">
+                                            <div class="kpi-item">
+                                                <span class="kpi-label">المستخدمون النشطون</span>
+                                                <span class="kpi-value">زيادة مستمرة</span>
+                                            </div>
+                                            <div class="kpi-item">
+                                                <span class="kpi-label">الحجوزات المتكررة</span>
+                                                <span class="kpi-value">تحسن تدريجي</span>
+                                            </div>
+                                            <div class="kpi-item">
+                                                <span class="kpi-label">تكلفة الاكتساب</span>
+                                                <span class="kpi-value">منخفض ومستدام</span>
+                                            </div>
+                                            <div class="kpi-item">
+                                                <span class="kpi-label">معدل النقر</span>
+                                                <span class="kpi-value">قيد المراقبة</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="subsection">
+                                        <h4 class="subsection-title">
+                                            <i class="fas fa-chart-pie"></i>
+                                            توزيع الميزانية
+                                        </h4>
+                                        <div class="budget-breakdown">
+                                            <div class="budget-item">
+                                                <span class="budget-label">الاكتساب</span>
+                                                <span class="budget-amount">40%</span>
+                                            </div>
+                                            <div class="budget-item">
+                                                <span class="budget-label">تطوير المنصة</span>
+                                                <span class="budget-amount">30%</span>
+                                            </div>
+                                            <div class="budget-item">
+                                                <span class="budget-label">التسويق</span>
+                                                <span class="budget-amount">25%</span>
+                                            </div>
+                                            <div class="budget-item">
+                                                <span class="budget-label">العمليات والقانونية</span>
+                                                <span class="budget-amount">5%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+
+    <script>
+        // Page Navigation
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Initialize charts if financial page is shown
+            if (pageId === 'financial-page') {
+                setTimeout(() => {
+                    initializeCharts();
+                }, 100);
+            }
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // Initialize Financial Charts
+        function initializeCharts() {
+            // Funding Distribution Chart
+            const fundingCtx = document.getElementById('fundingChart');
+            if (fundingCtx) {
+                new Chart(fundingCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['اكتساب المستخدمين والمزودين', 'تطوير المنصة', 'التسويق والعلامة التجارية', 'القانونية والإدارة'],
+                        datasets: [{
+                            data: [40, 30, 25, 5],
+                            backgroundColor: ['#1FB8CD', '#FFC185', '#B4413C', '#ECEBD5'],
+                            borderWidth: 2,
+                            borderColor: '#fff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    font: {
+                                        family: 'Cairo',
+                                        size: 12
+                                    },
+                                    padding: 20
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const amounts = [300000, 225000, 187500, 37500];
+                                        return context.label + ': ' + context.parsed + '% (' + amounts[context.dataIndex].toLocaleString() + ' ريال)';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // GMV Projection Chart
+            const gmvCtx = document.getElementById('gmvChart');
+            if (gmvCtx) {
+                new Chart(gmvCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['سبتمبر 2025', 'أكتوبر', 'نوفمبر', 'ديسمبر', 'يناير 2026', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس'],
+                        datasets: [{
+                            label: 'GMV الشهري (ريال)',
+                            data: [20000, 35000, 60000, 100000, 150000, 175000, 200000, 220000, 230000, 240000, 250000, 250000],
+                            borderColor: '#E6814F',
+                            backgroundColor: 'rgba(230, 129, 79, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointBackgroundColor: '#D2473C',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            pointRadius: 5
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return 'GMV: ' + context.parsed.y.toLocaleString() + ' ريال';
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return value.toLocaleString() + ' ريال';
+                                    },
+                                    font: {
+                                        family: 'Cairo'
+                                    }
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    font: {
+                                        family: 'Cairo'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        function toggleSection(header) {
+            const sectionItem = header.parentElement;
+            const isExpanded = sectionItem.classList.contains('expanded');
+            
+            // Close all other sections in the same phase
+            const phaseCard = header.closest('.phase-card');
+            const allSections = phaseCard.querySelectorAll('.section-item');
+            allSections.forEach(section => {
+                section.classList.remove('expanded');
+            });
+            
+            // If this section wasn't expanded, expand it
+            if (!isExpanded) {
+                sectionItem.classList.add('expanded');
+            }
+        }
+
+        // Add intersection observer for fade-in animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all fade-in elements
+        document.querySelectorAll('.fade-in').forEach(el => {
+            el.style.animationPlayState = 'paused';
+            observer.observe(el);
+        });
+
+        // Add smooth scroll behavior
+        document.documentElement.style.scrollBehavior = 'smooth';
+
+        // Add click analytics for sections (placeholder)
+        document.querySelectorAll('.section-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const sectionTitle = header.querySelector('.section-title').textContent;
+                const phaseNumber = header.closest('.phase-card') ? header.closest('.phase-card').querySelector('.phase-number').textContent : '';
+                console.log(`Section clicked: Phase ${phaseNumber} - ${sectionTitle}`);
+            });
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Start with navigation page
+            showPage('nav-page');
+        });
+    </script>
+</body>
+</html>
+
+

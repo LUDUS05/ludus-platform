@@ -4,8 +4,8 @@ services:
     name: ludus-backend
     env: node
     plan: starter
-    buildCommand: cd server && npm install --legacy-peer-deps && npm run build
-    startCommand: cd server && node --max-old-space-size=512 --expose-gc src/app.js
+    buildCommand: cd apps/api && npm install --legacy-peer-deps
+    startCommand: cd apps/api && node --max-old-space-size=512 --expose-gc src/app.js
     healthCheckPath: /health
     envVars:
       - key: NODE_ENV
@@ -42,8 +42,24 @@ services:
     name: ludus-frontend
     env: static
     plan: starter
-    buildCommand: cd client && npm install --legacy-peer-deps && npm run build
-    staticPublishPath: client/build
+    buildCommand: cd apps/web && npm install --legacy-peer-deps && npm run build:render
+    staticPublishPath: apps/web/build
+    routes:
+      - type: rewrite
+        source: /login
+        destination: /index.html
+      - type: rewrite
+        source: /admin
+        destination: /index.html
+      - type: rewrite
+        source: /admin/*
+        destination: /index.html
+      - type: rewrite
+        source: /share
+        destination: /index.html
+      - type: rewrite
+        source: /*
+        destination: /index.html
     headers:
       - path: /*
         name: X-Frame-Options
@@ -52,18 +68,27 @@ services:
         name: X-XSS-Protection
         value: 1; mode=block
       - path: /*
-        name: X-Content-Type-Options
-        value: nosniff
-      - path: /*
         name: Referrer-Policy
         value: strict-origin-when-cross-origin
-      - path: /static/*
+      - path: /static/css/*
+        name: Content-Type
+        value: text/css
+      - path: /static/css/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /static/js/*
+        name: Content-Type
+        value: application/javascript
+      - path: /static/js/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /static/media/*
         name: Cache-Control
         value: public, max-age=31536000, immutable
     envVars:
       # Core API Configuration - REQUIRED
       - key: REACT_APP_API_URL
-        value: https://ludus-backend.onrender.com
+        value: https://ludus-backend-jzc5.onrender.com
       # Animation Configuration - REQUIRED
       - key: REACT_APP_ANIMATION_ENABLED
         value: "true"
@@ -83,8 +108,8 @@ services:
     name: ludus-backend-athena
     env: node
     plan: starter
-    buildCommand: cd server && npm install --legacy-peer-deps && npm run build
-    startCommand: cd server && node --max-old-space-size=512 --expose-gc src/app.js
+    buildCommand: cd apps/api && npm install --legacy-peer-deps
+    startCommand: cd apps/api && node --max-old-space-size=512 --expose-gc src/app.js
     healthCheckPath: /health
     envVars:
       - key: NODE_ENV
@@ -121,8 +146,49 @@ services:
     name: ludus-frontend-athena
     env: static
     plan: starter
-    buildCommand: cd client && npm install --legacy-peer-deps && npm run build
-    staticPublishPath: client/build
+    buildCommand: cd apps/web && npm install --legacy-peer-deps && npm run build:render
+    staticPublishPath: apps/web/build
+    routes:
+      - type: rewrite
+        source: /login
+        destination: /index.html
+      - type: rewrite
+        source: /admin
+        destination: /index.html
+      - type: rewrite
+        source: /admin/*
+        destination: /index.html
+      - type: rewrite
+        source: /share
+        destination: /index.html
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
+        name: X-XSS-Protection
+        value: 1; mode=block
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+      - path: /static/css/*
+        name: Content-Type
+        value: text/css
+      - path: /static/css/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /static/js/*
+        name: Content-Type
+        value: application/javascript
+      - path: /static/js/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /static/media/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
     envVars:
       # Core API Configuration - REQUIRED
       - key: REACT_APP_API_URL

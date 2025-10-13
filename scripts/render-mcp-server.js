@@ -1,10 +1,23 @@
 #!/usr/bin/env node
 
 const { Server } = require('@modelcontextprotocol/sdk/server');
-const { StdioServerTransport } = require('@modelcontextprotocol/sdk/server/stdio');
+// Compatible import path for current @modelcontextprotocol/sdk versions
+let StdioServerTransport;
+try {
+  // Newer SDK path
+  ({ StdioServerTransport } = require('@modelcontextprotocol/sdk/server/stdio'));
+} catch (e1) {
+  try {
+    // Older CJS dist path
+    ({ StdioServerTransport } = require('@modelcontextprotocol/sdk/dist/cjs/server/stdio'));
+  } catch (e2) {
+    // Fallback to root dist if packaging differs
+    ({ StdioServerTransport } = require('@modelcontextprotocol/sdk/dist/server/stdio'));
+  }
+}
 
 // Render API integration
-const RENDER_API_TOKEN = process.env.RENDER_API_TOKEN || 'rnd_AjWyMGFA2vmtx6KidKj4TPVLZwpU';
+const RENDER_API_TOKEN = process.env.RENDER_API_TOKEN;
 const RENDER_API_BASE = 'https://api.render.com/v1';
 
 class RenderMCPServer extends Server {
