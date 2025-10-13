@@ -299,7 +299,8 @@ const createProductionIndexes = async () => {
     await db.collection('activities').createIndex({ "schedule.availableDates.date": 1, "status": 1 }, { background: true });
     await db.collection('activities').createIndex({ "stats.averageRating": -1, "stats.reviewCount": -1 }, { background: true });
     await db.collection('activities').createIndex({ "features.isFeatured": 1, "features.isPopular": 1, "status": 1 }, { background: true });
-    await db.collection('activities').createIndex({ "title": "text", "description": "text", "features.tags": "text" }, { background: true });
+    // Text search index for activities - using consistent field names
+    await db.collection('activities').createIndex({ "title": "text", "description": "text", "tags": "text" }, { background: true });
 
     // Bookings Collection Indexes
     await db.collection('bookings').createIndex({ "bookingNumber": 1 }, { unique: true, background: true });
