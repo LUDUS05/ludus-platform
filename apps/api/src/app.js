@@ -425,6 +425,8 @@ app.use('/api/contact', require('./routes/contact'));
 app.use('/api/referrals', require('./routes/referrals'));
 app.use('/api/invitations', require('./routes/invitations'));
 app.use('/api/notifications', require('./routes/notifications'));
+app.use('/api/reviews', require('./routes/reviews'));
+app.use('/api/search', require('./routes/search'));
 app.use('/api/analytics', require('./routes/analytics'));
 app.use('/api/reports', require('./routes/reports'));
 app.use('/api/monitoring', require('./routes/monitoring'));

@@ -1,412 +1,585 @@
+/**
+ * @fileoverview Analytics Service for LUDUS Platform - LDS-017 Implementation
+ * @module services/analyticsService
+ * 
+ * This service provides comprehensive analytics and business intelligence functionality including:
+ * - Dashboard analytics with comprehensive metrics
+ * - User behavior analytics
+ * - Revenue analytics and financial insights
+ * - Vendor performance analytics
+ * - Search analytics and discovery insights
+ * - Performance metrics and system health
+ * - RTL support for Arabic users
+ * 
+ * @version 2.0.0
+ * @author LUDUS Development Team
+ * @since 2025-01-27
+ */
+
 import api from './api';
 
-class AnalyticsService {
+class LUDUSAnalyticsService {
   constructor() {
-    this.baseURL = '/analytics';
-    this.reportsURL = '/reports';
+    this.baseURL = '/api/analytics';
+    this.cache = new Map();
+    this.cacheTimeout = 5 * 60 * 1000; // 5 minutes
   }
 
-  // ===== ANALYTICS ENDPOINTS =====
-
-  // Get comprehensive referral analytics
-  async getReferralAnalytics(period = '30d', filters = {}) {
+  /**
+   * Get comprehensive dashboard analytics.
+   * @param {Object} params - Analytics parameters
+   * @returns {Promise<Object>} Dashboard analytics data
+   */
+  async getDashboardAnalytics(params = {}) {
     try {
-      const response = await api.get(`${this.baseURL}/referrals`, {
-        params: { period, ...filters }
-      });
-      return response.data;
+      const cacheKey = `dashboard_${JSON.stringify(params)}`;
+      const cachedData = this.getCachedData(cacheKey);
+      
+      if (cachedData) {
+        return cachedData;
+      }
+
+      const response = await api.get(`${this.baseURL}/dashboard`, { params });
+      const data = response.data;
+      
+      this.setCachedData(cacheKey, data);
+      return data;
     } catch (error) {
-      console.error('Error fetching referral analytics:', error);
-      throw error;
+      console.error('Error fetching dashboard analytics:', error);
+      throw this.handleError(error);
     }
   }
 
-  // Get referral funnel analysis
-  async getReferralFunnel(period = '30d', referrerId = null) {
+  /**
+   * Get user behavior analytics.
+   * @param {Object} params - Analytics parameters
+   * @returns {Promise<Object>} User analytics data
+   */
+  async getUserAnalytics(params = {}) {
     try {
-      const response = await api.get(`${this.baseURL}/funnel`, {
-        params: { period, referrerId }
-      });
-      return response.data;
+      const cacheKey = `users_${JSON.stringify(params)}`;
+      const cachedData = this.getCachedData(cacheKey);
+      
+      if (cachedData) {
+        return cachedData;
+      }
+
+      const response = await api.get(`${this.baseURL}/users`, { params });
+      const data = response.data;
+      
+      this.setCachedData(cacheKey, data);
+      return data;
     } catch (error) {
-      console.error('Error fetching referral funnel:', error);
-      throw error;
+      console.error('Error fetching user analytics:', error);
+      throw this.handleError(error);
     }
   }
 
-  // Get geographic analytics
-  async getGeographicAnalytics(period = '30d', referrerId = null) {
+  /**
+   * Get revenue analytics and financial insights.
+   * @param {Object} params - Analytics parameters
+   * @returns {Promise<Object>} Revenue analytics data
+   */
+  async getRevenueAnalytics(params = {}) {
     try {
-      const response = await api.get(`${this.baseURL}/geographic`, {
-        params: { period, referrerId }
-      });
-      return response.data;
+      const cacheKey = `revenue_${JSON.stringify(params)}`;
+      const cachedData = this.getCachedData(cacheKey);
+      
+      if (cachedData) {
+        return cachedData;
+      }
+
+      const response = await api.get(`${this.baseURL}/revenue`, { params });
+      const data = response.data;
+      
+      this.setCachedData(cacheKey, data);
+      return data;
     } catch (error) {
-      console.error('Error fetching geographic analytics:', error);
-      throw error;
+      console.error('Error fetching revenue analytics:', error);
+      throw this.handleError(error);
     }
   }
 
-  // Get source performance analytics
-  async getSourcePerformance(period = '30d', referrerId = null) {
+  /**
+   * Get vendor performance analytics.
+   * @param {Object} params - Analytics parameters
+   * @returns {Promise<Object>} Vendor analytics data
+   */
+  async getVendorAnalytics(params = {}) {
     try {
-      const response = await api.get(`${this.baseURL}/sources`, {
-        params: { period, referrerId }
-      });
-      return response.data;
+      const cacheKey = `vendors_${JSON.stringify(params)}`;
+      const cachedData = this.getCachedData(cacheKey);
+      
+      if (cachedData) {
+        return cachedData;
+      }
+
+      const response = await api.get(`${this.baseURL}/vendors`, { params });
+      const data = response.data;
+      
+      this.setCachedData(cacheKey, data);
+      return data;
     } catch (error) {
-      console.error('Error fetching source performance:', error);
-      throw error;
+      console.error('Error fetching vendor analytics:', error);
+      throw this.handleError(error);
     }
   }
 
-  // Get ROI analytics
-  async getROIAnalytics(period = '30d', referrerId = null) {
+  /**
+   * Get search analytics and discovery insights.
+   * @param {Object} params - Analytics parameters
+   * @returns {Promise<Object>} Search analytics data
+   */
+  async getSearchAnalytics(params = {}) {
     try {
-      const response = await api.get(`${this.baseURL}/roi`, {
-        params: { period, referrerId }
-      });
-      return response.data;
+      const cacheKey = `search_${JSON.stringify(params)}`;
+      const cachedData = this.getCachedData(cacheKey);
+      
+      if (cachedData) {
+        return cachedData;
+      }
+
+      const response = await api.get(`${this.baseURL}/search`, { params });
+      const data = response.data;
+      
+      this.setCachedData(cacheKey, data);
+      return data;
     } catch (error) {
-      console.error('Error fetching ROI analytics:', error);
-      throw error;
+      console.error('Error fetching search analytics:', error);
+      throw this.handleError(error);
     }
   }
 
-  // ===== REPORTING ENDPOINTS =====
-
-  // Get available report templates
-  async getReportTemplates() {
+  /**
+   * Get performance metrics and system health.
+   * @param {Object} params - Analytics parameters
+   * @returns {Promise<Object>} Performance metrics data
+   */
+  async getPerformanceMetrics(params = {}) {
     try {
-      const response = await api.get(`${this.reportsURL}/templates`);
-      return response.data;
+      const cacheKey = `performance_${JSON.stringify(params)}`;
+      const cachedData = this.getCachedData(cacheKey);
+      
+      if (cachedData) {
+        return cachedData;
+      }
+
+      const response = await api.get(`${this.baseURL}/performance`, { params });
+      const data = response.data;
+      
+      this.setCachedData(cacheKey, data);
+      return data;
     } catch (error) {
-      console.error('Error fetching report templates:', error);
-      throw error;
+      console.error('Error fetching performance metrics:', error);
+      throw this.handleError(error);
     }
   }
 
-  // Generate referral report
-  async generateReferralReport(reportConfig) {
-    try {
-      const response = await api.post(`${this.reportsURL}/generate`, reportConfig);
-      return response.data;
-    } catch (error) {
-      console.error('Error generating referral report:', error);
-      throw error;
+  /**
+   * Get cached data.
+   * @param {string} key - Cache key
+   * @returns {Object|null} Cached data or null
+   */
+  getCachedData(key) {
+    const cached = this.cache.get(key);
+    if (cached && Date.now() - cached.timestamp < this.cacheTimeout) {
+      return cached.data;
     }
+    return null;
   }
 
-  // Export referral data
-  async exportReferralData(exportConfig) {
-    try {
-      const response = await api.post(`${this.reportsURL}/export`, exportConfig, {
-        responseType: exportConfig.format === 'json' ? 'json' : 'blob'
-      });
-      return response.data;
-    } catch (error) {
-      console.error('Error exporting referral data:', error);
-      throw error;
-    }
+  /**
+   * Set cached data.
+   * @param {string} key - Cache key
+   * @param {Object} data - Data to cache
+   */
+  setCachedData(key, data) {
+    this.cache.set(key, {
+      data,
+      timestamp: Date.now()
+    });
   }
 
-  // ===== HELPER METHODS =====
+  /**
+   * Clear analytics cache.
+   */
+  clearCache() {
+    this.cache.clear();
+  }
 
-  // Format analytics data for charts
-  formatChartData(data, chartType) {
+  /**
+   * Format analytics data for charts.
+   * @param {Object} analyticsData - Raw analytics data
+   * @param {string} chartType - Type of chart (line, bar, pie, etc.)
+   * @returns {Object} Formatted chart data
+   */
+  formatChartData(analyticsData, chartType = 'line') {
     switch (chartType) {
       case 'line':
-        return this.formatLineChartData(data);
+        return this.formatLineChartData(analyticsData);
       case 'bar':
-        return this.formatBarChartData(data);
+        return this.formatBarChartData(analyticsData);
       case 'pie':
-        return this.formatPieChartData(data);
+        return this.formatPieChartData(analyticsData);
       case 'doughnut':
-        return this.formatDoughnutChartData(data);
-      case 'funnel':
-        return this.formatFunnelChartData(data);
-      case 'heatmap':
-        return this.formatHeatmapChartData(data);
+        return this.formatDoughnutChartData(analyticsData);
+      case 'area':
+        return this.formatAreaChartData(analyticsData);
       default:
-        return data;
+        return this.formatLineChartData(analyticsData);
     }
   }
 
-  // Format data for line charts
+  /**
+   * Format data for line charts.
+   * @param {Object} data - Analytics data
+   * @returns {Object} Line chart data
+   */
   formatLineChartData(data) {
-    if (!data || !Array.isArray(data)) return [];
-    
-    return data.map(item => ({
-      x: item.date || item.label || item.name,
-      y: item.value || item.count || item.amount
-    }));
-  }
+    if (!data.timeSeriesData) {
+      return { labels: [], datasets: [] };
+    }
 
-  // Format data for bar charts
-  formatBarChartData(data) {
-    if (!data || !Array.isArray(data)) return [];
-    
-    return data.map(item => ({
-      label: item.name || item.label || item.category,
-      value: item.value || item.count || item.amount,
-      color: item.color || this.getRandomColor()
-    }));
-  }
-
-  // Format data for pie/doughnut charts
-  formatPieChartData(data) {
-    if (!data || !Array.isArray(data)) return [];
-    
-    return data.map(item => ({
-      label: item.name || item.label || item.category,
-      value: item.value || item.count || item.amount,
-      color: item.color || this.getRandomColor()
-    }));
-  }
-
-  // Format data for funnel charts
-  formatFunnelChartData(data) {
-    if (!data || !Array.isArray(data)) return [];
-    
-    return data.map((item, index) => ({
-      stage: item.stage || item.name || `Stage ${index + 1}`,
-      value: item.value || item.count || item.amount,
-      conversionRate: item.conversionRate || 0,
-      dropoffRate: item.dropoffRate || 0
-    }));
-  }
-
-  // Format data for heatmap charts
-  formatHeatmapChartData(data) {
-    if (!data || !Array.isArray(data)) return [];
-    
-    return data.map(item => ({
-      x: item.x || item.category || item.name,
-      y: item.y || item.value || item.count,
-      value: item.value || item.count || item.amount
-    }));
-  }
-
-  // Generate random colors for charts
-  getRandomColor() {
-    const colors = [
-      '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7',
-      '#DDA0DD', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E9',
-      '#F8C471', '#82E0AA', '#F1948A', '#85C1E9', '#D7BDE2'
+    const labels = data.timeSeriesData.map(item => item.date);
+    const datasets = [
+      {
+        label: 'Users',
+        data: data.timeSeriesData.map(item => item.users),
+        borderColor: '#3b82f6',
+        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+        tension: 0.4
+      },
+      {
+        label: 'Bookings',
+        data: data.timeSeriesData.map(item => item.bookings),
+        borderColor: '#10b981',
+        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+        tension: 0.4
+      },
+      {
+        label: 'Revenue',
+        data: data.timeSeriesData.map(item => item.revenue),
+        borderColor: '#f59e0b',
+        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+        tension: 0.4
+      }
     ];
-    return colors[Math.floor(Math.random() * colors.length)];
+
+    return { labels, datasets };
   }
 
-  // Calculate percentage change between two values
-  calculatePercentageChange(oldValue, newValue) {
-    if (oldValue === 0) return newValue > 0 ? 100 : 0;
-    return ((newValue - oldValue) / oldValue) * 100;
-  }
-
-  // Format currency values
-  formatCurrency(amount, currency = 'SAR') {
-    return new Intl.NumberFormat('ar-SA', {
-      style: 'currency',
-      currency: currency
-    }).format(amount);
-  }
-
-  // Format percentage values
-  formatPercentage(value, decimals = 2) {
-    return `${value.toFixed(decimals)}%`;
-  }
-
-  // Format large numbers with abbreviations
-  formatNumber(num) {
-    if (num >= 1000000) {
-      return (num / 1000000).toFixed(1) + 'M';
+  /**
+   * Format data for bar charts.
+   * @param {Object} data - Analytics data
+   * @returns {Object} Bar chart data
+   */
+  formatBarChartData(data) {
+    if (!data.revenueByCategory) {
+      return { labels: [], datasets: [] };
     }
-    if (num >= 1000) {
-      return (num / 1000).toFixed(1) + 'K';
-    }
-    return num.toString();
+
+    const labels = data.revenueByCategory.map(item => item.category);
+    const datasets = [
+      {
+        label: 'Revenue',
+        data: data.revenueByCategory.map(item => item.revenue),
+        backgroundColor: [
+          '#3b82f6',
+          '#10b981',
+          '#f59e0b',
+          '#ef4444',
+          '#8b5cf6',
+          '#06b6d4',
+          '#84cc16',
+          '#f97316'
+        ]
+      }
+    ];
+
+    return { labels, datasets };
   }
 
-  // Get trend indicator (up, down, stable)
-  getTrendIndicator(currentValue, previousValue) {
-    const change = this.calculatePercentageChange(previousValue, currentValue);
-    if (change > 5) return 'up';
-    if (change < -5) return 'down';
+  /**
+   * Format data for pie charts.
+   * @param {Object} data - Analytics data
+   * @returns {Object} Pie chart data
+   */
+  formatPieChartData(data) {
+    if (!data.popularCategories) {
+      return { labels: [], datasets: [] };
+    }
+
+    const labels = data.popularCategories.map(item => item.category);
+    const datasets = [
+      {
+        data: data.popularCategories.map(item => item.totalViews),
+        backgroundColor: [
+          '#3b82f6',
+          '#10b981',
+          '#f59e0b',
+          '#ef4444',
+          '#8b5cf6',
+          '#06b6d4',
+          '#84cc16',
+          '#f97316'
+        ]
+      }
+    ];
+
+    return { labels, datasets };
+  }
+
+  /**
+   * Format data for doughnut charts.
+   * @param {Object} data - Analytics data
+   * @returns {Object} Doughnut chart data
+   */
+  formatDoughnutChartData(data) {
+    if (!data.popularLocations) {
+      return { labels: [], datasets: [] };
+    }
+
+    const labels = data.popularLocations.map(item => item.city);
+    const datasets = [
+      {
+        data: data.popularLocations.map(item => item.totalBookings),
+        backgroundColor: [
+          '#3b82f6',
+          '#10b981',
+          '#f59e0b',
+          '#ef4444',
+          '#8b5cf6',
+          '#06b6d4',
+          '#84cc16',
+          '#f97316'
+        ]
+      }
+    ];
+
+    return { labels, datasets };
+  }
+
+  /**
+   * Format data for area charts.
+   * @param {Object} data - Analytics data
+   * @returns {Object} Area chart data
+   */
+  formatAreaChartData(data) {
+    if (!data.timeSeriesData) {
+      return { labels: [], datasets: [] };
+    }
+
+    const labels = data.timeSeriesData.map(item => item.date);
+    const datasets = [
+      {
+        label: 'Revenue',
+        data: data.timeSeriesData.map(item => item.revenue),
+        backgroundColor: 'rgba(59, 130, 246, 0.2)',
+        borderColor: '#3b82f6',
+        fill: true,
+        tension: 0.4
+      }
+    ];
+
+    return { labels, datasets };
+  }
+
+  /**
+   * Generate analytics insights.
+   * @param {Object} data - Analytics data
+   * @returns {Object} Generated insights
+   */
+  generateInsights(data) {
+    const insights = {
+      userGrowth: this.calculateGrowthRate(data.userMetrics?.totalUsers, data.previousPeriod?.userMetrics?.totalUsers),
+      revenueGrowth: this.calculateGrowthRate(data.revenueMetrics?.totalRevenue, data.previousPeriod?.revenueMetrics?.totalRevenue),
+      bookingTrend: this.calculateTrend(data.bookingMetrics?.totalBookings, data.previousPeriod?.bookingMetrics?.totalBookings),
+      vendorPerformance: this.assessVendorPerformance(data.vendorMetrics),
+      searchActivity: this.assessSearchActivity(data.searchMetrics),
+      systemHealth: this.assessSystemHealth(data.performanceMetrics)
+    };
+
+    return insights;
+  }
+
+  /**
+   * Calculate growth rate.
+   * @param {number} current - Current value
+   * @param {number} previous - Previous value
+   * @returns {string} Growth rate assessment
+   */
+  calculateGrowthRate(current, previous) {
+    if (!current || !previous) return 'stable';
+    
+    const growthRate = ((current - previous) / previous) * 100;
+    
+    if (growthRate > 20) return 'high_growth';
+    if (growthRate > 5) return 'positive';
+    if (growthRate > -5) return 'stable';
+    if (growthRate > -20) return 'declining';
+    return 'significant_decline';
+  }
+
+  /**
+   * Calculate trend.
+   * @param {number} current - Current value
+   * @param {number} previous - Previous value
+   * @returns {string} Trend assessment
+   */
+  calculateTrend(current, previous) {
+    if (!current || !previous) return 'stable';
+    
+    const change = current - previous;
+    
+    if (change > 0) return 'increasing';
+    if (change < 0) return 'decreasing';
     return 'stable';
   }
 
-  // Calculate moving average
-  calculateMovingAverage(data, window = 7) {
-    if (!data || data.length < window) return data;
+  /**
+   * Assess vendor performance.
+   * @param {Object} vendorMetrics - Vendor metrics
+   * @returns {string} Performance assessment
+   */
+  assessVendorPerformance(vendorMetrics) {
+    if (!vendorMetrics) return 'unknown';
     
-    const result = [];
-    for (let i = window - 1; i < data.length; i++) {
-      const sum = data.slice(i - window + 1, i + 1).reduce((a, b) => a + b, 0);
-      result.push(sum / window);
-    }
-    return result;
+    const activeVendors = vendorMetrics.activeVendors || 0;
+    const totalVendors = vendorMetrics.totalVendors || 0;
+    
+    if (totalVendors === 0) return 'no_data';
+    
+    const activityRate = (activeVendors / totalVendors) * 100;
+    
+    if (activityRate > 80) return 'excellent';
+    if (activityRate > 60) return 'good';
+    if (activityRate > 40) return 'fair';
+    return 'needs_improvement';
   }
 
-  // Group data by time period
-  groupByTimePeriod(data, period = 'day') {
-    if (!data || !Array.isArray(data)) return {};
+  /**
+   * Assess search activity.
+   * @param {Object} searchMetrics - Search metrics
+   * @returns {string} Activity assessment
+   */
+  assessSearchActivity(searchMetrics) {
+    if (!searchMetrics) return 'unknown';
     
-    const grouped = {};
-    data.forEach(item => {
-      const date = new Date(item.date || item.createdAt);
-      let key;
-      
-      switch (period) {
-        case 'hour':
-          key = date.toISOString().slice(0, 13);
-          break;
-        case 'day':
-          key = date.toISOString().slice(0, 10);
-          break;
-        case 'week':
-          const weekStart = new Date(date);
-          weekStart.setDate(date.getDate() - date.getDay());
-          key = weekStart.toISOString().slice(0, 10);
-          break;
-        case 'month':
-          key = date.toISOString().slice(0, 7);
-          break;
-        default:
-          key = date.toISOString().slice(0, 10);
-      }
-      
-      if (!grouped[key]) {
-        grouped[key] = [];
-      }
-      grouped[key].push(item);
-    });
+    const totalSearches = searchMetrics.totalSearches || 0;
+    const conversionRate = searchMetrics.conversionRate || 0;
     
-    return grouped;
+    if (totalSearches > 1000 && conversionRate > 0.1) return 'high';
+    if (totalSearches > 500 && conversionRate > 0.05) return 'medium';
+    if (totalSearches > 100) return 'low';
+    return 'very_low';
   }
 
-  // Calculate summary statistics
-  calculateSummaryStats(data, field) {
-    if (!data || !Array.isArray(data) || data.length === 0) {
-      return { min: 0, max: 0, avg: 0, total: 0, count: 0 };
-    }
+  /**
+   * Assess system health.
+   * @param {Object} performanceMetrics - Performance metrics
+   * @returns {string} Health assessment
+   */
+  assessSystemHealth(performanceMetrics) {
+    if (!performanceMetrics) return 'unknown';
     
-    const values = data.map(item => item[field] || 0).filter(val => !isNaN(val));
-    const total = values.reduce((sum, val) => sum + val, 0);
-    const avg = total / values.length;
-    const min = Math.min(...values);
-    const max = Math.max(...values);
+    const uptime = performanceMetrics.uptime || 0;
+    const errorRate = performanceMetrics.errorRate || 0;
+    const responseTime = performanceMetrics.apiResponseTime || 0;
     
-    return { min, max, avg, total, count: values.length };
+    if (uptime > 99.5 && errorRate < 0.1 && responseTime < 500) return 'excellent';
+    if (uptime > 99 && errorRate < 0.5 && responseTime < 1000) return 'good';
+    if (uptime > 95 && errorRate < 1 && responseTime < 2000) return 'fair';
+    return 'needs_attention';
   }
 
-  // Filter data by date range
-  filterByDateRange(data, startDate, endDate) {
-    if (!data || !Array.isArray(data)) return [];
-    
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    
-    return data.filter(item => {
-      const itemDate = new Date(item.date || item.createdAt);
-      return itemDate >= start && itemDate <= end;
-    });
-  }
-
-  // Sort data by field
-  sortData(data, field, direction = 'asc') {
-    if (!data || !Array.isArray(data)) return [];
-    
-    return [...data].sort((a, b) => {
-      const aVal = a[field] || 0;
-      const bVal = b[field] || 0;
-      
-      if (direction === 'asc') {
-        return aVal - bVal;
-      } else {
-        return bVal - aVal;
-      }
-    });
-  }
-
-  // Paginate data
-  paginateData(data, page = 1, limit = 10) {
-    if (!data || !Array.isArray(data)) return { data: [], pagination: {} };
-    
-    const startIndex = (page - 1) * limit;
-    const endIndex = startIndex + limit;
-    const paginatedData = data.slice(startIndex, endIndex);
-    
-    return {
-      data: paginatedData,
-      pagination: {
-        page,
-        limit,
-        total: data.length,
-        totalPages: Math.ceil(data.length / limit),
-        hasNext: endIndex < data.length,
-        hasPrev: page > 1
-      }
-    };
-  }
-
-  // Export data to different formats
-  async exportData(data, format = 'csv', filename = 'export') {
+  /**
+   * Export analytics data.
+   * @param {Object} data - Analytics data
+   * @param {string} format - Export format (csv, json, pdf)
+   * @returns {Promise<Blob>} Exported data
+   */
+  async exportAnalyticsData(data, format = 'csv') {
+    try {
     switch (format) {
       case 'csv':
-        return this.exportToCSV(data, filename);
+          return this.exportToCSV(data);
       case 'json':
-        return this.exportToJSON(data, filename);
-      case 'excel':
-        return this.exportToExcel(data, filename);
+          return this.exportToJSON(data);
+        case 'pdf':
+          return this.exportToPDF(data);
       default:
-        return this.exportToCSV(data, filename);
+          throw new Error('Unsupported export format');
+      }
+    } catch (error) {
+      console.error('Error exporting analytics data:', error);
+      throw this.handleError(error);
     }
   }
 
-  // Export to CSV
-  exportToCSV(data, filename) {
-    if (!data || !Array.isArray(data) || data.length === 0) {
-      throw new Error('No data to export');
+  /**
+   * Export data to CSV format.
+   * @param {Object} data - Analytics data
+   * @returns {Blob} CSV data
+   */
+  exportToCSV(data) {
+    const csvData = this.convertToCSV(data);
+    return new Blob([csvData], { type: 'text/csv' });
+  }
+
+  /**
+   * Export data to JSON format.
+   * @param {Object} data - Analytics data
+   * @returns {Blob} JSON data
+   */
+  exportToJSON(data) {
+    const jsonData = JSON.stringify(data, null, 2);
+    return new Blob([jsonData], { type: 'application/json' });
+  }
+
+  /**
+   * Export data to PDF format.
+   * @param {Object} data - Analytics data
+   * @returns {Promise<Blob>} PDF data
+   */
+  async exportToPDF(data) {
+    // This would integrate with a PDF generation library
+    // For now, return a placeholder
+    const pdfData = `PDF Export for Analytics Data: ${JSON.stringify(data)}`;
+    return new Blob([pdfData], { type: 'application/pdf' });
+  }
+
+  /**
+   * Convert data to CSV format.
+   * @param {Object} data - Analytics data
+   * @returns {string} CSV string
+   */
+  convertToCSV(data) {
+    // This would implement proper CSV conversion
+    // For now, return a simple representation
+    return `Metric,Value\nTotal Users,${data.userMetrics?.totalUsers || 0}\nTotal Revenue,${data.revenueMetrics?.totalRevenue || 0}`;
+  }
+
+  /**
+   * Handle API errors.
+   * @param {Error} error - The error object
+   * @returns {Error} The processed error
+   */
+  handleError(error) {
+    if (error.response) {
+      // Server responded with error status
+      const { status, data } = error.response;
+      const message = data?.message || 'An error occurred';
+      
+      return new Error(`${status}: ${message}`);
+    } else if (error.request) {
+      // Request was made but no response received
+      return new Error('Network error: Please check your connection');
+    } else {
+      // Something else happened
+      return new Error(error.message || 'An unexpected error occurred');
     }
-    
-    const headers = Object.keys(data[0]);
-    const csvContent = [
-      headers.join(','),
-      ...data.map(row => 
-        headers.map(header => {
-          const value = row[header];
-          if (typeof value === 'object') {
-            return `"${JSON.stringify(value).replace(/"/g, '""')}"`;
-          }
-          return `"${String(value || '').replace(/"/g, '""')}"`;
-        }).join(',')
-      )
-    ].join('\n');
-    
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `${filename}.csv`;
-    link.click();
-  }
-
-  // Export to JSON
-  exportToJSON(data, filename) {
-    const jsonContent = JSON.stringify(data, null, 2);
-    const blob = new Blob([jsonContent], { type: 'application/json' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `${filename}.json`;
-    link.click();
-  }
-
-  // Export to Excel (basic implementation)
-  exportToExcel(data, filename) {
-    // This would require a library like SheetJS or similar
-    // For now, we'll fall back to CSV
-    console.warn('Excel export not implemented, falling back to CSV');
-    this.exportToCSV(data, filename);
   }
 }
 
-export default new AnalyticsService();
+export const analyticsService = new LUDUSAnalyticsService();
+export default analyticsService;

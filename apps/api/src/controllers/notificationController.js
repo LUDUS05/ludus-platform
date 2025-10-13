@@ -4,7 +4,9 @@
  */
 
 const Notification = require('../models/Notification');
+const NotificationEnhanced = require('../models/NotificationEnhanced');
 const User = require('../models/User');
+const mongoose = require('mongoose');
 
 /**
  * Get all notifications for the authenticated user.
@@ -406,6 +408,423 @@ const getNotificationStats = async (req, res) => {
   }
 };
 
+/**
+ * Get notification analytics and insights.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
+const getNotificationAnalytics = async (req, res) => {
+  try {
+    const userId = req.user.id || req.user._id;
+    const { period = '30d', groupBy = 'type' } = req.query;
+
+    const endDate = new Date();
+    const startDate = new Date();
+    
+    switch (period) {
+      case '7d':
+        startDate.setDate(endDate.getDate() - 7);
+        break;
+      case '30d':
+        startDate.setDate(endDate.getDate() - 30);
+        break;
+      case '90d':
+        startDate.setDate(endDate.getDate() - 90);
+        break;
+      default:
+        startDate.setDate(endDate.getDate() - 30);
+    }
+
+    const analytics = await NotificationEnhanced.aggregate([
+      {
+        $match: {
+          user: mongoose.Types.ObjectId(userId),
+          createdAt: { $gte: startDate, $lte: endDate }
+        }
+      },
+      {
+        $group: {
+          _id: groupBy === 'type' ? '$type' : groupBy === 'priority' ? '$priority' : '$metadata.source',
+          total: { $sum: 1 },
+          unread: { $sum: { $cond: [{ $eq: ['$isRead', false] }, 1, 0] } },
+          read: { $sum: { $cond: [{ $eq: ['$isRead', true] }, 1, 0] } },
+          delivered: { $sum: { $cond: [{ $eq: ['$isDelivered', true] }, 1, 0] } },
+          urgent: { $sum: { $cond: [{ $eq: ['$isUrgent', true] }, 1, 0] } },
+          avgReadTime: {
+            $avg: {
+              $cond: [
+                { $ne: ['$readAt', null] },
+                { $subtract: ['$readAt', '$createdAt'] },
+                null
+              ]
+            }
+          }
+        }
+      },
+      {
+        $sort: { total: -1 }
+      }
+    ]);
+
+    // Get delivery channel analytics
+    const channelAnalytics = await NotificationEnhanced.aggregate([
+      {
+        $match: {
+          user: mongoose.Types.ObjectId(userId),
+          createdAt: { $gte: startDate, $lte: endDate }
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          emailSent: { $sum: { $cond: [{ $eq: ['$channels.email.sent', true] }, 1, 0] } },
+          smsSent: { $sum: { $cond: [{ $eq: ['$channels.sms.sent', true] }, 1, 0] } },
+          pushSent: { $sum: { $cond: [{ $eq: ['$channels.push.sent', true] }, 1, 0] } },
+          emailErrors: { $sum: { $cond: [{ $ne: ['$channels.email.error', null] }, 1, 0] } },
+          smsErrors: { $sum: { $cond: [{ $ne: ['$channels.sms.error', null] }, 1, 0] } },
+          pushErrors: { $sum: { $cond: [{ $ne: ['$channels.push.error', null] }, 1, 0] } }
+        }
+      }
+    ]);
+
+    res.status(200).json({
+      success: true,
+      data: {
+        period,
+        dateRange: { startDate, endDate },
+        analytics,
+        channelAnalytics: channelAnalytics[0] || {
+          emailSent: 0,
+          smsSent: 0,
+          pushSent: 0,
+          emailErrors: 0,
+          smsErrors: 0,
+          pushErrors: 0
+        }
+      }
+    });
+  } catch (error) {
+    console.error('Error getting notification analytics:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to get notification analytics',
+      error: error.message
+    });
+  }
+};
+
+/**
+ * Create enhanced notification with multi-channel delivery.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
+const createEnhancedNotification = async (req, res) => {
+  try {
+    const {
+      user,
+      type,
+      title,
+      titleAr,
+      message,
+      messageAr,
+      data = {},
+      actionUrl,
+      imageUrl,
+      priority = 'normal',
+      isUrgent = false,
+      relatedEntity = {},
+      channels = { email: true, sms: false, push: true },
+      expiresAt
+    } = req.body;
+
+    // Validate required fields
+    if (!user || !type || !title || !message) {
+      return res.status(400).json({
+        success: false,
+        message: 'User, type, title, and message are required'
+      });
+    }
+
+    // Check if user exists
+    const userExists = await User.findById(user);
+    if (!userExists) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    // Create notification
+    const notification = new NotificationEnhanced({
+      user,
+      type,
+      title,
+      titleAr,
+      message,
+      messageAr,
+      data,
+      actionUrl,
+      imageUrl,
+      priority,
+      isUrgent,
+      relatedEntity,
+      channels,
+      expiresAt: expiresAt ? new Date(expiresAt) : undefined
+    });
+
+    await notification.save();
+
+    // TODO: Implement actual delivery logic here
+    // This would integrate with email service, SMS service, and push notification service
+
+    res.status(201).json({
+      success: true,
+      message: 'Enhanced notification created successfully',
+      data: notification
+    });
+  } catch (error) {
+    console.error('Error creating enhanced notification:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to create enhanced notification',
+      error: error.message
+    });
+  }
+};
+
+/**
+ * Update notification delivery status.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
+const updateDeliveryStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { channel, sent, error } = req.body;
+
+    if (!channel || typeof sent !== 'boolean') {
+      return res.status(400).json({
+        success: false,
+        message: 'Channel and sent status are required'
+      });
+    }
+
+    const notification = await NotificationEnhanced.findById(id);
+    if (!notification) {
+      return res.status(404).json({
+        success: false,
+        message: 'Notification not found'
+      });
+    }
+
+    await notification.updateChannelStatus(channel, sent, error);
+
+    res.status(200).json({
+      success: true,
+      message: 'Delivery status updated successfully',
+      data: notification
+    });
+  } catch (error) {
+    console.error('Error updating delivery status:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to update delivery status',
+      error: error.message
+    });
+  }
+};
+
+/**
+ * Get notification preferences for user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
+const getNotificationPreferences = async (req, res) => {
+  try {
+    const userId = req.user.id || req.user._id;
+
+    const user = await User.findById(userId).select('notificationPreferences');
+    
+    const defaultPreferences = {
+      email: {
+        booking: true,
+        payment: true,
+        promotion: true,
+        system: true
+      },
+      sms: {
+        booking: false,
+        payment: true,
+        promotion: false,
+        system: false
+      },
+      push: {
+        booking: true,
+        payment: true,
+        promotion: true,
+        system: true
+      },
+      frequency: 'immediate',
+      quietHours: {
+        enabled: false,
+        start: '22:00',
+        end: '08:00'
+      }
+    };
+
+    res.status(200).json({
+      success: true,
+      data: {
+        preferences: user?.notificationPreferences || defaultPreferences
+      }
+    });
+  } catch (error) {
+    console.error('Error getting notification preferences:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to get notification preferences',
+      error: error.message
+    });
+  }
+};
+
+/**
+ * Update notification preferences for user.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
+const updateNotificationPreferences = async (req, res) => {
+  try {
+    const userId = req.user.id || req.user._id;
+    const { preferences } = req.body;
+
+    if (!preferences) {
+      return res.status(400).json({
+        success: false,
+        message: 'Preferences are required'
+      });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { notificationPreferences: preferences },
+      { new: true, runValidators: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Notification preferences updated successfully',
+      data: {
+        preferences: user.notificationPreferences
+      }
+    });
+  } catch (error) {
+    console.error('Error updating notification preferences:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to update notification preferences',
+      error: error.message
+    });
+  }
+};
+
+/**
+ * Bulk create notifications for multiple users.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>}
+ */
+const bulkCreateNotifications = async (req, res) => {
+  try {
+    const {
+      userIds,
+      type,
+      title,
+      titleAr,
+      message,
+      messageAr,
+      data = {},
+      actionUrl,
+      imageUrl,
+      priority = 'normal',
+      isUrgent = false,
+      channels = { email: true, sms: false, push: true },
+      expiresAt
+    } = req.body;
+
+    // Check if user is admin
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({
+        success: false,
+        message: 'Access denied. Admin only.'
+      });
+    }
+
+    if (!userIds || !Array.isArray(userIds) || userIds.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'User IDs array is required'
+      });
+    }
+
+    // Validate all users exist
+    const users = await User.find({ _id: { $in: userIds } }).select('_id');
+    if (users.length !== userIds.length) {
+      return res.status(400).json({
+        success: false,
+        message: 'Some users not found'
+      });
+    }
+
+    // Create notifications
+    const notifications = userIds.map(userId => ({
+      user: userId,
+      type,
+      title,
+      titleAr,
+      message,
+      messageAr,
+      data,
+      actionUrl,
+      imageUrl,
+      priority,
+      isUrgent,
+      channels,
+      expiresAt: expiresAt ? new Date(expiresAt) : undefined
+    }));
+
+    const createdNotifications = await NotificationEnhanced.insertMany(notifications);
+
+    res.status(201).json({
+      success: true,
+      message: `Bulk notifications created for ${createdNotifications.length} users`,
+      data: {
+        notificationsCreated: createdNotifications.length,
+        sampleNotification: createdNotifications[0]
+      }
+    });
+  } catch (error) {
+    console.error('Error creating bulk notifications:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to create bulk notifications',
+      error: error.message
+    });
+  }
+};
+
 module.exports = {
   getNotifications,
   getUnreadCount,
@@ -414,5 +833,11 @@ module.exports = {
   markAsArchived,
   deleteNotification,
   createSystemNotification,
-  getNotificationStats
+  getNotificationStats,
+  getNotificationAnalytics,
+  createEnhancedNotification,
+  updateDeliveryStatus,
+  getNotificationPreferences,
+  updateNotificationPreferences,
+  bulkCreateNotifications
 };
