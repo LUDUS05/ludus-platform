@@ -18,7 +18,7 @@ import { Label } from "../components/ui/Label";
 
 const LoginPage = () => {
   const { t, i18n } = useTranslation();
-  const { login, loginWithSocial, isAuthenticated, user, isLoading } = useAuth();
+  const { login, loginWithSocial, isLoading } = useAuth();
   const navigate = useNavigate();
 
   console.log('🔐 LoginPage component mounted!');
