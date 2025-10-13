@@ -64,12 +64,12 @@ const LoginPage = () => {
 
       if (result.success) {
         console.log('✅ Login successful - no redirects', {
-          role: result.user.role,
-          email: result.user.email
+          role: result.data.user.role,
+          email: result.data.user.email
         });
 
         // DISABLED: Redirect logic removed - users stay on login page
-        // if (result.user.role === 'admin' || result.user.email === 'admin@ludusapp.com') {
+        // if (result.data.user.role === 'admin' || result.data.user.email === 'admin@ludusapp.com') {
         //   navigate('/admin', { replace: true });
         // } else {
         //   navigate('/share', { replace: true });
