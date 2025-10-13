@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { siteSettingsService } from '../../services/siteSettingsService';
+import Alert from '../ui/Alert';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
-import Alert from '../ui/Alert';
-import { siteSettingsService } from '../../services/siteSettingsService';
 
 const SiteSettingsManagement = () => {
   const { t } = useTranslation();
@@ -13,13 +13,14 @@ const SiteSettingsManagement = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [formData, setFormData] = useState({
-    comingSoonMode: false,
-    maintenanceMode: false,
-    comingSoonTitle: '',
-    comingSoonMessage: '',
-    maintenanceTitle: '',
-    maintenanceMessage: '',
-    estimatedReturnTime: '',
+    // DISABLED: Lockdown system fields
+    // comingSoonMode: false,
+    // maintenanceMode: false,
+    // comingSoonTitle: '',
+    // comingSoonMessage: '',
+    // maintenanceTitle: '',
+    // maintenanceMessage: '',
+    // estimatedReturnTime: '',
     featureControls: {
       bookingEnabled: true,
       walletEnabled: true,
@@ -152,60 +153,19 @@ const SiteSettingsManagement = () => {
         <h2 className="text-body-lg font-semibold text-charcoal dark:text-dark-text-primary mb-4">
           Quick Actions
         </h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="flex items-center justify-between p-4 bg-soft-white dark:bg-dark-bg-tertiary rounded-lg border border-warm dark:border-dark-border-secondary">
-            <div>
-              <h3 className="font-medium text-charcoal dark:text-dark-text-primary">Coming Soon Mode</h3>
-              <p className="text-sm text-charcoal-light dark:text-dark-text-secondary">
-                Show coming soon page to visitors
-              </p>
-              <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium mt-2 ${
-                formData.comingSoonMode 
-                  ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' 
-                  : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200'
-              }`}>
-                {formData.comingSoonMode ? 'Active' : 'Inactive'}
-              </span>
-            </div>
-            <Button
-              onClick={() => toggleMode('comingSoon')}
-              variant={formData.comingSoonMode ? "destructive" : "primary"}
-              size="sm"
-              disabled={saving}
-            >
-              {formData.comingSoonMode ? 'Disable' : 'Enable'}
-            </Button>
-          </div>
 
-          <div className="flex items-center justify-between p-4 bg-soft-white dark:bg-dark-bg-tertiary rounded-lg border border-warm dark:border-dark-border-secondary">
-            <div>
-              <h3 className="font-medium text-charcoal dark:text-dark-text-primary">Maintenance Mode</h3>
-              <p className="text-sm text-charcoal-light dark:text-dark-text-secondary">
-                Show maintenance page to visitors
-              </p>
-              <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium mt-2 ${
-                formData.maintenanceMode 
-                  ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' 
-                  : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200'
-              }`}>
-                {formData.maintenanceMode ? 'Active' : 'Inactive'}
-              </span>
-            </div>
-            <Button
-              onClick={() => toggleMode('maintenance')}
-              variant={formData.maintenanceMode ? "destructive" : "secondary"}
-              size="sm"
-              disabled={saving}
-            >
-              {formData.maintenanceMode ? 'Disable' : 'Enable'}
-            </Button>
+        <div className="grid grid-cols-1 gap-4">
+          <div className="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg border border-gray-300 dark:border-gray-600">
+            <h3 className="font-medium text-gray-600 dark:text-gray-400">Lockdown System Disabled</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-500">
+              The lockdown system (Coming Soon and Maintenance modes) has been disabled.
+            </p>
           </div>
         </div>
       </div>
 
-      {/* Detailed Settings Form */}
-      <form onSubmit={handleSubmit} className="bg-white dark:bg-dark-bg-secondary rounded-xl p-6 border border-warm dark:border-dark-border-secondary">
+      {/* DISABLED: Detailed Settings Form - Lockdown system disabled */}
+      {/* <form onSubmit={handleSubmit} className="bg-white dark:bg-dark-bg-secondary rounded-xl p-6 border border-warm dark:border-dark-border-secondary"> */}
         <h2 className="text-body-lg font-semibold text-charcoal dark:text-dark-text-primary mb-6">
           Page Content Settings
         </h2>
@@ -216,7 +176,7 @@ const SiteSettingsManagement = () => {
             <h3 className="text-body-md font-medium text-charcoal dark:text-dark-text-primary mb-4">
               Coming Soon Page
             </h3>
-            
+
             <div className="grid grid-cols-1 gap-4">
               <Input
                 label="Title"
@@ -225,7 +185,7 @@ const SiteSettingsManagement = () => {
                 onChange={handleInputChange}
                 placeholder="Enter coming soon page title"
               />
-              
+
               <div>
                 <label className="block text-sm font-medium text-charcoal dark:text-dark-text-primary mb-2">
                   Message
@@ -247,7 +207,7 @@ const SiteSettingsManagement = () => {
             <h3 className="text-body-md font-medium text-charcoal dark:text-dark-text-primary mb-4">
               Maintenance Page
             </h3>
-            
+
             <div className="grid grid-cols-1 gap-4">
               <Input
                 label="Title"
@@ -256,7 +216,7 @@ const SiteSettingsManagement = () => {
                 onChange={handleInputChange}
                 placeholder="Enter maintenance page title"
               />
-              
+
               <div>
                 <label className="block text-sm font-medium text-charcoal dark:text-dark-text-primary mb-2">
                   Message
@@ -286,7 +246,7 @@ const SiteSettingsManagement = () => {
             <h3 className="text-body-md font-medium text-charcoal dark:text-dark-text-primary mb-4">
               Site Modes
             </h3>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <label className="flex items-center space-x-3 p-4 border border-warm dark:border-dark-border-secondary rounded-lg cursor-pointer hover:bg-soft-white dark:hover:bg-dark-bg-tertiary">
                 <input
@@ -324,7 +284,7 @@ const SiteSettingsManagement = () => {
           <h3 className="text-body-md font-medium text-charcoal dark:text-dark-text-primary mb-4">
             Feature Controls
           </h3>
-          
+
           <div className="space-y-4">
             <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-dark-bg-tertiary rounded-lg">
               <div>
@@ -433,7 +393,7 @@ const SiteSettingsManagement = () => {
             {saving ? 'Saving...' : 'Save Settings'}
           </Button>
         </div>
-      </form>
+      </form> */}
     </div>
   );
 };

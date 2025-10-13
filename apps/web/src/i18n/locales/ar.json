@@ -1213,13 +1213,64 @@
         "skipBtn": "تخطي الآن",
         "minError": "اختر على الأقل 3 اهتمامات",
         "selected": "مختار",
+        "selectedCount": "{{count}} من {{total}} مختار",
         "sportsFitness": "الرياضة واللياقة",
         "foodDining": "الطعام والمطاعم",
         "artsCulture": "الفنون والثقافة",
         "entertainment": "الترفيه",
         "learningWorkshops": "التعلم وورش العمل",
         "outdoorAdventures": "المغامرات الخارجية",
-        "socialEvents": "الفعاليات الاجتماعية"
+        "socialEvents": "الفعاليات الاجتماعية",
+        "categories": {
+          "fitness": {
+            "name": "اللياقة والرياضة",
+            "icon": "🏃‍♂️"
+          },
+          "arts": {
+            "name": "الفنون والإبداع",
+            "icon": "🎨"
+          },
+          "food": {
+            "name": "الطعام والطبخ",
+            "icon": "🍳"
+          },
+          "gaming": {
+            "name": "الألعاب والتكنولوجيا",
+            "icon": "🎮"
+          },
+          "outdoor": {
+            "name": "المغامرات الخارجية",
+            "icon": "🏞️"
+          },
+          "learning": {
+            "name": "التعلم وورش العمل",
+            "icon": "📚"
+          },
+          "music": {
+            "name": "الموسيقى والترفيه",
+            "icon": "🎵"
+          },
+          "wellness": {
+            "name": "الصحة واليقظة",
+            "icon": "🧘‍♀️"
+          },
+          "automotive": {
+            "name": "السيارات",
+            "icon": "🚗"
+          },
+          "photography": {
+            "name": "التصوير",
+            "icon": "📸"
+          },
+          "events": {
+            "name": "الفعاليات والمهرجانات",
+            "icon": "🎪"
+          },
+          "networking": {
+            "name": "الشبكات المهنية",
+            "icon": "🧑‍💼"
+          }
+        }
       },
       "preferences": {
         "title": "دعنا نخصص تجربتك",
