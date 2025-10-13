@@ -1,10 +1,10 @@
 /**
  * @fileoverview Cloudinary utility functions for LUDUS platform
- * 
+ *
  * This module provides utility functions for uploading and deleting images
  * from Cloudinary cloud storage service. It's used for activity images,
  * user avatars, and other media assets.
- * 
+ *
  * @version 1.0.0
  * @author LUDUS Development Team
  * @since 2025-01-13

@@ -1,7 +1,7 @@
 /**
  * @fileoverview Enhanced Analytics Controller for LUDUS Platform - LDS-017 Implementation
  * @module controllers/analyticsController
- * 
+ *
  * This controller provides comprehensive analytics and business intelligence including:
  * - User behavior analytics
  * - Business intelligence and revenue analytics
@@ -9,7 +9,7 @@
  * - Custom reports and insights
  * - Performance metrics and optimization
  * - RTL support for Arabic users
- * 
+ *
  * @version 2.0.0
  * @author LUDUS Development Team
  * @since 2025-01-27
@@ -71,7 +71,7 @@ const getDashboardAnalytics = async (req, res) => {
       getRevenueMetrics(startDate, now),
       getVendorMetrics(startDate, now),
       getSearchMetrics(startDate, now),
-      getPerformanceMetrics(startDate, now)
+      getPerformanceMetricsDataData(startDate, now)
     ]);
 
     // Get time-series data
@@ -359,7 +359,7 @@ const getVendorAnalytics = async (req, res) => {
     const matchCriteria = {
       createdAt: { $gte: startDate, $lte: now }
     };
-    
+
     if (vendorId) {
       matchCriteria.partner = new mongoose.Types.ObjectId(vendorId);
     }
@@ -826,7 +826,7 @@ const getSearchMetrics = async (startDate, endDate) => {
  * @param {Date} endDate - End date
  * @returns {Promise<Object>} Performance metrics
  */
-const getPerformanceMetrics = async (startDate, endDate) => {
+const getPerformanceMetricsDataData = async (startDate, endDate) => {
   // Mock performance metrics - in a real implementation, these would come from monitoring systems
   return {
     apiResponseTime: 250, // ms
@@ -957,5 +957,5 @@ module.exports = {
   getRevenueAnalytics,
   getVendorAnalytics,
   getSearchAnalytics,
-  getPerformanceMetrics
+  getPerformanceMetricsDataData
 };

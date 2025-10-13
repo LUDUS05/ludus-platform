@@ -1,7 +1,7 @@
 /**
  * @fileoverview Enhanced Search Controller for LUDUS Platform - LDS-016 Implementation
  * @module controllers/searchController
- * 
+ *
  * This controller provides comprehensive search and discovery functionality including:
  * - Advanced search with multiple filters
  * - Full-text search across activities
@@ -9,7 +9,7 @@
  * - Search analytics and reporting
  * - Search suggestions and auto-complete
  * - RTL support for Arabic users
- * 
+ *
  * @version 2.0.0
  * @author LUDUS Development Team
  * @since 2025-01-27
