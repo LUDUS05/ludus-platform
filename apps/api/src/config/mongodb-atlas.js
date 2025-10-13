@@ -1,14 +1,14 @@
 /**
  * @fileoverview MongoDB Atlas configuration and connection management for LUDUS platform.
- * 
+ *
  * Purpose: Manages MongoDB Atlas production database connections with optimized
  * configuration for the LUDUS social activity platform serving the Saudi Arabian market.
- * 
+ *
  * Business Context: This module ensures reliable database connectivity for all
  * platform operations including user management, activity listings, booking systems,
  * payment processing, and referral tracking. It's designed for production workloads
  * with high availability and performance optimization.
- * 
+ *
  * Implementation Notes:
  * - Production-ready MongoDB Atlas connection
  * - Optimized connection pooling for Render deployment
@@ -16,15 +16,15 @@
  * - Automatic index creation for performance
  * - Health check endpoints for monitoring
  * - Graceful shutdown handling
- * 
+ *
  * Dependencies:
  * - Mongoose for MongoDB ODM
  * - Environment variables for configuration
  * - MongoDB Atlas cluster (M30 tier)
- * 
+ *
  * Evolution: Created specifically for production MongoDB Atlas deployment
  * with comprehensive monitoring and performance optimization.
- * 
+ *
  * @version 1.0.0
  * @since 2025-10-06
  * @modified 2025-10-06 - Initial implementation for LDS-005
@@ -34,20 +34,20 @@ const mongoose = require('mongoose');
 
 /**
  * MongoDB Atlas connection configuration optimized for production.
- * 
+ *
  * Purpose: Establishes connection to MongoDB Atlas cluster with production-ready
  * settings including connection pooling, timeouts, and error handling.
- * 
+ *
  * Business Context: Critical for all platform functionality including user authentication,
  * activity management, booking systems, payment processing, and referral tracking.
  * The connection strategy is optimized for high availability and performance.
- * 
+ *
  * Configuration:
  * - Connection pooling for concurrent requests
  * - Optimized timeouts for Render deployment
  * - Automatic reconnection on failures
  * - Comprehensive error handling
- * 
+ *
  * @type {Object}
  */
 const atlasConfig = {
@@ -89,10 +89,10 @@ const atlasConfig = {
 
 /**
  * Connection state tracking for monitoring and health checks.
- * 
+ *
  * Purpose: Tracks connection state and performance metrics for monitoring
  * and alerting systems.
- * 
+ *
  * @type {Object}
  */
 let connectionState = {
@@ -107,40 +107,40 @@ let connectionState = {
 
 /**
  * Establishes MongoDB Atlas connection with production-ready configuration.
- * 
+ *
  * Purpose: Connects to MongoDB Atlas cluster using optimized configuration
  * for production workloads with comprehensive error handling and monitoring.
- * 
+ *
  * Business Context: Critical for all platform functionality. The connection
  * strategy ensures high availability and performance for the LUDUS platform.
- * 
+ *
  * Parameters:
  * @returns {Promise<boolean>} Promise that resolves to true if connection successful,
  * false if connection failed. In production, returns false to allow graceful degradation.
- * 
+ *
  * Implementation Notes:
  * - Production MongoDB Atlas connection
  * - Optimized connection pooling
  * - Comprehensive error handling
  * - Automatic index creation
  * - Health monitoring setup
- * 
+ *
  * Dependencies:
  * - Mongoose for MongoDB connection
  * - Environment variables for configuration
  * - MongoDB Atlas cluster
- * 
+ *
  * @async
  * @function connectAtlas
  * @returns {Promise<boolean>} Connection success status
- * 
+ *
  * @example
  * // Connect to MongoDB Atlas during server startup
  * const connected = await connectAtlas();
  * if (connected) {
  *   console.log('MongoDB Atlas connected successfully');
  * }
- * 
+ *
  * @since 2025-10-06
  */
 const connectAtlas = async () => {
@@ -183,7 +183,7 @@ const connectAtlas = async () => {
     connectionState.errorCount++;
 
     console.error('❌ MongoDB Atlas connection error:', error.message);
-    
+
     if (process.env.NODE_ENV === 'production') {
       console.log('⚠️  Production server will continue without database connection');
       return false;
@@ -195,10 +195,10 @@ const connectAtlas = async () => {
 
 /**
  * Sets up connection event listeners for monitoring and error handling.
- * 
+ *
  * Purpose: Monitors connection events and updates connection state for
  * health checks and alerting systems.
- * 
+ *
  * @param {Object} connection - Mongoose connection object
  * @since 2025-10-06
  */
@@ -241,28 +241,28 @@ const setupConnectionListeners = (connection) => {
 
 /**
  * Creates production-optimized indexes for all collections.
- * 
+ *
  * Purpose: Creates comprehensive indexes for optimal query performance
  * in production environment with focus on LUDUS platform use cases.
- * 
+ *
  * Business Context: Critical for platform performance including user searches,
  * activity discovery, booking management, and analytics. Indexes are optimized
  * for common query patterns and geospatial operations.
- * 
+ *
  * Implementation Notes:
  * - Compound indexes for complex queries
  * - Geospatial indexes for location-based searches
  * - Text indexes for full-text search
  * - Unique indexes for data integrity
- * 
+ *
  * Dependencies:
  * - Mongoose connection
  * - Database collections
- * 
+ *
  * @async
  * @function createProductionIndexes
  * @returns {Promise<void>}
- * 
+ *
  * @since 2025-10-06
  */
 const createProductionIndexes = async () => {
@@ -275,7 +275,7 @@ const createProductionIndexes = async () => {
     console.log('📊 Creating production indexes...');
 
     const db = mongoose.connection.db;
-    
+
     // Users Collection Indexes
     await db.collection('users').createIndex({ email: 1 }, { unique: true, background: true });
     await db.collection('users').createIndex({ phone: 1 }, { unique: true, sparse: true, background: true });
@@ -338,10 +338,10 @@ const createProductionIndexes = async () => {
 
 /**
  * Sets up health monitoring for the database connection.
- * 
+ *
  * Purpose: Monitors database health and performance metrics for alerting
  * and monitoring systems.
- * 
+ *
  * @since 2025-10-06
  */
 const setupHealthMonitoring = () => {
@@ -364,10 +364,10 @@ const setupHealthMonitoring = () => {
 
 /**
  * Extracts cluster information from MongoDB URI for logging.
- * 
+ *
  * Purpose: Extracts cluster name and database from connection string
  * for logging and monitoring purposes.
- * 
+ *
  * @param {string} uri - MongoDB connection string
  * @returns {string} Cluster information
  * @since 2025-10-06
@@ -386,10 +386,10 @@ const extractClusterInfo = (uri) => {
 
 /**
  * Gets current connection state for health checks and monitoring.
- * 
+ *
  * Purpose: Provides current connection state and performance metrics
  * for health check endpoints and monitoring systems.
- * 
+ *
  * @returns {Object} Connection state and metrics
  * @since 2025-10-06
  */
@@ -405,16 +405,16 @@ const getConnectionState = () => {
 
 /**
  * Performs health check on the database connection.
- * 
+ *
  * Purpose: Tests database connectivity and performance for health check
  * endpoints and monitoring systems.
- * 
+ *
  * @returns {Promise<Object>} Health check result
  * @since 2025-10-06
  */
 const healthCheck = async () => {
   const startTime = Date.now();
-  
+
   try {
     if (mongoose.connection.readyState !== 1) {
       return {
@@ -427,7 +427,7 @@ const healthCheck = async () => {
 
     // Test basic query
     await mongoose.connection.db.admin().ping();
-    
+
     return {
       status: 'healthy',
       message: 'Database connection successful',
@@ -448,10 +448,10 @@ const healthCheck = async () => {
 
 /**
  * Gracefully disconnects from MongoDB Atlas.
- * 
+ *
  * Purpose: Closes database connection gracefully during server shutdown
  * to prevent data corruption and ensure clean shutdown.
- * 
+ *
  * @returns {Promise<void>}
  * @since 2025-10-06
  */

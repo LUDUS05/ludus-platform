@@ -290,7 +290,7 @@ const searchActivities = async (req, res) => {
     ]);
 
     // Get search suggestions
-    const suggestions = await getSearchSuggestions(query, language);
+    const suggestions = await getSearchSuggestionsData(query, language);
 
     res.status(200).json({
       success: true,
@@ -359,7 +359,7 @@ const getSearchSuggestions = async (req, res) => {
       });
     }
 
-    const suggestions = await getSearchSuggestions(query, language, parseInt(limit));
+    const suggestions = await getSearchSuggestionsData(query, language, parseInt(limit));
 
     res.status(200).json({
       success: true,
@@ -517,7 +517,7 @@ const saveSearchQuery = async (req, res) => {
  * @param {number} limit - Maximum number of suggestions
  * @returns {Promise<Array>} Array of suggestions
  */
-const getSearchSuggestions = async (query, language = 'ar', limit = 10) => {
+const getSearchSuggestionsData = async (query, language = 'ar', limit = 10) => {
   try {
     const suggestions = [];
 
