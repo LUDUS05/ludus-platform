@@ -119,7 +119,8 @@ const seedSampleData = async (req, res) => {
         location: {
           country: 'Saudi Arabia',
           city: 'Riyadh',
-          address: 'شارع الملك فهد، الرياض'
+          address: 'شارع الملك فهد، الرياض',
+          coordinates: [46.6753, 24.7136] // [longitude, latitude]
         },
         businessType: 'sports_club',
         description: 'نادي رياضي متكامل',
@@ -140,7 +141,8 @@ const seedSampleData = async (req, res) => {
         location: {
           country: 'Saudi Arabia',
           city: 'Jeddah',
-          address: 'كورنيش جدة، جدة'
+          address: 'كورنيش جدة، جدة',
+          coordinates: [39.1925, 21.4858] // [longitude, latitude]
         },
         businessType: 'cultural_center',
         description: 'مركز للفنون والثقافة',
