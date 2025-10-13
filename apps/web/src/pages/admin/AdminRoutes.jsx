@@ -1,29 +1,30 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import ComingSoonPage from '../ComingSoonPage';
-import AdminLayout from '../../components/admin/AdminLayout';
-import AdminDashboard from '../../components/admin/AdminDashboard';
-import VendorManagement from '../../components/admin/VendorManagement';
-import EnhancedVendorForm from '../../components/admin/EnhancedVendorForm';
-import ActivityManagement from '../../components/admin/ActivityManagement';
+// DISABLED: Lockdown system
+// import ComingSoonPage from '../ComingSoonPage';
 import ActivityForm from '../../components/admin/ActivityForm';
-import EnhancedPageManagement from '../../components/admin/EnhancedPageManagement';
-import PageForm from '../../components/admin/PageForm';
+import ActivityManagement from '../../components/admin/ActivityManagement';
+import AdminDashboard from '../../components/admin/AdminDashboard';
+import AdminLayout from '../../components/admin/AdminLayout';
 import BookingManagement from '../../components/admin/BookingManagement';
-import PaymentManagement from '../../components/admin/PaymentManagement';
 import CategoryManagement from '../../components/admin/CategoryManagement';
-import TranslationManagement from '../../components/admin/TranslationManagement';
-import SystemSettings from '../../components/admin/SystemSettings';
-import UserManagement from '../../components/admin/UserManagement';
-import ReferralManagement from '../../components/admin/ReferralManagement';
+import EnhancedPageManagement from '../../components/admin/EnhancedPageManagement';
+import EnhancedVendorForm from '../../components/admin/EnhancedVendorForm';
 import FormManagement from '../../components/admin/FormManagement';
 import FormResponses from '../../components/admin/FormResponses';
 import OnboardingManagement from '../../components/admin/OnboardingManagement';
+import PageForm from '../../components/admin/PageForm';
+import PaymentManagement from '../../components/admin/PaymentManagement';
+import ReferralManagement from '../../components/admin/ReferralManagement';
+import SystemSettings from '../../components/admin/SystemSettings';
+import TranslationManagement from '../../components/admin/TranslationManagement';
+import UserManagement from '../../components/admin/UserManagement';
+import VendorManagement from '../../components/admin/VendorManagement';
 
 const AdminRoutes = () => {
   const { isAuthenticated, user, isLoading } = useAuth();
-  
+
   // Show loading spinner while checking authentication
   if (isLoading) {
     return (
@@ -35,17 +36,17 @@ const AdminRoutes = () => {
 
   // Check if user is admin
   const isAdmin = user && (user.role === 'admin' || user.email === 'admin@ludusapp.com');
-  
+
   if (!isAuthenticated) {
     console.log('❌ Not authenticated, redirecting to /hi');
     return <Navigate to="/hi" replace />;
   }
-  
+
   if (!isAdmin) {
-    console.log('❌ Not admin user, showing Coming Soon page');
-    return <ComingSoonPage />;
+    console.log('❌ Not admin user, redirecting to home');
+    return <Navigate to="/" replace />;
   }
-  
+
   console.log('✅ Admin access granted');
   return (
     <AdminLayout>

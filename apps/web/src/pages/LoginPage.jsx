@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
-import { useAuth } from "../context/AuthContext";
-import { 
-  ArrowRight, 
-  Mail,
-  Lock,
-  Eye,
-  EyeOff,
-  User as UserIcon
+import {
+    ArrowRight,
+    Eye,
+    EyeOff,
+    Lock,
+    Mail,
+    User as UserIcon
 } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 import { Button } from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
@@ -20,9 +20,9 @@ const LoginPage = () => {
   const { t, i18n } = useTranslation();
   const { login, loginWithSocial, isAuthenticated, user, isLoading } = useAuth();
   const navigate = useNavigate();
-  
+
   console.log('🔐 LoginPage component mounted!');
-  
+
   const [formData, setFormData] = useState({
     email: "",
     password: ""
@@ -30,7 +30,7 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  
+
   const isRTL = i18n.language === 'ar';
 
   // Redirect if already authenticated
@@ -40,7 +40,7 @@ const LoginPage = () => {
         role: user.role,
         email: user.email
       });
-      
+
       if (user.role === 'admin' || user.email === 'admin@ludusapp.com') {
         navigate('/admin', { replace: true });
       } else {
@@ -61,13 +61,13 @@ const LoginPage = () => {
 
     try {
       const result = await login(formData);
-      
+
       if (result.success) {
         console.log('✅ Login successful, redirecting...', {
           role: result.user.role,
           email: result.user.email
         });
-        
+
         // Redirect based on user role
         if (result.user.role === 'admin' || result.user.email === 'admin@ludusapp.com') {
           navigate('/admin', { replace: true });
@@ -97,13 +97,13 @@ const LoginPage = () => {
           callback: async (response) => {
             try {
               const result = await loginWithSocial('google', response.credential);
-              
+
               if (result.success) {
                 console.log('✅ Google login successful, redirecting...', {
                   role: result.user.role,
                   email: result.user.email
                 });
-                
+
                 // Redirect based on user role
                 if (result.user.role === 'admin' || result.user.email === 'admin@ludusapp.com') {
                   navigate('/admin', { replace: true });

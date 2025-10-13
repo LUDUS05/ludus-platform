@@ -13,15 +13,12 @@ export const siteSettingsService = {
     return response.data;
   },
 
-  // Toggle coming soon mode
+  // DISABLED: Lockdown system functions
   toggleComingSoon: async () => {
-    const response = await api.post('/site-settings/toggle-coming-soon');
-    return response.data;
+    throw new Error('Coming soon mode is disabled');
   },
 
-  // Toggle maintenance mode
   toggleMaintenance: async () => {
-    const response = await api.post('/site-settings/toggle-maintenance');
-    return response.data;
+    throw new Error('Maintenance mode is disabled');
   }
 };

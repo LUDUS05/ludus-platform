@@ -1,38 +1,9 @@
 const mongoose = require('mongoose');
 
 const siteSettingsSchema = new mongoose.Schema({
-  comingSoonMode: {
-    type: Boolean,
-    default: false
-  },
-  maintenanceMode: {
-    type: Boolean,
-    default: false
-  },
-  comingSoonTitle: {
-    type: String,
-    default: 'LUDUS is Coming Soon'
-  },
-  comingSoonMessage: {
-    type: String,
-    default: 'We\'re building something amazing. Get ready to discover incredible activities and experiences!'
-  },
-  maintenanceTitle: {
-    type: String,
-    default: 'Under Maintenance'
-  },
-  maintenanceMessage: {
-    type: String,
-    default: 'We\'re currently updating our platform to serve you better. We\'ll be back shortly!'
-  },
-  estimatedReturnTime: {
-    type: Date,
-    default: null
-  },
-  allowedPaths: {
-    type: [String],
-    default: ['/admin', '/api/auth/login', '/api/admin']
-  },
+  // DISABLED: Lockdown system fields removed
+  // comingSoonMode, maintenanceMode, comingSoonTitle, comingSoonMessage,
+  // maintenanceTitle, maintenanceMessage, estimatedReturnTime, allowedPaths
   // Wallet controls
   walletControls: {
     addFundsEnabled: {

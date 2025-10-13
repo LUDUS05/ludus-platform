@@ -1,53 +1,54 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import MainLayout from '../components/layout/MainLayout';
+import { Route, Routes } from 'react-router-dom';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
-import SmartRoute from '../components/routing/SmartRoute';
-import HomePage from '../pages/HomePage';
 import RegisterForm from '../components/auth/RegisterForm';
-import AdminRoutes from '../pages/admin/AdminRoutes';
+import MainLayout from '../components/layout/MainLayout';
+import SmartRoute from '../components/routing/SmartRoute';
 import ActivitiesPageComponent from '../pages/ActivitiesPage';
 import ActivityDetailPage from '../pages/ActivityDetailPage';
-import DashboardPage from '../pages/DashboardPage';
-import VendorProfilePage from '../pages/VendorProfilePage';
 import BookingPage from '../pages/BookingPage';
+import DashboardPage from '../pages/DashboardPage';
+import ForgotPasswordPage from '../pages/ForgotPasswordPage';
+import HomePage from '../pages/HomePage';
+import HowItWorksPage from '../pages/HowItWorksPage';
+import OnboardTestPage from '../pages/OnboardTestPage';
+import PartnerRegistrationPage from '../pages/PartnerRegistrationPage';
 import PaymentSuccessPage from '../pages/PaymentSuccessPage';
 import ProfilePage from '../pages/ProfilePage';
-import HowItWorksPage from '../pages/HowItWorksPage';
-import ForgotPasswordPage from '../pages/ForgotPasswordPage';
 import UIShowcasePage from '../pages/UIShowcasePage';
-import PartnerRegistrationPage from '../pages/PartnerRegistrationPage';
 import UserRegistrationPage from '../pages/UserRegistrationPage';
-import OnboardTestPage from '../pages/OnboardTestPage';
-import ComingSoonPage from '../pages/ComingSoonPage';
-import MaintenancePage from '../pages/MaintenancePage';
+import VendorProfilePage from '../pages/VendorProfilePage';
+import AdminRoutes from '../pages/admin/AdminRoutes';
+// DISABLED: Lockdown system pages
+// import ComingSoonPage from '../pages/ComingSoonPage';
+// import MaintenancePage from '../pages/MaintenancePage';
 // import MapPage from '../pages/MapPage'; // Temporarily disabled
-import WalletPage from '../pages/WalletPage';
-import ReferralDashboard from '../pages/ReferralDashboard';
-import ReferralTestPage from '../pages/ReferralTestPage';
-import ContactPage from '../pages/ContactPage';
+import OnboardingTest from '../components/onboarding/OnboardingTest';
+import OnboardingWrapper from '../components/onboarding/OnboardingWrapper';
 import DynamicPage from '../components/pages/DynamicPage';
 import UserProfilePage from '../components/user/UserProfilePage';
-import OnboardingWrapper from '../components/onboarding/OnboardingWrapper';
-import OnboardingTest from '../components/onboarding/OnboardingTest';
-import NewOnboarding from '../pages/NewOnboarding';
-import LoginPage from '../pages/LoginPage';
-import SharePage from '../pages/SharePage';
 import NeoLayout from '../neoui/Layout';
-import NeoHome from '../neoui/pages/Home';
-import NeoSearch from '../neoui/pages/Search';
 import NeoActivityDetails from '../neoui/pages/ActivityDetails';
-import NeoProfile from '../neoui/pages/Profile';
 import NeoDashboard from '../neoui/pages/Dashboard';
-import NeoWallet from '../neoui/pages/Wallet';
+import NeoHome from '../neoui/pages/Home';
+import NeoProfile from '../neoui/pages/Profile';
+import NeoSearch from '../neoui/pages/Search';
 import TestHomePage from '../neoui/pages/TestHomePage';
+import NeoWallet from '../neoui/pages/Wallet';
+import ContactPage from '../pages/ContactPage';
+import LoginPage from '../pages/LoginPage';
+import NewOnboarding from '../pages/NewOnboarding';
+import ReferralDashboard from '../pages/ReferralDashboard';
+import ReferralTestPage from '../pages/ReferralTestPage';
+import SharePage from '../pages/SharePage';
+import WalletPage from '../pages/WalletPage';
 
 const AppRoutes = () => {
   return (
     <Routes>
       {/* Routes without layout (standalone pages) */}
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/admin" element={<AdminRoutes />} />
+      <Route path="/admin/*" element={<AdminRoutes />} />
       <Route path="/share" element={
         <ProtectedRoute>
           <SharePage />
@@ -68,8 +69,9 @@ const AppRoutes = () => {
           <PartnerRegistrationPage />
         </SmartRoute>
       } />
-      <Route path="/coming-soon" element={<ComingSoonPage />} />
-      <Route path="/maintenance" element={<MaintenancePage />} />
+      {/* DISABLED: Lockdown system routes */}
+      {/* <Route path="/coming-soon" element={<ComingSoonPage />} /> */}
+      {/* <Route path="/maintenance" element={<MaintenancePage />} /> */}
       <Route path="/onboarding" element={
         <SmartRoute path="/onboarding">
           <OnboardingWrapper />

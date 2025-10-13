@@ -71,7 +71,7 @@ const getDashboardAnalytics = async (req, res) => {
       getRevenueMetrics(startDate, now),
       getVendorMetrics(startDate, now),
       getSearchMetrics(startDate, now),
-      getPerformanceMetricsDataData(startDate, now)
+      getPerformanceMetricsData(startDate, now)
     ]);
 
     // Get time-series data
@@ -826,7 +826,7 @@ const getSearchMetrics = async (startDate, endDate) => {
  * @param {Date} endDate - End date
  * @returns {Promise<Object>} Performance metrics
  */
-const getPerformanceMetricsDataData = async (startDate, endDate) => {
+const getPerformanceMetricsData = async (startDate, endDate) => {
   // Mock performance metrics - in a real implementation, these would come from monitoring systems
   return {
     apiResponseTime: 250, // ms
@@ -958,5 +958,5 @@ module.exports = {
   getVendorAnalytics,
   getSearchAnalytics,
   getPerformanceMetrics,
-  getPerformanceMetricsDataData
+  getPerformanceMetricsData
 };

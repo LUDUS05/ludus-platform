@@ -27,10 +27,8 @@ router.get('/', getSettings);
 // Update site settings (Admin only)
 router.put('/', authenticate, authorize('admin'), settingsValidation, updateSettings);
 
-// Toggle coming soon mode (Admin only)
-router.post('/toggle-coming-soon', authenticate, authorize('admin'), toggleComingSoon);
-
-// Toggle maintenance mode (Admin only)
-router.post('/toggle-maintenance', authenticate, authorize('admin'), toggleMaintenance);
+// DISABLED: Lockdown system routes
+// router.post('/toggle-coming-soon', authenticate, authorize('admin'), toggleComingSoon);
+// router.post('/toggle-maintenance', authenticate, authorize('admin'), toggleMaintenance);
 
 module.exports = router;

@@ -553,6 +553,15 @@
     "yourMessage": "Your message"
   },
   "admin": {
+    "title": "Admin",
+    "dashboard": "Dashboard",
+    "users": "Users",
+    "vendors": "Vendors",
+    "activities": "Activities",
+    "bookings": "Bookings",
+    "payments": "Payments",
+    "settings": "Settings",
+    "reports": "Reports",
     "translationScan": {
       "title": "Translation Scan Dashboard",
       "subtitle": "Automatically detect untranslated content and translation errors",

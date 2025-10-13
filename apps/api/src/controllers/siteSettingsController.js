@@ -32,9 +32,9 @@ exports.updateSettings = async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ 
-        message: 'Validation error', 
-        errors: errors.array() 
+      return res.status(400).json({
+        message: 'Validation error',
+        errors: errors.array()
       });
     }
 
@@ -42,10 +42,10 @@ exports.updateSettings = async (req, res) => {
     const userId = req.user.id;
 
     const settings = await SiteSettings.updateSettings(updates, userId);
-    
-    res.json({ 
+
+    res.json({
       message: 'Site settings updated successfully',
-      settings 
+      settings
     });
   } catch (error) {
     console.error('Update settings error:', error);
@@ -54,47 +54,27 @@ exports.updateSettings = async (req, res) => {
 };
 
 /**
- * Toggle the "coming soon" mode for the site.
+ * DISABLED: Toggle the "coming soon" mode for the site.
  * @param {import('express').Request} req - The Express request object.
  * @param {import('express').Response} res - The Express response object.
  * @returns {Promise<void>}
  */
 exports.toggleComingSoon = async (req, res) => {
-  try {
-    const settings = await SiteSettings.getSettings();
-    settings.comingSoonMode = !settings.comingSoonMode;
-    settings.lastUpdatedBy = req.user.id;
-    await settings.save();
-
-    res.json({ 
-      message: `Coming soon mode ${settings.comingSoonMode ? 'enabled' : 'disabled'}`,
-      comingSoonMode: settings.comingSoonMode 
-    });
-  } catch (error) {
-    console.error('Toggle coming soon error:', error);
-    res.status(500).json({ message: 'Failed to toggle coming soon mode' });
-  }
+  res.status(410).json({
+    message: 'Coming soon mode is disabled',
+    error: 'LOCKDOWN_SYSTEM_DISABLED'
+  });
 };
 
 /**
- * Toggle the maintenance mode for the site.
+ * DISABLED: Toggle the maintenance mode for the site.
  * @param {import('express').Request} req - The Express request object.
  * @param {import('express').Response} res - The Express response object.
  * @returns {Promise<void>}
  */
 exports.toggleMaintenance = async (req, res) => {
-  try {
-    const settings = await SiteSettings.getSettings();
-    settings.maintenanceMode = !settings.maintenanceMode;
-    settings.lastUpdatedBy = req.user.id;
-    await settings.save();
-
-    res.json({ 
-      message: `Maintenance mode ${settings.maintenanceMode ? 'enabled' : 'disabled'}`,
-      maintenanceMode: settings.maintenanceMode 
-    });
-  } catch (error) {
-    console.error('Toggle maintenance error:', error);
-    res.status(500).json({ message: 'Failed to toggle maintenance mode' });
-  }
+  res.status(410).json({
+    message: 'Maintenance mode is disabled',
+    error: 'LOCKDOWN_SYSTEM_DISABLED'
+  });
 };
