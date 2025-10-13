@@ -110,6 +110,7 @@ const seedSampleData = async (req, res) => {
       {
         businessName: 'نادي الرياضة المثالي',
         businessNameEn: 'Perfect Sports Club',
+        slug: 'perfect-sports-club',
         contactPerson: 'سعد الأحمد',
         contactInfo: {
           email: 'sports@perfect.com',
@@ -123,12 +124,14 @@ const seedSampleData = async (req, res) => {
         businessType: 'sports_club',
         description: 'نادي رياضي متكامل',
         descriptionEn: 'Complete sports club',
+        categories: ['fitness'],
         isActive: true,
         isVerified: true
       },
       {
         businessName: 'مركز الثقافة والفنون',
         businessNameEn: 'Culture & Arts Center',
+        slug: 'culture-arts-center',
         contactPerson: 'نورا الخالدي',
         contactInfo: {
           email: 'culture@arts.com',
@@ -142,6 +145,7 @@ const seedSampleData = async (req, res) => {
         businessType: 'cultural_center',
         description: 'مركز للفنون والثقافة',
         descriptionEn: 'Arts and culture center',
+        categories: ['arts'],
         isActive: true,
         isVerified: true
       }
