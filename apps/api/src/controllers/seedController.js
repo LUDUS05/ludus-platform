@@ -111,8 +111,10 @@ const seedSampleData = async (req, res) => {
         businessName: 'نادي الرياضة المثالي',
         businessNameEn: 'Perfect Sports Club',
         contactPerson: 'سعد الأحمد',
-        email: 'sports@perfect.com',
-        phone: '+966501234567',
+        contactInfo: {
+          email: 'sports@perfect.com',
+          phone: '+966501234567'
+        },
         location: {
           country: 'Saudi Arabia',
           city: 'Riyadh',
@@ -128,8 +130,10 @@ const seedSampleData = async (req, res) => {
         businessName: 'مركز الثقافة والفنون',
         businessNameEn: 'Culture & Arts Center',
         contactPerson: 'نورا الخالدي',
-        email: 'culture@arts.com',
-        phone: '+966507654321',
+        contactInfo: {
+          email: 'culture@arts.com',
+          phone: '+966507654321'
+        },
         location: {
           country: 'Saudi Arabia',
           city: 'Jeddah',
@@ -146,7 +150,7 @@ const seedSampleData = async (req, res) => {
     const vendors = [];
     for (const vendorInfo of vendorData) {
       const vendor = await Vendor.findOneAndUpdate(
-        { email: vendorInfo.email },
+        { 'contactInfo.email': vendorInfo.contactInfo.email },
         vendorInfo,
         { upsert: true, new: true }
       );
