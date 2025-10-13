@@ -50,11 +50,11 @@ dotenv.config();
 
 // Aggressive memory optimization for Render starter plan
 if (global.gc) {
-  // Force garbage collection every 2 minutes if available
+  // Force garbage collection every 30 seconds if available
   setInterval(() => {
     global.gc();
     logger.info('Garbage collection performed');
-  }, 120000);
+  }, 30000);
 }
 
 // Aggressive memory monitoring and cleanup
@@ -67,17 +67,17 @@ setInterval(() => {
     external: Math.round(memUsage.external / 1024 / 1024)
   };
   
-  // Log memory usage every 5 minutes
+  // Log memory usage every 1 minute
   logger.info({ memoryUsage: memUsageMB }, 'Memory usage report');
   
   // Force cleanup if memory usage is high (lowered threshold)
-  if (memUsage.heapUsed / memUsage.heapTotal > 0.7) {
+  if (memUsage.heapUsed / memUsage.heapTotal > 0.6) {
     if (global.gc) {
       global.gc();
       logger.warn('High memory usage detected, garbage collection performed');
     }
   }
-}, 300000); // Every 5 minutes
+}, 60000); // Every 1 minute
 
 // Additional memory optimization
 process.on('uncaughtException', (err) => {

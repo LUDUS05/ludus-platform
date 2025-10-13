@@ -32,7 +32,8 @@ router.get('/navigation', async (req, res) => {
     })
       .select('title slug placement navigationOrder')
       .sort({ placement: 1, navigationOrder: 1 })
-      .lean();
+      .lean()
+      .maxTimeMS(5000); // 5 second timeout
     
     // Transform to include computed URL
     const pagesWithUrl = pages.map(page => ({
@@ -63,7 +64,8 @@ router.get('/featured', async (req, res) => {
       .select('title slug seo.description settings.featuredImage views')
       .sort({ views: -1, createdAt: -1 })
       .limit(6)
-      .lean();
+      .lean()
+      .maxTimeMS(5000); // 5 second timeout
     
     // Transform to include computed URL and featured image
     const pagesWithMetadata = pages.map(page => ({
@@ -184,7 +186,8 @@ router.get('/menu/:placement', async (req, res) => {
     const pages = await Page.find(query)
       .select('title slug placement navigationOrder createdAt')
       .sort({ navigationOrder: 1, createdAt: -1 })
-      .lean();
+      .lean()
+      .maxTimeMS(5000); // 5 second timeout
     
     // Transform to include computed URL
     const pagesWithUrl = pages.map(page => ({
@@ -226,7 +229,8 @@ router.get('/by-placement/:placement', async (req, res) => {
     })
       .select('title slug placement navigationOrder createdAt')
       .sort({ navigationOrder: 1, createdAt: -1 })
-      .lean();
+      .lean()
+      .maxTimeMS(5000); // 5 second timeout
     
     // Transform to include computed URL
     const pagesWithUrl = pages.map(page => ({
