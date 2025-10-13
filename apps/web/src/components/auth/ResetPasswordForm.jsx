@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link, useSearchParams } from 'react-router-dom';
 import useTranslationWithFallback from '../../hooks/useTranslationWithFallback';
 import { authService } from '../../services/authService';
 import Logo from '../common/Logo';
@@ -8,9 +8,8 @@ import Logo from '../common/Logo';
 const ResetPasswordForm = () => {
   const { t } = useTranslation();
   const { t: tFallback } = useTranslationWithFallback();
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  
+
   const [formData, setFormData] = useState({
     password: '',
     confirmPassword: ''
@@ -33,7 +32,7 @@ const ResetPasswordForm = () => {
 
   const validateForm = () => {
     const errors = {};
-    
+
     if (!formData.password) {
       errors.password = tFallback('auth.passwordRequired', 'Password is required');
     } else if (formData.password.length < 8) {
@@ -41,13 +40,13 @@ const ResetPasswordForm = () => {
     } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
       errors.password = tFallback('auth.passwordComplexity', 'Password must contain uppercase, lowercase, and number');
     }
-    
+
     if (!formData.confirmPassword) {
       errors.confirmPassword = tFallback('auth.confirmPasswordRequired', 'Please confirm your password');
     } else if (formData.password !== formData.confirmPassword) {
       errors.confirmPassword = tFallback('auth.passwordsDoNotMatch', 'Passwords do not match');
     }
-    
+
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
   };

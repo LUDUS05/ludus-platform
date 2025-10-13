@@ -34,7 +34,9 @@
     "postinstall": "echo 'Backend dependencies installed successfully'"
   },
   "dependencies": {
+    "@linear/sdk": "^29.0.0",
     "@modelcontextprotocol/sdk": "^1.17.5",
+    "@notionhq/client": "^2.2.15",
     "axios": "^1.11.0",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.41.0",

@@ -19,7 +19,7 @@ const csv = require('csv-writer').createObjectCsvWriter;
 const getAllForms = async (req, res) => {
   try {
     const { status, page = 1, limit = 10, search } = req.query;
-    
+
     const query = {};
     if (status) query.status = status;
     if (search) {
@@ -29,16 +29,16 @@ const getAllForms = async (req, res) => {
         { slug: { $regex: search, $options: 'i' } }
       ];
     }
-    
+
     const forms = await Form.find(query)
       .populate('createdBy', 'firstName lastName email')
       .populate('lastModifiedBy', 'firstName lastName email')
       .sort({ createdAt: -1 })
       .limit(limit * 1)
       .skip((page - 1) * limit);
-    
+
     const total = await Form.countDocuments(query);
-    
+
     res.json({
       success: true,
       data: {
@@ -70,14 +70,14 @@ const getForm = async (req, res) => {
     const form = await Form.findById(req.params.id)
       .populate('createdBy', 'firstName lastName email')
       .populate('lastModifiedBy', 'firstName lastName email');
-    
+
     if (!form) {
       return res.status(404).json({
         success: false,
         message: 'Form not found'
       });
     }
-    
+
     res.json({
       success: true,
       data: { form }
@@ -107,13 +107,13 @@ const createForm = async (req, res) => {
         errors: errors.array()
       });
     }
-    
+
     const formData = {
       ...req.body,
       createdBy: req.user.id,
       lastModifiedBy: req.user.id
     };
-    
+
     // Ensure fields have proper order
     if (formData.fields && formData.fields.length > 0) {
       formData.fields = formData.fields.map((field, index) => ({
@@ -121,9 +121,9 @@ const createForm = async (req, res) => {
         order: field.order || index
       }));
     }
-    
+
     const form = await Form.create(formData);
-    
+
     res.status(201).json({
       success: true,
       message: 'Form created successfully',
@@ -131,14 +131,14 @@ const createForm = async (req, res) => {
     });
   } catch (error) {
     console.error('Create form error:', error);
-    
+
     if (error.code === 11000) {
       return res.status(400).json({
         success: false,
         message: 'Form slug already exists'
       });
     }
-    
+
     res.status(500).json({
       success: false,
       message: 'Failed to create form'
@@ -162,7 +162,7 @@ const updateForm = async (req, res) => {
         errors: errors.array()
       });
     }
-    
+
     const form = await Form.findById(req.params.id);
     if (!form) {
       return res.status(404).json({
@@ -170,17 +170,17 @@ const updateForm = async (req, res) => {
         message: 'Form not found'
       });
     }
-    
+
     const updateData = {
       ...req.body,
       lastModifiedBy: req.user.id
     };
-    
+
     // If publishing for the first time, set publishedAt
     if (updateData.status === 'published' && form.status !== 'published') {
       updateData.publishedAt = new Date();
     }
-    
+
     // Ensure fields have proper order
     if (updateData.fields && updateData.fields.length > 0) {
       updateData.fields = updateData.fields.map((field, index) => ({
@@ -188,14 +188,14 @@ const updateForm = async (req, res) => {
         order: field.order || index
       }));
     }
-    
+
     const updatedForm = await Form.findByIdAndUpdate(
       req.params.id,
       updateData,
       { new: true, runValidators: true }
     ).populate('createdBy', 'firstName lastName email')
      .populate('lastModifiedBy', 'firstName lastName email');
-    
+
     res.json({
       success: true,
       message: 'Form updated successfully',
@@ -203,14 +203,14 @@ const updateForm = async (req, res) => {
     });
   } catch (error) {
     console.error('Update form error:', error);
-    
+
     if (error.code === 11000) {
       return res.status(400).json({
         success: false,
         message: 'Form slug already exists'
       });
     }
-    
+
     res.status(500).json({
       success: false,
       message: 'Failed to update form'
@@ -233,7 +233,7 @@ const deleteForm = async (req, res) => {
         message: 'Form not found'
       });
     }
-    
+
     // Check if form has responses
     const responseCount = await FormResponse.countDocuments({ form: req.params.id });
     if (responseCount > 0) {
@@ -242,9 +242,9 @@ const deleteForm = async (req, res) => {
         message: `Cannot delete form with ${responseCount} responses. Archive the form instead.`
       });
     }
-    
+
     await Form.findByIdAndDelete(req.params.id);
-    
+
     res.json({
       success: true,
       message: 'Form deleted successfully'
@@ -267,7 +267,7 @@ const deleteForm = async (req, res) => {
 const getFormResponses = async (req, res) => {
   try {
     const { status, page = 1, limit = 20, dateFrom, dateTo } = req.query;
-    
+
     const form = await Form.findById(req.params.id);
     if (!form) {
       return res.status(404).json({
@@ -275,7 +275,7 @@ const getFormResponses = async (req, res) => {
         message: 'Form not found'
       });
     }
-    
+
     const options = {
       status,
       dateFrom,
@@ -283,10 +283,10 @@ const getFormResponses = async (req, res) => {
       limit: parseInt(limit),
       skip: (parseInt(page) - 1) * parseInt(limit)
     };
-    
+
     const responses = await FormResponse.getResponsesByForm(req.params.id, options);
     const total = await FormResponse.countDocuments({ form: req.params.id });
-    
+
     res.json({
       success: true,
       data: {
@@ -327,7 +327,7 @@ const getFormStats = async (req, res) => {
         message: 'Form not found'
       });
     }
-    
+
     const stats = await FormResponse.getResponseStats(req.params.id);
     const fieldStats = await FormResponse.aggregate([
       { $match: { form: form._id } },
@@ -343,7 +343,7 @@ const getFormStats = async (req, res) => {
       },
       { $sort: { responseCount: -1 } }
     ]);
-    
+
     res.json({
       success: true,
       data: {
@@ -379,7 +379,7 @@ const getFormStats = async (req, res) => {
 const updateResponseStatus = async (req, res) => {
   try {
     const { status, reviewNotes } = req.body;
-    
+
     const response = await FormResponse.findById(req.params.id);
     if (!response) {
       return res.status(404).json({
@@ -387,23 +387,23 @@ const updateResponseStatus = async (req, res) => {
         message: 'Response not found'
       });
     }
-    
+
     const updateData = {
       status,
       reviewedBy: req.user.id,
       reviewedAt: new Date()
     };
-    
+
     if (reviewNotes) {
       updateData.reviewNotes = reviewNotes;
     }
-    
+
     const updatedResponse = await FormResponse.findByIdAndUpdate(
       req.params.id,
       updateData,
       { new: true }
     ).populate('reviewedBy', 'firstName lastName email');
-    
+
     res.json({
       success: true,
       message: 'Response status updated successfully',
@@ -427,7 +427,7 @@ const updateResponseStatus = async (req, res) => {
 const exportFormResponses = async (req, res) => {
   try {
     const { format = 'csv', status, dateFrom, dateTo } = req.query;
-    
+
     const form = await Form.findById(req.params.id);
     if (!form) {
       return res.status(404).json({
@@ -435,25 +435,25 @@ const exportFormResponses = async (req, res) => {
         message: 'Form not found'
       });
     }
-    
+
     const options = { status, dateFrom, dateTo };
     const responses = await FormResponse.getResponsesByForm(req.params.id, options);
-    
+
     if (format === 'csv') {
       // Generate CSV
       const csvData = responses.map(response => response.toCSVRow());
-      
+
       if (csvData.length === 0) {
         return res.status(400).json({
           success: false,
           message: 'No responses to export'
         });
       }
-      
+
       const headers = Object.keys(csvData[0]);
       const csvContent = [
         headers.join(','),
-        ...csvData.map(row => 
+        ...csvData.map(row =>
           headers.map(header => {
             const value = row[header] || '';
             // Escape CSV values
@@ -461,7 +461,7 @@ const exportFormResponses = async (req, res) => {
           }).join(',')
         )
       ].join('\n');
-      
+
       res.setHeader('Content-Type', 'text/csv');
       res.setHeader('Content-Disposition', `attachment; filename="${form.slug}-responses-${new Date().toISOString().split('T')[0]}.csv"`);
       res.send(csvContent);
@@ -500,7 +500,7 @@ const submitFormResponse = async (req, res) => {
   try {
     const { slug } = req.params;
     const { responses, metadata = {} } = req.body;
-    
+
     const form = await Form.findOne({ slug, status: 'published' });
     if (!form) {
       return res.status(404).json({
@@ -508,14 +508,14 @@ const submitFormResponse = async (req, res) => {
         message: 'Form not found or not published'
       });
     }
-    
+
     // Check if multiple submissions are allowed
     if (!form.settings.allowMultipleSubmissions && req.user) {
       const existingResponse = await FormResponse.findOne({
         form: form._id,
         submittedBy: req.user.id
       });
-      
+
       if (existingResponse) {
         return res.status(400).json({
           success: false,
@@ -523,19 +523,19 @@ const submitFormResponse = async (req, res) => {
         });
       }
     }
-    
+
     // Validate responses against form fields
     const validatedResponses = [];
     for (const field of form.fields) {
       const response = responses.find(r => r.fieldId === field.id);
-      
+
       if (field.required && (!response || !response.value)) {
         return res.status(400).json({
           success: false,
           message: `Field "${field.label}" is required`
         });
       }
-      
+
       if (response && response.value) {
         // Basic validation
         if (field.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(response.value)) {
@@ -544,14 +544,14 @@ const submitFormResponse = async (req, res) => {
             message: `Invalid email format for field "${field.label}"`
           });
         }
-        
+
         if (field.type === 'number' && isNaN(response.value)) {
           return res.status(400).json({
             success: false,
             message: `Invalid number format for field "${field.label}"`
           });
         }
-        
+
         validatedResponses.push({
           fieldId: field.id,
           fieldType: field.type,
@@ -561,7 +561,7 @@ const submitFormResponse = async (req, res) => {
         });
       }
     }
-    
+
     // Create form response
     const formResponse = await FormResponse.create({
       form: form._id,
@@ -581,18 +581,17 @@ const submitFormResponse = async (req, res) => {
         source: metadata.source || 'web'
       }
     });
-    
+
     // Update form response count
     await Form.findByIdAndUpdate(form._id, {
       $inc: { responseCount: 1 }
     });
-    
+
     res.status(201).json({
       success: true,
       message: form.settings.successMessage,
       data: {
-        responseId: formResponse._id,
-        redirectUrl: form.settings.redirectUrl
+        responseId: formResponse._id
       }
     });
   } catch (error) {
@@ -612,18 +611,18 @@ const submitFormResponse = async (req, res) => {
  */
 const getPublishedForm = async (req, res) => {
   try {
-    const form = await Form.findOne({ 
-      slug: req.params.slug, 
-      status: 'published' 
+    const form = await Form.findOne({
+      slug: req.params.slug,
+      status: 'published'
     });
-    
+
     if (!form) {
       return res.status(404).json({
         success: false,
         message: 'Form not found'
       });
     }
-    
+
     res.json({
       success: true,
       data: { form }

@@ -266,6 +266,11 @@ const setupConnectionListeners = (connection) => {
  * @since 2025-10-06
  */
 const createProductionIndexes = async () => {
+  // Allow skipping index creation in health checks or constrained environments
+  if (process.env.SKIP_INDEX_BUILD === '1') {
+    console.log('⏭️  Skipping production index creation (SKIP_INDEX_BUILD=1)');
+    return;
+  }
   try {
     console.log('📊 Creating production indexes...');
 

@@ -1,7 +1,7 @@
 /**
  * @fileoverview Enhanced Controller for handling payments with Moyasar integration.
  * @module controllers/paymentController
- * 
+ *
  * This controller provides comprehensive payment processing capabilities including:
  * - Payment creation and processing
  * - Payment confirmation and status tracking
@@ -9,7 +9,7 @@
  * - Payment method management
  * - Webhook handling
  * - Payment analytics and reporting
- * 
+ *
  * @version 2.0.0
  * @author LUDUS Development Team
  * @since 2025-01-27
@@ -65,7 +65,7 @@ const createPayment = async (req, res) => {
 
     // Create payment source based on method
     let paymentSource;
-    
+
     switch (paymentMethod) {
       case 'credit_card':
         if (savedTokenId) {
@@ -79,7 +79,7 @@ const createPayment = async (req, res) => {
           });
         }
         break;
-      
+
       case 'apple_pay':
         if (!req.body.applePayToken) {
           return res.status(400).json({
@@ -89,7 +89,7 @@ const createPayment = async (req, res) => {
         }
         paymentSource = moyasarService.createApplePaySource(req.body.applePayToken);
         break;
-      
+
       case 'stc_pay':
         if (!req.body.mobile) {
           return res.status(400).json({
@@ -99,7 +99,7 @@ const createPayment = async (req, res) => {
         }
         paymentSource = moyasarService.createSTCPaySource(req.body.mobile);
         break;
-      
+
       default:
         return res.status(400).json({
           success: false,
@@ -111,7 +111,6 @@ const createPayment = async (req, res) => {
     const paymentData = {
       amount: booking.pricing.totalPrice,
       description: `Booking for ${booking.activity.title}`,
-      callbackUrl: `${process.env.CLIENT_URL}/payment/callback`,
       source: paymentSource,
       bookingId: booking._id,
       userId: userId,
@@ -130,11 +129,11 @@ const createPayment = async (req, res) => {
     booking.payment.moyasarPaymentId = moyasarPayment.id;
     booking.payment.method = paymentMethod;
     booking.payment.status = moyasarService.getPaymentStatus(moyasarPayment.status);
-    
+
     if (moyasarPayment.source?.company || moyasarPayment.source?.brand) {
       booking.payment.brand = moyasarPayment.source.company || moyasarPayment.source.brand;
     }
-    
+
     if (moyasarPayment.source?.last_four) {
       booking.payment.last4 = moyasarPayment.source.last_four;
     }
@@ -204,7 +203,7 @@ const confirmPayment = async (req, res) => {
     if (moyasarPayment.status === 'paid') {
       booking.status = 'confirmed';
       booking.payment.paidAt = new Date();
-      
+
       // Send booking confirmation email
   try {
   const _vendor = await Vendor.findById(booking.vendor);
@@ -212,7 +211,7 @@ const confirmPayment = async (req, res) => {
           .populate('activity')
           .populate('vendor')
           .populate('user');
-        
+
         await emailService.sendBookingConfirmationEmail(
           populatedBooking,
           populatedBooking.activity,
@@ -316,7 +315,7 @@ const processRefund = async (req, res) => {
 
     // Calculate refund amount based on cancellation policy
     const refundAmount = booking.getRefundAmount();
-    
+
     if (refundAmount <= 0) {
       return res.status(400).json({
         success: false,
@@ -387,7 +386,7 @@ const savePaymentMethod = async (req, res) => {
     // Check if payment methods are enabled in site settings
     const SiteSettings = require('../models/SiteSettings');
     const settings = await SiteSettings.getSettings();
-    
+
     // Determine payment method type and check if it's enabled
     let paymentMethodType = 'creditCard'; // Default to credit card
     if (cardData.brand) {
@@ -397,7 +396,7 @@ const savePaymentMethod = async (req, res) => {
       else if (brand.includes('stc')) paymentMethodType = 'stcPay';
       else if (brand.includes('sadad')) paymentMethodType = 'sadad';
     }
-    
+
     const methodEnabledKey = `${paymentMethodType}Enabled`;
     if (!settings.paymentMethodControls?.[methodEnabledKey]) {
       return res.status(403).json({
@@ -863,10 +862,10 @@ const setDefaultPaymentMethod = async (req, res) => {
 
     // Set all methods to non-default
     user.paymentMethods.forEach(m => m.isDefault = false);
-    
+
     // Set selected method as default
     method.isDefault = true;
-    
+
     await user.save();
 
     res.status(200).json({
