@@ -180,6 +180,7 @@ const seedSampleData = async (req, res) => {
       {
         title: 'كرة القدم الأسبوعية',
         titleEn: 'Weekly Football',
+        slug: 'weekly-football',
         description: 'مباراة كرة قدم أسبوعية',
         descriptionEn: 'Weekly football match',
         category: categories[0]._id,
@@ -202,6 +203,7 @@ const seedSampleData = async (req, res) => {
       {
         title: 'ورشة الرسم',
         titleEn: 'Painting Workshop',
+        slug: 'painting-workshop',
         description: 'ورشة تعليم الرسم للمبتدئين',
         descriptionEn: 'Beginner painting workshop',
         category: categories[1]._id,
@@ -224,6 +226,7 @@ const seedSampleData = async (req, res) => {
       {
         title: 'حفلة موسيقية',
         titleEn: 'Music Concert',
+        slug: 'music-concert',
         description: 'حفلة موسيقية للفنانين المحليين',
         descriptionEn: 'Local artists music concert',
         category: categories[2]._id,
