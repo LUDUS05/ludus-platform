@@ -5,8 +5,7 @@ const notificationSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true,
-    index: true
+    required: true
   },
   
   // Notification type
@@ -24,8 +23,7 @@ const notificationSchema = new mongoose.Schema({
       'payment_success',
       'payment_failed'
     ],
-    required: true,
-    index: true
+    required: true
   },
   
   // Title and content
@@ -51,16 +49,14 @@ const notificationSchema = new mongoose.Schema({
   priority: {
     type: String,
     enum: ['low', 'normal', 'high', 'urgent'],
-    default: 'normal',
-    index: true
+    default: 'normal'
   },
   
   // Status
   status: {
     type: String,
     enum: ['unread', 'read', 'archived'],
-    default: 'unread',
-    index: true
+    default: 'unread'
   },
   
   // Read timestamp

@@ -28,8 +28,7 @@ const paymentSchema = new mongoose.Schema({
   paymentNumber: {
     type: String,
     unique: true,
-    required: [true, 'Payment number is required'],
-    index: true
+    required: [true, 'Payment number is required']
   },
 
   // Related Entities
@@ -37,8 +36,7 @@ const paymentSchema = new mongoose.Schema({
     id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Booking',
-      required: [true, 'Booking ID is required'],
-      index: true
+      required: [true, 'Booking ID is required']
     },
     bookingNumber: {
       type: String,
@@ -49,8 +47,7 @@ const paymentSchema = new mongoose.Schema({
     id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: [true, 'User ID is required'],
-      index: true
+      required: [true, 'User ID is required']
     },
     name: {
       type: String,
@@ -89,8 +86,7 @@ const paymentSchema = new mongoose.Schema({
       required: [true, 'Payment gateway provider is required']
     },
     transactionId: {
-      type: String,
-      index: true
+      type: String
     },
     gatewayResponse: {
       type: mongoose.Schema.Types.Mixed,
@@ -111,8 +107,7 @@ const paymentSchema = new mongoose.Schema({
   status: {
     type: String,
     enum: ['pending', 'processing', 'completed', 'failed', 'cancelled', 'refunded'],
-    default: 'pending',
-    index: true
+    default: 'pending'
   },
 
   // Refund Information
