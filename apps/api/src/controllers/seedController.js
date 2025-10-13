@@ -186,7 +186,7 @@ const seedSampleData = async (req, res) => {
           name: 'ملعب النادي المثالي',
           nameEn: 'Perfect Club Stadium',
           address: 'شارع الملك فهد، الرياض',
-          coordinates: { lat: 24.7136, lng: 46.6753 }
+          coordinates: [46.6753, 24.7136] // [longitude, latitude]
         },
         price: 50,
         currency: 'SAR',
@@ -208,7 +208,7 @@ const seedSampleData = async (req, res) => {
           name: 'مركز الثقافة والفنون',
           nameEn: 'Culture & Arts Center',
           address: 'كورنيش جدة، جدة',
-          coordinates: { lat: 21.4858, lng: 39.1925 }
+          coordinates: [39.1925, 21.4858] // [longitude, latitude]
         },
         price: 100,
         currency: 'SAR',
@@ -230,7 +230,7 @@ const seedSampleData = async (req, res) => {
           name: 'قاعة الحفلات',
           nameEn: 'Concert Hall',
           address: 'كورنيش جدة، جدة',
-          coordinates: { lat: 21.4858, lng: 39.1925 }
+          coordinates: [39.1925, 21.4858] // [longitude, latitude]
         },
         price: 200,
         currency: 'SAR',
