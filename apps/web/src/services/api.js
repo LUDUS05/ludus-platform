@@ -11,7 +11,7 @@ const getApiBaseUrl = () => {
     }
     return 'https://ludus-backend-jzc5.onrender.com/api';
   }
-  
+
   // Development: Use local backend
   const envUrl = process.env.REACT_APP_API_URL;
   if (envUrl) {
@@ -46,7 +46,7 @@ api.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    
+
     // Debug log the full URL being requested
     console.log('API Request:', {
       method: config.method,
@@ -54,7 +54,7 @@ api.interceptors.request.use(
       baseURL: config.baseURL,
       fullURL: config.baseURL + config.url
     });
-    
+
     return config;
   },
   (error) => {
@@ -78,7 +78,7 @@ api.interceptors.response.use(
         });
 
         const { accessToken } = response.data.data;
-        
+
         localStorage.setItem('accessToken', accessToken);
         // New refresh token is automatically set as HttpOnly cookie by server
 

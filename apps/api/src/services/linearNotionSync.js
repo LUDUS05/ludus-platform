@@ -9,7 +9,7 @@ const { LinearClient } = require('@linear/sdk');
 class LinearNotionSyncService {
   constructor() {
     this.notion = new Client({ auth: process.env.NOTION_API_KEY });
-    
+
     // Only initialize Linear client if API key is provided
     if (process.env.LINEAR_API_KEY) {
       this.linear = new LinearClient({ apiKey: process.env.LINEAR_API_KEY });
@@ -17,9 +17,9 @@ class LinearNotionSyncService {
       this.linear = null;
       console.log('⚠️  Linear API key not provided - Linear integration disabled');
     }
-    
+
     this.notionDatabaseId = process.env.NOTION_TASKS_DATABASE_ID || '9efe5329-42c7-49d1-920e-c927f4d4602c';
-    
+
     // Status mapping: Linear -> Notion
     this.statusMapping = {
       'Backlog': 'Backlog',
@@ -51,7 +51,7 @@ class LinearNotionSyncService {
         console.log('⚠️  Linear client not available - skipping webhook processing');
         return { success: false, message: 'Linear API key not provided' };
       }
-      
+
       const { action, data, type } = webhookData;
 
       console.log(`[Linear Webhook] Received: ${type} - ${action}`);
@@ -116,7 +116,7 @@ class LinearNotionSyncService {
       if (!this.linear) {
         throw new Error('Linear client not available');
       }
-      
+
       const issue = await this.linear.issue(issueId);
       const state = await issue.state;
       const priority = issue.priority;

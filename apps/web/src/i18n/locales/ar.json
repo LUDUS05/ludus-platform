@@ -87,22 +87,12 @@
     "noFieldsAdded": "لم يتم إضافة حقول بعد. انقر على \"إضافة حقل\" للبدء.",
     "contactUs": "اتصل بنا",
     "fieldLabel": "تسمية الحقل",
-    "adventureToursSaudi": "جولات المغامرات السعودية",
-    "riyadhProvince": "منطقة الرياض",
-    "businessAccountName": "اسم الحساب التجاري",
-    "accountNumber": "رقم الحساب",
-    "adventureActivities": "أنشطة المغامرات",
-    "desertSafariAdventure": "مغامرة رحلة الصحراء",
-    "alKhobar": "الخبر",
     "natureLandscape": "منظر طبيعي",
     "desertLandscape": "منظر صحراوي",
     "validInput": "إدخال صحيح",
     "invalidInput": "إدخال غير صحيح",
     "neumorphicInput": "إدخال نيومورفيك",
     "pressedInput": "إدخال مضغوط",
-    "clearSearch": "مسح البحث",
-    "johnDoe": "أحمد محمد",
-    "deleteNotification": "حذف الإشعار",
     "textInput": "إدخال نص",
     "emailInput": "إدخال بريد إلكتروني",
     "passwordInput": "إدخال كلمة مرور",
@@ -116,6 +106,15 @@
     "yourMessage": "رسالتك"
   },
   "admin": {
+    "title": "الإدارة",
+    "dashboard": "لوحة التحكم",
+    "users": "المستخدمون",
+    "vendors": "البائعون",
+    "activities": "الأنشطة",
+    "bookings": "الحجوزات",
+    "payments": "المدفوعات",
+    "settings": "الإعدادات",
+    "reports": "التقارير",
     "translationScan": {
       "title": "لوحة تحكم فحص الترجمة",
       "subtitle": "اكتشف تلقائياً المحتوى غير المترجم وأخطاء الترجمة",
@@ -504,7 +503,75 @@
     "loadingQRCode": "جاري تحميل رمز QR...",
     "shareQRCodeWithFriends": "شارك رمز QR هذا مع الأصدقاء لكسب المكافآت!",
     "downloadQRCode": "تحميل رمز QR",
-    "copyReferralLink": "نسخ رابط الإحالة"
+    "copyReferralLink": "نسخ رابط الإحالة",
+    "viewAll": "عرض الكل",
+    "contactInformation": "معلومات الاتصال",
+    "about": "حول",
+    "contact": "اتصل بنا",
+    "nextSteps": "الخطوات التالية",
+    "contactVendor": "اتصل بالبائع مباشرة إذا كان لديك أي أسئلة",
+    "shareLudusWithFriends": "شارك لودوس مع الأصدقاء واكسب المكافآت!",
+    "referralProgram": "برنامج الإحالة",
+    "viewFullDashboard": "عرض لوحة التحكم الكاملة",
+    "earnRewardsByReferring": "اكسب المكافآت من خلال إحالة الأصدقاء",
+    "startReferring": "ابدأ الإحالة",
+    "totalSpent": "إجمالي المبلغ المنفق",
+    "minPrice": "الحد الأدنى للسعر (ريال)",
+    "sortBy": "ترتيب حسب",
+    "latest": "الأحدث",
+    "priceLowToHigh": "السعر: من الأقل للأعلى",
+    "priceHighToLow": "السعر: من الأعلى للأقل",
+    "nameAZ": "الاسم أ-ي",
+    "mostPopular": "الأكثر شعبية",
+    "activitiesFound": "أنشطة موجودة",
+    "resetFilters": "إعادة تعيين المرشحات",
+    "noActivitiesFound": "لم يتم العثور على أنشطة",
+    "tryAdjustingSearch": "حاول تعديل مرشحات البحث أو تصفح جميع الأنشطة",
+    "showAllActivities": "عرض جميع الأنشطة",
+    "previous": "السابق",
+    "next": "التالي",
+    "by": "بواسطة",
+    "back": "رجوع",
+    "continue": "متابعة",
+    "adventureToursSaudi": "جولات المغامرات السعودية",
+    "riyadhProvince": "منطقة الرياض",
+    "businessAccountName": "اسم الحساب التجاري",
+    "accountNumber": "رقم الحساب",
+    "adventureActivities": "أنشطة المغامرات",
+    "desertSafariAdventure": "مغامرة رحلة الصحراء",
+    "alKhobar": "الخبر",
+    "deleteNotification": "حذف الإشعار",
+    "clearSearch": "مسح البحث",
+    "johnDoe": "محمد أحمد",
+    "enterYourName": "أدخل اسمك",
+    "emailAddress": "عنوان البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "disabledInput": "حقل معطل",
+    "editPage": "تعديل الصفحة",
+    "duplicatePage": "نسخ الصفحة",
+    "previewPage": "معاينة الصفحة",
+    "deletePage": "حذف الصفحة",
+    "contactForm": "نموذج الاتصال",
+    "noFieldsAdded": "لم يتم إضافة حقول بعد. انقر على \"إضافة حقل\" للبدء.",
+    "contactUs": "اتصل بنا",
+    "fieldLabel": "تسمية الحقل",
+    "natureLandscape": "منظر طبيعي",
+    "desertLandscape": "منظر صحراوي",
+    "validInput": "إدخال صحيح",
+    "invalidInput": "إدخال غير صحيح",
+    "neumorphicInput": "إدخال نيومورفيك",
+    "pressedInput": "إدخال مضغوط",
+    "textInput": "إدخال نص",
+    "emailInput": "إدخال بريد إلكتروني",
+    "passwordInput": "إدخال كلمة مرور",
+    "numberInput": "إدخال رقم",
+    "phoneNumber": "رقم الهاتف",
+    "websiteUrl": "رابط الموقع",
+    "search": "بحث...",
+    "normalInput": "إدخال عادي",
+    "readOnlyInput": "إدخال للقراءة فقط",
+    "yourName": "اسمك",
+    "yourMessage": "رسالتك"
   },
   "user": {
     "title": "المستخدم",
@@ -1138,6 +1205,62 @@
         },
         "incentiveMessage": "ادع الأصدقاء واكسب المكافآت!",
         "skipOption": "ربما لاحقاً"
+      },
+      "interests": {
+        "title": "اختر اهتماماتك",
+        "subtitle": "اختر الأنشطة التي تحبها",
+        "continueBtn": "متابعة",
+        "skipBtn": "تخطي الآن",
+        "minError": "اختر على الأقل 3 اهتمامات",
+        "selected": "مختار",
+        "sportsFitness": "الرياضة واللياقة",
+        "foodDining": "الطعام والمطاعم",
+        "artsCulture": "الفنون والثقافة",
+        "entertainment": "الترفيه",
+        "learningWorkshops": "التعلم وورش العمل",
+        "outdoorAdventures": "المغامرات الخارجية",
+        "socialEvents": "الفعاليات الاجتماعية"
+      },
+      "preferences": {
+        "title": "دعنا نخصص تجربتك",
+        "preferences": {
+          "language": {
+            "label": "اللغة",
+            "description": "اختر لغتك المفضلة",
+            "options": {
+              "ar": "العربية",
+              "en": "English"
+            }
+          },
+          "theme": {
+            "label": "المظهر",
+            "description": "اختر مظهرك المفضل",
+            "options": {
+              "light": "فاتح",
+              "dark": "داكن"
+            }
+          },
+          "locationSharing": {
+            "label": "مشاركة الموقع",
+            "description": "تفعيل للحصول على توصيات أفضل"
+          },
+          "emailNotifications": {
+            "label": "إشعارات البريد الإلكتروني",
+            "description": "توصيات الأنشطة والتحديثات"
+          },
+          "pushNotifications": {
+            "label": "الإشعارات الفورية",
+            "description": "تأكيدات الحجز والتحديثات"
+          },
+          "profileVisibility": {
+            "label": "رؤية الملف الشخصي",
+            "description": "تحكم في من يمكنه رؤية ملفك الشخصي",
+            "options": {
+              "public": "عام",
+              "friends": "الأصدقاء فقط"
+            }
+          }
+        }
       }
     },
     "welcome": {
