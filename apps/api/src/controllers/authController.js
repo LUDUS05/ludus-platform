@@ -805,60 +805,6 @@ const createAdminUser = async (req, res, next) => {
   }
 };
 
-// Temporary endpoint to update user role (for initial setup)
-const updateUserRole = async (req, res) => {
-  try {
-    const { email, role, adminRole } = req.body;
-
-    if (!email || !role) {
-      return res.status(400).json({
-        success: false,
-        message: 'Email and role are required'
-      });
-    }
-
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: 'User not found'
-      });
-    }
-
-    // Update user role
-    user.role = role;
-    if (adminRole) {
-      user.adminRole = adminRole;
-    }
-    
-    if (role === 'admin' && !user.adminMetadata) {
-      user.adminMetadata = {
-        assignedBy: user._id,
-        assignedAt: new Date(),
-        lastActiveAt: new Date()
-      };
-    }
-
-    await user.save();
-
-    res.json({
-      success: true,
-      message: 'User role updated successfully',
-      data: {
-        id: user._id,
-        email: user.email,
-        role: user.role,
-        adminRole: user.adminRole
-      }
-    });
-  } catch (error) {
-    console.error('❌ Error updating user role:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Server error updating user role'
-    });
-  }
-};
 
 module.exports = {
   register,
@@ -871,6 +817,5 @@ module.exports = {
   resetPassword,
   changePassword,
   socialLogin,
-  createAdminUser,
-  updateUserRole
+  createAdminUser
 };
