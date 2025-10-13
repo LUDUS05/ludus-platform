@@ -278,7 +278,7 @@ const createProductionIndexes = async () => {
     
     // Users Collection Indexes
     await db.collection('users').createIndex({ email: 1 }, { unique: true, background: true });
-    await db.collection('users').createIndex({ phone: 1 }, { unique: true, background: true });
+    await db.collection('users').createIndex({ phone: 1 }, { unique: true, sparse: true, background: true });
     await db.collection('users').createIndex({ "location.coordinates": "2dsphere" }, { background: true });
     await db.collection('users').createIndex({ "profile.firstName": "text", "profile.lastName": "text", email: "text" }, { background: true });
     await db.collection('users').createIndex({ "location.city": 1, "preferences.interests": 1 }, { background: true });

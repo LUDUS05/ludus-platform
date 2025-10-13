@@ -21,8 +21,8 @@ const mongoose = require('mongoose');
 const app = require('../app');
 const Activity = require('../models/Activity');
 const ActivityEnhanced = require('../models/ActivityEnhanced');
-const Category = require('../models/Category');
-const Partner = require('../models/Partner');
+const Category = require('../models/CategoryEnhanced');
+const Partner = require('../models/PartnerEnhanced');
 const User = require('../models/User');
 const { generateAuthToken } = require('../utils/auth');
 
