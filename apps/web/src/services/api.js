@@ -9,7 +9,7 @@ const getApiBaseUrl = () => {
     if (envUrl) {
       return envUrl.endsWith('/api') ? envUrl : `${envUrl}/api`;
     }
-    return 'https://ludus-backend-athena.onrender.com/api';
+    return 'https://ludus-backend-jzc5.onrender.com/api';
   }
   
   // Development: Use local backend
