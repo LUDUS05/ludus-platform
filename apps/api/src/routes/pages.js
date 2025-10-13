@@ -201,12 +201,9 @@ router.get('/menu/:placement', async (req, res) => {
     });
   } catch (error) {
     console.error('Get pages by placement error:', error);
-    
-    // Return empty data instead of error for better UX
-    res.json({
-      success: true,
-      data: [],
-      message: 'No menu pages found'
+    res.status(500).json({
+      success: false,
+      message: 'Server error retrieving pages by placement'
     });
   }
 });

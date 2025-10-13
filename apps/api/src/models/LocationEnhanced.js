@@ -28,15 +28,13 @@ const locationSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Location name is required'],
     trim: true,
-    maxlength: [100, 'Location name cannot exceed 100 characters'],
-    index: true
+    maxlength: [100, 'Location name cannot exceed 100 characters']
   },
   nameEn: {
     type: String,
     required: [true, 'English location name is required'],
     trim: true,
-    maxlength: [100, 'English location name cannot exceed 100 characters'],
-    index: true
+    maxlength: [100, 'English location name cannot exceed 100 characters']
   },
   description: {
     type: String,
@@ -72,8 +70,7 @@ const locationSchema = new mongoose.Schema({
   },
   path: {
     type: String,
-    default: '',
-    index: true
+    default: ''
   },
 
   // Geospatial Information

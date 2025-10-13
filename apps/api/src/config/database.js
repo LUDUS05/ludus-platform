@@ -91,7 +91,6 @@ const connectDB = async () => {
         console.log('🚀 Connecting to MongoDB Atlas...');
         
         // Set up query optimization
-        mongoose.set('lean', true); // Use lean queries by default for better performance
         mongoose.set('maxTimeMS', 10000); // 10 second query timeout
         
         return await connectAtlas();

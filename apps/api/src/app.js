@@ -1,34 +1,34 @@
 /**
  * @fileoverview Main application entry point for LUDUS platform backend.
- *
+ * 
  * Purpose: Central Express.js application that orchestrates all backend services including
  * authentication, API routing, database connections, and middleware configuration for the
  * LUDUS social activity platform serving the Saudi Arabian market.
- *
+ * 
  * Business Context: This is the core server that powers the LUDUS platform, handling
  * user authentication, activity management, payment processing, referral systems, and
  * AI agent integrations. It's optimized for Render deployment with aggressive memory
  * management for the starter plan constraints.
- *
- * Implementation Notes:
+ * 
+ * Implementation Notes: 
  * - Aggressive memory optimization with garbage collection intervals
  * - Comprehensive error handling and logging
  * - Security middleware with CORS, Helmet, and rate limiting
  * - Database connection with automatic partner terms page creation
  * - Health check endpoints for monitoring
  * - Backward compatibility routes for frontend deployment
- *
- * Dependencies:
+ * 
+ * Dependencies: 
  * - Express.js for web framework
  * - MongoDB with Mongoose for database operations
  * - Firebase for authentication integration
  * - Moyasar for payment processing
  * - Render MCP for AI agent management
- *
+ * 
  * Evolution: Originally built as a simple Express server, evolved to include
  * comprehensive memory management, AI integrations, and production optimizations
  * for Render deployment.
- *
+ * 
  * @version 1.0.0
  * @since 2024-01-01
  * @modified 2025-01-08 - Added aggressive memory management and Render optimizations
@@ -69,7 +69,7 @@ setInterval(() => {
   
   // Log memory usage every 1 minute
   logger.info({ memoryUsage: memUsageMB }, 'Memory usage report');
-
+  
   // Force cleanup if memory usage is high (lowered threshold)
   if (memUsage.heapUsed / memUsage.heapTotal > 0.6) {
     if (global.gc) {
@@ -96,14 +96,8 @@ const app = express();
 // Connect to MongoDB only if not in test mode or if MONGODB_URI is available
 if (process.env.NODE_ENV !== 'test' && process.env.MONGODB_URI) {
   connectDB().then(async () => {
-    // Wait a moment for connection to be fully established
-    await new Promise(resolve => setTimeout(resolve, 1000));
     // Create partner terms page if it doesn't exist
-    try {
-      await createPartnerTermsPage();
-    } catch (err) {
-      logger.warn({ err }, 'Failed to create partner terms page, continuing...');
-    }
+    await createPartnerTermsPage();
   }).catch(err => {
     logger.error({ err }, 'Failed to connect to database');
     logger.warn('Server will continue running without database');
@@ -117,37 +111,37 @@ if (process.env.NODE_ENV !== 'test' && process.env.MONGODB_URI) {
 
 /**
  * Creates the partner terms and conditions page if it doesn't already exist.
- *
+ * 
  * Purpose: Automatically provisions the partner terms page during server startup to ensure
  * all partners have access to the legal terms and conditions required for platform participation.
- *
+ * 
  * Business Context: This function ensures compliance with Saudi Arabian business regulations
  * by providing clear terms and conditions for partner onboarding. It's called during server
  * initialization to guarantee the page exists before any partner registration attempts.
- *
+ * 
  * Implementation Notes:
  * - Idempotent function that can be safely called multiple times
  * - Creates bilingual content (Arabic/English) for Saudi market compliance
  * - Uses system user ID for audit trail
  * - Includes comprehensive partner agreement terms
  * - Automatically sets proper SEO metadata
- *
+ * 
  * Dependencies:
  * - Page model for database operations
  * - Mongoose for ObjectId generation
  * - Logger for operation tracking
- *
+ * 
  * Evolution: Originally manual page creation, evolved to automatic provisioning
  * during server startup for better user experience and compliance.
- *
+ * 
  * @async
  * @function createPartnerTermsPage
  * @returns {Promise<void>} A promise that resolves when the page is created or if it already exists.
- *
+ * 
  * @example
  * // Called automatically during server startup
  * await createPartnerTermsPage();
- *
+ * 
  * @since 2024-06-01
  * @modified 2025-01-08 - Added comprehensive bilingual content and SEO optimization
  * @see {@link Page} Model for page structure
@@ -157,7 +151,7 @@ async function createPartnerTermsPage() {
   try {
     const Page = require('./models/Page');
     const mongoose = require('mongoose');
-
+    
     // Check if partner terms page already exists
     const existingPage = await Page.findOne({ slug: 'partner-terms-and-conditions' });
     if (existingPage) {
@@ -302,7 +296,7 @@ app.use(helmet());
 app.use(cors({
   origin: [
     'http://localhost:3000',
-    'https://app.letsludus.com',
+    'https://app.letsludus.com', 
     'https://ludus-frontend-og2d.onrender.com',
     'https://ludus-platform.onrender.com',
     /https:\/\/.*\.onrender\.com$/
@@ -327,22 +321,6 @@ app.use(require('cookie-parser')());
 
 // Static file serving for uploads
 app.use('/uploads', express.static('uploads'));
-
-// Root route
-app.get('/', (req, res) => {
-  res.status(200).json({
-    message: 'LUDUS Platform API',
-    status: 'running',
-    timestamp: new Date().toISOString(),
-    version: process.env.npm_package_version || '1.0.1',
-    environment: process.env.NODE_ENV || 'development',
-    endpoints: {
-      health: '/health',
-      api_health: '/api/health',
-      docs: '/api/docs'
-    }
-  });
-});
 
 // Health check route
 app.get('/health', (req, res) => {
@@ -412,9 +390,6 @@ app.post('/api/create-partner-terms', async (req, res) => {
   }
 });
 
-// Health check routes (before other routes for monitoring)
-app.use('/health', require('./routes/health'));
-
 // API Routes
 app.use('/api/auth', require('./routes/auth'));
 // Backward compatibility route (temporary fix for frontend deployment issue)
@@ -441,8 +416,6 @@ app.use('/api/contact', require('./routes/contact'));
 app.use('/api/referrals', require('./routes/referrals'));
 app.use('/api/invitations', require('./routes/invitations'));
 app.use('/api/notifications', require('./routes/notifications'));
-app.use('/api/reviews', require('./routes/reviews'));
-app.use('/api/search', require('./routes/search'));
 app.use('/api/analytics', require('./routes/analytics'));
 app.use('/api/reports', require('./routes/reports'));
 app.use('/api/monitoring', require('./routes/monitoring'));
@@ -451,16 +424,15 @@ app.use('/api/onboarding', require('./routes/onboarding'));
 app.use('/api/social', require('./routes/social'));
 app.use('/api/setup', require('./routes/setup'));
 app.use('/api/render-mcp', require('./routes/renderMCP'));
-app.use('/api/linear-webhook', require('./routes/linearWebhook'));
 const formsRoutes = require('./routes/forms');
 app.use('/api/forms', formsRoutes.publicRouter);
 app.use('/api/admin/forms', formsRoutes.adminRouter);
 
 // Remove the catch-all 404 handler - Render should handle frontend routes
 // app.use('*', (req, res) => {
-//   res.status(404).json({
+//   res.status(404).json({ 
 //     success: false,
-//     message: 'Route not found'
+//     message: 'Route not found' 
 //   });
 // });
 

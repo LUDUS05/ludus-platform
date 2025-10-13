@@ -29,16 +29,14 @@ const categorySchema = new mongoose.Schema({
     required: [true, 'Category name is required'],
     unique: true,
     trim: true,
-    maxlength: [50, 'Category name cannot exceed 50 characters'],
-    index: true
+    maxlength: [50, 'Category name cannot exceed 50 characters']
   },
   nameEn: {
     type: String,
     required: [true, 'English category name is required'],
     unique: true,
     trim: true,
-    maxlength: [50, 'English category name cannot exceed 50 characters'],
-    index: true
+    maxlength: [50, 'English category name cannot exceed 50 characters']
   },
   description: {
     type: String,
@@ -80,8 +78,7 @@ const categorySchema = new mongoose.Schema({
   },
   path: {
     type: String,
-    default: '',
-    index: true
+    default: ''
   },
 
   // Statistics
