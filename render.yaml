@@ -72,7 +72,7 @@ services:
     envVars:
       # Core API Configuration - REQUIRED
       - key: REACT_APP_API_URL
-        value: https://ludus-backend.onrender.com
+        value: https://ludus-backend-jzc5.onrender.com
       # Animation Configuration - REQUIRED
       - key: REACT_APP_ANIMATION_ENABLED
         value: "true"
