@@ -1,11 +1,11 @@
 /**
  * @fileoverview Enhanced Category model for LUDUS platform - LDS-006 Implementation
- * 
+ *
  * This model defines the comprehensive category schema for the LUDUS social activity platform
  * based on the detailed database design specification. It includes category management,
  * hierarchical structure, multilingual support, and activity counting with cultural
  * sensitivity for the Saudi Arabian market.
- * 
+ *
  * Key Features:
  * - Hierarchical category structure with parent-child relationships
  * - Arabic/English bilingual support
@@ -14,7 +14,7 @@
  * - Sorting and ordering capabilities
  * - Active/inactive status management
  * - SEO-friendly structure
- * 
+ *
  * @version 2.0.0
  * @author LUDUS Development Team
  * @since 2025-01-27
@@ -29,16 +29,14 @@ const categorySchema = new mongoose.Schema({
     required: [true, 'Category name is required'],
     unique: true,
     trim: true,
-    maxlength: [50, 'Category name cannot exceed 50 characters'],
-    index: true
+    maxlength: [50, 'Category name cannot exceed 50 characters']
   },
   nameEn: {
     type: String,
     required: [true, 'English category name is required'],
     unique: true,
     trim: true,
-    maxlength: [50, 'English category name cannot exceed 50 characters'],
-    index: true
+    maxlength: [50, 'English category name cannot exceed 50 characters']
   },
   description: {
     type: String,
@@ -80,8 +78,7 @@ const categorySchema = new mongoose.Schema({
   },
   path: {
     type: String,
-    default: '',
-    index: true
+    default: ''
   },
 
   // Statistics
@@ -144,10 +141,10 @@ const categorySchema = new mongoose.Schema({
 
 /**
  * Update category path before saving.
- * 
+ *
  * Updates the category path based on the parent hierarchy
  * for efficient querying and navigation.
- * 
+ *
  * @function
  * @param {Function} next - Express middleware next function
  * @returns {void}
@@ -170,10 +167,10 @@ categorySchema.pre('save', async function(next) {
 
 /**
  * Update parent's subcategories after saving.
- * 
+ *
  * Updates the parent category's subcategories array when
  * a new category is created or parent is changed.
- * 
+ *
  * @function
  * @param {Function} next - Express middleware next function
  * @returns {void}
@@ -190,10 +187,10 @@ categorySchema.post('save', async function(next) {
 
 /**
  * Remove from parent's subcategories after deletion.
- * 
+ *
  * Removes the category from its parent's subcategories array
  * when the category is deleted.
- * 
+ *
  * @function
  * @param {Function} next - Express middleware next function
  * @returns {void}
@@ -210,10 +207,10 @@ categorySchema.post('remove', async function(next) {
 
 /**
  * Get all subcategories recursively.
- * 
+ *
  * Retrieves all subcategories at all levels below this category
  * in the hierarchy.
- * 
+ *
  * @method getAllSubcategories
  * @returns {Promise<Array>} Array of all subcategory documents
  */
@@ -221,16 +218,16 @@ categorySchema.methods.getAllSubcategories = async function() {
   const subcategories = await this.constructor.find({
     path: { $regex: `^${this.path}/` }
   }).sort({ sortOrder: 1, name: 1 });
-  
+
   return subcategories;
 };
 
 /**
  * Get direct subcategories only.
- * 
+ *
  * Retrieves only the direct subcategories (one level down)
  * from this category.
- * 
+ *
  * @method getDirectSubcategories
  * @returns {Promise<Array>} Array of direct subcategory documents
  */
@@ -239,16 +236,16 @@ categorySchema.methods.getDirectSubcategories = async function() {
     parent: this._id,
     isActive: true
   }).sort({ sortOrder: 1, name: 1 });
-  
+
   return subcategories;
 };
 
 /**
  * Update activity count.
- * 
+ *
  * Updates the activity count for this category and all
  * parent categories in the hierarchy.
- * 
+ *
  * @method updateActivityCount
  * @param {number} change - Change in activity count (positive or negative)
  * @returns {Promise<Category>} The updated category document
@@ -256,7 +253,7 @@ categorySchema.methods.getDirectSubcategories = async function() {
 categorySchema.methods.updateActivityCount = async function(change) {
   this.activityCount = Math.max(0, this.activityCount + change);
   await this.save();
-  
+
   // Update parent categories
   if (this.parent) {
     const parentCategory = await this.constructor.findById(this.parent);
@@ -264,23 +261,23 @@ categorySchema.methods.updateActivityCount = async function(change) {
       await parentCategory.updateActivityCount(change);
     }
   }
-  
+
   return this;
 };
 
 /**
  * Get category breadcrumb.
- * 
+ *
  * Retrieves the breadcrumb path from root to this category
  * for navigation purposes.
- * 
+ *
  * @method getBreadcrumb
  * @returns {Promise<Array>} Array of category documents in breadcrumb order
  */
 categorySchema.methods.getBreadcrumb = async function() {
   const breadcrumb = [];
   let current = this;
-  
+
   while (current) {
     breadcrumb.unshift(current);
     if (current.parent) {
@@ -289,15 +286,15 @@ categorySchema.methods.getBreadcrumb = async function() {
       current = null;
     }
   }
-  
+
   return breadcrumb;
 };
 
 /**
  * Check if category has subcategories.
- * 
+ *
  * Determines if this category has any active subcategories.
- * 
+ *
  * @method hasSubcategories
  * @returns {Promise<boolean>} True if has subcategories, false otherwise
  */
@@ -344,8 +341,8 @@ categorySchema.index({ isActive: 1, sortOrder: 1 });
 categorySchema.index({ activityCount: -1 });
 
 // Text index for search
-categorySchema.index({ 
-  name: 'text', 
+categorySchema.index({
+  name: 'text',
   nameEn: 'text',
   description: 'text',
   descriptionEn: 'text'
