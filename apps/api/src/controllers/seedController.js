@@ -13,12 +13,13 @@ const seedSampleData = async (req, res) => {
 
     // Get admin user for createdBy field
     const adminUser = await User.findOne({ role: 'admin' });
+    console.log('Admin user found:', adminUser ? adminUser._id : 'Not found');
     if (!adminUser) {
       throw new Error('Admin user not found');
     }
 
     // Create sample categories
-    const categories = await Category.create([
+    const categoryData = [
       {
         name: 'رياضة',
         nameEn: 'Sports',
@@ -46,7 +47,10 @@ const seedSampleData = async (req, res) => {
         isActive: true,
         createdBy: adminUser._id
       }
-    ]);
+    ];
+    
+    console.log('Category data:', JSON.stringify(categoryData, null, 2));
+    const categories = await Category.create(categoryData);
     console.log('✅ Created categories:', categories.length);
 
     // Create sample users
