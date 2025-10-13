@@ -18,7 +18,7 @@ import { Label } from "../components/ui/Label";
 
 const LoginPage = () => {
   const { t, i18n } = useTranslation();
-  const { login, isAuthenticated, user, isLoading } = useAuth();
+  const { login, loginWithSocial, isAuthenticated, user, isLoading } = useAuth();
   const navigate = useNavigate();
   
   console.log('🔐 LoginPage component mounted!');
@@ -60,7 +60,7 @@ const LoginPage = () => {
     setError("");
 
     try {
-      const result = await login(formData.email, formData.password);
+      const result = await login(formData);
       
       if (result.success) {
         console.log('✅ Login successful, redirecting...', {
@@ -96,7 +96,7 @@ const LoginPage = () => {
           client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
           callback: async (response) => {
             try {
-              const result = await login(null, null, response.credential);
+              const result = await loginWithSocial('google', response.credential);
               
               if (result.success) {
                 console.log('✅ Google login successful, redirecting...', {
