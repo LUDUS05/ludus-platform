@@ -153,11 +153,22 @@ const seedSampleData = async (req, res) => {
     
     const vendors = [];
     for (const vendorInfo of vendorData) {
-      const vendor = await Vendor.findOneAndUpdate(
-        { 'contactInfo.email': vendorInfo.contactInfo.email },
-        vendorInfo,
-        { upsert: true, new: true }
-      );
+      // First check if vendor exists
+      let vendor = await Vendor.findOne({ 'contactInfo.email': vendorInfo.contactInfo.email });
+      
+      if (vendor) {
+        // Update existing vendor
+        vendor = await Vendor.findByIdAndUpdate(
+          vendor._id,
+          vendorInfo,
+          { new: true }
+        );
+      } else {
+        // Create new vendor
+        vendor = new Vendor(vendorInfo);
+        await vendor.save();
+      }
+      
       vendors.push(vendor);
     }
     console.log('✅ Created/updated vendors:', vendors.length);
