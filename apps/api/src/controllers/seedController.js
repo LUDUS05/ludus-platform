@@ -250,11 +250,22 @@ const seedSampleData = async (req, res) => {
     
     const activities = [];
     for (const activityInfo of activityData) {
-      const activity = await Activity.findOneAndUpdate(
-        { title: activityInfo.title },
-        activityInfo,
-        { upsert: true, new: true }
-      );
+      // First check if activity exists
+      let activity = await Activity.findOne({ title: activityInfo.title });
+      
+      if (activity) {
+        // Update existing activity
+        activity = await Activity.findByIdAndUpdate(
+          activity._id,
+          activityInfo,
+          { new: true }
+        );
+      } else {
+        // Create new activity
+        activity = new Activity(activityInfo);
+        await activity.save();
+      }
+      
       activities.push(activity);
     }
     console.log('✅ Created/updated activities:', activities.length);
