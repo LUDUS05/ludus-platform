@@ -1,7 +1,7 @@
 /**
  * @fileoverview Comprehensive Test Suite for Activity Management System
  * @module tests/activity.test
- * 
+ *
  * This test suite covers all activity management functionality including:
  * - Activity CRUD operations
  * - Advanced search and filtering
@@ -10,7 +10,7 @@
  * - Media management
  * - Analytics and reporting
  * - RTL support for Arabic users
- * 
+ *
  * @version 2.0.0
  * @author LUDUS Development Team
  * @since 2025-01-27
@@ -268,7 +268,7 @@ describe('Activity Management System', () => {
 
     it('should get analytics for different periods', async () => {
       const periods = ['7d', '30d', '90d', '1y'];
-      
+
       for (const period of periods) {
         const response = await request(app)
           .get(`/api/activities/${activityId}/analytics?period=${period}`)
@@ -485,7 +485,7 @@ describe('Activity Management System', () => {
 
     it('should sort activities by different fields', async () => {
       const sortFields = ['createdAt', 'pricing.basePrice', 'title'];
-      
+
       for (const sortBy of sortFields) {
         const response = await request(app)
           .get(`/api/activities?sortBy=${sortBy}`)

@@ -1,34 +1,34 @@
 /**
  * @fileoverview Main application entry point for LUDUS platform backend.
- * 
+ *
  * Purpose: Central Express.js application that orchestrates all backend services including
  * authentication, API routing, database connections, and middleware configuration for the
  * LUDUS social activity platform serving the Saudi Arabian market.
- * 
+ *
  * Business Context: This is the core server that powers the LUDUS platform, handling
  * user authentication, activity management, payment processing, referral systems, and
  * AI agent integrations. It's optimized for Render deployment with aggressive memory
  * management for the starter plan constraints.
- * 
- * Implementation Notes: 
+ *
+ * Implementation Notes:
  * - Aggressive memory optimization with garbage collection intervals
  * - Comprehensive error handling and logging
  * - Security middleware with CORS, Helmet, and rate limiting
  * - Database connection with automatic partner terms page creation
  * - Health check endpoints for monitoring
  * - Backward compatibility routes for frontend deployment
- * 
- * Dependencies: 
+ *
+ * Dependencies:
  * - Express.js for web framework
  * - MongoDB with Mongoose for database operations
  * - Firebase for authentication integration
  * - Moyasar for payment processing
  * - Render MCP for AI agent management
- * 
+ *
  * Evolution: Originally built as a simple Express server, evolved to include
  * comprehensive memory management, AI integrations, and production optimizations
  * for Render deployment.
- * 
+ *
  * @version 1.0.0
  * @since 2024-01-01
  * @modified 2025-01-08 - Added aggressive memory management and Render optimizations
@@ -66,10 +66,10 @@ setInterval(() => {
     heapUsed: Math.round(memUsage.heapUsed / 1024 / 1024),
     external: Math.round(memUsage.external / 1024 / 1024)
   };
-  
+
   // Log memory usage every 5 minutes
   logger.info({ memoryUsage: memUsageMB }, 'Memory usage report');
-  
+
   // Force cleanup if memory usage is high (lowered threshold)
   if (memUsage.heapUsed / memUsage.heapTotal > 0.7) {
     if (global.gc) {
@@ -117,37 +117,37 @@ if (process.env.NODE_ENV !== 'test' && process.env.MONGODB_URI) {
 
 /**
  * Creates the partner terms and conditions page if it doesn't already exist.
- * 
+ *
  * Purpose: Automatically provisions the partner terms page during server startup to ensure
  * all partners have access to the legal terms and conditions required for platform participation.
- * 
+ *
  * Business Context: This function ensures compliance with Saudi Arabian business regulations
  * by providing clear terms and conditions for partner onboarding. It's called during server
  * initialization to guarantee the page exists before any partner registration attempts.
- * 
+ *
  * Implementation Notes:
  * - Idempotent function that can be safely called multiple times
  * - Creates bilingual content (Arabic/English) for Saudi market compliance
  * - Uses system user ID for audit trail
  * - Includes comprehensive partner agreement terms
  * - Automatically sets proper SEO metadata
- * 
+ *
  * Dependencies:
  * - Page model for database operations
  * - Mongoose for ObjectId generation
  * - Logger for operation tracking
- * 
+ *
  * Evolution: Originally manual page creation, evolved to automatic provisioning
  * during server startup for better user experience and compliance.
- * 
+ *
  * @async
  * @function createPartnerTermsPage
  * @returns {Promise<void>} A promise that resolves when the page is created or if it already exists.
- * 
+ *
  * @example
  * // Called automatically during server startup
  * await createPartnerTermsPage();
- * 
+ *
  * @since 2024-06-01
  * @modified 2025-01-08 - Added comprehensive bilingual content and SEO optimization
  * @see {@link Page} Model for page structure
@@ -157,7 +157,7 @@ async function createPartnerTermsPage() {
   try {
     const Page = require('./models/Page');
     const mongoose = require('mongoose');
-    
+
     // Check if partner terms page already exists
     const existingPage = await Page.findOne({ slug: 'partner-terms-and-conditions' });
     if (existingPage) {
@@ -302,7 +302,7 @@ app.use(helmet());
 app.use(cors({
   origin: [
     'http://localhost:3000',
-    'https://app.letsludus.com', 
+    'https://app.letsludus.com',
     'https://ludus-frontend-og2d.onrender.com',
     'https://ludus-platform.onrender.com',
     /https:\/\/.*\.onrender\.com$/
@@ -458,9 +458,9 @@ app.use('/api/admin/forms', formsRoutes.adminRouter);
 
 // Remove the catch-all 404 handler - Render should handle frontend routes
 // app.use('*', (req, res) => {
-//   res.status(404).json({ 
+//   res.status(404).json({
 //     success: false,
-//     message: 'Route not found' 
+//     message: 'Route not found'
 //   });
 // });
 

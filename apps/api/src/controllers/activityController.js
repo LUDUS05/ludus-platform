@@ -1,7 +1,7 @@
 /**
  * @fileoverview Enhanced Activity Controller for LUDUS Platform - LDS-012 Implementation
  * @module controllers/activityController
- * 
+ *
  * This controller provides comprehensive activity management functionality including:
  * - Activity CRUD operations
  * - Advanced search and filtering
@@ -10,7 +10,7 @@
  * - Media management
  * - Analytics and reporting
  * - RTL support for Arabic users
- * 
+ *
  * @version 2.0.0
  * @author LUDUS Development Team
  * @since 2025-01-27
@@ -45,7 +45,7 @@ const getActivities = async (req, res) => {
 
     // Build filter object
     const filter = { isActive: true };
-    
+
     if (search) {
       filter.$or = [
         { title: { $regex: search, $options: 'i' } },
@@ -53,15 +53,15 @@ const getActivities = async (req, res) => {
         { tags: { $in: [new RegExp(search, 'i')] } }
       ];
     }
-    
+
     if (category) {
       filter.category = category;
     }
-    
+
     if (city) {
       filter['location.city'] = { $regex: city, $options: 'i' };
     }
-    
+
     if (minPrice !== null || maxPrice !== null) {
       filter['pricing.basePrice'] = {};
       if (minPrice !== null) filter['pricing.basePrice'].$gte = minPrice;
@@ -237,10 +237,10 @@ const getPopularActivities = async (req, res) => {
     // Get activities sorted by popularity metrics
     const activities = await Activity.find({ isActive: true })
       .populate('vendor', 'businessName rating')
-      .sort({ 
+      .sort({
         totalBookings: -1,
         'vendor.rating': -1,
-        createdAt: -1 
+        createdAt: -1
       })
       .limit(limit)
       .lean();
@@ -273,9 +273,9 @@ const getActivitiesByCategory = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 12;
 
-    const filter = { 
+    const filter = {
       category: category.toLowerCase(),
-      isActive: true 
+      isActive: true
     };
 
     const activities = await Activity.find(filter)
@@ -474,7 +474,7 @@ const createEnhancedActivity = async (req, res) => {
 
   } catch (error) {
     console.error('Create enhanced activity error:', error);
-    
+
     if (error.name === 'ValidationError') {
       const errors = Object.values(error.errors).map(err => err.message);
       return res.status(400).json({
