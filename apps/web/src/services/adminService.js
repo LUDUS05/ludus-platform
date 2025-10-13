@@ -64,7 +64,7 @@ export const adminService = {
       const api = createAuthAxios();
       console.log('AdminService: Making request to:', `${API_BASE_URL}/admin/dashboard/overview`);
       console.log('AdminService: Auth token present:', !!localStorage.getItem('accessToken'));
-      
+
       const response = await api.get('/admin/dashboard/overview');
       console.log('AdminService: Response received:', response.data);
       return response.data;
@@ -87,10 +87,10 @@ export const adminService = {
   // Permission helpers
   hasPermission(permissions, resource, action) {
     if (!permissions || !Array.isArray(permissions)) return false;
-    
+
     const permission = permissions.find(p => p.resource === resource);
     if (!permission) return false;
-    
+
     return permission.actions.includes(action) || permission.actions.includes('manage');
   },
 

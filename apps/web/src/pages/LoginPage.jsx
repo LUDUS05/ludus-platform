@@ -7,7 +7,7 @@ import {
     Mail,
     User as UserIcon
 } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -33,21 +33,21 @@ const LoginPage = () => {
 
   const isRTL = i18n.language === 'ar';
 
-  // Redirect if already authenticated
-  useEffect(() => {
-    if (isAuthenticated && user) {
-      console.log('🔐 User already authenticated, redirecting...', {
-        role: user.role,
-        email: user.email
-      });
+  // DISABLED: Redirect logic removed - users can stay on login page
+  // useEffect(() => {
+  //   if (isAuthenticated && user) {
+  //     console.log('🔐 User already authenticated, redirecting...', {
+  //       role: user.role,
+  //       email: user.email
+  //     });
 
-      if (user.role === 'admin' || user.email === 'admin@ludusapp.com') {
-        navigate('/admin', { replace: true });
-      } else {
-        navigate('/share', { replace: true });
-      }
-    }
-  }, [isAuthenticated, user, navigate]);
+  //     if (user.role === 'admin' || user.email === 'admin@ludusapp.com') {
+  //       navigate('/admin', { replace: true });
+  //     } else {
+  //       navigate('/share', { replace: true });
+  //     }
+  //   }
+  // }, [isAuthenticated, user, navigate]);
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -63,17 +63,17 @@ const LoginPage = () => {
       const result = await login(formData);
 
       if (result.success) {
-        console.log('✅ Login successful, redirecting...', {
+        console.log('✅ Login successful - no redirects', {
           role: result.user.role,
           email: result.user.email
         });
 
-        // Redirect based on user role
-        if (result.user.role === 'admin' || result.user.email === 'admin@ludusapp.com') {
-          navigate('/admin', { replace: true });
-        } else {
-          navigate('/share', { replace: true });
-        }
+        // DISABLED: Redirect logic removed - users stay on login page
+        // if (result.user.role === 'admin' || result.user.email === 'admin@ludusapp.com') {
+        //   navigate('/admin', { replace: true });
+        // } else {
+        //   navigate('/share', { replace: true });
+        // }
       } else {
         setError(result.message || t('auth.login.error'));
       }
@@ -99,17 +99,17 @@ const LoginPage = () => {
               const result = await loginWithSocial('google', response.credential);
 
               if (result.success) {
-                console.log('✅ Google login successful, redirecting...', {
+                console.log('✅ Google login successful - no redirects', {
                   role: result.user.role,
                   email: result.user.email
                 });
 
-                // Redirect based on user role
-                if (result.user.role === 'admin' || result.user.email === 'admin@ludusapp.com') {
-                  navigate('/admin', { replace: true });
-                } else {
-                  navigate('/share', { replace: true });
-                }
+                // DISABLED: Redirect logic removed - users stay on login page
+                // if (result.user.role === 'admin' || result.user.email === 'admin@ludusapp.com') {
+                //   navigate('/admin', { replace: true });
+                // } else {
+                //   navigate('/share', { replace: true });
+                // }
               } else {
                 setError(result.message || t('auth.login.error'));
               }

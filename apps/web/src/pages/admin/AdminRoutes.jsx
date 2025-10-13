@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 // DISABLED: Lockdown system
 // import ComingSoonPage from '../ComingSoonPage';
@@ -37,15 +37,16 @@ const AdminRoutes = () => {
   // Check if user is admin
   const isAdmin = user && (user.role === 'admin' || user.email === 'admin@ludusapp.com');
 
-  if (!isAuthenticated) {
-    console.log('❌ Not authenticated, redirecting to /hi');
-    return <Navigate to="/hi" replace />;
-  }
+  // DISABLED: All redirects removed - admin access is now open
+  // if (!isAuthenticated) {
+  //   console.log('❌ Not authenticated, redirecting to /hi');
+  //   return <Navigate to="/hi" replace />;
+  // }
 
-  if (!isAdmin) {
-    console.log('❌ Not admin user, redirecting to home');
-    return <Navigate to="/" replace />;
-  }
+  // if (!isAdmin) {
+  //   console.log('❌ Not admin user, redirecting to home');
+  //   return <Navigate to="/" replace />;
+  // }
 
   console.log('✅ Admin access granted');
   return (
