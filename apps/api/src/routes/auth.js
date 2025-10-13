@@ -13,6 +13,7 @@ const {
   socialLogin,
   createAdminUser
 } = require('../controllers/authController');
+const { seedSampleData } = require('../controllers/seedController');
 const { authenticate, authenticateWithFullUser } = require('../middleware/auth');
 const {
   validateUserRegistration,
@@ -28,6 +29,7 @@ router.post('/verify-email', verifyEmail);
 router.post('/forgot-password', forgotPassword);
 router.post('/reset-password', resetPassword);
 router.post('/create-admin', createAdminUser); // Development endpoint to create admin user
+router.post('/seed-data', seedSampleData); // Development endpoint to seed sample data
 
 // Protected routes
 router.post('/logout', authenticate, logout);
