@@ -244,10 +244,12 @@ const seedSampleData = async (req, res) => {
 
   } catch (error) {
     console.error('❌ Error creating sample data:', error);
+    console.error('❌ Error stack:', error.stack);
     res.status(500).json({
       success: false,
       message: 'Error creating sample data',
-      error: error.message
+      error: error.message,
+      stack: error.stack
     });
   }
 };
