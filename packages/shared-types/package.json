@@ -1,16 +1,22 @@
 {
   "name": "@ludus/shared-types",
   "version": "1.0.0",
-  "description": "Shared TypeScript types and interfaces for LUDUS platform",
+  "description": "Shared TypeScript type definitions for LUDUS platform",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
     "clean": "rm -rf dist",
-    "type-check": "tsc --noEmit"
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "test": "jest"
   },
   "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
     "typescript": "^5.0.0"
   },
   "files": [

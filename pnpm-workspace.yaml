@@ -1,12 +1,12 @@
+# PNPM Workspace Configuration
+# LUDUS Platform Monorepo
+
 packages:
-  # Main applications
+  # Application packages
   - 'apps/*'
   
   # Shared packages
   - 'packages/*'
   
-  # Tools and utilities
+  # Development tools
   - 'tools/*'
-  
-  # Documentation
-  - 'docs/*'
