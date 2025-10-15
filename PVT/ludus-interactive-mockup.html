@@ -1,0 +1,1574 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUDUS - Interactive Platform Mockup</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Tajawal', sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 400px;
+            background: #fff;
+            border-radius: 30px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            position: relative;
+            height: 850px;
+        }
+
+        .status-bar {
+            background: #fff;
+            padding: 8px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .screen {
+            position: absolute;
+            width: 100%;
+            height: calc(100% - 40px);
+            top: 40px;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+
+        .screen.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .screen.prev {
+            transform: translateX(-100%);
+        }
+
+        /* Header Styles */
+        .header {
+            background: #fff;
+            color: #1f2937;
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .user-greeting {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .greeting-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .notification-icon:hover {
+            background: #e5e7eb;
+        }
+
+        .language-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #f8f9fa;
+            border: 1px solid #e5e7eb;
+            color: #6b7280;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .language-toggle:hover {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        /* Search Section */
+        .search-section {
+            padding: 0 20px 20px;
+        }
+
+        .search-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 15px;
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 16px 20px 16px 50px;
+            border: 2px solid #e5e7eb;
+            border-radius: 15px;
+            font-size: 16px;
+            background: #f8f9fa;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 18px;
+        }
+
+        .categories {
+            display: flex;
+            gap: 15px;
+            padding: 0 0 25px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .categories::-webkit-scrollbar {
+            display: none;
+        }
+
+        .category-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            min-width: 80px;
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 10px;
+            border-radius: 15px;
+        }
+
+        .category-item:hover {
+            background: #f8f9fa;
+            transform: translateY(-2px);
+        }
+
+        .category-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            background: #1f2937;
+            color: white;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(31, 41, 55, 0.2);
+        }
+
+        .category-item:hover .category-icon {
+            background: #3b82f6;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+        }
+
+        .category-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: #6b7280;
+            text-align: center;
+        }
+
+        /* Top Trips Section */
+        .top-trips-section {
+            padding: 0 20px 20px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1f2937;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-arrow {
+            color: #9ca3af;
+            font-size: 16px;
+        }
+
+        .explore-link {
+            color: #3b82f6;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .top-trips-container {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            padding-bottom: 10px;
+        }
+
+        .top-trips-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .trip-card {
+            min-width: 280px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .trip-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .trip-image {
+            width: 100%;
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .trip-price {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .trip-content {
+            padding: 20px;
+        }
+
+        .trip-location {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .location-icon {
+            color: #ef4444;
+            font-size: 14px;
+        }
+
+        .trip-heart {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 35px;
+            height: 35px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .trip-heart:hover {
+            background: #ef4444;
+            color: white;
+        }
+
+        /* Activity Detail Screen */
+        .activity-detail-hero {
+            position: relative;
+            height: 250px;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.6) 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            color: white;
+            width: 100%;
+        }
+
+        .hero-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .hero-price-badge {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .price-plus {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 3;
+        }
+
+        .back-button:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+
+        .heart-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 3;
+        }
+
+        .heart-button:hover {
+            background: #ef4444;
+            color: white;
+        }
+
+
+        .tab-navigation {
+            display: flex;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 16px;
+            text-align: center;
+            font-weight: 600;
+            color: #9ca3af;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-button.active {
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+        }
+
+        .tab-content {
+            padding: 20px;
+            background: white;
+        }
+
+        .activity-info {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .star-rating {
+            color: #fbbf24;
+        }
+
+        .activity-description {
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .book-now-button {
+            width: 100%;
+            background: #1f2937;
+            color: white;
+            padding: 18px;
+            border: none;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .book-now-button:hover {
+            background: #374151;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(31, 41, 55, 0.4);
+        }
+
+        /* Booking Screen */
+        .booking-section {
+            background: white;
+            margin: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #1f2937;
+        }
+
+        .date-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .date-option {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .date-option.selected {
+            border-color: #0ea5e9;
+            background: #f0f9ff;
+        }
+
+        .participant-selector {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .counter {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .counter-btn {
+            width: 35px;
+            height: 35px;
+            border: 2px solid #0ea5e9;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 20px;
+            color: #0ea5e9;
+        }
+
+        .counter-btn:hover {
+            background: #0ea5e9;
+            color: white;
+        }
+
+        /* Payment Screen */
+        .payment-method {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .payment-method.selected {
+            border-color: #0ea5e9;
+            background: #f0f9ff;
+        }
+
+        .payment-icon {
+            width: 40px;
+            height: 40px;
+            background: #f3f4f6;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .price-breakdown {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: #6b7280;
+        }
+
+        .price-row.total {
+            font-weight: 600;
+            font-size: 18px;
+            color: #1f2937;
+            padding-top: 10px;
+            border-top: 2px solid #e5e7eb;
+        }
+
+        /* Success Screen */
+        .success-container {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .success-icon {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 60px;
+            color: white;
+            animation: scaleIn 0.5s ease-out;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .success-title {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #1f2937;
+        }
+
+        .success-message {
+            color: #6b7280;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .booking-details {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .booking-detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .booking-detail-row:last-child {
+            border-bottom: none;
+        }
+
+        /* Share Section */
+        .share-section {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .share-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #1f2937;
+        }
+
+        .share-options {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .share-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .share-option:hover {
+            transform: scale(1.1);
+        }
+
+        .share-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .share-icon.whatsapp { background: #25D366; }
+        .share-icon.facebook { background: #1877f2; }
+        .share-icon.twitter { background: #1DA1F2; }
+        .share-icon.instagram { background: linear-gradient(135deg, #f58529 0%, #dd2a7b 50%, #8134af 100%); }
+
+        .share-label {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        /* CTA Button */
+        .cta-button {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%);
+            color: white;
+            padding: 18px;
+            border: none;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(14, 165, 233, 0.4);
+        }
+
+        .cta-button:active {
+            transform: translateY(0);
+        }
+
+        /* Navigation Arrows */
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .nav-arrow:hover {
+            background: white;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .nav-arrow.prev {
+            left: 15px;
+        }
+
+        .nav-arrow.next {
+            right: 15px;
+        }
+
+        .nav-arrow.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .nav-arrow.disabled:hover {
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Navigation */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            color: #9ca3af;
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 8px;
+            border-radius: 12px;
+        }
+
+        .nav-item:hover {
+            color: #3b82f6;
+            background: #f8f9fa;
+        }
+
+        .nav-item.active {
+            color: #3b82f6;
+            background: #f0f9ff;
+        }
+
+        .nav-icon {
+            font-size: 20px;
+        }
+
+        .nav-label {
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* RTL Support */
+        .rtl {
+            direction: rtl;
+        }
+
+        .rtl .language-toggle {
+            left: 20px;
+            right: auto;
+        }
+
+        .rtl .activity-price {
+            left: 15px;
+            right: auto;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f4f6;
+            border-top: 5px solid #0ea5e9;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .app-container {
+                border-radius: 0;
+                height: 100vh;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container" id="app">
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <span id="time">9:41</span>
+            <span>LUDUS</span>
+            <span>🔋 📶 📡</span>
+        </div>
+
+        <!-- Screen 1: Search & Discovery -->
+        <div class="screen active" id="searchScreen">
+            <div class="header">
+                <button class="language-toggle" onclick="toggleLanguage()">عربي</button>
+                <div class="header-content">
+                <div class="user-greeting">
+                    <div class="user-avatar">J</div>
+                    <div class="greeting-text" data-en="Hi, Jennifer!" data-ar="مرحباً، جينيفر!">Hi, Jennifer!</div>
+                </div>
+                    <div class="notification-icon">🔔</div>
+                </div>
+            </div>
+
+            <div class="search-section">
+                <h2 class="search-title" data-en="Where do you want to go?" data-ar="إلى أين تريد الذهاب؟">Where do you want to go?</h2>
+                <div class="search-box">
+                    <div class="search-icon">🔍</div>
+                    <input type="text" class="search-input" placeholder="Search for places..." data-placeholder-en="Search for places..." data-placeholder-ar="البحث عن الأماكن...">
+                </div>
+
+                <div class="categories">
+                    <div class="category-item">
+                        <div class="category-icon">⛺</div>
+                        <div class="category-label" data-en="Camping" data-ar="التخييم">Camping</div>
+                    </div>
+                    <div class="category-item">
+                        <div class="category-icon">🏔️</div>
+                        <div class="category-label" data-en="Hiking" data-ar="المشي">Hiking</div>
+                    </div>
+                    <div class="category-item">
+                        <div class="category-icon">🏖️</div>
+                        <div class="category-label" data-en="Beach" data-ar="الشاطئ">Beach</div>
+                    </div>
+                    <div class="category-item">
+                        <div class="category-icon">🎭</div>
+                        <div class="category-label" data-en="Culture" data-ar="الثقافة">Culture</div>
+                    </div>
+                    <div class="category-item">
+                        <div class="category-icon">🍽️</div>
+                        <div class="category-label" data-en="Food" data-ar="الطعام">Food</div>
+                    </div>
+                    <div class="category-item">
+                        <div class="category-icon">🎨</div>
+                        <div class="category-label" data-en="Art" data-ar="الفن">Art</div>
+                    </div>
+                    <div class="category-item">
+                        <div class="category-icon">⚽</div>
+                        <div class="category-label" data-en="Sports" data-ar="الرياضة">Sports</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="top-trips-section">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <span data-en="Top trips" data-ar="أفضل الرحلات">Top trips</span>
+                    </h3>
+                    <a href="#" class="explore-link" data-en="Explore →" data-ar="استكشف →">Explore →</a>
+                </div>
+
+                <div class="top-trips-container">
+                    <div class="trip-card" onclick="goToActivityDetail()">
+                        <div class="trip-image" style="background-image: url('https://images.unsplash.com/photo-1551632811-561732d1e306?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');">
+                            <div class="trip-heart">♡</div>
+                            <div class="trip-price">450 SAR</div>
+                        </div>
+                        <div class="trip-content">
+                            <div class="trip-location">
+                                <span class="location-icon">📍</span>
+                                <span data-en="Al Ula Desert Camp" data-ar="معسكر صحراء العلا">Al Ula Desert Camp</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="trip-card" onclick="goToActivityDetail()">
+                        <div class="trip-image" style="background-image: url('https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');">
+                            <div class="trip-heart">♡</div>
+                            <div class="trip-price">320 SAR</div>
+                        </div>
+                        <div class="trip-content">
+                            <div class="trip-location">
+                                <span class="location-icon">📍</span>
+                                <span data-en="Riyadh Heritage Tour" data-ar="جولة تراث الرياض">Riyadh Heritage Tour</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="trip-card" onclick="goToActivityDetail()">
+                        <div class="trip-image" style="background-image: url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');">
+                            <div class="trip-heart">♡</div>
+                            <div class="trip-price">280 SAR</div>
+                        </div>
+                        <div class="trip-content">
+                            <div class="trip-location">
+                                <span class="location-icon">📍</span>
+                                <span data-en="Jeddah Corniche Walk" data-ar="مشي كورنيش جدة">Jeddah Corniche Walk</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="trip-card" onclick="goToActivityDetail()">
+                        <div class="trip-image" style="background-image: url('https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');">
+                            <div class="trip-heart">♡</div>
+                            <div class="trip-price">180 SAR</div>
+                        </div>
+                        <div class="trip-content">
+                            <div class="trip-location">
+                                <span class="location-icon">📍</span>
+                                <span data-en="Traditional Cooking Class" data-ar="فصل الطبخ التقليدي">Traditional Cooking Class</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="trip-card" onclick="goToActivityDetail()">
+                        <div class="trip-image" style="background-image: url('https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');">
+                            <div class="trip-heart">♡</div>
+                            <div class="trip-price">220 SAR</div>
+                        </div>
+                        <div class="trip-content">
+                            <div class="trip-location">
+                                <span class="location-icon">📍</span>
+                                <span data-en="Saudi Art Gallery Tour" data-ar="جولة معرض الفن السعودي">Saudi Art Gallery Tour</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 2: Activity Detail -->
+        <div class="screen" id="activityDetailScreen">
+            <div class="activity-detail-hero" style="background-image: url('https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');">
+                <div class="hero-overlay"></div>
+                <div class="back-button" onclick="goToSearch()">←</div>
+                <div class="heart-button">♡</div>
+                <div class="hero-content">
+                    <h1 class="hero-title" data-en="Al Ula Desert Adventure" data-ar="مغامرة صحراء العلا">Al Ula Desert Adventure</h1>
+                </div>
+                <div class="hero-price-badge">
+                    <span data-en="450 SAR/person" data-ar="450 ريال/شخص">450 SAR/person</span>
+                    <div class="price-plus">+15</div>
+                </div>
+            </div>
+
+            <div class="tab-navigation">
+                <div class="tab-button active" onclick="switchTab('overview')" data-en="Overview" data-ar="نظرة عامة">Overview</div>
+                <div class="tab-button" onclick="switchTab('reviews')" data-en="Reviews" data-ar="التقييمات">Reviews</div>
+            </div>
+
+            <div class="tab-content">
+                <div class="activity-info">
+                    <div class="info-item">
+                        <span>⏱️</span>
+                        <span data-en="8 hours" data-ar="8 ساعات">8 hours</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="star-rating">⭐</span>
+                        <span data-en="4.9 out of 5" data-ar="4.9 من 5">4.9 out of 5</span>
+                    </div>
+                    <div class="info-item">
+                        <span>👥</span>
+                        <span data-en="Max 12 people" data-ar="حد أقصى 12 شخص">Max 12 people</span>
+                    </div>
+                </div>
+
+                <div class="activity-description" data-en="Experience the breathtaking beauty of Al Ula's ancient desert landscape. This immersive adventure takes you through UNESCO World Heritage sites, ancient rock formations, and traditional Bedouin culture. Includes guided tour, traditional lunch, and camel riding experience." data-ar="استمتع بجمال صحراء العلا القديمة المذهل. تأخذك هذه المغامرة الغامرة عبر مواقع التراث العالمي لليونسكو والتكوينات الصخرية القديمة والثقافة البدوية التقليدية. تشمل الجولة المرشدة والغداء التقليدي وتجربة ركوب الجمال.">
+                    Experience the breathtaking beauty of Al Ula's ancient desert landscape. This immersive adventure takes you through UNESCO World Heritage sites, ancient rock formations, and traditional Bedouin culture. Includes guided tour, traditional lunch, and camel riding experience.
+                </div>
+
+                <button class="book-now-button" onclick="goToBooking()">
+                    <span data-en="Book now" data-ar="احجز الآن">Book now</span>
+                    <span>→</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Screen 3: Booking Details -->
+        <div class="screen" id="bookingScreen">
+            <div class="header">
+                <button class="language-toggle" onclick="toggleLanguage()">عربي</button>
+                <h1 class="header-title" data-en="Complete Your Booking" data-ar="أكمل حجزك">Complete Your Booking</h1>
+            </div>
+
+            <div class="booking-section">
+                <h3 class="section-title" data-en="Select Date" data-ar="اختر التاريخ">Select Date</h3>
+                <div class="date-selector">
+                    <div class="date-option selected">
+                        <div>Today</div>
+                        <div style="font-size: 12px; color: #6b7280;">Dec 14</div>
+                    </div>
+                    <div class="date-option">
+                        <div>Tomorrow</div>
+                        <div style="font-size: 12px; color: #6b7280;">Dec 15</div>
+                    </div>
+                    <div class="date-option">
+                        <div>Weekend</div>
+                        <div style="font-size: 12px; color: #6b7280;">Dec 16</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="booking-section">
+                <h3 class="section-title" data-en="Number of Participants" data-ar="عدد المشاركين">Number of Participants</h3>
+
+                <div class="participant-selector">
+                    <span data-en="Adults" data-ar="البالغين">Adults</span>
+                    <div class="counter">
+                        <div class="counter-btn" onclick="updateCount('adults', -1)">−</div>
+                        <span id="adultsCount">2</span>
+                        <div class="counter-btn" onclick="updateCount('adults', 1)">+</div>
+                    </div>
+                </div>
+
+                <div class="participant-selector">
+                    <span data-en="Children" data-ar="الأطفال">Children</span>
+                    <div class="counter">
+                        <div class="counter-btn" onclick="updateCount('children', -1)">−</div>
+                        <span id="childrenCount">0</span>
+                        <div class="counter-btn" onclick="updateCount('children', 1)">+</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="booking-section">
+                <h3 class="section-title" data-en="What's Included" data-ar="ما هو مشمول">What's Included</h3>
+                <ul style="padding-left: 20px; color: #6b7280;">
+                    <li data-en="Professional Arabic/English guide" data-ar="مرشد محترف بالعربية والإنجليزية">Professional Arabic/English guide</li>
+                    <li data-en="Traditional Bedouin lunch" data-ar="غداء بدوي تقليدي">Traditional Bedouin lunch</li>
+                    <li data-en="Camel riding experience" data-ar="تجربة ركوب الجمال">Camel riding experience</li>
+                    <li data-en="Transportation from meeting point" data-ar="النقل من نقطة اللقاء">Transportation from meeting point</li>
+                    <li data-en="Photography session" data-ar="جلسة تصوير">Photography session</li>
+                </ul>
+            </div>
+
+            <div class="booking-section">
+                <h3 class="section-title" data-en="What to Bring" data-ar="ما يجب إحضاره">What to Bring</h3>
+                <ul style="padding-left: 20px; color: #6b7280;">
+                    <li data-en="Comfortable walking shoes" data-ar="أحذية مشي مريحة">Comfortable walking shoes</li>
+                    <li data-en="Sun hat and sunglasses" data-ar="قبعة شمس ونظارات شمسية">Sun hat and sunglasses</li>
+                    <li data-en="Camera or smartphone" data-ar="كاميرا أو هاتف ذكي">Camera or smartphone</li>
+                    <li data-en="Light jacket for evening" data-ar="سترة خفيفة للمساء">Light jacket for evening</li>
+                </ul>
+            </div>
+
+            <div style="padding: 20px;">
+                <button class="cta-button" onclick="goToPayment()">
+                    <span data-en="Continue to Payment" data-ar="المتابعة إلى الدفع">Continue to Payment</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Screen 3: Payment -->
+        <div class="screen" id="paymentScreen">
+            <div class="header">
+                <button class="language-toggle" onclick="toggleLanguage()">عربي</button>
+                <h1 class="header-title" data-en="Secure Payment" data-ar="الدفع الآمن">Secure Payment</h1>
+            </div>
+
+            <div class="booking-section">
+                <h3 class="section-title" data-en="Select Payment Method" data-ar="اختر طريقة الدفع">Select Payment Method</h3>
+
+                <div class="payment-method selected">
+                    <div class="payment-icon">💳</div>
+                    <div>
+                        <div style="font-weight: 600;">Credit/Debit Card</div>
+                        <div style="font-size: 12px; color: #6b7280;">Visa, Mastercard, Amex</div>
+                    </div>
+                </div>
+
+                <div class="payment-method">
+                    <div class="payment-icon" style="background: #00a859; color: white;">M</div>
+                    <div>
+                        <div style="font-weight: 600;">Mada</div>
+                        <div style="font-size: 12px; color: #6b7280;" data-en="Saudi Debit Card" data-ar="بطاقة سعودية مدى">Saudi Debit Card</div>
+                    </div>
+                </div>
+
+                <div class="payment-method">
+                    <div class="payment-icon" style="background: #5c2d91; color: white;">S</div>
+                    <div>
+                        <div style="font-weight: 600;">STC Pay</div>
+                        <div style="font-size: 12px; color: #6b7280;" data-en="Digital Wallet" data-ar="محفظة رقمية">Digital Wallet</div>
+                    </div>
+                </div>
+
+                <div class="payment-method">
+                    <div class="payment-icon" style="background: #ff6b35; color: white;">T</div>
+                    <div>
+                        <div style="font-weight: 600;">Tamara</div>
+                        <div style="font-size: 12px; color: #6b7280;" data-en="Buy Now, Pay Later" data-ar="اشتر الآن، ادفع لاحقاً">Buy Now, Pay Later</div>
+                    </div>
+                </div>
+
+                <div class="payment-method">
+                    <div class="payment-icon" style="background: #1a1a1a; color: white;">A</div>
+                    <div>
+                        <div style="font-weight: 600;">Apple Pay</div>
+                        <div style="font-size: 12px; color: #6b7280;" data-en="Quick & Secure" data-ar="سريع وآمن">Quick & Secure</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="booking-section">
+                <h3 class="section-title" data-en="Price Breakdown" data-ar="تفاصيل السعر">Price Breakdown</h3>
+                <div class="price-breakdown">
+                    <div class="price-row">
+                        <span data-en="Al Ula Adventure (2 Adults)" data-ar="مغامرة العلا (2 بالغين)">Al Ula Adventure (2 Adults)</span>
+                        <span>900 SAR</span>
+                    </div>
+                    <div class="price-row">
+                        <span data-en="Transportation" data-ar="النقل">Transportation</span>
+                        <span>150 SAR</span>
+                    </div>
+                    <div class="price-row">
+                        <span data-en="Platform Fee" data-ar="رسوم المنصة">Platform Fee</span>
+                        <span>45 SAR</span>
+                    </div>
+                    <div class="price-row">
+                        <span data-en="VAT (15%)" data-ar="ضريبة القيمة المضافة (15%)">VAT (15%)</span>
+                        <span>164.25 SAR</span>
+                    </div>
+                    <div class="price-row total">
+                        <span data-en="Total" data-ar="المجموع">Total</span>
+                        <span>1,259.25 SAR</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="padding: 20px;">
+                <button class="cta-button" onclick="processPayment()">
+                    <span data-en="Pay Now" data-ar="ادفع الآن">Pay Now</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Screen 5: Success & Share -->
+        <div class="screen" id="successScreen">
+            <div class="success-container">
+                <div class="success-icon">✓</div>
+                <h2 class="success-title" data-en="Booking Confirmed!" data-ar="تم تأكيد الحجز بنجاح!">Booking Confirmed!</h2>
+                <p class="success-message" data-en="Your Al Ula adventure awaits! We've sent all details to your email and WhatsApp." data-ar="مغامرة العلا في انتظارك! لقد أرسلنا جميع التفاصيل إلى بريدك الإلكتروني وواتساب.">Your Al Ula adventure awaits! We've sent all details to your email and WhatsApp.</p>
+
+                <div class="booking-details">
+                    <div class="booking-detail-row">
+                        <span data-en="Booking ID" data-ar="رقم الحجز">Booking ID</span>
+                        <span style="font-weight: 600;">LDS-2024-1214</span>
+                    </div>
+                    <div class="booking-detail-row">
+                        <span data-en="Activity" data-ar="النشاط">Activity</span>
+                        <span data-en="Al Ula Desert Adventure" data-ar="مغامرة صحراء العلا">Al Ula Desert Adventure</span>
+                    </div>
+                    <div class="booking-detail-row">
+                        <span data-en="Date & Time" data-ar="التاريخ والوقت">Date & Time</span>
+                        <span data-en="Dec 14, 2024 at 7:00 AM" data-ar="14 ديسمبر 2024 في 7:00 صباحاً">Dec 14, 2024 at 7:00 AM</span>
+                    </div>
+                    <div class="booking-detail-row">
+                        <span data-en="Meeting Point" data-ar="نقطة اللقاء">Meeting Point</span>
+                        <span data-en="Riyadh City Center" data-ar="وسط مدينة الرياض">Riyadh City Center</span>
+                    </div>
+                    <div class="booking-detail-row">
+                        <span data-en="Participants" data-ar="المشاركون">Participants</span>
+                        <span data-en="2 Adults" data-ar="2 بالغين">2 Adults</span>
+                    </div>
+                    <div class="booking-detail-row">
+                        <span data-en="Total Paid" data-ar="المبلغ المدفوع">Total Paid</span>
+                        <span style="font-weight: 600; color: #059669;">1,259.25 SAR</span>
+                    </div>
+                </div>
+
+                <div class="share-section">
+                    <h3 class="share-title" data-en="Share Your Adventure" data-ar="شارك مغامرتك">Share Your Adventure</h3>
+                    <div class="share-options">
+                        <div class="share-option" onclick="shareVia('whatsapp')">
+                            <div class="share-icon whatsapp">📱</div>
+                            <span class="share-label" data-en="WhatsApp" data-ar="واتساب">WhatsApp</span>
+                        </div>
+                        <div class="share-option" onclick="shareVia('snapchat')">
+                            <div class="share-icon" style="background: #FFFC00; color: #000;">👻</div>
+                            <span class="share-label" data-en="Snapchat" data-ar="سناب شات">Snapchat</span>
+                        </div>
+                        <div class="share-option" onclick="shareVia('instagram')">
+                            <div class="share-icon instagram">📷</div>
+                            <span class="share-label" data-en="Instagram" data-ar="إنستغرام">Instagram</span>
+                        </div>
+                        <div class="share-option" onclick="shareVia('tiktok')">
+                            <div class="share-icon" style="background: #000; color: #fff;">🎵</div>
+                            <span class="share-label" data-en="TikTok" data-ar="تيك توك">TikTok</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="cta-button" onclick="goToSearch()">
+                    <span data-en="Book Another Activity" data-ar="احجز نشاطاً آخر">Book Another Activity</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+        </div>
+
+        <!-- Navigation Arrows -->
+        <div class="nav-arrow prev" id="prevArrow" onclick="navigatePrev()" style="display: none;">←</div>
+        <div class="nav-arrow next" id="nextArrow" onclick="navigateNext()" style="display: none;">→</div>
+
+        <!-- Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-item active" onclick="goToScreen('searchScreen')">
+                <div class="nav-icon">🏠</div>
+                <div class="nav-label" data-en="Home" data-ar="الرئيسية">Home</div>
+            </div>
+            <div class="nav-item" onclick="goToScreen('searchScreen')">
+                <div class="nav-icon">🔍</div>
+                <div class="nav-label" data-en="Discover" data-ar="اكتشف">Discover</div>
+            </div>
+            <div class="nav-item" onclick="goToScreen('searchScreen')">
+                <div class="nav-icon">❤️</div>
+                <div class="nav-label" data-en="Favorites" data-ar="المفضلة">Favorites</div>
+            </div>
+            <div class="nav-item" onclick="goToScreen('searchScreen')">
+                <div class="nav-icon">📋</div>
+                <div class="nav-label" data-en="Bookings" data-ar="الحجوزات">Bookings</div>
+            </div>
+            <div class="nav-item" onclick="goToScreen('searchScreen')">
+                <div class="nav-icon">👤</div>
+                <div class="nav-label" data-en="Profile" data-ar="الملف الشخصي">Profile</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentScreen = 'searchScreen';
+        let isArabic = false;
+        let counts = {
+            adults: 2,
+            children: 0
+        };
+
+        // Initialize
+        function init() {
+            updateTime();
+            setInterval(updateTime, 60000);
+        }
+
+        // Update time in status bar
+        function updateTime() {
+            const now = new Date();
+            const hours = now.getHours() % 12 || 12;
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('time').textContent = `${hours}:${minutes}`;
+        }
+
+        // Screen Navigation
+        function navigateToScreen(screenId) {
+            const currentEl = document.getElementById(currentScreen);
+            const nextEl = document.getElementById(screenId);
+
+            currentEl.classList.remove('active');
+            currentEl.classList.add('prev');
+
+            setTimeout(() => {
+                nextEl.classList.add('active');
+                currentScreen = screenId;
+            }, 50);
+        }
+
+        // Navigation Functions
+        function goToActivityDetail() {
+            navigateToScreen('activityDetailScreen');
+        }
+
+        function goToBooking() {
+            navigateToScreen('bookingScreen');
+        }
+
+        function goToScreen(screenId) {
+            navigateToScreen(screenId);
+        }
+
+        function switchTab(tabName) {
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab-button').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+
+            // Here you would typically show/hide different tab content
+            console.log('Switched to tab:', tabName);
+        }
+
+        function navigatePrev() {
+            const screens = ['searchScreen', 'activityDetailScreen', 'bookingScreen', 'paymentScreen', 'successScreen'];
+            const currentIndex = screens.indexOf(currentScreen);
+            if (currentIndex > 0) {
+                navigateToScreen(screens[currentIndex - 1]);
+            }
+        }
+
+        function navigateNext() {
+            const screens = ['searchScreen', 'activityDetailScreen', 'bookingScreen', 'paymentScreen', 'successScreen'];
+            const currentIndex = screens.indexOf(currentScreen);
+            if (currentIndex < screens.length - 1) {
+                navigateToScreen(screens[currentIndex + 1]);
+            }
+        }
+
+        function goToPayment() {
+            // Validate booking details
+            if (counts.adults === 0) {
+                alert(isArabic ? 'يرجى اختيار عدد المشاركين' : 'Please select number of participants');
+                return;
+            }
+            navigateToScreen('paymentScreen');
+        }
+
+        function processPayment() {
+            // Show loading
+            document.getElementById('loading').classList.add('active');
+
+            // Simulate payment processing
+            setTimeout(() => {
+                document.getElementById('loading').classList.remove('active');
+                navigateToScreen('successScreen');
+            }, 2000);
+        }
+
+        function goToSearch() {
+            // Reset all screens
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active', 'prev');
+            });
+            document.getElementById('searchScreen').classList.add('active');
+            currentScreen = 'searchScreen';
+
+            // Reset counters
+            counts.adults = 2;
+            counts.children = 0;
+            updateCountDisplay();
+        }
+
+        // Language Toggle
+        function toggleLanguage() {
+            isArabic = !isArabic;
+            const app = document.getElementById('app');
+
+            if (isArabic) {
+                app.classList.add('rtl');
+                document.querySelectorAll('.language-toggle').forEach(btn => {
+                    btn.textContent = 'EN';
+                });
+            } else {
+                app.classList.remove('rtl');
+                document.querySelectorAll('.language-toggle').forEach(btn => {
+                    btn.textContent = 'عربي';
+                });
+            }
+
+            // Update all text elements
+            updateLanguage();
+        }
+
+        function updateLanguage() {
+            // Update elements with data attributes
+            document.querySelectorAll('[data-en]').forEach(el => {
+                if (isArabic && el.hasAttribute('data-ar')) {
+                    el.textContent = el.getAttribute('data-ar');
+                } else {
+                    el.textContent = el.getAttribute('data-en');
+                }
+            });
+
+            // Update placeholders
+            document.querySelectorAll('[data-placeholder-en]').forEach(input => {
+                if (isArabic && input.hasAttribute('data-placeholder-ar')) {
+                    input.placeholder = input.getAttribute('data-placeholder-ar');
+                } else {
+                    input.placeholder = input.getAttribute('data-placeholder-en');
+                }
+            });
+        }
+
+        // Counter Functions
+        function updateCount(type, change) {
+            counts[type] = Math.max(0, counts[type] + change);
+            updateCountDisplay();
+        }
+
+        function updateCountDisplay() {
+            document.getElementById('adultsCount').textContent = counts.adults;
+            document.getElementById('childrenCount').textContent = counts.children;
+        }
+
+        // Share Functions
+        function shareVia(platform) {
+            const message = isArabic
+                ? 'انضم إلي في مغامرة صحراء العلا المذهلة! لقد حجزت للتو رحلة لا تُنسى عبر LUDUS 🏜️✨'
+                : 'Join me for an amazing Al Ula desert adventure! I just booked an unforgettable experience through LUDUS 🏜️✨';
+
+            const url = 'https://ludus.sa/activity/al-ula-adventure';
+
+            switch(platform) {
+                case 'whatsapp':
+                    alert(`Opening WhatsApp to share:\n"${message}"\n${url}`);
+                    break;
+                case 'snapchat':
+                    alert(`Opening Snapchat to share:\n"${message}"\n${url}`);
+                    break;
+                case 'instagram':
+                    alert('Opening Instagram Stories with Al Ula adventure booking confirmation');
+                    break;
+                case 'tiktok':
+                    alert(`Opening TikTok to create a video about:\n"${message}"\n${url}`);
+                    break;
+            }
+        }
+
+        // Initialize on load
+        window.onload = init;
+    </script>
+</body>
+</html>
