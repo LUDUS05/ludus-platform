@@ -43,6 +43,7 @@ import ReferralTestPage from '../pages/ReferralTestPage';
 import SharePage from '../pages/SharePage';
 import WalletPage from '../pages/WalletPage';
 import BGLPage from '../pages/BGLPage';
+import SampleHomePage from '../pages/SampleHomePage';
 
 const AppRoutes = () => {
   return (
@@ -135,6 +136,11 @@ const AppRoutes = () => {
         <Route path="bgl" element={
           <SmartRoute path="/bgl">
             <BGLPage />
+          </SmartRoute>
+        } />
+        <Route path="sample" element={
+          <SmartRoute path="/sample">
+            <SampleHomePage />
           </SmartRoute>
         } />
         {/* Map route disabled */}
