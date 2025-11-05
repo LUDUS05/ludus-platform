@@ -279,6 +279,14 @@
       "entertainment": "Entertainment",
       "sports": "Sports",
       "wellness": "Wellness"
+    },
+    "card": {
+      "availableSeats": "Available Seats",
+      "remaining": "remaining",
+      "free": "Free",
+      "loading": "Loading...",
+      "joined": "Joined",
+      "joinNow": "Join Now"
     }
   },
   "booking": {

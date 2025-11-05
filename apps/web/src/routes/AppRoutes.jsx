@@ -42,6 +42,7 @@ import ReferralDashboard from '../pages/ReferralDashboard';
 import ReferralTestPage from '../pages/ReferralTestPage';
 import SharePage from '../pages/SharePage';
 import WalletPage from '../pages/WalletPage';
+import BGLPage from '../pages/BGLPage';
 
 const AppRoutes = () => {
   return (
@@ -129,6 +130,11 @@ const AppRoutes = () => {
         <Route path="ui-showcase" element={
           <SmartRoute path="/ui-showcase">
             <UIShowcasePage />
+          </SmartRoute>
+        } />
+        <Route path="bgl" element={
+          <SmartRoute path="/bgl">
+            <BGLPage />
           </SmartRoute>
         } />
         {/* Map route disabled */}

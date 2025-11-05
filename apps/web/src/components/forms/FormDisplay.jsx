@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Card } from '../ui/Card';
-import { Button } from '../ui/Button';
-import { Input } from '../ui/Input';
-import Alert from '../ui/Alert';
+import { useNavigate, useParams } from 'react-router-dom';
 import api from '../../services/api';
+import Alert from '../ui/Alert';
+import { Button } from '../ui/Button';
+import { Card } from '../ui/Card';
+import { Input } from '../ui/Input';
 
 const FormDisplay = () => {
   const { slug } = useParams();
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const [form, setForm] = useState(null);
   const [responses, setResponses] = useState({});
@@ -40,7 +41,7 @@ const FormDisplay = () => {
   const handleInputChange = (fieldId, value) => {
     setResponses(prev => ({
       ...prev,
-      [fieldId]: { value }
+      [fieldId]: { value },
     }));
   };
 
@@ -49,70 +50,81 @@ const FormDisplay = () => {
       ...prev,
       [fieldId]: {
         ...prev[fieldId],
-        files: Array.from(files)
-      }
+        files: Array.from(files),
+      },
     }));
   };
 
   const validateForm = () => {
     const errors = [];
-    
+
     form.fields.forEach(field => {
-      if (field.required && (!responses[field.id] || !responses[field.id].value)) {
+      if (
+        field.required &&
+        (!responses[field.id] || !responses[field.id].value)
+      ) {
         errors.push(`Field "${field.label}" is required`);
       }
-      
+
       if (responses[field.id] && responses[field.id].value) {
         // Basic validation
-        if (field.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(responses[field.id].value)) {
+        if (
+          field.type === 'email' &&
+          !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(responses[field.id].value)
+        ) {
           errors.push(`Invalid email format for field "${field.label}"`);
         }
-        
+
         if (field.type === 'number' && isNaN(responses[field.id].value)) {
           errors.push(`Invalid number format for field "${field.label}"`);
         }
       }
     });
-    
+
     return errors;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    
+
     const errors = validateForm();
     if (errors.length > 0) {
       setError(errors.join(', '));
       return;
     }
-    
+
     try {
       setSubmitting(true);
       setError('');
-      
+
       const submissionTime = Math.round((Date.now() - startTime) / 1000);
-      
+
       const response = await api.post(`/forms/${slug}/submit`, {
         responses: Object.entries(responses).map(([fieldId, data]) => ({
           fieldId,
           value: data.value,
-          files: data.files || []
+          files: data.files || [],
         })),
         metadata: {
           submissionTime,
-          source: 'web'
-        }
+          source: 'web',
+        },
       });
-      
+
       setSuccess(response.data.message);
-      
+
       // Redirect if specified
       if (response.data.data.redirectUrl) {
         setTimeout(() => {
-          window.location.href = response.data.data.redirectUrl;
+          // Check if it's an internal route or external URL
+          if (response.data.data.redirectUrl.startsWith('/')) {
+            navigate(response.data.data.redirectUrl);
+          } else {
+            window.location.href = response.data.data.redirectUrl;
+          }
         }, 2000);
       }
-      
+
       // Clear form
       setResponses({});
     } catch (err) {
@@ -122,7 +134,7 @@ const FormDisplay = () => {
     }
   };
 
-  const renderField = (field) => {
+  const renderField = field => {
     const fieldValue = responses[field.id]?.value || '';
     const fieldFiles = responses[field.id]?.files || [];
 
@@ -135,53 +147,55 @@ const FormDisplay = () => {
           <Input
             type={field.type}
             value={fieldValue}
-            onChange={(e) => handleInputChange(field.id, e.target.value)}
+            onChange={e => handleInputChange(field.id, e.target.value)}
             placeholder={field.placeholder}
             required={field.required}
             className="w-full"
           />
         );
-      
+
       case 'number':
         return (
           <Input
             type="number"
             value={fieldValue}
-            onChange={(e) => handleInputChange(field.id, parseFloat(e.target.value))}
+            onChange={e =>
+              handleInputChange(field.id, parseFloat(e.target.value))
+            }
             placeholder={field.placeholder}
             required={field.required}
             className="w-full"
           />
         );
-      
+
       case 'textarea':
         return (
           <textarea
             value={fieldValue}
-            onChange={(e) => handleInputChange(field.id, e.target.value)}
+            onChange={e => handleInputChange(field.id, e.target.value)}
             placeholder={field.placeholder}
             required={field.required}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
             rows={4}
           />
         );
-      
+
       case 'date':
         return (
           <Input
             type="date"
             value={fieldValue}
-            onChange={(e) => handleInputChange(field.id, e.target.value)}
+            onChange={e => handleInputChange(field.id, e.target.value)}
             required={field.required}
             className="w-full"
           />
         );
-      
+
       case 'select':
         return (
           <select
             value={fieldValue}
-            onChange={(e) => handleInputChange(field.id, e.target.value)}
+            onChange={e => handleInputChange(field.id, e.target.value)}
             required={field.required}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
           >
@@ -193,7 +207,7 @@ const FormDisplay = () => {
             ))}
           </select>
         );
-      
+
       case 'radio':
         return (
           <div className="space-y-2">
@@ -204,7 +218,7 @@ const FormDisplay = () => {
                   name={field.id}
                   value={option.value}
                   checked={fieldValue === option.value}
-                  onChange={(e) => handleInputChange(field.id, e.target.value)}
+                  onChange={e => handleInputChange(field.id, e.target.value)}
                   required={field.required}
                   className="mr-2"
                 />
@@ -213,7 +227,7 @@ const FormDisplay = () => {
             ))}
           </div>
         );
-      
+
       case 'checkbox':
         return (
           <div className="space-y-2">
@@ -222,9 +236,15 @@ const FormDisplay = () => {
                 <input
                   type="checkbox"
                   value={option.value}
-                  checked={fieldValue.includes ? fieldValue.includes(option.value) : false}
-                  onChange={(e) => {
-                    const currentValues = Array.isArray(fieldValue) ? fieldValue : [];
+                  checked={
+                    fieldValue.includes
+                      ? fieldValue.includes(option.value)
+                      : false
+                  }
+                  onChange={e => {
+                    const currentValues = Array.isArray(fieldValue)
+                      ? fieldValue
+                      : [];
                     const newValues = e.target.checked
                       ? [...currentValues, option.value]
                       : currentValues.filter(v => v !== option.value);
@@ -237,13 +257,13 @@ const FormDisplay = () => {
             ))}
           </div>
         );
-      
+
       case 'file':
         return (
           <div>
             <input
               type="file"
-              onChange={(e) => handleFileChange(field.id, e.target.files)}
+              onChange={e => handleFileChange(field.id, e.target.files)}
               multiple
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
             />
@@ -254,13 +274,13 @@ const FormDisplay = () => {
             )}
           </div>
         );
-      
+
       default:
         return (
           <Input
             type="text"
             value={fieldValue}
-            onChange={(e) => handleInputChange(field.id, e.target.value)}
+            onChange={e => handleInputChange(field.id, e.target.value)}
             placeholder={field.placeholder}
             required={field.required}
             className="w-full"
@@ -283,10 +303,7 @@ const FormDisplay = () => {
   if (!form) {
     return (
       <div className="max-w-2xl mx-auto p-6">
-        <Alert
-          type="error"
-          message="Form not found or not available"
-        />
+        <Alert type="error" message="Form not found or not available" />
       </div>
     );
   }
@@ -295,7 +312,9 @@ const FormDisplay = () => {
     <div className="max-w-2xl mx-auto p-6">
       <Card className="p-6">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">{form.title}</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">
+            {form.title}
+          </h1>
           {form.description && (
             <p className="text-gray-600">{form.description}</p>
           )}
@@ -305,23 +324,25 @@ const FormDisplay = () => {
           <div className="mb-6">
             <div className="flex justify-between text-sm text-gray-600 mb-2">
               <span>Progress</span>
-              <span>{Object.keys(responses).length} / {form.fields.length} fields</span>
+              <span>
+                {Object.keys(responses).length} / {form.fields.length} fields
+              </span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
               <div
                 className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                style={{ width: `${(Object.keys(responses).length / form.fields.length) * 100}%` }}
+                style={{
+                  width: `${
+                    (Object.keys(responses).length / form.fields.length) * 100
+                  }%`,
+                }}
               ></div>
             </div>
           </div>
         )}
 
         {error && (
-          <Alert
-            type="error"
-            message={error}
-            onClose={() => setError('')}
-          />
+          <Alert type="error" message={error} onClose={() => setError('')} />
         )}
 
         {success && (
@@ -335,11 +356,13 @@ const FormDisplay = () => {
         <form onSubmit={handleSubmit} className="space-y-6">
           {form.fields
             .sort((a, b) => a.order - b.order)
-            .map((field) => (
+            .map(field => (
               <div key={field.id} className="space-y-2">
                 <label className="block text-sm font-medium text-gray-700">
                   {field.label}
-                  {field.required && <span className="text-red-500 ml-1">*</span>}
+                  {field.required && (
+                    <span className="text-red-500 ml-1">*</span>
+                  )}
                 </label>
                 {field.description && (
                   <p className="text-sm text-gray-500">{field.description}</p>

@@ -1,16 +1,18 @@
 /* global google */
-import React, { useEffect, useRef, useState } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
+import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const GoogleMap = ({ 
-  activities = [], 
+const GoogleMap = ({
+  activities = [],
   center = { lat: 24.7136, lng: 46.6753 }, // Riyadh, Saudi Arabia
   zoom = 11,
   onActivitySelect,
   selectedActivityId,
   className = '',
-  height = '400px'
+  height = '400px',
 }) => {
+  const navigate = useNavigate();
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const markersRef = useRef(new Map());
@@ -19,16 +21,22 @@ const GoogleMap = ({
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    // Set up global navigation function for map info windows
+    window.ludusNavigateToActivity = activityId => {
+      navigate(`/activities/${activityId}`);
+    };
+
     const initMap = async () => {
       try {
         const loader = new Loader({
           apiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
           version: 'weekly',
-          libraries: ['places', 'geometry']
+          libraries: ['places', 'geometry'],
         });
 
         const { Map } = await loader.importLibrary('maps');
-        const { AdvancedMarkerElement, PinElement } = await loader.importLibrary('marker');
+        const { AdvancedMarkerElement, PinElement } =
+          await loader.importLibrary('marker');
 
         // Initialize map
         const map = new Map(mapRef.current, {
@@ -39,14 +47,14 @@ const GoogleMap = ({
             {
               featureType: 'poi',
               elementType: 'labels',
-              stylers: [{ visibility: 'off' }]
+              stylers: [{ visibility: 'off' }],
             },
             {
               featureType: 'transit',
               elementType: 'labels',
-              stylers: [{ visibility: 'off' }]
-            }
-          ]
+              stylers: [{ visibility: 'off' }],
+            },
+          ],
         });
 
         mapInstanceRef.current = map;
@@ -78,7 +86,7 @@ const GoogleMap = ({
       try {
         const { AdvancedMarkerElement, PinElement } = await new Loader({
           apiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-          version: 'weekly'
+          version: 'weekly',
         }).importLibrary('marker');
 
         // Clear existing markers
@@ -89,7 +97,11 @@ const GoogleMap = ({
 
         // Add new markers for activities
         activities.forEach(activity => {
-          if (!activity.location?.coordinates && !activity.vendor?.location?.coordinates) return;
+          if (
+            !activity.location?.coordinates &&
+            !activity.vendor?.location?.coordinates
+          )
+            return;
 
           // Try to get coordinates from activity or vendor
           let lat, lng;
@@ -100,14 +112,14 @@ const GoogleMap = ({
           } else {
             return; // Skip if no coordinates
           }
-          
+
           // Create custom pin with category color
           const pinColor = getCategoryColor(activity.category);
           const pinElement = new PinElement({
             background: pinColor,
             borderColor: '#FFFFFF',
             glyphColor: '#FFFFFF',
-            scale: selectedActivityId === activity._id ? 1.2 : 1.0
+            scale: selectedActivityId === activity._id ? 1.2 : 1.0,
           });
 
           // Create marker
@@ -115,7 +127,7 @@ const GoogleMap = ({
             position: { lat, lng },
             map: mapInstanceRef.current,
             content: pinElement.element,
-            title: activity.title
+            title: activity.title,
           });
 
           // Add click listener
@@ -147,7 +159,6 @@ const GoogleMap = ({
           });
           mapInstanceRef.current.fitBounds(bounds);
         }
-
       } catch (err) {
         console.error('Error updating markers:', err);
       }
@@ -156,23 +167,23 @@ const GoogleMap = ({
     updateMarkers();
   }, [activities, selectedActivityId, onActivitySelect, isLoading]);
 
-  const getCategoryColor = (category) => {
+  const getCategoryColor = category => {
     const colors = {
-      'fitness': '#10B981', // Green
-      'arts': '#8B5CF6',    // Purple
-      'food': '#F59E0B',    // Amber
-      'outdoor': '#059669', // Emerald
-      'unique': '#EF4444',  // Red
-      'wellness': '#06B6D4', // Cyan
-      'sports': '#3B82F6',  // Blue
-      'education': '#7C3AED', // Violet
-      'entertainment': '#EC4899', // Pink
-      'default': '#FF6B35'  // LUDUS Orange
+      fitness: '#10B981', // Green
+      arts: '#8B5CF6', // Purple
+      food: '#F59E0B', // Amber
+      outdoor: '#059669', // Emerald
+      unique: '#EF4444', // Red
+      wellness: '#06B6D4', // Cyan
+      sports: '#3B82F6', // Blue
+      education: '#7C3AED', // Violet
+      entertainment: '#EC4899', // Pink
+      default: '#FF6B35', // LUDUS Orange
     };
     return colors[category] || colors.default;
   };
 
-  const createInfoWindowContent = (activity) => {
+  const createInfoWindowContent = activity => {
     return `
       <div class="p-3 max-w-xs">
         <div class="flex items-start space-x-3">
@@ -184,8 +195,12 @@ const GoogleMap = ({
             </div>
           </div>
           <div class="flex-1 min-w-0">
-            <h3 class="text-sm font-medium text-gray-900 truncate">${activity.title}</h3>
-            <p class="text-sm text-gray-500 mt-1">${activity.vendor?.businessName || 'Partner'}</p>
+            <h3 class="text-sm font-medium text-gray-900 truncate">${
+              activity.title
+            }</h3>
+            <p class="text-sm text-gray-500 mt-1">${
+              activity.vendor?.businessName || 'Partner'
+            }</p>
             <div class="flex items-center space-x-2 mt-2">
               <div class="flex items-center text-xs text-gray-500">
                 <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -205,8 +220,8 @@ const GoogleMap = ({
               <span class="text-sm font-semibold text-orange-500">
                 ${activity.price?.toLocaleString() || 'Price varies'} SAR
               </span>
-              <button 
-                onclick="window.location.href='/activities/${activity._id}'"
+              <button
+                onclick="window.ludusNavigateToActivity('${activity._id}')"
                 class="bg-orange-500 text-white px-3 py-1 rounded text-xs font-medium hover:bg-orange-600 transition-colors"
               >
                 View Details
@@ -238,17 +253,19 @@ const GoogleMap = ({
   const handleUserLocation = () => {
     if (navigator.geolocation && mapInstanceRef.current) {
       navigator.geolocation.getCurrentPosition(
-        (position) => {
+        position => {
           const userLocation = {
             lat: position.coords.latitude,
-            lng: position.coords.longitude
+            lng: position.coords.longitude,
           };
           mapInstanceRef.current.setCenter(userLocation);
           mapInstanceRef.current.setZoom(13);
         },
-        (error) => {
+        error => {
           console.error('Error getting user location:', error);
-          alert('Unable to get your location. Please enable location services.');
+          alert(
+            'Unable to get your location. Please enable location services.'
+          );
         }
       );
     }
@@ -256,13 +273,23 @@ const GoogleMap = ({
 
   if (error) {
     return (
-      <div 
+      <div
         className={`${className} flex items-center justify-center bg-gray-100 rounded-lg`}
         style={{ height }}
       >
         <div className="text-center p-6">
-          <svg className="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 48 48">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <svg
+            className="mx-auto h-12 w-12 text-gray-400 mb-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 48 48"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
           </svg>
           <p className="text-gray-600">{error}</p>
         </div>
@@ -273,7 +300,7 @@ const GoogleMap = ({
   return (
     <div className={`relative ${className}`} style={{ height }}>
       <div ref={mapRef} className="w-full h-full rounded-lg" />
-      
+
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center bg-gray-100 rounded-lg">
           <div className="text-center">
@@ -291,19 +318,44 @@ const GoogleMap = ({
             className="bg-white shadow-md rounded-lg p-2 hover:bg-gray-50 transition-colors"
             title="Show all activities"
           >
-            <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+            <svg
+              className="w-5 h-5 text-gray-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
+              />
             </svg>
           </button>
-          
+
           <button
             onClick={handleUserLocation}
             className="bg-white shadow-md rounded-lg p-2 hover:bg-gray-50 transition-colors"
             title="Go to my location"
           >
-            <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            <svg
+              className="w-5 h-5 text-gray-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+              />
             </svg>
           </button>
         </div>
@@ -313,7 +365,8 @@ const GoogleMap = ({
       {!isLoading && activities.length > 0 && (
         <div className="absolute bottom-4 left-4 bg-white shadow-md rounded-lg px-3 py-2">
           <span className="text-sm font-medium text-gray-700">
-            {activities.length} activit{activities.length !== 1 ? 'ies' : 'y'} found
+            {activities.length} activit{activities.length !== 1 ? 'ies' : 'y'}{' '}
+            found
           </span>
         </div>
       )}

@@ -1,21 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { useOnboarding } from './OnboardingProvider';
 import { Globe } from 'lucide-react';
+import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { useOnboarding } from './OnboardingProvider';
 
 // Import step components
-import WelcomeStep from './steps/WelcomeStep';
 import AuthStep from './steps/AuthStep';
-import ProfileStep from './steps/ProfileStep';
-import ReferralStep from './steps/ReferralStep';
 import InterestsStep from './steps/InterestsStep';
 import PreferencesStep from './steps/PreferencesStep';
-import SuccessStep from './steps/SuccessStep';
+import ProfileStep from './steps/ProfileStep';
+import ReferralStep from './steps/ReferralStep';
 import SocialProofStep from './steps/SocialProofStep';
+import SuccessStep from './steps/SuccessStep';
+import WelcomeStep from './steps/WelcomeStep';
 
 // Import UI components
-import { Button } from '../ui/Button';
 import Alert from '../ui/Alert';
 import LoadingSpinner from '../ui/LoadingSpinner';
 
@@ -28,13 +27,15 @@ const OnboardingFlow = () => {
     formData,
     loading,
     error,
+    setError,
+    setLoading,
     user,
     nextStep,
     previousStep,
     completeOnboarding,
     getCurrentStepConfig,
     getProgressPercentage,
-    t: onboardingT
+    t: onboardingT,
   } = useOnboarding();
 
   // Set Arabic as default language on component mount
@@ -49,7 +50,7 @@ const OnboardingFlow = () => {
     if (!config?.steps || !config.steps[currentStep]) {
       return t('common.loading');
     }
-    
+
     const stepId = config.steps[currentStep].stepId;
     const stepNames = {
       welcome: t('onboarding.steps.welcome.title'),
@@ -58,9 +59,9 @@ const OnboardingFlow = () => {
       profile: t('onboarding.steps.profile.title'),
       referral: t('onboarding.steps.referral.title'),
       interests: t('onboarding.steps.interests.title'),
-      preferences: t('onboarding.steps.preferences.title')
+      preferences: t('onboarding.steps.preferences.title'),
     };
-    
+
     return stepNames[stepId] || t('common.loading');
   };
 
@@ -87,7 +88,7 @@ const OnboardingFlow = () => {
   // Render current step
   const renderCurrentStep = () => {
     const currentStepConfig = getCurrentStepConfig();
-    
+
     if (!currentStepConfig) {
       return null;
     }
@@ -96,11 +97,11 @@ const OnboardingFlow = () => {
     const commonProps = {
       config: currentStepConfig,
       stepData: formData[stepId] || {},
-      onComplete: (data) => handleStepComplete(stepId, data),
+      onComplete: data => handleStepComplete(stepId, data),
       onNext: nextStep,
       onBack: previousStep,
       onSkip: () => nextStep(),
-      t
+      t,
     };
 
     switch (stepId) {
@@ -125,18 +126,17 @@ const OnboardingFlow = () => {
 
   // Show success step if onboarding is completed
   if (currentStep >= config?.steps.length) {
-    return (
-      <SuccessStep
-        onComplete={handleSuccessComplete}
-        t={t}
-      />
-    );
+    return <SuccessStep onComplete={handleSuccessComplete} t={t} />;
   }
 
   // Loading state
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#e0e0e0]" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'} lang={i18n.language}>
+      <div
+        className="min-h-screen bg-[#e0e0e0]"
+        dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}
+        lang={i18n.language}
+      >
         <style>
           {`
             .neumorphic {
@@ -184,7 +184,11 @@ const OnboardingFlow = () => {
   // Error state
   if (error) {
     return (
-      <div className="min-h-screen bg-[#e0e0e0]" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'} lang={i18n.language}>
+      <div
+        className="min-h-screen bg-[#e0e0e0]"
+        dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}
+        lang={i18n.language}
+      >
         <style>
           {`
             .neumorphic {
@@ -239,7 +243,11 @@ const OnboardingFlow = () => {
   // No config available
   if (!config || !config.isEnabled) {
     return (
-      <div className="min-h-screen bg-[#e0e0e0]" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'} lang={i18n.language}>
+      <div
+        className="min-h-screen bg-[#e0e0e0]"
+        dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}
+        lang={i18n.language}
+      >
         <style>
           {`
             .neumorphic {
@@ -279,9 +287,7 @@ const OnboardingFlow = () => {
             <h1 className="text-2xl font-bold text-gray-800 mb-4">
               {t('onboarding.title')}
             </h1>
-            <p className="text-gray-600 mb-6">
-              {t('onboarding.subtitle')}
-            </p>
+            <p className="text-gray-600 mb-6">{t('onboarding.subtitle')}</p>
             <button
               onClick={() => navigate('/dashboard')}
               className="neumorphic-subtle hover:neumorphic-pressed w-full py-3 px-6 rounded-xl text-lg font-medium text-gray-700 transition-all duration-200"
@@ -295,7 +301,11 @@ const OnboardingFlow = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#e0e0e0]" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'} lang={i18n.language}>
+    <div
+      className="min-h-screen bg-[#e0e0e0]"
+      dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}
+      lang={i18n.language}
+    >
       <style>
         {`
           .neumorphic {
@@ -340,7 +350,10 @@ const OnboardingFlow = () => {
                   {getCurrentStepName()}
                 </span>
                 <span className="text-xs text-gray-500">
-                  {t('onboarding.progress', { current: currentStep + 1, total: config.steps.length })}
+                  {t('onboarding.progress', {
+                    current: currentStep + 1,
+                    total: config.steps.length,
+                  })}
                 </span>
               </div>
               <div className="flex items-center gap-2">
@@ -351,8 +364,18 @@ const OnboardingFlow = () => {
                     className="neumorphic-subtle hover:neumorphic-pressed p-2 rounded-lg transition-all duration-200"
                     title={t('common.previous')}
                   >
-                    <svg className="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    <svg
+                      className="w-4 h-4 text-gray-700"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 19l-7-7 7-7"
+                      />
                     </svg>
                   </button>
                 )}
@@ -363,8 +386,18 @@ const OnboardingFlow = () => {
                     className="neumorphic-subtle hover:neumorphic-pressed p-2 rounded-lg transition-all duration-200"
                     title={t('common.next')}
                   >
-                    <svg className="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    <svg
+                      className="w-4 h-4 text-gray-700"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
                     </svg>
                   </button>
                 )}
@@ -374,7 +407,7 @@ const OnboardingFlow = () => {
               <div
                 className="bg-gradient-to-r from-orange-500 to-orange-600 h-2 rounded-full transition-all duration-300 ease-out"
                 style={{
-                  width: `${getProgressPercentage()}%`
+                  width: `${getProgressPercentage()}%`,
                 }}
               />
             </div>
@@ -383,9 +416,7 @@ const OnboardingFlow = () => {
       )}
 
       {/* Main content */}
-      <div className="max-w-md mx-auto px-4 pb-24">
-        {renderCurrentStep()}
-      </div>
+      <div className="max-w-md mx-auto px-4 pb-24">{renderCurrentStep()}</div>
 
       {/* Error display */}
       {error && (

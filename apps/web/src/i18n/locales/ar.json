@@ -216,7 +216,6 @@
     "continueWithGoogle": "المتابعة مع جوجل",
     "continueWithFacebook": "المتابعة مع فيسبوك",
     "continueWithApple": "المتابعة مع آبل",
-    "login": "تسجيل الدخول",
     "login": {
       "title": "تسجيل الدخول",
       "subtitle": "مرحباً بك مرة أخرى",
@@ -314,6 +313,14 @@
       "entertainment": "ترفيه",
       "sports": "رياضة",
       "wellness": "صحة ولياقة"
+    },
+    "card": {
+      "availableSeats": "المقاعد المتاحة",
+      "remaining": "متبقي",
+      "free": "مجاني",
+      "loading": "جاري...",
+      "joined": "انضممت",
+      "joinNow": "انضم الآن"
     }
   },
   "booking": {
@@ -485,7 +492,6 @@
     "referralHistory": "تاريخ الإحالات",
     "noReferralsYet": "لا توجد إحالات بعد. ابدأ المشاركة لرؤية تاريخك هنا!",
     "shareQRCode": "شارك رمز QR هذا مع الأصدقاء لكسب المكافآت",
-    "downloadQRCode": "تحميل رمز QR",
     "copyLink": "نسخ الرابط",
     "shareLink": "مشاركة الرابط",
     "viewDetails": "عرض التفاصيل",
@@ -516,7 +522,6 @@
     "earnMoreDesc": "اكسب مكافآت إضافية عندما يقوم أصدقاؤك بأول حجز لهم",
     "loadingQRCode": "جاري تحميل رمز QR...",
     "shareQRCodeWithFriends": "شارك رمز QR هذا مع الأصدقاء لكسب المكافآت!",
-    "downloadQRCode": "تحميل رمز QR",
     "copyReferralLink": "نسخ رابط الإحالة",
     "viewAll": "عرض الكل",
     "contactInformation": "معلومات الاتصال",
@@ -950,7 +955,7 @@
     "modelSpecializedFor": "نموذج متخصص لمجالات الأعمال والأنشطة",
     "startTraining": "بدء التدريب",
     "retrainModel": "إعادة تدريب النموذج",
-    "training": "تدريب...",
+    "trainingInProgress": "تدريب...",
     "modelDetails": "تفاصيل النموذج",
     "accuracy": "الدقة",
     "precision": "الدقة",
@@ -971,7 +976,7 @@
     "modelStatus": "حالة النموذج",
     "ready": "جاهز",
     "trained": "مدرب",
-    "training": "جاري التدريب",
+    "trainingStatus": "جاري التدريب",
     "failed": "فشل"
   },
   "rating": {
@@ -1129,7 +1134,7 @@
   "onboarding": {
     "title": "مرحباً بك في لودوس",
     "subtitle": "اكتشف أنشطة رائعة وتواصل مع أشخاص متشابهين في التفكير",
-      "getStarted": "ابدأ الآن",
+    "getStarted": "ابدأ الآن",
     "continue": "متابعة",
     "back": "رجوع",
     "skip": "تخطي",
@@ -1142,9 +1147,18 @@
       "socialProof": {
         "title": "موثوق من مجتمع لودوس",
         "subtitle": "حجم أنشطة حقيقي ومجتمع متنامٍ في الرياض",
-        "activities": { "title": "أكثر من 12,000 حجز هذا الشهر", "subtitle": "إقبال كبير عبر أشهر الفئات" },
-        "members": { "title": "أكثر من 50,000 عضو نشط", "subtitle": "اعثر على مجموعتك في الرياض" },
-        "rating": { "title": "متوسط تقييم 4.9/5", "subtitle": "محبوب من مجتمعنا" }
+        "activities": {
+          "title": "أكثر من 12,000 حجز هذا الشهر",
+          "subtitle": "إقبال كبير عبر أشهر الفئات"
+        },
+        "members": {
+          "title": "أكثر من 50,000 عضو نشط",
+          "subtitle": "اعثر على مجموعتك في الرياض"
+        },
+        "rating": {
+          "title": "متوسط تقييم 4.9/5",
+          "subtitle": "محبوب من مجتمعنا"
+        }
       },
       "welcome": {
         "title": "مرحباً بك في لودوس",
@@ -1183,24 +1197,24 @@
       },
       "profile": {
         "title": "أخبرنا عن نفسك",
-      "questions": {
-        "firstName": {
+        "questions": {
+          "firstName": {
             "question": "ماذا نسميك؟",
             "placeholder": "أدخل اسمك الأول"
-        },
-        "lastName": {
+          },
+          "lastName": {
             "question": "ما هو اسم عائلتك، {{name}}؟",
             "placeholder": "أدخل اسم العائلة"
-        },
-        "email": {
+          },
+          "email": {
             "question": "أين يمكننا الوصول إليك؟",
             "placeholder": "example@email.com"
-        },
-        "phone": {
+          },
+          "phone": {
             "question": "رقم هاتفك",
             "placeholder": "+966 XX XXX XXXX"
-        },
-        "dateOfBirth": {
+          },
+          "dateOfBirth": {
             "question": "ما تاريخ ميلادك؟ (اختياري)",
             "placeholder": "اختر التاريخ"
           }
