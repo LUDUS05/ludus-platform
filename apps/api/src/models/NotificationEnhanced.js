@@ -357,7 +357,6 @@ notificationSchema.index({ user: 1, isRead: 1 });
 notificationSchema.index({ user: 1, createdAt: -1 });
 notificationSchema.index({ type: 1, createdAt: -1 });
 notificationSchema.index({ priority: 1, isUrgent: 1 });
-notificationSchema.index({ expiresAt: 1 });
 notificationSchema.index({ 'relatedEntity.type': 1, 'relatedEntity.id': 1 });
 notificationSchema.index({ isDelivered: 1, createdAt: -1 });
 
