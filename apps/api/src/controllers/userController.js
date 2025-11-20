@@ -21,6 +21,7 @@ const UserEnhanced = require('../models/UserEnhanced');
 const Booking = require('../models/Booking');
 const BookingEnhanced = require('../models/BookingEnhanced');
 const PaymentEnhanced = require('../models/PaymentEnhanced');
+const Like = require('../models/Like');
 
 /**
  * Get the profile of the authenticated user.
@@ -31,7 +32,7 @@ const PaymentEnhanced = require('../models/PaymentEnhanced');
 const getUserProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
-    
+
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -73,7 +74,7 @@ const updateUserProfile = async (req, res) => {
 
     // Build update object with only provided fields
     const updateData = {};
-    
+
     if (firstName !== undefined) updateData.firstName = firstName;
     if (lastName !== undefined) updateData.lastName = lastName;
     if (phone !== undefined) updateData.phone = phone;
@@ -101,9 +102,9 @@ const updateUserProfile = async (req, res) => {
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { $set: updateData },
-      { 
-        new: true, 
-        runValidators: true 
+      {
+        new: true,
+        runValidators: true
       }
     ).select('-password');
 
@@ -122,7 +123,7 @@ const updateUserProfile = async (req, res) => {
 
   } catch (error) {
     console.error('Update user profile error:', error);
-    
+
     if (error.name === 'ValidationError') {
       const errors = Object.values(error.errors).map(err => err.message);
       return res.status(400).json({
@@ -161,8 +162,8 @@ const updateUserPreferences = async (req, res) => {
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { preferences },
-      { 
-        new: true, 
+      {
+        new: true,
         runValidators: true
       }
     ).select('-password');
@@ -182,7 +183,7 @@ const updateUserPreferences = async (req, res) => {
 
   } catch (error) {
     console.error('Update user preferences error:', error);
-    
+
     // Handle validation errors
     if (error.name === 'ValidationError') {
       const errors = Object.values(error.errors).map(err => err.message);
@@ -214,143 +215,10 @@ const getUserBookings = async (req, res) => {
     const status = req.query.status || '';
 
     // Build filter
-    const filter = { user: userId };
-    if (status) {
-      filter.status = status;
-    }
-
-    // For now, return mock data since Booking model might not have full implementation
-    const mockBookings = [];
-    const totalBookings = 0;
-
-    res.status(200).json({
-      success: true,
-      data: {
-        bookings: mockBookings,
-        pagination: {
-          page,
-          limit,
-          totalPages: Math.ceil(totalBookings / limit),
-          totalBookings
-        }
-      }
-    });
-
-  } catch (error) {
-    console.error('Get user bookings error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Failed to fetch user bookings'
-    });
-  }
-};
-
-/**
- * Get all favorite activities for the authenticated user.
- * @param {import('express').Request} req - The Express request object.
- * @param {import('express').Response} res - The Express response object.
- * @returns {Promise<void>}
- */
-const getUserFavorites = async (req, res) => {
-  try {
-    // For now, return empty array since favorites feature is not implemented yet
-    res.status(200).json({
-      success: true,
-      data: {
-        favorites: []
-      }
-    });
-
-  } catch (error) {
-    console.error('Get user favorites error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Failed to fetch user favorites'
-    });
-  }
-};
-
-/**
- * Add an activity to the authenticated user's favorites.
- * @param {import('express').Request} req - The Express request object.
- * @param {import('express').Response} res - The Express response object.
- * @returns {Promise<void>}
- */
-const addToFavorites = async (req, res) => {
-  try {
-  const { activityId: _activityId } = req.params;
-    
-    // TODO: Implement favorites functionality
-    res.status(200).json({
-      success: true,
-      message: 'Activity added to favorites'
-    });
-
-  } catch (error) {
-    console.error('Add to favorites error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Failed to add activity to favorites'
-    });
-  }
-};
-
-/**
- * Remove an activity from the authenticated user's favorites.
- * @param {import('express').Request} req - The Express request object.
- * @param {import('express').Response} res - The Express response object.
- * @returns {Promise<void>}
- */
-const removeFromFavorites = async (req, res) => {
-  try {
-  const { activityId: _activityId } = req.params;
-    
-    // TODO: Implement favorites functionality
-    res.status(200).json({
-      success: true,
-      message: 'Activity removed from favorites'
-    });
-
-  } catch (error) {
-    console.error('Remove from favorites error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Failed to remove activity from favorites'
-    });
-  }
-};
-
-/**
- * Get dashboard statistics for the authenticated user.
- * @param {import('express').Request} req - The Express request object.
- * @param {import('express').Response} res - The Express response object.
- * @returns {Promise<void>}
- */
-const getDashboardStats = async (req, res) => {
-  try {
-    const _userId = req.user.id;
-
-    // For now, return mock stats since booking system is not fully implemented
-    const stats = {
-      totalBookings: 0,
-      upcomingBookings: 0,
-      completedBookings: 0,
-      totalSpent: 0,
-      favoriteActivities: 0
-    };
-
-    res.status(200).json({
-      success: true,
-      data: { stats }
-    });
-
-  } catch (error) {
-    console.error('Get dashboard stats error:', error);
-    res.status(500).json({
-      success: false,
+    success: false,
       message: 'Failed to fetch dashboard statistics'
-    });
-  }
+  });
+}
 };
 
 /**
@@ -392,7 +260,7 @@ const searchUsers = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      data: { 
+      data: {
         users,
         count: users.length
       }
@@ -548,7 +416,7 @@ const getUserActivityHistory = async (req, res) => {
     // Filter by category if specified
     let filteredBookings = bookings;
     if (category) {
-      filteredBookings = bookings.filter(booking => 
+      filteredBookings = bookings.filter(booking =>
         booking.activity?.category === category
       );
     }
@@ -771,13 +639,13 @@ const getDashboardData = async (req, res) => {
     ] = await Promise.all([
       User.findById(userId).select('firstName lastName email profileImage preferences stats'),
       Booking.countDocuments({ user: userId }),
-      Booking.countDocuments({ 
-        user: userId, 
+      Booking.countDocuments({
+        user: userId,
         status: 'confirmed',
         bookingDate: { $gte: now }
       }),
-      Booking.countDocuments({ 
-        user: userId, 
+      Booking.countDocuments({
+        user: userId,
         status: 'completed',
         createdAt: { $gte: startDate }
       }),
@@ -867,20 +735,20 @@ const getDashboardData = async (req, res) => {
  */
 const searchUsersAdvanced = async (req, res) => {
   try {
-    const { 
-      q, 
-      city, 
-      interests, 
-      ageRange, 
-      gender, 
+    const {
+      q,
+      city,
+      interests,
+      ageRange,
+      gender,
       language,
-      page = 1, 
-      limit = 20 
+      page = 1,
+      limit = 20
     } = req.query;
 
     // Build search query
     const searchQuery = {};
-    
+
     // Text search
     if (q && q.trim().length >= 2) {
       searchQuery.$or = [
