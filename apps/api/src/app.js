@@ -98,33 +98,6 @@ const app = express();
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'healthy', startup: 'in_progress' });
 });
-app.get('/api/health', (req, res) => {
-  res.status(200).json({ status: 'healthy', startup: 'in_progress' });
-});
-
-// Start server immediately to bind to port on Render
-// We do this EARLY to ensure Render detects the open port during startup.
-// We use RENDER=true check as a fallback for require.main.
-const PORT = process.env.PORT || 5000;
-if (require.main === module || process.env.RENDER === 'true' || process.env.NODE_ENV === 'production') {
-  console.log(`[BOOT] Attempting to bind to port ${PORT}...`);
-  const server = app.listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀 [BOOT] Server bound to port ${PORT} successfully`);
-    console.log(`📍 [BOOT] Environment: ${process.env.NODE_ENV || 'development'}`);
-    console.log(`📍 [BOOT] Render detected: ${process.env.RENDER || 'false'}`);
-  });
-
-  server.on('error', (err) => {
-    console.error('❌ [BOOT] Server binding error:', err);
-    if (err.code === 'EADDRINUSE') {
-      console.error(`❌ [BOOT] Port ${PORT} is already in use`);
-    }
-  });
-
-  // Keep-alive timeout extension for Render
-  server.keepAliveTimeout = 65000;
-  server.headersTimeout = 66000;
-}
 
 // Connect to MongoDB asynchronously
 if (process.env.NODE_ENV !== 'test' && process.env.MONGODB_URI) {
@@ -431,5 +404,25 @@ app.use('/api/admin/forms', formsRoutes.adminRouter);
 // Global error handler (must be last middleware)
 app.use(require('./middleware/errorHandler'));
 
-// Export the app (server is already started if this is the main module)
+// Start server to bind to port on Render
+// We use RENDER=true check as a fallback for require.main.
+const PORT = process.env.PORT || 5000;
+if (require.main === module || process.env.RENDER === 'true' || process.env.NODE_ENV === 'production') {
+  console.log(`[BOOT] Attempting to bind to port ${PORT}...`);
+  const server = app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 [BOOT] Server bound to port ${PORT} successfully`);
+    console.log(`📍 [BOOT] Environment: ${process.env.NODE_ENV || 'production'}`);
+    console.log(`📍 [BOOT] Render detected: ${process.env.RENDER || 'false'}`);
+  });
+
+  server.on('error', (err) => {
+    console.error('❌ [BOOT] Server binding error:', err);
+  });
+
+  // Keep-alive timeout extension for Render
+  server.keepAliveTimeout = 65000;
+  server.headersTimeout = 66000;
+}
+
+// Export the app
 module.exports = app;
