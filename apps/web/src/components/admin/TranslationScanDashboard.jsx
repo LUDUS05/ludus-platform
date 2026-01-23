@@ -4,7 +4,8 @@ import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 
 import translationScanService from '../../services/translationScanService';
-Search,
+import {
+  Search,
   AlertTriangle,
   CheckCircle,
   XCircle,
@@ -382,14 +383,14 @@ const TranslationScanDashboard = () => {
                         </p>
                         <div className="flex items-center space-x-4 text-xs">
                           <span className={`px-2 py-1 rounded-full ${item.impact === 'high' ? 'bg-red-100 text-red-800' :
-                              item.impact === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                                'bg-green-100 text-green-800'
+                            item.impact === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                              'bg-green-100 text-green-800'
                             }`}>
                             Impact: {item.impact}
                           </span>
                           <span className={`px-2 py-1 rounded-full ${item.effort === 'high' ? 'bg-red-100 text-red-800' :
-                              item.effort === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                                'bg-green-100 text-green-800'
+                            item.effort === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                              'bg-green-100 text-green-800'
                             }`}>
                             Effort: {item.effort}
                           </span>
