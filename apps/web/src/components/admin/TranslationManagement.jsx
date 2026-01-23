@@ -60,26 +60,6 @@ const TranslationManagement = () => {
   }, [selectedLanguage]);
 
 
-  const detectMissingTranslations = () => {
-    // Compare Arabic and English translations to find missing keys
-    const arTranslations = require(`../../i18n/locales/ar.json`);
-    const enTranslations = require(`../../i18n/locales/en.json`);
-
-    const missing = [];
-    const allKeys = new Set([...Object.keys(arTranslations), ...Object.keys(enTranslations)]);
-
-    allKeys.forEach(key => {
-      if (!arTranslations[key] || !enTranslations[key]) {
-        missing.push({
-          key,
-          ar: arTranslations[key] || 'MISSING',
-          en: enTranslations[key] || 'MISSING'
-        });
-      }
-    });
-
-    setMissingTranslations(missing);
-  };
 
   const handleTranslationUpdate = (key, value) => {
     setTranslations(prev => ({
@@ -232,56 +212,6 @@ const TranslationManagement = () => {
 
   // ===== AUTOMATED WORKFLOWS =====
 
-  const loadWorkflows = () => {
-    // Load predefined workflow templates
-    const templates = [
-      {
-        id: 'content-update',
-        name: 'Content Update Workflow',
-        description: 'Automatically detect and translate new content',
-        triggers: ['new-content', 'content-update'],
-        steps: [
-          'detect-new-content',
-          'extract-text',
-          'translate-content',
-          'validate-translation',
-          'deploy-updates'
-        ],
-        isActive: false
-      },
-      {
-        id: 'quality-improvement',
-        name: 'Quality Improvement Workflow',
-        description: 'Continuously improve translation quality',
-        triggers: ['user-feedback', 'quality-score'],
-        steps: [
-          'collect-feedback',
-          'analyze-issues',
-          'retrain-models',
-          'test-improvements',
-          'deploy-updates'
-        ],
-        isActive: false
-      },
-      {
-        id: 'bulk-translation',
-        name: 'Bulk Translation Workflow',
-        description: 'Handle large-scale translation projects',
-        triggers: ['bulk-import', 'scheduled-update'],
-        steps: [
-          'validate-import',
-          'batch-translate',
-          'quality-check',
-          'approve-translations',
-          'deploy-batch'
-        ],
-        isActive: false
-      }
-    ];
-
-    setWorkflowTemplates(templates);
-    setWorkflows(templates);
-  };
 
   const activateWorkflow = (workflowId) => {
     const updatedWorkflows = workflows.map(w =>
@@ -582,36 +512,6 @@ const TranslationManagement = () => {
 
   // ===== CONTENT UPDATE DETECTION =====
 
-  const loadContentUpdates = () => {
-    const updates = [
-      {
-        id: 1,
-        type: 'new-page',
-        content: 'New "About Us" page content',
-        language: 'en',
-        timestamp: '2024-01-15T10:30:00Z',
-        status: 'pending-translation'
-      },
-      {
-        id: 2,
-        type: 'updated-content',
-        content: 'Updated activity descriptions',
-        language: 'en',
-        timestamp: '2024-01-14T15:45:00Z',
-        status: 'translated'
-      },
-      {
-        id: 3,
-        type: 'new-feature',
-        content: 'New wallet payment options',
-        language: 'en',
-        timestamp: '2024-01-13T09:20:00Z',
-        status: 'pending-translation'
-      }
-    ];
-
-    setContentUpdates(updates);
-  };
 
   const detectNewContent = async () => {
     // Simulate content detection

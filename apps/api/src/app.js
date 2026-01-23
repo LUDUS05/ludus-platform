@@ -442,11 +442,13 @@ app.use('/api/admin/forms', formsRoutes.adminRouter);
 app.use(require('./middleware/errorHandler'));
 
 // Start server immediately to bind to port on Render
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, '0.0.0.0', () => {
-  logger.info({ port: PORT }, 'Server running');
-  logger.info({ environment: process.env.NODE_ENV || 'development' }, 'Environment');
-  logger.info({ apiUrl: `http://localhost:${PORT}/api` }, 'API URL');
-});
+if (require.main === module) {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, '0.0.0.0', () => {
+    logger.info({ port: PORT }, 'Server running');
+    logger.info({ environment: process.env.NODE_ENV || 'development' }, 'Environment');
+    logger.info({ apiUrl: `http://localhost:${PORT}/api` }, 'API URL');
+  });
+}
 
 module.exports = app;
