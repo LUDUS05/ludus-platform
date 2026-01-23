@@ -165,6 +165,9 @@ This document outlines the complete MongoDB Atlas setup for the LUDUS platform, 
 
 ### **Indexes Configuration**
 
+> [!IMPORTANT]
+> All production index creations MUST use the `{ background: true }` option to ensure they do not block database operations and to maintain platform responsiveness during deployments.
+
 #### **Performance Indexes**
 ```javascript
 // Users Collection

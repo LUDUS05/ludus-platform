@@ -49,7 +49,7 @@ const ProfileStep = ({ config, stepData, onComplete, onBack, onSkip, t }) => {
       // This would come from auth context
       // setFormData(prev => ({ ...prev, email: userEmail }));
     }
-  }, [currentField]);
+  }, [currentField, formData.email]);
 
   const validateField = (fieldId, value) => {
     const field = fields.find(f => f.fieldId === fieldId);
@@ -63,7 +63,7 @@ const ProfileStep = ({ config, stepData, onComplete, onBack, onSkip, t }) => {
 
   const handleInputChange = (value) => {
     const fieldId = currentField.fieldId;
-    
+
     // Format phone number if needed
     if (fieldId === 'phone') {
       value = onboardingService.formatPhoneNumber(value);
@@ -89,7 +89,7 @@ const ProfileStep = ({ config, stepData, onComplete, onBack, onSkip, t }) => {
 
     // Validate current field
     const fieldErrors = validateField(fieldId, value);
-    
+
     if (fieldErrors.length > 0) {
       setErrors(prev => ({
         ...prev,
@@ -148,7 +148,7 @@ const ProfileStep = ({ config, stepData, onComplete, onBack, onSkip, t }) => {
 
   const getErrorMessage = (fieldId, errors) => {
     if (errors.length === 0) return null;
-    
+
     const errorMessages = {
       required: t('onboarding.validation.required'),
       invalidEmail: t('onboarding.validation.invalidEmail'),
@@ -212,16 +212,16 @@ const ProfileStep = ({ config, stepData, onComplete, onBack, onSkip, t }) => {
               className="mb-6"
             >
               <Input
-                type={currentField.fieldId === 'email' ? 'email' : 
-                      currentField.fieldId === 'phone' ? 'tel' :
-                      currentField.fieldId === 'dateOfBirth' ? 'date' : 'text'}
+                type={currentField.fieldId === 'email' ? 'email' :
+                  currentField.fieldId === 'phone' ? 'tel' :
+                    currentField.fieldId === 'dateOfBirth' ? 'date' : 'text'}
                 value={formData[currentField.fieldId] || ''}
                 onChange={(e) => handleInputChange(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder={getFieldPlaceholder(currentField)}
                 className="w-full text-lg py-4 px-4"
               />
-              
+
               {/* Error message */}
               {errors[currentField.fieldId] && (
                 <motion.p
@@ -255,7 +255,7 @@ const ProfileStep = ({ config, stepData, onComplete, onBack, onSkip, t }) => {
                 </Button>
               )}
             </div>
-            
+
             <Button
               onClick={handleNext}
               variant="primary"

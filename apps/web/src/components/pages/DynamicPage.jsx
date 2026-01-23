@@ -11,19 +11,11 @@ const DynamicPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    // Check if this is a form route
-    if (location.pathname.startsWith('/forms/')) {
-      return; // Let FormDisplay handle it
-    }
-    fetchPage();
-  }, [url, location.pathname]);
-
-  const fetchPage = async () => {
+  const fetchPage = React.useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
-      
+
       // Try to get page by slug directly
       const response = await axios.get(`/api/pages/slug/${url}`);
       setPage(response.data);
@@ -37,7 +29,15 @@ const DynamicPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [url]);
+
+  useEffect(() => {
+    // Check if this is a form route
+    if (location.pathname.startsWith('/forms/')) {
+      return; // Let FormDisplay handle it
+    }
+    fetchPage();
+  }, [fetchPage, location.pathname]);
 
   // Handle form routes
   if (location.pathname.startsWith('/forms/')) {
@@ -89,14 +89,14 @@ const DynamicPage = () => {
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
               {page.title?.en || page.title?.ar || page.title || 'Untitled'}
             </h1>
-            
+
             {/* Meta Information */}
             {page.metaDescription && (
               <p className="text-gray-600 dark:text-gray-300 text-lg">
                 {page.metaDescription}
               </p>
             )}
-            
+
             {/* Page Info */}
             <div className="mt-4 flex items-center text-sm text-gray-500 dark:text-gray-400 space-x-4">
               {page.createdBy && (
@@ -119,7 +119,7 @@ const DynamicPage = () => {
 
           {/* Page Content */}
           <div className="px-6 py-8">
-            <div 
+            <div
               className="prose prose-lg max-w-none dark:prose-invert
                          prose-headings:text-gray-900 dark:prose-headings:text-white
                          prose-p:text-gray-700 dark:prose-p:text-gray-300

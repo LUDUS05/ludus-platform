@@ -3,13 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { paymentService } from '../../services/paymentService';
 import useTranslationWithFallback from '../../hooks/useTranslationWithFallback';
 
-const PaymentForm = ({ 
-  amount, 
-  description, 
-  onPaymentSuccess, 
-  onPaymentError, 
+const PaymentForm = ({
+  amount,
+  description,
+  onPaymentSuccess,
+  onPaymentError,
   metadata = {},
-  showSavedMethods = true 
+  showSavedMethods = true
 }) => {
   const { t } = useTranslationWithFallback();
   const [paymentMethod, setPaymentMethod] = useState('creditcard');
@@ -27,6 +27,15 @@ const PaymentForm = ({
   const [errors, setErrors] = useState({});
   const [moyasarLoaded, setMoyasarLoaded] = useState(false);
 
+  const loadSavedMethods = React.useCallback(async () => {
+    try {
+      const response = await paymentService.getUserPaymentMethods();
+      setSavedMethods(response.data.methods || []);
+    } catch (error) {
+      console.error('Failed to load saved payment methods:', error);
+    }
+  }, []);
+
   useEffect(() => {
     // Initialize Moyasar SDK
     paymentService.initializeMoyasar()
@@ -42,20 +51,11 @@ const PaymentForm = ({
     if (showSavedMethods) {
       loadSavedMethods();
     }
-  }, [showSavedMethods]);
-
-  const loadSavedMethods = async () => {
-    try {
-      const response = await paymentService.getUserPaymentMethods();
-      setSavedMethods(response.data.methods || []);
-    } catch (error) {
-      console.error('Failed to load saved payment methods:', error);
-    }
-  };
+  }, [showSavedMethods, loadSavedMethods]);
 
   const handleCardInputChange = (field, value) => {
     let formattedValue = value;
-    
+
     if (field === 'number') {
       // Remove non-digits and limit to 19 characters (with spaces)
       formattedValue = value.replace(/\D/g, '').slice(0, 16);
@@ -128,7 +128,7 @@ const PaymentForm = ({
       }
 
       const response = await paymentService.createPayment(paymentData);
-      
+
       if (response.success) {
         onPaymentSuccess(response.data);
       } else {
@@ -139,7 +139,7 @@ const PaymentForm = ({
       console.error('Payment processing error:', error);
       const errorMessage = error.response?.data?.message || 'Payment processing failed. Please try again.';
       setErrors({ general: errorMessage });
-      
+
       if (onPaymentError) {
         onPaymentError(error);
       }
@@ -165,7 +165,7 @@ const PaymentForm = ({
   }
 
   return (
-    <div 
+    <div
       className="bg-white rounded-lg shadow border border-gray-200 p-6"
       dir={t('common.direction') || 'ltr'}
     >
@@ -198,11 +198,10 @@ const PaymentForm = ({
                 key={method.id}
                 type="button"
                 onClick={() => setPaymentMethod(method.id)}
-                className={`p-3 border rounded-lg text-left transition-colors ${
-                  paymentMethod === method.id
+                className={`p-3 border rounded-lg text-left transition-colors ${paymentMethod === method.id
                     ? 'border-ludus-orange bg-ludus-orange/10 text-ludus-orange-dark'
                     : 'border-gray-300 hover:border-gray-400'
-                }`}
+                  }`}
               >
                 <div className="flex items-center space-x-2">
                   <span className="text-lg">{method.icon}</span>
@@ -270,9 +269,8 @@ const PaymentForm = ({
                     value={paymentService.formatCardNumber(cardData.number)}
                     onChange={(e) => handleCardInputChange('number', e.target.value)}
                     placeholder="1234 5678 9012 3456"
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                      errors.number ? 'border-red-500' : 'border-gray-300'
-                    }`}
+                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.number ? 'border-red-500' : 'border-gray-300'
+                      }`}
                   />
                   {errors.number && (
                     <p className="mt-1 text-sm text-red-600">{errors.number}</p>
@@ -288,9 +286,8 @@ const PaymentForm = ({
                     value={cardData.name}
                     onChange={(e) => handleCardInputChange('name', e.target.value)}
                     placeholder={t('common.johnDoe')}
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                      errors.name ? 'border-red-500' : 'border-gray-300'
-                    }`}
+                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.name ? 'border-red-500' : 'border-gray-300'
+                      }`}
                   />
                   {errors.name && (
                     <p className="mt-1 text-sm text-red-600">{errors.name}</p>
@@ -308,9 +305,8 @@ const PaymentForm = ({
                       onChange={(e) => handleCardInputChange('month', e.target.value)}
                       placeholder="MM"
                       maxLength="2"
-                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                        errors.month ? 'border-red-500' : 'border-gray-300'
-                      }`}
+                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.month ? 'border-red-500' : 'border-gray-300'
+                        }`}
                     />
                     {errors.month && (
                       <p className="mt-1 text-sm text-red-600">{errors.month}</p>
@@ -326,9 +322,8 @@ const PaymentForm = ({
                       onChange={(e) => handleCardInputChange('year', e.target.value)}
                       placeholder="YYYY"
                       maxLength="4"
-                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                        errors.year ? 'border-red-500' : 'border-gray-300'
-                      }`}
+                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.year ? 'border-red-500' : 'border-gray-300'
+                        }`}
                     />
                     {errors.year && (
                       <p className="mt-1 text-sm text-red-600">{errors.year}</p>
@@ -344,9 +339,8 @@ const PaymentForm = ({
                       onChange={(e) => handleCardInputChange('cvc', e.target.value)}
                       placeholder="123"
                       maxLength="4"
-                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                        errors.cvc ? 'border-red-500' : 'border-gray-300'
-                      }`}
+                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.cvc ? 'border-red-500' : 'border-gray-300'
+                        }`}
                     />
                     {errors.cvc && (
                       <p className="mt-1 text-sm text-red-600">{errors.cvc}</p>

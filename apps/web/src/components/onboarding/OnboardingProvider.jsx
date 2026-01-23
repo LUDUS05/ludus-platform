@@ -16,7 +16,7 @@ export const useOnboarding = () => {
 };
 
 export const OnboardingProvider = ({ children }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { user, login, register } = useAuth();
   const [searchParams] = useSearchParams();
   const [config, setConfig] = useState(null);
@@ -28,32 +28,7 @@ export const OnboardingProvider = ({ children }) => {
   const [gamification, setGamification] = useState({ totalPoints: 0, badges: [] });
   const [leaderboard, setLeaderboard] = useState([]);
 
-  useEffect(() => {
-    initializeOnboarding();
-  }, []);
-
-  // Handle referral code from URL parameters
-  useEffect(() => {
-    const refCode = searchParams.get('ref');
-    if (refCode) {
-      setFormData(prev => ({ ...prev, referralCode: refCode }));
-    }
-    // Adjust-style deep link params (campaign, adgroup, creative, deep_link)
-    const campaign = searchParams.get('campaign') || searchParams.get('utm_campaign');
-    const adgroup = searchParams.get('adgroup') || searchParams.get('utm_adgroup');
-    const creative = searchParams.get('creative') || searchParams.get('utm_content');
-    const deepLink = searchParams.get('deep_link') || searchParams.get('deepLink');
-    const feature = searchParams.get('feature');
-    if (campaign || adgroup || creative || deepLink || feature) {
-      setFormData(prev => ({
-        ...prev,
-        attribution: { campaign, adgroup, creative, feature },
-        deepLinkTarget: deepLink || null
-      }));
-    }
-  }, [searchParams]);
-
-  const initializeOnboarding = async () => {
+  const initializeOnboarding = React.useCallback(async () => {
     try {
       setLoading(true);
       setError('');
@@ -84,7 +59,7 @@ export const OnboardingProvider = ({ children }) => {
           if (data?.success && Array.isArray(data.leaderboard)) {
             setLeaderboard(data.leaderboard);
           }
-        }).catch(() => {});
+        }).catch(() => { });
       }
     } catch (error) {
       console.error('Error initializing onboarding:', error);
@@ -92,7 +67,32 @@ export const OnboardingProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    initializeOnboarding();
+  }, [initializeOnboarding]);
+
+  // Handle referral code from URL parameters
+  useEffect(() => {
+    const refCode = searchParams.get('ref');
+    if (refCode) {
+      setFormData(prev => ({ ...prev, referralCode: refCode }));
+    }
+    // Adjust-style deep link params (campaign, adgroup, creative, deep_link)
+    const campaign = searchParams.get('campaign') || searchParams.get('utm_campaign');
+    const adgroup = searchParams.get('adgroup') || searchParams.get('utm_adgroup');
+    const creative = searchParams.get('creative') || searchParams.get('utm_content');
+    const deepLink = searchParams.get('deep_link') || searchParams.get('deepLink');
+    const feature = searchParams.get('feature');
+    if (campaign || adgroup || creative || deepLink || feature) {
+      setFormData(prev => ({
+        ...prev,
+        attribution: { campaign, adgroup, creative, feature },
+        deepLinkTarget: deepLink || null
+      }));
+    }
+  }, [searchParams]);
 
   const updateFormData = (stepData) => {
     setFormData(prev => ({
@@ -302,7 +302,7 @@ export const OnboardingProvider = ({ children }) => {
     onboardingProgress,
     gamification,
     leaderboard,
-    
+
     // Actions
     nextStep,
     previousStep,
@@ -311,15 +311,14 @@ export const OnboardingProvider = ({ children }) => {
     updateFormData,
     authenticateWithGoogle,
     authenticateWithEmail,
-    
+
     // Utilities
     getCurrentStepConfig,
     isStepCompleted,
     getProgressPercentage,
-    
+
     // Translation
-    t,
-    i18n
+    t
   };
 
   return (

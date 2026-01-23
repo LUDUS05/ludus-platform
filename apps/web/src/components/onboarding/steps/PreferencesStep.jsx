@@ -66,13 +66,17 @@ const PreferencesStep = ({ config, stepData, onComplete, onBack, t }) => {
 
   useEffect(() => {
     // Initialize preferences with default values
-    const initialPreferences = {};
-    preferencesConfig.forEach(pref => {
-      if (preferences[pref.preferenceId] === undefined) {
-        initialPreferences[pref.preferenceId] = pref.defaultValue;
-      }
+    setPreferences(prev => {
+      const initialPreferences = {};
+      let hasChanges = false;
+      preferencesConfig.forEach(pref => {
+        if (prev[pref.preferenceId] === undefined) {
+          initialPreferences[pref.preferenceId] = pref.defaultValue;
+          hasChanges = true;
+        }
+      });
+      return hasChanges ? { ...prev, ...initialPreferences } : prev;
     });
-    setPreferences(prev => ({ ...prev, ...initialPreferences }));
   }, [preferencesConfig]);
 
   const handlePreferenceChange = (preferenceId, value) => {
@@ -214,7 +218,7 @@ const PreferencesStep = ({ config, stepData, onComplete, onBack, t }) => {
             >
               {t('back')}
             </Button>
-            
+
             <Button
               onClick={handleContinue}
               variant="primary"

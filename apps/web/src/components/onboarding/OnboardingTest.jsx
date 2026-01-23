@@ -10,10 +10,10 @@ const OnboardingTest = () => {
 
   const runTests = async () => {
     const results = [];
-    
+
     try {
       // Test 1: Check if onboarding service is available
-      const onboardingService = await import('../../services/onboardingService');
+      await import('../../services/onboardingService');
       results.push({
         test: 'Onboarding Service Import',
         status: 'PASS',
@@ -29,7 +29,7 @@ const OnboardingTest = () => {
 
     try {
       // Test 2: Check if API service is available
-      const apiService = await import('../../services/api');
+      await import('../../services/api');
       results.push({
         test: 'API Service Import',
         status: 'PASS',
@@ -45,7 +45,7 @@ const OnboardingTest = () => {
 
     try {
       // Test 3: Check if translation keys exist
-      const { useTranslation } = await import('react-i18next');
+      await import('react-i18next');
       results.push({
         test: 'Translation System',
         status: 'PASS',
@@ -173,9 +173,9 @@ const OnboardingTest = () => {
               <p className="text-gray-600 mb-4">
                 Launch the onboarding flow to test the user experience.
               </p>
-              <Button 
-                onClick={() => setShowOnboarding(true)} 
-                variant="outline" 
+              <Button
+                onClick={() => setShowOnboarding(true)}
+                variant="outline"
                 className="w-full"
               >
                 Launch Onboarding

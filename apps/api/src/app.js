@@ -48,16 +48,16 @@ const logger = require('./utils/logger');
 // Load environment variables
 dotenv.config();
 
-// Aggressive memory optimization for Render starter plan
+// Memory optimization for Render starter plan
 if (global.gc) {
-  // Force garbage collection every 30 seconds if available
+  // Force garbage collection every 2 minutes if available (increased from 30s)
   setInterval(() => {
     global.gc();
-    logger.info('Garbage collection performed');
-  }, 30000);
+    logger.info('Periodic garbage collection performed');
+  }, 120000);
 }
 
-// Aggressive memory monitoring and cleanup
+// Memory monitoring and cleanup
 setInterval(() => {
   const memUsage = process.memoryUsage();
   const memUsageMB = {
@@ -67,17 +67,17 @@ setInterval(() => {
     external: Math.round(memUsage.external / 1024 / 1024)
   };
 
-  // Log memory usage every 1 minute
+  // Log memory usage every 2 minutes
   logger.info({ memoryUsage: memUsageMB }, 'Memory usage report');
 
-  // Force cleanup if memory usage is high (lowered threshold)
-  if (memUsage.heapUsed / memUsage.heapTotal > 0.6) {
+  // Trigger cleanup if memory usage is critically high (> 80%)
+  if (memUsage.heapUsed / memUsage.heapTotal > 0.8) {
     if (global.gc) {
       global.gc();
-      logger.warn('High memory usage detected, garbage collection performed');
+      logger.warn({ heapUsed: memUsageMB.heapUsed }, 'High memory usage detected, emergency GC performed');
     }
   }
-}, 60000); // Every 1 minute
+}, 120000); // Every 2 minutes
 
 // Additional memory optimization
 process.on('uncaughtException', (err) => {

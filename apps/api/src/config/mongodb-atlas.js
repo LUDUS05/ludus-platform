@@ -325,7 +325,7 @@ const createProductionIndexes = async () => {
     await db.collection('notifications').createIndex({ "user": 1, "isRead": 1 }, { background: true });
     await db.collection('notifications').createIndex({ "type": 1, "createdAt": -1 }, { background: true });
     await db.collection('notifications').createIndex({ "expiresAt": 1 }, { expireAfterSeconds: 0, background: true });
-    
+
     // Optimize slow notification queries
     await db.collection('notificationenhanceds').createIndex({ "expiresAt": 1 }, { background: true });
     await db.collection('notificationenhanceds').createIndex({ "user": 1, "isRead": 1, "createdAt": -1 }, { background: true });
@@ -333,14 +333,12 @@ const createProductionIndexes = async () => {
     // Analytics Collection Indexes
     await db.collection('analytics').createIndex({ "date": 1, "type": 1 }, { background: true });
     await db.collection('analytics').createIndex({ "createdAt": -1 }, { background: true });
-    
+
     // Optimize slow page queries
-    await db.collection('pages').createIndex({ "slug": 1 }, { background: true });
     await db.collection('pages').createIndex({ "status": 1, "placement": 1 }, { background: true });
     await db.collection('pages').createIndex({ "status": 1, "placement": 1, "publishDate": -1 }, { background: true });
-    
+
     // Optimize slow user queries
-    await db.collection('users').createIndex({ "email": 1 }, { background: true });
     await db.collection('users').createIndex({ "email": 1, "status": 1 }, { background: true });
     await db.collection('users').createIndex({ "role": 1, "status": 1 }, { background: true });
 
