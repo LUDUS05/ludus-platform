@@ -94,20 +94,49 @@ process.on('unhandledRejection', (reason, promise) => {
 // Initialize express app
 const app = express();
 
-// Connect to MongoDB only if not in test mode or if MONGODB_URI is available
+// Basic health check route for immediate availability
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'healthy', startup: 'in_progress' });
+});
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ status: 'healthy', startup: 'in_progress' });
+});
+
+// Start server immediately to bind to port on Render
+// We do this EARLY to ensure Render detects the open port during startup.
+// We use RENDER=true check as a fallback for require.main.
+const PORT = process.env.PORT || 5000;
+if (require.main === module || process.env.RENDER === 'true' || process.env.NODE_ENV === 'production') {
+  console.log(`[BOOT] Attempting to bind to port ${PORT}...`);
+  const server = app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 [BOOT] Server bound to port ${PORT} successfully`);
+    console.log(`📍 [BOOT] Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`📍 [BOOT] Render detected: ${process.env.RENDER || 'false'}`);
+  });
+
+  server.on('error', (err) => {
+    console.error('❌ [BOOT] Server binding error:', err);
+    if (err.code === 'EADDRINUSE') {
+      console.error(`❌ [BOOT] Port ${PORT} is already in use`);
+    }
+  });
+
+  // Keep-alive timeout extension for Render
+  server.keepAliveTimeout = 65000;
+  server.headersTimeout = 66000;
+}
+
+// Connect to MongoDB asynchronously
 if (process.env.NODE_ENV !== 'test' && process.env.MONGODB_URI) {
+  console.log('[BOOT] Initializing database connection...');
   connectDB().then(async () => {
+    console.log('✅ [BOOT] Database connected successfully');
     // Create partner terms page if it doesn't exist
     await createPartnerTermsPage();
   }).catch(err => {
     logger.error({ err }, 'Failed to connect to database');
-    logger.warn('Server will continue running without database');
+    console.error('❌ [BOOT] Database connection failed:', err.message);
   });
-} else if (process.env.MONGODB_URI === 'memory://test') {
-  // Skip connection - test database already connected
-  logger.info('Using test database connection');
-} else {
-  logger.info('Skipping database connection (test mode or no MONGODB_URI)');
 }
 
 /**
@@ -323,53 +352,14 @@ app.use(require('cookie-parser')());
 // Static file serving for uploads
 app.use('/uploads', express.static('uploads'));
 
-// Health check route
-app.get('/health', (req, res) => {
+// Health check route (detailed) - redefined later to include DB status
+app.get('/api/health/detailed', (req, res) => {
   res.status(200).json({
     status: 'healthy',
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
     environment: process.env.NODE_ENV || 'development',
-    version: process.env.npm_package_version || '1.0.1',
-    services: {
-      database: 'connected', // You can add actual DB health check here
-      referral: 'active',
-      analytics: 'active',
-      notifications: 'active',
-      invitations: 'active',
-      reports: 'active'
-    },
-    referral: {
-      system: 'operational',
-      rewards: 'active',
-      tracking: 'enabled',
-      analytics: 'available'
-    }
-  });
-});
-
-// Health check route (API-prefixed) for Render
-app.get('/api/health', (req, res) => {
-  res.status(200).json({
-    status: 'healthy',
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime(),
-    environment: process.env.NODE_ENV || 'development',
-    version: process.env.npm_package_version || '1.0.1',
-    services: {
-      database: 'connected',
-      referral: 'active',
-      analytics: 'active',
-      notifications: 'active',
-      invitations: 'active',
-      reports: 'active'
-    },
-    referral: {
-      system: 'operational',
-      rewards: 'active',
-      tracking: 'enabled',
-      analytics: 'available'
-    }
+    version: process.env.npm_package_version || '1.0.1'
   });
 });
 
@@ -441,14 +431,5 @@ app.use('/api/admin/forms', formsRoutes.adminRouter);
 // Global error handler (must be last middleware)
 app.use(require('./middleware/errorHandler'));
 
-// Start server immediately to bind to port on Render
-if (require.main === module) {
-  const PORT = process.env.PORT || 5000;
-  app.listen(PORT, '0.0.0.0', () => {
-    logger.info({ port: PORT }, 'Server running');
-    logger.info({ environment: process.env.NODE_ENV || 'development' }, 'Environment');
-    logger.info({ apiUrl: `http://localhost:${PORT}/api` }, 'API URL');
-  });
-}
-
+// Export the app (server is already started if this is the main module)
 module.exports = app;
