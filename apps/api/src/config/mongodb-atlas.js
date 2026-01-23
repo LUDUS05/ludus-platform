@@ -53,8 +53,6 @@ const mongoose = require('mongoose');
 const atlasConfig = {
   // Connection options optimized for production
   options: {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
     maxPoolSize: 10,                    // Maximum number of connections in pool
     minPoolSize: 2,                     // Minimum number of connections in pool
     maxIdleTimeMS: 30000,              // Close connections after 30s of inactivity
@@ -169,8 +167,10 @@ const connectAtlas = async () => {
     // Set up connection event listeners
     setupConnectionListeners(conn);
 
-    // Create indexes for better performance
-    await createProductionIndexes();
+    // Create production indexes in the background (non-blocking)
+    createProductionIndexes().catch(err => {
+      console.error('⚠️  Background index creation failed:', err.message);
+    });
 
     // Set up health monitoring
     setupHealthMonitoring();
@@ -277,16 +277,14 @@ const createProductionIndexes = async () => {
     const db = mongoose.connection.db;
 
     // Users Collection Indexes
-    await db.collection('users').createIndex({ email: 1 }, { unique: true, background: true });
-    await db.collection('users').createIndex({ phone: 1 }, { unique: true, sparse: true, background: true });
+    // Note: email and phone are usually indexed via schema unique:true
     await db.collection('users').createIndex({ "location.coordinates": "2dsphere" }, { background: true });
     await db.collection('users').createIndex({ "profile.firstName": "text", "profile.lastName": "text", email: "text" }, { background: true });
     await db.collection('users').createIndex({ "location.city": 1, "preferences.interests": 1 }, { background: true });
     await db.collection('users').createIndex({ "stats.totalBookings": -1, "createdAt": -1 }, { background: true });
 
     // Partners Collection Indexes
-    await db.collection('partners').createIndex({ "contact.email": 1 }, { unique: true, background: true });
-    await db.collection('partners').createIndex({ "businessInfo.registrationNumber": 1 }, { unique: true, sparse: true, background: true });
+    // Note: contact.email and registrationNumber are usually indexed via schema unique:true
     await db.collection('partners').createIndex({ "location.coordinates": "2dsphere" }, { background: true });
     await db.collection('partners').createIndex({ "location.city": 1, "verification.isVerified": 1 }, { background: true });
     await db.collection('partners').createIndex({ "stats.averageRating": -1, "stats.reviewCount": -1 }, { background: true });
@@ -299,11 +297,12 @@ const createProductionIndexes = async () => {
     await db.collection('activities').createIndex({ "schedule.availableDates.date": 1, "status": 1 }, { background: true });
     await db.collection('activities').createIndex({ "stats.averageRating": -1, "stats.reviewCount": -1 }, { background: true });
     await db.collection('activities').createIndex({ "features.isFeatured": 1, "features.isPopular": 1, "status": 1 }, { background: true });
-    // Text search index for activities - using consistent field names
-    await db.collection('activities').createIndex({ "title": "text", "description": "text", "tags": "text" }, { background: true });
+    // Text search index for activities
+    // Use background creation to avoid blocking
+    await db.collection('activities').createIndex({ "title": "text", "description": "text", "tags": "text" }, { background: true, name: "activities_text" });
 
     // Bookings Collection Indexes
-    await db.collection('bookings').createIndex({ "bookingNumber": 1 }, { unique: true, background: true });
+    // Note: bookingNumber is usually indexed via schema unique:true
     await db.collection('bookings').createIndex({ "user.id": 1, "status": 1 }, { background: true });
     await db.collection('bookings').createIndex({ "activity.id": 1, "schedule.date": 1 }, { background: true });
     await db.collection('bookings').createIndex({ "schedule.date": 1, "status": 1 }, { background: true });
@@ -316,7 +315,7 @@ const createProductionIndexes = async () => {
     await db.collection('reviews').createIndex({ "status": 1, "createdAt": -1 }, { background: true });
 
     // Payments Collection Indexes
-    await db.collection('payments').createIndex({ "paymentNumber": 1 }, { unique: true, background: true });
+    // Note: paymentNumber is usually indexed via schema unique:true
     await db.collection('payments').createIndex({ "booking.id": 1 }, { background: true });
     await db.collection('payments').createIndex({ "user.id": 1, "status": 1 }, { background: true });
     await db.collection('payments').createIndex({ "status": 1, "createdAt": -1 }, { background: true });
@@ -339,7 +338,6 @@ const createProductionIndexes = async () => {
     await db.collection('pages').createIndex({ "status": 1, "placement": 1, "publishDate": -1 }, { background: true });
 
     // Optimize slow user queries
-    await db.collection('users').createIndex({ "email": 1, "status": 1 }, { background: true });
     await db.collection('users').createIndex({ "role": 1, "status": 1 }, { background: true });
 
     console.log('✅ Production indexes created successfully');

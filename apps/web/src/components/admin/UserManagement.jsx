@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../services/api';
 import { Eye, Search, Filter, Users } from 'lucide-react';
@@ -374,8 +374,8 @@ const UserManagement = () => {
                     <button
                       onClick={() => handleStatusToggle(user._id, user.isActive)}
                       className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${user.isActive
-                          ? 'bg-red-100 text-red-700 hover:bg-red-200'
-                          : 'bg-green-100 text-green-700 hover:bg-green-200'
+                        ? 'bg-red-100 text-red-700 hover:bg-red-200'
+                        : 'bg-green-100 text-green-700 hover:bg-green-200'
                         }`}
                     >
                       {user.isActive ? 'Deactivate' : 'Activate'}

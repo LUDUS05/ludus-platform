@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../services/api';
 
@@ -387,8 +387,8 @@ const VendorManagement = () => {
                     <button
                       onClick={() => toggleVendorStatus(vendor._id, vendor.isActive)}
                       className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${vendor.isActive
-                          ? 'bg-green-100 text-green-800 hover:bg-green-200'
-                          : 'bg-red-100 text-red-800 hover:bg-red-200'
+                        ? 'bg-green-100 text-green-800 hover:bg-green-200'
+                        : 'bg-red-100 text-red-800 hover:bg-red-200'
                         } transition-colors`}
                     >
                       {vendor.isActive ? 'Active' : 'Inactive'}

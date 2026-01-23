@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -59,18 +59,6 @@ const TranslationManagement = () => {
     loadContentUpdates();
   }, [selectedLanguage]);
 
-  const loadTranslations = async () => {
-    try {
-      setLoading(true);
-      // In a real app, this would fetch from your API
-      const response = await import(`../../i18n/locales/${selectedLanguage}.json`);
-      setTranslations(response.default);
-    } catch (error) {
-      console.error('Failed to load translations:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const detectMissingTranslations = () => {
     // Compare Arabic and English translations to find missing keys
@@ -726,8 +714,8 @@ const TranslationManagement = () => {
             setShowScanDashboard(false);
           }}
           className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${!showWorkflowBuilder && !showMLDashboard && !showScanDashboard
-              ? 'bg-white text-gray-900 shadow-sm'
-              : 'text-gray-600 hover:text-gray-900'
+            ? 'bg-white text-gray-900 shadow-sm'
+            : 'text-gray-600 hover:text-gray-900'
             }`}
         >
           Translations
@@ -739,8 +727,8 @@ const TranslationManagement = () => {
             setShowScanDashboard(false);
           }}
           className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${showWorkflowBuilder
-              ? 'bg-white text-gray-900 shadow-sm'
-              : 'text-gray-600 hover:text-gray-900'
+            ? 'bg-white text-gray-900 shadow-sm'
+            : 'text-gray-600 hover:text-gray-900'
             }`}
         >
           Automated Workflows
@@ -752,8 +740,8 @@ const TranslationManagement = () => {
             setShowScanDashboard(false);
           }}
           className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${showMLDashboard
-              ? 'bg-white text-gray-900 shadow-sm'
-              : 'text-gray-600 hover:text-gray-900'
+            ? 'bg-white text-gray-900 shadow-sm'
+            : 'text-gray-600 hover:text-gray-900'
             }`}
         >
           Machine Learning
@@ -765,8 +753,8 @@ const TranslationManagement = () => {
             setShowScanDashboard(true);
           }}
           className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${showScanDashboard
-              ? 'bg-white text-gray-900 shadow-sm'
-              : 'text-gray-600 hover:text-gray-900'
+            ? 'bg-white text-gray-900 shadow-sm'
+            : 'text-gray-600 hover:text-gray-900'
             }`}
         >
           Code Scanner
@@ -786,8 +774,8 @@ const TranslationManagement = () => {
                     key={lang.code}
                     onClick={() => setSelectedLanguage(lang.code)}
                     className={`flex items-center space-x-2 px-4 py-2 rounded-lg border transition-colors ${selectedLanguage === lang.code
-                        ? 'border-blue-500 bg-blue-50 text-blue-700'
-                        : 'border-gray-300 hover:border-gray-400'
+                      ? 'border-blue-500 bg-blue-50 text-blue-700'
+                      : 'border-gray-300 hover:border-gray-400'
                       }`}
                   >
                     <span className="text-xl">{lang.flag}</span>
@@ -1139,8 +1127,8 @@ const TranslationManagement = () => {
                     </div>
                     <div className="flex items-center space-x-2">
                       <span className={`px-2 py-1 text-xs rounded-full ${update.status === 'pending-translation'
-                          ? 'bg-yellow-100 text-yellow-800'
-                          : 'bg-green-100 text-green-800'
+                        ? 'bg-yellow-100 text-yellow-800'
+                        : 'bg-green-100 text-green-800'
                         }`}>
                         {update.status.replace('-', ' ')}
                       </span>
@@ -1177,8 +1165,8 @@ const TranslationManagement = () => {
                       <div className="flex items-center justify-between">
                         <h3 className="text-lg font-semibold text-gray-900">{model.name}</h3>
                         <span className={`px-2 py-1 text-xs rounded-full ${model.status === 'trained' ? 'bg-green-100 text-green-800' :
-                            model.status === 'training' ? 'bg-yellow-100 text-yellow-800' :
-                              'bg-blue-100 text-blue-800'
+                          model.status === 'training' ? 'bg-yellow-100 text-yellow-800' :
+                            'bg-blue-100 text-blue-800'
                           }`}>
                           {model.status}
                         </span>

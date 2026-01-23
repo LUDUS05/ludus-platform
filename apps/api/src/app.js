@@ -70,8 +70,9 @@ setInterval(() => {
   // Log memory usage every 2 minutes
   logger.info({ memoryUsage: memUsageMB }, 'Memory usage report');
 
-  // Trigger cleanup if memory usage is critically high (> 80%)
-  if (memUsage.heapUsed / memUsage.heapTotal > 0.8) {
+  // Trigger cleanup if memory usage is critically high (> 85%) AND heap is large enough to matter
+  // Small heaps (< 100MB) often hit 80% quickly during GC cycles without real pressure.
+  if (memUsageMB.heapUsed / memUsageMB.heapTotal > 0.85 && memUsageMB.heapTotal > 100) {
     if (global.gc) {
       global.gc();
       logger.warn({ heapUsed: memUsageMB.heapUsed }, 'High memory usage detected, emergency GC performed');
@@ -440,14 +441,12 @@ app.use('/api/admin/forms', formsRoutes.adminRouter);
 // Global error handler (must be last middleware)
 app.use(require('./middleware/errorHandler'));
 
-// Start server only if this file is run directly
-if (require.main === module) {
-  const PORT = process.env.PORT || 5000;
-  app.listen(PORT, '0.0.0.0', () => {
-    logger.info({ port: PORT }, 'Server running');
-    logger.info({ environment: process.env.NODE_ENV || 'development' }, 'Environment');
-    logger.info({ apiUrl: `http://localhost:${PORT}/api` }, 'API URL');
-  });
-}
+// Start server immediately to bind to port on Render
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, '0.0.0.0', () => {
+  logger.info({ port: PORT }, 'Server running');
+  logger.info({ environment: process.env.NODE_ENV || 'development' }, 'Environment');
+  logger.info({ apiUrl: `http://localhost:${PORT}/api` }, 'API URL');
+});
 
 module.exports = app;

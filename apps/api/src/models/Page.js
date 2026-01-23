@@ -73,19 +73,18 @@ const pageSchema = new mongoose.Schema({
   url: {
     type: String,
     trim: true,
-    unique: true,
     sparse: true
   },
   // Rich content blocks
   content: [contentBlockSchema],
-  
+
   // Page template type
   template: {
     type: String,
     enum: ['basic', 'landing', 'about', 'contact', 'custom'],
     default: 'basic'
   },
-  
+
   // Publishing options
   status: {
     type: String,
@@ -99,7 +98,7 @@ const pageSchema = new mongoose.Schema({
   expiryDate: {
     type: Date
   },
-  
+
   // Navigation and placement
   placement: {
     type: String,
@@ -114,10 +113,10 @@ const pageSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
-  
+
   // SEO and meta data
   seo: seoSchema,
-  
+
   // Page settings
   settings: {
     allowComments: { type: Boolean, default: false },
@@ -128,7 +127,7 @@ const pageSchema = new mongoose.Schema({
     backgroundColor: { type: String, default: '#ffffff' },
     textColor: { type: String, default: '#000000' }
   },
-  
+
   // Categories and tags
   categories: [{
     type: String,
@@ -138,7 +137,7 @@ const pageSchema = new mongoose.Schema({
     type: String,
     trim: true
   }],
-  
+
   // System flags
   isSystem: {
     type: Boolean,
@@ -148,7 +147,7 @@ const pageSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
-  
+
   // Analytics and tracking
   views: {
     type: Number,
@@ -157,7 +156,7 @@ const pageSchema = new mongoose.Schema({
   lastViewed: {
     type: Date
   },
-  
+
   // Version control
   version: {
     type: Number,
@@ -170,7 +169,7 @@ const pageSchema = new mongoose.Schema({
     updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     changeLog: String
   }],
-  
+
   // User tracking
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
@@ -192,14 +191,14 @@ const pageSchema = new mongoose.Schema({
 // available as a real path on the document.
 
 // Virtual for published status
-pageSchema.virtual('isPublished').get(function() {
-  return this.status === 'published' && 
-         (!this.publishDate || this.publishDate <= new Date()) &&
-         (!this.expiryDate || this.expiryDate > new Date());
+pageSchema.virtual('isPublished').get(function () {
+  return this.status === 'published' &&
+    (!this.publishDate || this.publishDate <= new Date()) &&
+    (!this.expiryDate || this.expiryDate > new Date());
 });
 
 // Virtual for word count
-pageSchema.virtual('wordCount').get(function() {
+pageSchema.virtual('wordCount').get(function () {
   let totalWords = 0;
   this.content.forEach(block => {
     if (block.content) {
@@ -212,7 +211,7 @@ pageSchema.virtual('wordCount').get(function() {
 });
 
 // Pre-save middleware
-pageSchema.pre('save', async function(next) {
+pageSchema.pre('save', async function (next) {
   // Generate slug from English title if not provided
   if (!this.slug && this.title && this.title.en) {
     this.slug = this.title.en
@@ -221,12 +220,12 @@ pageSchema.pre('save', async function(next) {
       .replace(/\s+/g, '-')
       .replace(/-+/g, '-')
       .replace(/^-+|-+$/g, '');
-    
+
     if (!this.slug) {
       this.slug = 'page-' + Date.now();
     }
   }
-  
+
   // Ensure content blocks have proper IDs and order
   if (this.content && Array.isArray(this.content)) {
     this.content.forEach((block, index) => {
@@ -238,7 +237,7 @@ pageSchema.pre('save', async function(next) {
       }
     });
   }
-  
+
   // Auto-generate SEO title from page title if not provided
   if (!this.seo) {
     this.seo = {};
@@ -249,18 +248,18 @@ pageSchema.pre('save', async function(next) {
       ar: this.title.ar
     };
   }
-  
+
   // Update version for content changes
   if (this.isModified('content')) {
     this.version = (this.version || 0) + 1;
   }
-  
+
   // Ensure persisted `url` is kept in sync with the slug. This avoids
   // documents with `url: null` and makes the field available as a real path.
   if (this.slug) {
     this.url = `/pages/${this.slug}`;
   }
-  
+
   next();
 });
 
@@ -277,7 +276,7 @@ pageSchema.index({ createdBy: 1 });
 pageSchema.index({ url: 1 }, { unique: true, sparse: true });
 
 // Static methods
-pageSchema.statics.findPublished = function(conditions = {}) {
+pageSchema.statics.findPublished = function (conditions = {}) {
   return this.find({
     ...conditions,
     status: 'published',
@@ -289,7 +288,7 @@ pageSchema.statics.findPublished = function(conditions = {}) {
   });
 };
 
-pageSchema.statics.findBySlug = function(slug, includeUnpublished = false) {
+pageSchema.statics.findBySlug = function (slug, includeUnpublished = false) {
   const query = { slug };
   if (!includeUnpublished) {
     query.status = 'published';
@@ -299,17 +298,17 @@ pageSchema.statics.findBySlug = function(slug, includeUnpublished = false) {
 };
 
 // Instance methods
-pageSchema.methods.incrementViews = function() {
+pageSchema.methods.incrementViews = function () {
   this.views = (this.views || 0) + 1;
   this.lastViewed = new Date();
   return this.save();
 };
 
-pageSchema.methods.createBackup = function(userId, changeLog = '') {
+pageSchema.methods.createBackup = function (userId, changeLog = '') {
   if (!this.previousVersions) {
     this.previousVersions = [];
   }
-  
+
   this.previousVersions.push({
     version: this.version || 1,
     content: this.content,
@@ -317,12 +316,12 @@ pageSchema.methods.createBackup = function(userId, changeLog = '') {
     updatedBy: userId,
     changeLog
   });
-  
+
   // Keep only last 10 versions
   if (this.previousVersions.length > 10) {
     this.previousVersions = this.previousVersions.slice(-10);
   }
-  
+
   return this.save();
 };
 
