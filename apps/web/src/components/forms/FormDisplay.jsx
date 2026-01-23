@@ -19,14 +19,7 @@ const FormDisplay = () => {
   const [success, setSuccess] = useState('');
   const [startTime, setStartTime] = useState(null);
 
-  useEffect(() => {
-    if (slug) {
-      fetchForm();
-      setStartTime(Date.now());
-    }
-  }, [slug]);
-
-  const fetchForm = async () => {
+  const fetchForm = React.useCallback(async () => {
     try {
       setLoading(true);
       const response = await api.get(`/forms/${slug}`);
@@ -36,7 +29,14 @@ const FormDisplay = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [slug]);
+
+  useEffect(() => {
+    if (slug) {
+      fetchForm();
+      setStartTime(Date.now());
+    }
+  }, [fetchForm, slug]);
 
   const handleInputChange = (fieldId, value) => {
     setResponses(prev => ({
@@ -332,9 +332,8 @@ const FormDisplay = () => {
               <div
                 className="bg-blue-600 h-2 rounded-full transition-all duration-300"
                 style={{
-                  width: `${
-                    (Object.keys(responses).length / form.fields.length) * 100
-                  }%`,
+                  width: `${(Object.keys(responses).length / form.fields.length) * 100
+                    }%`,
                 }}
               ></div>
             </div>

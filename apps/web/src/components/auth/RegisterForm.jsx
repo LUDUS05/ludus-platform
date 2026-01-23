@@ -23,15 +23,13 @@ const RegisterForm = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Clear validation errors when user starts typing
   useEffect(() => {
     if (Object.keys(validationErrors).length > 0) {
       setValidationErrors({});
     }
-  }, [formData]);
+  }, [formData, validationErrors]);
 
   const validateForm = () => {
     const errors = {};

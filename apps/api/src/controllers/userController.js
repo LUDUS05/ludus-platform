@@ -215,10 +215,39 @@ const getUserBookings = async (req, res) => {
     const status = req.query.status || '';
 
     // Build filter
-    success: false,
-      message: 'Failed to fetch dashboard statistics'
-  });
-}
+    const filter = { user: userId };
+    if (status) filter.status = status;
+
+    const skip = (page - 1) * limit;
+
+    const [bookings, total] = await Promise.all([
+      Booking.find(filter)
+        .populate('activity', 'title category images')
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit),
+      Booking.countDocuments(filter)
+    ]);
+
+    res.status(200).json({
+      success: true,
+      data: {
+        bookings,
+        pagination: {
+          page,
+          limit,
+          total,
+          pages: Math.ceil(total / limit)
+        }
+      }
+    });
+  } catch (error) {
+    console.error('Get user bookings error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch user bookings'
+    });
+  }
 };
 
 /**

@@ -14,25 +14,25 @@ const PartnerRegistrationPage = () => {
     website: '',
     description: ''
   });
-  
+
   // Conversational flow state
   const [currentStep, setCurrentStep] = useState(-1); // Start with welcome screen
   const [isAnimating, setIsAnimating] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false);
-  
+
   // Form state
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   // Refs
   const inputRef = useRef(null);
-  
+
   // Terms modal state
   const [showTermsModal, setShowTermsModal] = useState(false);
   const [termsContent, setTermsContent] = useState('');
   const [loadingTerms, setLoadingTerms] = useState(false);
-  
+
   // Conversational questions configuration
   const conversationSteps = [
     // Welcome screen is step -1
@@ -95,7 +95,7 @@ const PartnerRegistrationPage = () => {
   const getPersonalizedQuestion = (step) => {
     const questionData = conversationSteps[step];
     if (!questionData) return '';
-    
+
     const { question } = questionData;
     if (typeof question === 'function') {
       return question(formData.contactName, formData.companyName);
@@ -126,23 +126,23 @@ const PartnerRegistrationPage = () => {
     if (!value && question.required) {
       return t('partner.registration.validation.required');
     }
-    
+
     switch (question.key) {
       case 'email':
-        return value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) 
-          ? t('partner.registration.validation.invalidEmail') 
+        return value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+          ? t('partner.registration.validation.invalidEmail')
           : '';
       case 'website':
-        return value && !/^https?:\/\/.+\..+/.test(value) 
-          ? t('partner.registration.validation.invalidWebsite') 
+        return value && !/^https?:\/\/.+\..+/.test(value)
+          ? t('partner.registration.validation.invalidWebsite')
           : '';
       case 'phone':
-        return value && !/^[+]?[\d\s\-\(\)]{10,}$/.test(value) 
-          ? t('partner.registration.validation.invalidPhone') 
+        return value && !/^[+]?[\d\s()-]{10,}$/.test(value)
+          ? t('partner.registration.validation.invalidPhone')
           : '';
       case 'description':
-        return value && value.length < 20 
-          ? t('partner.registration.validation.descriptionTooShort') 
+        return value && value.length < 20
+          ? t('partner.registration.validation.descriptionTooShort')
           : '';
       default:
         return '';
@@ -152,10 +152,10 @@ const PartnerRegistrationPage = () => {
   const handleInputChange = (e) => {
     const question = getCurrentQuestion();
     if (!question) return;
-    
+
     const value = e.target.value;
     setFormData(prev => ({ ...prev, [question.key]: value }));
-    
+
     // Clear errors when typing
     if (errors.current) {
       setErrors(prev => ({ ...prev, current: '' }));
@@ -183,7 +183,7 @@ const PartnerRegistrationPage = () => {
 
     const value = formData[question.key]?.trim() || '';
     const error = validateCurrentField(value);
-    
+
     if (error) {
       setErrors({ current: error });
       return;
@@ -192,7 +192,7 @@ const PartnerRegistrationPage = () => {
     // Move to next step
     setIsAnimating(true);
     setErrors({});
-    
+
     setTimeout(() => {
       if (currentStep >= conversationSteps.length - 1) {
         setCurrentStep(conversationSteps.length); // Terms step
@@ -400,18 +400,18 @@ const PartnerRegistrationPage = () => {
             }
           `}
         </style>
-        
+
         <div className="success-screen">
           <div className="success-icon">
             <span className="success-checkmark">✓</span>
           </div>
-          
+
           <h1 className="success-title">{t('partner.registration.success.title')}</h1>
-          
+
           <p className="success-message">
             {t('partner.registration.success.message', { name: formData.contactName, company: formData.companyName })}
           </p>
-          
+
           <div className="success-details">
             <h4>{t('partner.registration.success.nextSteps.title')}</h4>
             <ul>
@@ -797,12 +797,12 @@ const PartnerRegistrationPage = () => {
           }
         `}
       </style>
-      
+
       {/* Progress Bar */}
       {!isWelcomeScreen() && (
         <div className="progress-bar" style={{ width: `${getProgress()}%` }}></div>
       )}
-      
+
       <div className={`form-screen ${isAnimating ? 'animating' : ''}`}>
         {/* Welcome Screen */}
         {isWelcomeScreen() && (
@@ -819,7 +819,7 @@ const PartnerRegistrationPage = () => {
             </button>
           </div>
         )}
-        
+
         {/* Question Screens */}
         {currentStep >= 0 && currentStep < conversationSteps.length && (
           <div className="question-screen">
@@ -827,7 +827,7 @@ const PartnerRegistrationPage = () => {
               <h2 className="question-text">
                 {getPersonalizedQuestion(currentStep)}
               </h2>
-              
+
               <div className="input-container">
                 {getCurrentQuestion()?.type === 'textarea' ? (
                   <textarea
@@ -850,12 +850,12 @@ const PartnerRegistrationPage = () => {
                     placeholder={getCurrentQuestion()?.placeholder}
                   />
                 )}
-                
+
                 {errors.current && (
                   <div className="error-message">{errors.current}</div>
                 )}
               </div>
-              
+
               <div className="button-container">
                 <button
                   className="back-button"
@@ -864,7 +864,7 @@ const PartnerRegistrationPage = () => {
                 >
                   ← {t('common.back')}
                 </button>
-                
+
                 <button
                   className="next-button"
                   onClick={handleNext}
@@ -875,7 +875,7 @@ const PartnerRegistrationPage = () => {
             </div>
           </div>
         )}
-        
+
         {/* Terms Screen */}
         {isTermsStep() && (
           <div className="terms-screen">
@@ -883,7 +883,7 @@ const PartnerRegistrationPage = () => {
               <h2 className="terms-title">
                 {t('partner.registration.terms.title', { name: formData.contactName })}
               </h2>
-              
+
               <div className="checkbox-container">
                 <input
                   type="checkbox"
@@ -914,11 +914,11 @@ const PartnerRegistrationPage = () => {
                   })}
                 </label>
               </div>
-              
+
               {errors.current && (
                 <div className="error-message">{errors.current}</div>
               )}
-              
+
               <button
                 className="submit-button"
                 onClick={handleNext}
@@ -926,7 +926,7 @@ const PartnerRegistrationPage = () => {
               >
                 {isSubmitting ? t('partner.registration.terms.submitting') : t('partner.registration.terms.submit')}
               </button>
-              
+
               <div className="button-container" style={{ marginTop: '20px', justifyContent: 'center' }}>
                 <button
                   className="back-button"
@@ -948,9 +948,9 @@ const PartnerRegistrationPage = () => {
         }}>
           <div className="min-h-screen px-4 text-center">
             <div className="fixed inset-0" onClick={() => setShowTermsModal(false)}></div>
-            
+
             <span className="inline-block h-screen align-middle" aria-hidden="true">&#8203;</span>
-            
+
             <div className="inline-block w-full max-w-4xl p-8 my-8 text-left align-middle transition-all transform bg-white shadow-xl rounded-lg">
               <div className="flex justify-between items-start mb-6">
                 <h3 className="text-xl font-semibold text-gray-900">
@@ -963,20 +963,20 @@ const PartnerRegistrationPage = () => {
                   ×
                 </button>
               </div>
-              
+
               <div className="max-h-96 overflow-y-auto">
                 {loadingTerms ? (
                   <div className="text-center py-8">
                     <div className="text-gray-600">{t('partner.registration.terms.loading')}</div>
                   </div>
                 ) : (
-                  <div 
+                  <div
                     className="prose max-w-none"
                     dangerouslySetInnerHTML={{ __html: termsContent }}
                   />
                 )}
               </div>
-              
+
               <div className="flex justify-end space-x-4 mt-8 pt-6 border-t border-gray-200">
                 <button
                   onClick={() => setShowTermsModal(false)}

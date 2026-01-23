@@ -87,9 +87,9 @@ const BLOCK_TYPES = {
   }
 };
 
-const RichTextEditor = ({ 
-  content = [], 
-  onChange, 
+const RichTextEditor = ({
+  content = [],
+  onChange,
   language = 'en',
   placeholder = 'Start writing...',
   readOnly = false,
@@ -113,7 +113,7 @@ const RichTextEditor = ({
   }, [content]);
 
   const updateBlock = useCallback((blockId, updates) => {
-    const updatedBlocks = blocks.map(block => 
+    const updatedBlocks = blocks.map(block =>
       block.id === blockId ? { ...block, ...updates } : block
     );
     onChange(updatedBlocks);
@@ -125,7 +125,7 @@ const RichTextEditor = ({
       return;
     }
 
-    const afterIndex = afterBlockId 
+    const afterIndex = afterBlockId
       ? blocks.findIndex(b => b.id === afterBlockId)
       : blocks.length - 1;
 
@@ -189,7 +189,7 @@ const RichTextEditor = ({
   const moveBlock = useCallback((fromId, toId) => {
     const fromIndex = blocks.findIndex(b => b.id === fromId);
     const toIndex = blocks.findIndex(b => b.id === toId);
-    
+
     if (fromIndex === -1 || toIndex === -1) return;
 
     const updatedBlocks = [...blocks];
@@ -278,6 +278,215 @@ const RichTextEditor = ({
     };
   }
 
+  const renderBlockContent = useCallback((block, textContent, isRTL, blockType) => {
+    const commonProps = {
+      dir: isRTL ? 'rtl' : 'ltr',
+      className: 'w-full border-none outline-none bg-transparent resize-none'
+    };
+
+    switch (block.type) {
+      case 'paragraph':
+        return readOnly ? (
+          <p className="whitespace-pre-wrap" {...commonProps}>{textContent}</p>
+        ) : (
+          <textarea
+            {...commonProps}
+            value={textContent}
+            onChange={(e) => updateBlock(block.id, {
+              content: { ...block.content, [language]: e.target.value }
+            })}
+            placeholder={placeholder}
+            className={`${commonProps.className} min-h-[60px]`}
+            rows={3}
+          />
+        );
+
+      case 'heading':
+        const HeadingTag = `h${block.data?.level || 2}`;
+        const headingClasses = {
+          1: 'text-4xl font-bold',
+          2: 'text-3xl font-bold',
+          3: 'text-2xl font-semibold',
+          4: 'text-xl font-semibold',
+          5: 'text-lg font-medium',
+          6: 'text-base font-medium'
+        };
+
+        return readOnly ? (
+          <HeadingTag className={headingClasses[block.data?.level || 2]} {...commonProps}>
+            {textContent}
+          </HeadingTag>
+        ) : (
+          <textarea
+            {...commonProps}
+            value={textContent}
+            onChange={(e) => updateBlock(block.id, {
+              content: { ...block.content, [language]: e.target.value }
+            })}
+            placeholder="Heading text..."
+            className={`${commonProps.className} ${headingClasses[block.data?.level || 2]} min-h-[50px] font-bold`}
+            rows={2}
+          />
+        );
+
+      case 'image':
+        return (
+          <div className="text-center">
+            {block.data?.url ? (
+              <div className="space-y-2">
+                <img
+                  src={block.data.url}
+                  alt={block.data?.alt || ''}
+                  className="max-w-full h-auto rounded-lg mx-auto"
+                  style={{
+                    maxWidth: {
+                      small: '300px',
+                      medium: '500px',
+                      large: '100%'
+                    }[block.data?.size || 'medium']
+                  }}
+                />
+                {(block.data?.caption || block.content?.[language]) && (
+                  <p className="text-sm text-ludus-gray-600 italic">
+                    {block.content?.[language] || block.data?.caption}
+                  </p>
+                )}
+              </div>
+            ) : !readOnly ? (
+              <div className="border-2 border-dashed border-ludus-gray-300 rounded-lg p-8 text-center">
+                <div className="text-4xl mb-2">🖼️</div>
+                <p className="text-ludus-gray-600 mb-4">Click to add an image</p>
+                <Button
+                  size="sm"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="bg-ludus-orange text-white"
+                >
+                  Choose Image
+                </Button>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => handleImageUpload(block.id, e.target.files[0])}
+                />
+              </div>
+            ) : null}
+          </div>
+        );
+
+      case 'quote':
+        return (
+          <blockquote className="border-l-4 border-ludus-orange pl-4 italic">
+            {readOnly ? (
+              <>
+                <p className="text-lg mb-2">{textContent}</p>
+                {block.data?.author && (
+                  <cite className="text-sm text-ludus-gray-600">
+                    — {block.data.author}
+                    {block.data?.source && `, ${block.data.source}`}
+                  </cite>
+                )}
+              </>
+            ) : (
+              <div className="space-y-2">
+                <textarea
+                  {...commonProps}
+                  value={textContent}
+                  onChange={(e) => updateBlock(block.id, {
+                    content: { ...block.content, [language]: e.target.value }
+                  })}
+                  placeholder="Quote text..."
+                  className={`${commonProps.className} text-lg min-h-[80px]`}
+                  rows={3}
+                />
+                <div className="flex gap-2 text-sm">
+                  <Input
+                    value={block.data?.author || ''}
+                    onChange={(e) => updateBlock(block.id, {
+                      data: { ...block.data, author: e.target.value }
+                    })}
+                    placeholder="Author"
+                    className="flex-1"
+                    size="sm"
+                  />
+                  <Input
+                    value={block.data?.source || ''}
+                    onChange={(e) => updateBlock(block.id, {
+                      data: { ...block.data, source: e.target.value }
+                    })}
+                    placeholder="Source"
+                    className="flex-1"
+                    size="sm"
+                  />
+                </div>
+              </div>
+            )}
+          </blockquote>
+        );
+
+      case 'code':
+        return (
+          <div className="bg-ludus-gray-900 rounded-lg p-4 overflow-x-auto">
+            {readOnly ? (
+              <pre className="text-green-400 text-sm font-mono whitespace-pre-wrap">
+                <code>{textContent}</code>
+              </pre>
+            ) : (
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <select
+                    value={block.data?.language || 'javascript'}
+                    onChange={(e) => updateBlock(block.id, {
+                      data: { ...block.data, language: e.target.value }
+                    })}
+                    className="bg-ludus-gray-800 text-white text-xs px-2 py-1 rounded"
+                  >
+                    <option value="javascript">JavaScript</option>
+                    <option value="python">Python</option>
+                    <option value="html">HTML</option>
+                    <option value="css">CSS</option>
+                    <option value="json">JSON</option>
+                    <option value="bash">Bash</option>
+                  </select>
+                </div>
+                <textarea
+                  value={textContent}
+                  onChange={(e) => updateBlock(block.id, {
+                    content: { ...block.content, [language]: e.target.value }
+                  })}
+                  placeholder="Enter your code..."
+                  className="w-full bg-transparent text-green-400 text-sm font-mono border-none outline-none resize-none min-h-[120px]"
+                  rows={6}
+                />
+              </div>
+            )}
+          </div>
+        );
+
+      case 'divider':
+        return (
+          <div className="flex items-center justify-center py-4">
+            <hr className={`
+              w-full border-0
+              ${block.data?.style === 'dotted' ? 'border-t border-dotted border-ludus-gray-300' :
+                block.data?.style === 'dashed' ? 'border-t border-dashed border-ludus-gray-300' :
+                  'border-t border-solid border-ludus-gray-300'
+              }
+            `} />
+          </div>
+        );
+
+      default:
+        return (
+          <div className="text-center text-ludus-gray-500 py-4">
+            <div className="text-2xl mb-2">{blockType?.icon || '❓'}</div>
+            <p>Block type "{block.type}" not implemented</p>
+          </div>
+        );
+    }
+  }, [language, readOnly, updateBlock, placeholder, handleImageUpload]);
+
   const renderBlock = useCallback((block) => {
     const blockType = BLOCK_TYPES[block.type];
     const isRTL = language === 'ar';
@@ -365,217 +574,9 @@ const RichTextEditor = ({
     );
   }, [
     language, focusedBlock, dragOverBlock, draggedBlock, readOnly,
-    handleDragStart, handleDragOver, handleDrop, duplicateBlock, removeBlock
+    handleDragStart, handleDragOver, handleDrop, duplicateBlock, removeBlock,
+    renderBlockContent, setShowSettingsFor, setShowBlockMenu
   ]);
-
-  const renderBlockContent = (block, textContent, isRTL, blockType) => {
-    const commonProps = {
-      dir: isRTL ? 'rtl' : 'ltr',
-      className: 'w-full border-none outline-none bg-transparent resize-none'
-    };
-
-    switch (block.type) {
-      case 'paragraph':
-        return readOnly ? (
-          <p className="whitespace-pre-wrap" {...commonProps}>{textContent}</p>
-        ) : (
-          <textarea
-            {...commonProps}
-            value={textContent}
-            onChange={(e) => updateBlock(block.id, { 
-              content: { ...block.content, [language]: e.target.value } 
-            })}
-            placeholder={placeholder}
-            className={`${commonProps.className} min-h-[60px]`}
-            rows={3}
-          />
-        );
-
-      case 'heading':
-        const HeadingTag = `h${block.data?.level || 2}`;
-        const headingClasses = {
-          1: 'text-4xl font-bold',
-          2: 'text-3xl font-bold',
-          3: 'text-2xl font-semibold',
-          4: 'text-xl font-semibold',
-          5: 'text-lg font-medium',
-          6: 'text-base font-medium'
-        };
-        
-        return readOnly ? (
-          <HeadingTag className={headingClasses[block.data?.level || 2]} {...commonProps}>
-            {textContent}
-          </HeadingTag>
-        ) : (
-          <textarea
-            {...commonProps}
-            value={textContent}
-            onChange={(e) => updateBlock(block.id, { 
-              content: { ...block.content, [language]: e.target.value } 
-            })}
-            placeholder="Heading text..."
-            className={`${commonProps.className} ${headingClasses[block.data?.level || 2]} min-h-[50px] font-bold`}
-            rows={2}
-          />
-        );
-
-      case 'image':
-        return (
-          <div className="text-center">
-            {block.data?.url ? (
-              <div className="space-y-2">
-                <img 
-                  src={block.data.url} 
-                  alt={block.data?.alt || ''} 
-                  className="max-w-full h-auto rounded-lg mx-auto"
-                  style={{
-                    maxWidth: {
-                      small: '300px',
-                      medium: '500px',
-                      large: '100%'
-                    }[block.data?.size || 'medium']
-                  }}
-                />
-                {(block.data?.caption || block.content?.[language]) && (
-                  <p className="text-sm text-ludus-gray-600 italic">
-                    {block.content?.[language] || block.data?.caption}
-                  </p>
-                )}
-              </div>
-            ) : !readOnly ? (
-              <div className="border-2 border-dashed border-ludus-gray-300 rounded-lg p-8 text-center">
-                <div className="text-4xl mb-2">🖼️</div>
-                <p className="text-ludus-gray-600 mb-4">Click to add an image</p>
-                <Button
-                  size="sm"
-                  onClick={() => fileInputRef.current?.click()}
-                  className="bg-ludus-orange text-white"
-                >
-                  Choose Image
-                </Button>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={(e) => handleImageUpload(block.id, e.target.files[0])}
-                />
-              </div>
-            ) : null}
-          </div>
-        );
-
-      case 'quote':
-        return (
-          <blockquote className="border-l-4 border-ludus-orange pl-4 italic">
-            {readOnly ? (
-              <>
-                <p className="text-lg mb-2">{textContent}</p>
-                {block.data?.author && (
-                  <cite className="text-sm text-ludus-gray-600">
-                    — {block.data.author}
-                    {block.data?.source && `, ${block.data.source}`}
-                  </cite>
-                )}
-              </>
-            ) : (
-              <div className="space-y-2">
-                <textarea
-                  {...commonProps}
-                  value={textContent}
-                  onChange={(e) => updateBlock(block.id, { 
-                    content: { ...block.content, [language]: e.target.value } 
-                  })}
-                  placeholder="Quote text..."
-                  className={`${commonProps.className} text-lg min-h-[80px]`}
-                  rows={3}
-                />
-                <div className="flex gap-2 text-sm">
-                  <Input
-                    value={block.data?.author || ''}
-                    onChange={(e) => updateBlock(block.id, { 
-                      data: { ...block.data, author: e.target.value } 
-                    })}
-                    placeholder="Author"
-                    className="flex-1"
-                    size="sm"
-                  />
-                  <Input
-                    value={block.data?.source || ''}
-                    onChange={(e) => updateBlock(block.id, { 
-                      data: { ...block.data, source: e.target.value } 
-                    })}
-                    placeholder="Source"
-                    className="flex-1"
-                    size="sm"
-                  />
-                </div>
-              </div>
-            )}
-          </blockquote>
-        );
-
-      case 'code':
-        return (
-          <div className="bg-ludus-gray-900 rounded-lg p-4 overflow-x-auto">
-            {readOnly ? (
-              <pre className="text-green-400 text-sm font-mono whitespace-pre-wrap">
-                <code>{textContent}</code>
-              </pre>
-            ) : (
-              <div className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <select
-                    value={block.data?.language || 'javascript'}
-                    onChange={(e) => updateBlock(block.id, { 
-                      data: { ...block.data, language: e.target.value } 
-                    })}
-                    className="bg-ludus-gray-800 text-white text-xs px-2 py-1 rounded"
-                  >
-                    <option value="javascript">JavaScript</option>
-                    <option value="python">Python</option>
-                    <option value="html">HTML</option>
-                    <option value="css">CSS</option>
-                    <option value="json">JSON</option>
-                    <option value="bash">Bash</option>
-                  </select>
-                </div>
-                <textarea
-                  value={textContent}
-                  onChange={(e) => updateBlock(block.id, { 
-                    content: { ...block.content, [language]: e.target.value } 
-                  })}
-                  placeholder="Enter your code..."
-                  className="w-full bg-transparent text-green-400 text-sm font-mono border-none outline-none resize-none min-h-[120px]"
-                  rows={6}
-                />
-              </div>
-            )}
-          </div>
-        );
-
-      case 'divider':
-        return (
-          <div className="flex items-center justify-center py-4">
-            <hr className={`
-              w-full border-0
-              ${block.data?.style === 'dotted' ? 'border-t border-dotted border-ludus-gray-300' :
-                block.data?.style === 'dashed' ? 'border-t border-dashed border-ludus-gray-300' :
-                'border-t border-solid border-ludus-gray-300'
-              }
-            `} />
-          </div>
-        );
-
-      default:
-        return (
-          <div className="text-center text-ludus-gray-500 py-4">
-            <div className="text-2xl mb-2">{blockType?.icon || '❓'}</div>
-            <p>Block type "{block.type}" not implemented</p>
-          </div>
-        );
-    }
-  };
 
   return (
     <div className="rich-text-editor space-y-4">
@@ -604,7 +605,7 @@ const RichTextEditor = ({
               {allowedBlockTypes.map(type => {
                 const blockType = BLOCK_TYPES[type];
                 if (!blockType) return null;
-                
+
                 return (
                   <Button
                     key={type}

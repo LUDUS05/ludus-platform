@@ -7,7 +7,7 @@ import { Card } from '../ui/Card';
 import onboardingService from '../../services/onboardingService';
 
 const OnboardingManagement = () => {
-  const { t } = useTranslation();
+  useTranslation();
   const [config, setConfig] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -38,7 +38,7 @@ const OnboardingManagement = () => {
       setSaving(true);
       setError('');
       setSuccess('');
-      
+
       await onboardingService.updateConfig(config);
       setSuccess('Onboarding configuration updated successfully');
     } catch (error) {
@@ -54,7 +54,7 @@ const OnboardingManagement = () => {
       setSaving(true);
       setError('');
       setSuccess('');
-      
+
       const response = await onboardingService.toggleOnboarding();
       setConfig(prev => ({
         ...prev,
@@ -74,14 +74,14 @@ const OnboardingManagement = () => {
       const newConfig = { ...prev };
       const keys = path.split('.');
       let current = newConfig;
-      
+
       for (let i = 0; i < keys.length - 1; i++) {
         if (!current[keys[i]]) {
           current[keys[i]] = {};
         }
         current = current[keys[i]];
       }
-      
+
       current[keys[keys.length - 1]] = value;
       return newConfig;
     });
@@ -119,12 +119,12 @@ const OnboardingManagement = () => {
   const moveStep = (index, direction) => {
     const newSteps = [...config.steps];
     const newIndex = direction === 'up' ? index - 1 : index + 1;
-    
+
     if (newIndex >= 0 && newIndex < newSteps.length) {
       [newSteps[index], newSteps[newIndex]] = [newSteps[newIndex], newSteps[index]];
       newSteps[index].order = index;
       newSteps[newIndex].order = newIndex;
-      
+
       setConfig(prev => ({
         ...prev,
         steps: newSteps
@@ -192,11 +192,10 @@ const OnboardingManagement = () => {
 
       {/* Status */}
       <div className="flex items-center space-x-4">
-        <div className={`px-3 py-1 rounded-full text-sm font-medium ${
-          config.isEnabled 
-            ? 'bg-green-100 text-green-800' 
+        <div className={`px-3 py-1 rounded-full text-sm font-medium ${config.isEnabled
+            ? 'bg-green-100 text-green-800'
             : 'bg-red-100 text-red-800'
-        }`}>
+          }`}>
           {config.isEnabled ? 'Enabled' : 'Disabled'}
         </div>
         <span className="text-sm text-gray-500">
@@ -219,11 +218,10 @@ const OnboardingManagement = () => {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                activeTab === tab.id
+              className={`py-2 px-1 border-b-2 font-medium text-sm ${activeTab === tab.id
                   ? 'border-purple-500 text-purple-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
+                }`}
             >
               <span className="mr-2">{tab.icon}</span>
               {tab.label}
@@ -310,14 +308,12 @@ const OnboardingManagement = () => {
                         <span className="text-sm font-medium text-gray-500">#{step.order + 1}</span>
                         <span className="font-medium text-gray-900">{step.stepId}</span>
                         <div className="flex items-center space-x-2">
-                          <span className={`px-2 py-1 rounded-full text-xs ${
-                            step.isEnabled ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                          }`}>
+                          <span className={`px-2 py-1 rounded-full text-xs ${step.isEnabled ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                            }`}>
                             {step.isEnabled ? 'Enabled' : 'Disabled'}
                           </span>
-                          <span className={`px-2 py-1 rounded-full text-xs ${
-                            step.isRequired ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'
-                          }`}>
+                          <span className={`px-2 py-1 rounded-full text-xs ${step.isRequired ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'
+                            }`}>
                             {step.isRequired ? 'Required' : 'Optional'}
                           </span>
                         </div>
@@ -360,7 +356,7 @@ const OnboardingManagement = () => {
           <Card>
             <div className="space-y-6">
               <h3 className="text-lg font-medium text-gray-900">Welcome Step Configuration</h3>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Title (English)
@@ -416,7 +412,7 @@ const OnboardingManagement = () => {
           <Card>
             <div className="space-y-6">
               <h3 className="text-lg font-medium text-gray-900">Interests Configuration</h3>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Minimum Selections

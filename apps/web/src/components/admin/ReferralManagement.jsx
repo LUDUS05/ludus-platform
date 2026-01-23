@@ -4,12 +4,12 @@ import { useAuth } from '../../context/AuthContext';
 import api from '../../services/api';
 import { Card } from '../ui/Card';
 
-import { 
-  Users, 
-  TrendingUp, 
-  DollarSign, 
-  BarChart3, 
-  Settings, 
+import {
+  Users,
+  TrendingUp,
+  DollarSign,
+  BarChart3,
+  Settings,
   Download,
   RefreshCw,
   Crown,
@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 
 const ReferralManagement = () => {
-  const { user } = useAuth();
+  useAuth();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [referralStats, setReferralStats] = useState(null);
@@ -49,7 +49,7 @@ const ReferralManagement = () => {
       setReferralStats(statsResponse.data.data);
       setTopInviters(invitersResponse.data.data);
       setRewards(rewardsResponse.data.data);
-      
+
       // Initialize form with current reward values
       setRewardForm({
         registration: rewardsResponse.data.data.registration?.amount || 50,
@@ -68,7 +68,7 @@ const ReferralManagement = () => {
   const handleRewardUpdate = async () => {
     try {
       setLoading(true);
-      
+
       const response = await api.put('/admin/referrals/rewards', {
         registration: { amount: parseInt(rewardForm.registration) },
         firstBooking: { amount: parseInt(rewardForm.firstBooking) }
@@ -94,7 +94,7 @@ const ReferralManagement = () => {
       const response = await api.get('/admin/referrals/export', {
         responseType: 'blob'
       });
-      
+
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
@@ -367,14 +367,14 @@ const ReferralManagement = () => {
               {formatNumber(referralStats?.monthlyReferrals || 0)}
             </p>
           </div>
-          
+
           <div className="text-center p-4 bg-gray-50 rounded-lg">
             <p className="text-sm font-medium text-gray-600">Average Referrals per User</p>
             <p className="text-2xl font-bold text-gray-900">
               {referralStats?.avgReferralsPerUser ? referralStats.avgReferralsPerUser.toFixed(1) : '0'}
             </p>
           </div>
-          
+
           <div className="text-center p-4 bg-gray-50 rounded-lg">
             <p className="text-sm font-medium text-gray-600">Total Active Referral Codes</p>
             <p className="text-2xl font-bold text-gray-900">

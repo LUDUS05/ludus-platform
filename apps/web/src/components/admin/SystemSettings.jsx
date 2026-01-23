@@ -8,7 +8,7 @@ import { Input } from '../ui/Input';
 import api from '../../services/api';
 
 const SystemSettings = () => {
-  const { t, i18n } = useTranslation();
+  useTranslation();
   const [settings, setSettings] = useState({
     site: {
       name: { en: '', ar: '' },
@@ -49,7 +49,7 @@ const SystemSettings = () => {
       sadadEnabled: true
     }
   });
-  
+
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState(null);
@@ -119,7 +119,7 @@ const SystemSettings = () => {
       ...prev,
       [section]: {
         ...prev[section],
-        [key]: language 
+        [key]: language
           ? { ...prev[section][key], [language]: value }
           : value
       }
@@ -192,9 +192,9 @@ const SystemSettings = () => {
 
   const exportSettings = () => {
     const dataStr = JSON.stringify(settings, null, 2);
-    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+    const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
     const exportFileDefaultName = `ludus-settings-${new Date().toISOString().split('T')[0]}.json`;
-    
+
     const linkElement = document.createElement('a');
     linkElement.setAttribute('href', dataUri);
     linkElement.setAttribute('download', exportFileDefaultName);
@@ -255,11 +255,10 @@ const SystemSettings = () => {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`px-6 py-4 text-sm font-medium border-b-2 transition-colors ${
-                activeTab === tab.id
+              className={`px-6 py-4 text-sm font-medium border-b-2 transition-colors ${activeTab === tab.id
                   ? 'border-ludus-orange text-ludus-orange bg-ludus-orange/5'
                   : 'border-transparent text-ludus-gray-600 hover:text-ludus-dark hover:border-ludus-gray-300'
-              }`}
+                }`}
             >
               <span className="inline-flex items-center gap-2">
                 {tab.icon} {tab.label}
@@ -273,7 +272,7 @@ const SystemSettings = () => {
           {activeTab === 'site' && (
             <div className="space-y-6">
               <h3 className="text-body-lg font-semibold text-ludus-dark">Site Configuration</h3>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-label-sm font-medium text-ludus-dark mb-2">
@@ -285,7 +284,7 @@ const SystemSettings = () => {
                     placeholder="LUDUS Platform"
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-label-sm font-medium text-ludus-dark mb-2">
                     Site Name (Arabic)
@@ -297,7 +296,7 @@ const SystemSettings = () => {
                     dir="rtl"
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-label-sm font-medium text-ludus-dark mb-2">
                     Description (English)
@@ -309,7 +308,7 @@ const SystemSettings = () => {
                     className="w-full px-3 py-2 border border-ludus-gray-300 rounded-md resize-none h-20"
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-label-sm font-medium text-ludus-dark mb-2">
                     Description (Arabic)
@@ -322,7 +321,7 @@ const SystemSettings = () => {
                     dir="rtl"
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-label-sm font-medium text-ludus-dark mb-2">
                     Timezone
@@ -337,7 +336,7 @@ const SystemSettings = () => {
                     ))}
                   </select>
                 </div>
-                
+
                 <div>
                   <label className="block text-label-sm font-medium text-ludus-dark mb-2">
                     Default Currency
@@ -371,7 +370,7 @@ const SystemSettings = () => {
                   📧 Send Test Email
                 </Button>
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-label-sm font-medium text-ludus-dark mb-2">
@@ -383,7 +382,7 @@ const SystemSettings = () => {
                     placeholder="LUDUS Platform"
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-label-sm font-medium text-ludus-dark mb-2">
                     From Email
@@ -395,7 +394,7 @@ const SystemSettings = () => {
                     placeholder="hi@letsludus.com"
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-label-sm font-medium text-ludus-dark mb-2">
                     SMTP Host
@@ -406,7 +405,7 @@ const SystemSettings = () => {
                     placeholder="smtp-relay.gmail.com"
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-label-sm font-medium text-ludus-dark mb-2">
                     SMTP Port
@@ -426,7 +425,7 @@ const SystemSettings = () => {
           {activeTab === 'features' && (
             <div className="space-y-6">
               <h3 className="text-body-lg font-semibold text-ludus-dark">Platform Features</h3>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {Object.entries(settings.features).map(([feature, enabled]) => (
                   <Card key={feature} className="p-4">
@@ -459,7 +458,7 @@ const SystemSettings = () => {
           {activeTab === 'payment' && (
             <div className="space-y-6">
               <h3 className="text-body-lg font-semibold text-ludus-dark">Payment Configuration</h3>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <Card className="p-4">
                   <div className="flex items-center justify-between mb-4">
@@ -474,7 +473,7 @@ const SystemSettings = () => {
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-ludus-orange/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-ludus-orange"></div>
                     </label>
                   </div>
-                  
+
                   <div className="flex items-center">
                     <input
                       type="checkbox"
@@ -488,7 +487,7 @@ const SystemSettings = () => {
                     </label>
                   </div>
                 </Card>
-                
+
                 <Card className="p-4">
                   <h4 className="font-medium text-ludus-dark mb-4">Supported Payment Methods</h4>
                   <div className="space-y-2">
@@ -516,7 +515,7 @@ const SystemSettings = () => {
           {activeTab === 'wallet' && (
             <div className="space-y-6">
               <h3 className="text-body-lg font-semibold text-ludus-dark">Wallet Controls</h3>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Card className="p-4">
                   <div className="flex items-center justify-between">
@@ -537,7 +536,7 @@ const SystemSettings = () => {
                     </label>
                   </div>
                 </Card>
-                
+
                 <Card className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
@@ -565,7 +564,7 @@ const SystemSettings = () => {
           {activeTab === 'paymentMethods' && (
             <div className="space-y-6">
               <h3 className="text-body-lg font-semibold text-ludus-dark">Payment Method Controls</h3>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {Object.entries(settings.paymentMethodControls).map(([method, enabled]) => (
                   <Card key={method} className="p-4">
@@ -598,7 +597,7 @@ const SystemSettings = () => {
           {activeTab === 'maintenance' && (
             <div className="space-y-6">
               <h3 className="text-body-lg font-semibold text-ludus-dark">System Maintenance</h3>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Card className="p-6 text-center">
                   <div className="text-3xl mb-3">🗑️</div>
@@ -614,7 +613,7 @@ const SystemSettings = () => {
                     Clear Cache
                   </Button>
                 </Card>
-                
+
                 <Card className="p-6 text-center">
                   <div className="text-3xl mb-3">📊</div>
                   <h4 className="font-medium text-ludus-dark mb-2">System Info</h4>

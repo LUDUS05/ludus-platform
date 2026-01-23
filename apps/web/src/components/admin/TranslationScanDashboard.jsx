@@ -2,27 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
-import { Alert } from '../ui/Alert';
+
 import translationScanService from '../../services/translationScanService';
-import { 
-  Search, 
-  AlertTriangle, 
-  CheckCircle, 
-  XCircle, 
-  Download, 
-  RefreshCw, 
-  Clock, 
-  FileText, 
-  Globe, 
-  Settings,
-  Play,
-  Pause,
-  Calendar,
+Search,
+  AlertTriangle,
+  CheckCircle,
+  XCircle,
+  Download,
+  RefreshCw,
+  Clock,
+  FileText,
+  Globe,
   TrendingUp,
   Filter,
   Eye,
-  Edit,
-  Trash2
+  Edit
 } from 'lucide-react';
 
 const TranslationScanDashboard = () => {
@@ -33,11 +27,6 @@ const TranslationScanDashboard = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedSeverity, setSelectedSeverity] = useState('all');
   const [autoScanEnabled, setAutoScanEnabled] = useState(true);
-  const [scanSchedule, setScanSchedule] = useState({
-    daily: true,
-    weekly: true,
-    onContentChange: true
-  });
 
   useEffect(() => {
     loadScanHistory();
@@ -57,7 +46,7 @@ const TranslationScanDashboard = () => {
     try {
       const results = await translationScanService.performFullScan();
       setScanResults(results);
-      
+
       // Save to history
       const newHistory = [{
         id: Date.now(),
@@ -65,10 +54,10 @@ const TranslationScanDashboard = () => {
         results: results,
         statistics: translationScanService.getScanStatistics()
       }, ...scanHistory.slice(0, 9)]; // Keep last 10 scans
-      
+
       setScanHistory(newHistory);
       localStorage.setItem('translationScanHistory', JSON.stringify(newHistory));
-      
+
     } catch (error) {
       console.error('Scan failed:', error);
     } finally {
@@ -78,10 +67,10 @@ const TranslationScanDashboard = () => {
 
   const exportResults = (format) => {
     if (!scanResults) return;
-    
+
     const data = translationScanService.exportScanResults(format);
-    const blob = new Blob([data], { 
-      type: format === 'json' ? 'application/json' : 'text/csv' 
+    const blob = new Blob([data], {
+      type: format === 'json' ? 'application/json' : 'text/csv'
     });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -113,9 +102,9 @@ const TranslationScanDashboard = () => {
 
   const filteredResults = () => {
     if (!scanResults) return { hardcodedText: [], missingTranslations: [], unusedTranslations: [], translationErrors: [] };
-    
+
     let results = { ...scanResults };
-    
+
     // Filter by category
     if (selectedCategory !== 'all') {
       Object.keys(results).forEach(key => {
@@ -124,7 +113,7 @@ const TranslationScanDashboard = () => {
         }
       });
     }
-    
+
     // Filter by severity
     if (selectedSeverity !== 'all') {
       Object.keys(results).forEach(key => {
@@ -133,7 +122,7 @@ const TranslationScanDashboard = () => {
         }
       });
     }
-    
+
     return results;
   };
 
@@ -163,8 +152,8 @@ const TranslationScanDashboard = () => {
               <Search className="w-4 h-4" />
             )}
             <span>
-              {isScanning 
-                ? t('admin.translationScan.scanning', 'Scanning...') 
+              {isScanning
+                ? t('admin.translationScan.scanning', 'Scanning...')
                 : t('admin.translationScan.startScan', 'Start Scan')
               }
             </span>
@@ -188,7 +177,7 @@ const TranslationScanDashboard = () => {
               <FileText className="w-8 h-8 text-blue-500" />
             </div>
           </Card>
-          
+
           <Card className="p-4">
             <div className="flex items-center justify-between">
               <div>
@@ -202,7 +191,7 @@ const TranslationScanDashboard = () => {
               <XCircle className="w-8 h-8 text-red-500" />
             </div>
           </Card>
-          
+
           <Card className="p-4">
             <div className="flex items-center justify-between">
               <div>
@@ -216,7 +205,7 @@ const TranslationScanDashboard = () => {
               <AlertTriangle className="w-8 h-8 text-yellow-500" />
             </div>
           </Card>
-          
+
           <Card className="p-4">
             <div className="flex items-center justify-between">
               <div>
@@ -242,7 +231,7 @@ const TranslationScanDashboard = () => {
               {t('admin.translationScan.filters', 'Filters')}:
             </span>
           </div>
-          
+
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
@@ -254,7 +243,7 @@ const TranslationScanDashboard = () => {
             <option value="unusedTranslations">{t('admin.translationScan.unusedTranslations', 'Unused Translations')}</option>
             <option value="translationErrors">{t('admin.translationScan.translationErrors', 'Translation Errors')}</option>
           </select>
-          
+
           <select
             value={selectedSeverity}
             onChange={(e) => setSelectedSeverity(e.target.value)}
@@ -283,7 +272,7 @@ const TranslationScanDashboard = () => {
                   </span>
                 </h3>
               </div>
-              
+
               <div className="space-y-3">
                 {filteredResults().hardcodedText.map((item, index) => (
                   <div key={index} className="border border-gray-200 rounded-lg p-4">
@@ -333,7 +322,7 @@ const TranslationScanDashboard = () => {
                   </span>
                 </h3>
               </div>
-              
+
               <div className="space-y-3">
                 {filteredResults().missingTranslations.map((item, index) => (
                   <div key={index} className="border border-gray-200 rounded-lg p-4">
@@ -379,7 +368,7 @@ const TranslationScanDashboard = () => {
                   </span>
                 </h3>
               </div>
-              
+
               <div className="space-y-3">
                 {filteredResults().suggestions.map((item, index) => (
                   <div key={index} className="border border-gray-200 rounded-lg p-4">
@@ -392,18 +381,16 @@ const TranslationScanDashboard = () => {
                           {item.description}
                         </p>
                         <div className="flex items-center space-x-4 text-xs">
-                          <span className={`px-2 py-1 rounded-full ${
-                            item.impact === 'high' ? 'bg-red-100 text-red-800' :
-                            item.impact === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                            'bg-green-100 text-green-800'
-                          }`}>
+                          <span className={`px-2 py-1 rounded-full ${item.impact === 'high' ? 'bg-red-100 text-red-800' :
+                              item.impact === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                                'bg-green-100 text-green-800'
+                            }`}>
                             Impact: {item.impact}
                           </span>
-                          <span className={`px-2 py-1 rounded-full ${
-                            item.effort === 'high' ? 'bg-red-100 text-red-800' :
-                            item.effort === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                            'bg-green-100 text-green-800'
-                          }`}>
+                          <span className={`px-2 py-1 rounded-full ${item.effort === 'high' ? 'bg-red-100 text-red-800' :
+                              item.effort === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                                'bg-green-100 text-green-800'
+                            }`}>
                             Effort: {item.effort}
                           </span>
                         </div>
@@ -439,7 +426,7 @@ const TranslationScanDashboard = () => {
                 <span>{t('admin.translationScan.exportCsv', 'Export CSV')}</span>
               </Button>
             </div>
-            
+
             <div className="flex items-center space-x-4">
               <label className="flex items-center space-x-2">
                 <input

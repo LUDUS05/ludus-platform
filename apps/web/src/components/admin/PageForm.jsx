@@ -30,18 +30,12 @@ const PageForm = () => {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState(null);
 
-  useEffect(() => {
-    if (isEditing) {
-      fetchPage();
-    }
-  }, [id, isEditing]);
-
-  const fetchPage = async () => {
+  const fetchPage = React.useCallback(async () => {
     try {
       setLoading(true);
       const response = await api.get(`/admin/pages/${id}`);
       const page = response.data.data;
-      
+
       setFormData({
         title: page.title || { en: '', ar: '' },
         content: page.content || '',
@@ -54,14 +48,20 @@ const PageForm = () => {
       });
     } catch (error) {
       console.error('Failed to fetch page:', error);
-      const errorMessage = error.response?.status === 404 
-        ? 'Page not found. It may have been deleted.' 
+      const errorMessage = error.response?.status === 404
+        ? 'Page not found. It may have been deleted.'
         : error.response?.data?.message || 'Failed to load page';
       setMessage({ type: 'error', text: errorMessage });
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    if (isEditing) {
+      fetchPage();
+    }
+  }, [fetchPage, isEditing]);
 
   const handleTitleChange = (lang, title) => {
     setFormData(prev => ({
@@ -86,10 +86,10 @@ const PageForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
       setSaving(true);
-      
+
       if (isEditing) {
         await api.put(`/admin/pages/${id}`, formData);
         setMessage({ type: 'success', text: 'Page updated successfully' });
@@ -97,17 +97,17 @@ const PageForm = () => {
         await api.post('/admin/pages', formData);
         setMessage({ type: 'success', text: 'Page created successfully' });
       }
-      
+
       // Redirect after short delay
       setTimeout(() => {
         navigate('/admin/content');
       }, 1500);
-      
+
     } catch (error) {
       console.error('Failed to save page:', error);
-      setMessage({ 
-        type: 'error', 
-        text: error.response?.data?.message || 'Failed to save page' 
+      setMessage({
+        type: 'error',
+        text: error.response?.data?.message || 'Failed to save page'
       });
     } finally {
       setSaving(false);
@@ -156,7 +156,7 @@ const PageForm = () => {
         {/* Basic Information */}
         <Card className="p-6">
           <h3 className="text-body-lg font-semibold text-ludus-dark mb-4">Basic Information</h3>
-          
+
           {/* Page Titles */}
           <div className="space-y-4 mb-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -171,7 +171,7 @@ const PageForm = () => {
                   required
                 />
               </div>
-              
+
               <div>
                 <label className="block text-label-sm font-medium text-ludus-dark mb-2">
                   Arabic Title *
@@ -226,7 +226,7 @@ const PageForm = () => {
                 <option value="archived">Archived</option>
               </select>
             </div>
-            
+
             <div>
               <label className="block text-label-sm font-medium text-ludus-dark mb-2">
                 Menu Placement
@@ -241,7 +241,7 @@ const PageForm = () => {
                 <option value="footer">Footer Menu</option>
               </select>
             </div>
-            
+
             <div>
               <label className="block text-label-sm font-medium text-ludus-dark mb-2">
                 Menu Order
@@ -262,7 +262,7 @@ const PageForm = () => {
         {/* Content */}
         <Card className="p-6">
           <h3 className="text-body-lg font-semibold text-ludus-dark mb-4">Page Content</h3>
-          
+
           <div>
             <label className="block text-label-sm font-medium text-ludus-dark mb-2">
               Page Content *
@@ -284,7 +284,7 @@ const PageForm = () => {
         {/* SEO Settings */}
         <Card className="p-6">
           <h3 className="text-body-lg font-semibold text-ludus-dark mb-4">SEO Settings</h3>
-          
+
           <div className="space-y-4">
             <div>
               <label className="block text-label-sm font-medium text-ludus-dark mb-2">

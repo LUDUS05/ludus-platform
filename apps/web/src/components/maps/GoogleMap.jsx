@@ -35,8 +35,7 @@ const GoogleMap = ({
         });
 
         const { Map } = await loader.importLibrary('maps');
-        const { AdvancedMarkerElement, PinElement } =
-          await loader.importLibrary('marker');
+        await loader.importLibrary('marker');
 
         // Initialize map
         const map = new Map(mapRef.current, {
@@ -195,12 +194,10 @@ const GoogleMap = ({
             </div>
           </div>
           <div class="flex-1 min-w-0">
-            <h3 class="text-sm font-medium text-gray-900 truncate">${
-              activity.title
-            }</h3>
-            <p class="text-sm text-gray-500 mt-1">${
-              activity.vendor?.businessName || 'Partner'
-            }</p>
+            <h3 class="text-sm font-medium text-gray-900 truncate">${activity.title
+      }</h3>
+            <p class="text-sm text-gray-500 mt-1">${activity.vendor?.businessName || 'Partner'
+      }</p>
             <div class="flex items-center space-x-2 mt-2">
               <div class="flex items-center text-xs text-gray-500">
                 <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

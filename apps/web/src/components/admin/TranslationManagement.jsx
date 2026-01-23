@@ -7,7 +7,7 @@ import Alert from '../ui/Alert';
 import TranslationScanDashboard from './TranslationScanDashboard';
 
 const TranslationManagement = () => {
-  const { t, i18n } = useTranslation();
+  useTranslation();
   const [translations, setTranslations] = useState({});
   const [loading, setLoading] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState('en');
@@ -16,7 +16,7 @@ const TranslationManagement = () => {
   const [missingTranslations, setMissingTranslations] = useState([]);
   const [autoTranslateMode, setAutoTranslateMode] = useState(false);
   const [translationHistory, setTranslationHistory] = useState([]);
-  
+
   // New state for automated workflows and ML
   const [workflows, setWorkflows] = useState([]);
   const [activeWorkflows, setActiveWorkflows] = useState([]);
@@ -76,10 +76,10 @@ const TranslationManagement = () => {
     // Compare Arabic and English translations to find missing keys
     const arTranslations = require(`../../i18n/locales/ar.json`);
     const enTranslations = require(`../../i18n/locales/en.json`);
-    
+
     const missing = [];
     const allKeys = new Set([...Object.keys(arTranslations), ...Object.keys(enTranslations)]);
-    
+
     allKeys.forEach(key => {
       if (!arTranslations[key] || !enTranslations[key]) {
         missing.push({
@@ -89,7 +89,7 @@ const TranslationManagement = () => {
         });
       }
     });
-    
+
     setMissingTranslations(missing);
   };
 
@@ -105,17 +105,17 @@ const TranslationManagement = () => {
       setLoading(true);
       // In a real app, this would save to your API
       console.log('Saving translations:', translations);
-      
+
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       // Update translation history
       setTranslationHistory(prev => [{
         timestamp: new Date().toISOString(),
         language: selectedLanguage,
         changes: Object.keys(translations).length
       }, ...prev]);
-      
+
       alert('Translations saved successfully!');
     } catch (error) {
       console.error('Failed to save translations:', error);
@@ -157,7 +157,7 @@ const TranslationManagement = () => {
     try {
       setLoading(true);
       setAutoTranslateMode(true);
-      
+
       // Simulate AI translation process
       for (const missing of missingTranslations) {
         if (missing.ar === 'MISSING' && selectedLanguage === 'ar') {
@@ -169,11 +169,11 @@ const TranslationManagement = () => {
           const translated = await simulateTranslation(missing.ar, 'ar', 'en');
           handleTranslationUpdate(missing.key, translated);
         }
-        
+
         // Add delay to simulate processing
         await new Promise(resolve => setTimeout(resolve, 200));
       }
-      
+
       setAutoTranslateMode(false);
       alert('Auto-translation completed!');
     } catch (error) {
@@ -187,7 +187,7 @@ const TranslationManagement = () => {
   const simulateTranslation = async (text, fromLang, toLang) => {
     // This would integrate with Google Translate, DeepL, or other translation services
     // For now, we'll simulate with some basic transformations
-    
+
     if (fromLang === 'en' && toLang === 'ar') {
       // Simulate English to Arabic translation
       const translations = {
@@ -207,7 +207,7 @@ const TranslationManagement = () => {
         'Search': 'بحث',
         'Loading': 'جاري التحميل...'
       };
-      
+
       return translations[text] || `[AR: ${text}]`;
     } else if (fromLang === 'ar' && toLang === 'en') {
       // Simulate Arabic to English translation
@@ -228,22 +228,22 @@ const TranslationManagement = () => {
         'بحث': 'Search',
         'جاري التحميل...': 'Loading...'
       };
-      
+
       return translations[text] || `[EN: ${text}]`;
     }
-    
+
     return text;
   };
 
   const filteredTranslations = Object.entries(translations).filter(([key, value]) => {
-    const matchesSearch = key.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                         value.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = key.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      value.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = filterCategory === 'all' || key.startsWith(filterCategory);
     return matchesSearch && matchesCategory;
   });
 
   // ===== AUTOMATED WORKFLOWS =====
-  
+
   const loadWorkflows = () => {
     // Load predefined workflow templates
     const templates = [
@@ -290,17 +290,17 @@ const TranslationManagement = () => {
         isActive: false
       }
     ];
-    
+
     setWorkflowTemplates(templates);
     setWorkflows(templates);
   };
 
   const activateWorkflow = (workflowId) => {
-    const updatedWorkflows = workflows.map(w => 
+    const updatedWorkflows = workflows.map(w =>
       w.id === workflowId ? { ...w, isActive: true } : w
     );
     setWorkflows(updatedWorkflows);
-    
+
     // Add to active workflows
     const workflow = workflows.find(w => w.id === workflowId);
     if (workflow) {
@@ -309,14 +309,185 @@ const TranslationManagement = () => {
   };
 
   const deactivateWorkflow = (workflowId) => {
-    const updatedWorkflows = workflows.map(w => 
+    const updatedWorkflows = workflows.map(w =>
       w.id === workflowId ? { ...w, isActive: false } : w
     );
     setWorkflows(updatedWorkflows);
-    
+
     // Remove from active workflows
     setActiveWorkflows(prev => prev.filter(w => w.id !== workflowId));
   };
+
+  const loadTranslations = React.useCallback(async () => {
+    try {
+      setLoading(true);
+      // In a real app, this would fetch from your API
+      const response = await import(`../../i18n/locales/${selectedLanguage}.json`);
+      setTranslations(response.default);
+    } catch (error) {
+      console.error('Failed to load translations:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [selectedLanguage]);
+
+  const detectMissingTranslations = React.useCallback(() => {
+    // Compare Arabic and English translations to find missing keys
+    const arTranslations = require(`../../i18n/locales/ar.json`);
+    const enTranslations = require(`../../i18n/locales/en.json`);
+
+    const missing = [];
+    const allKeys = new Set([...Object.keys(arTranslations), ...Object.keys(enTranslations)]);
+
+    allKeys.forEach(key => {
+      if (!arTranslations[key] || !enTranslations[key]) {
+        missing.push({
+          key,
+          ar: arTranslations[key] || 'MISSING',
+          en: enTranslations[key] || 'MISSING'
+        });
+      }
+    });
+
+    setMissingTranslations(missing);
+  }, []);
+
+  const loadWorkflows = React.useCallback(() => {
+    // Load predefined workflow templates
+    const templates = [
+      {
+        id: 'content-update',
+        name: 'Content Update Workflow',
+        description: 'Automatically detect and translate new content',
+        triggers: ['new-content', 'content-update'],
+        steps: [
+          'detect-new-content',
+          'extract-text',
+          'translate-content',
+          'validate-translation',
+          'deploy-updates'
+        ],
+        isActive: false
+      },
+      {
+        id: 'quality-improvement',
+        name: 'Quality Improvement Workflow',
+        description: 'Continuously improve translation quality',
+        triggers: ['user-feedback', 'quality-score'],
+        steps: [
+          'collect-feedback',
+          'analyze-issues',
+          'retrain-models',
+          'test-improvements',
+          'deploy-updates'
+        ],
+        isActive: false
+      },
+      {
+        id: 'bulk-translation',
+        name: 'Bulk Translation Workflow',
+        description: 'Handle large-scale translation projects',
+        triggers: ['bulk-import', 'scheduled-update'],
+        steps: [
+          'validate-import',
+          'batch-translate',
+          'quality-check',
+          'approve-translations',
+          'deploy-batch'
+        ],
+        isActive: false
+      }
+    ];
+
+    setWorkflowTemplates(templates);
+    setWorkflows(templates);
+  }, []);
+
+  const loadMLModels = React.useCallback(() => {
+    const models = [
+      {
+        id: 'translation-quality',
+        name: 'Translation Quality Model',
+        description: 'AI model for assessing translation quality',
+        status: 'trained',
+        accuracy: 94.2,
+        lastTrained: '2024-01-15',
+        trainingData: 15420,
+        languages: ['ar', 'en']
+      },
+      {
+        id: 'context-understanding',
+        name: 'Context Understanding Model',
+        description: 'Deep learning model for context-aware translation',
+        status: 'training',
+        accuracy: 87.6,
+        lastTrained: '2024-01-10',
+        trainingData: 8920,
+        languages: ['ar', 'en']
+      },
+      {
+        id: 'cultural-adaptation',
+        name: 'Cultural Adaptation Model',
+        description: 'Model for cultural context and localization',
+        status: 'ready',
+        accuracy: 91.8,
+        lastTrained: '2024-01-12',
+        trainingData: 12340,
+        languages: ['ar', 'en']
+      }
+    ];
+
+    setMlModels(models);
+
+    // Set training status
+    const status = {};
+    models.forEach(model => {
+      status[model.id] = {
+        isTraining: model.status === 'training',
+        progress: model.status === 'training' ? Math.floor(Math.random() * 100) : 100
+      };
+    });
+    setTrainingStatus(status);
+  }, []);
+
+  const loadContentUpdates = React.useCallback(() => {
+    const updates = [
+      {
+        id: 1,
+        type: 'new-page',
+        content: 'New "About Us" page content',
+        language: 'en',
+        timestamp: '2024-01-15T10:30:00Z',
+        status: 'pending-translation'
+      },
+      {
+        id: 2,
+        type: 'updated-content',
+        content: 'Updated activity descriptions',
+        language: 'en',
+        timestamp: '2024-01-14T15:45:00Z',
+        status: 'translated'
+      },
+      {
+        id: 3,
+        type: 'new-feature',
+        content: 'New wallet payment options',
+        language: 'en',
+        timestamp: '2024-01-13T09:20:00Z',
+        status: 'pending-translation'
+      }
+    ];
+
+    setContentUpdates(updates);
+  }, []);
+
+  useEffect(() => {
+    loadTranslations();
+    detectMissingTranslations();
+    loadWorkflows();
+    loadMLModels();
+    loadContentUpdates();
+  }, [loadTranslations, detectMissingTranslations, loadWorkflows, loadMLModels, loadContentUpdates]);
 
   const executeWorkflow = async (workflowId) => {
     const workflow = workflows.find(w => w.id === workflowId);
@@ -324,14 +495,14 @@ const TranslationManagement = () => {
 
     try {
       setLoading(true);
-      
+
       // Execute workflow steps
       for (const step of workflow.steps) {
         console.log(`Executing step: ${step}`);
         await executeWorkflowStep(step);
         await new Promise(resolve => setTimeout(resolve, 500)); // Simulate processing
       }
-      
+
       alert(`Workflow "${workflow.name}" completed successfully!`);
     } catch (error) {
       console.error('Workflow execution failed:', error);
@@ -369,53 +540,6 @@ const TranslationManagement = () => {
   };
 
   // ===== MACHINE LEARNING CAPABILITIES =====
-  
-  const loadMLModels = () => {
-    const models = [
-      {
-        id: 'translation-quality',
-        name: 'Translation Quality Model',
-        description: 'AI model for assessing translation quality',
-        status: 'trained',
-        accuracy: 94.2,
-        lastTrained: '2024-01-15',
-        trainingData: 15420,
-        languages: ['ar', 'en']
-      },
-      {
-        id: 'context-understanding',
-        name: 'Context Understanding Model',
-        description: 'Deep learning model for context-aware translation',
-        status: 'training',
-        accuracy: 87.6,
-        lastTrained: '2024-01-10',
-        trainingData: 8920,
-        languages: ['ar', 'en']
-      },
-      {
-        id: 'cultural-adaptation',
-        name: 'Cultural Adaptation Model',
-        description: 'Model for cultural context and localization',
-        status: 'ready',
-        accuracy: 91.8,
-        lastTrained: '2024-01-12',
-        trainingData: 12340,
-        languages: ['ar', 'en']
-      }
-    ];
-    
-    setMlModels(models);
-    
-    // Set training status
-    const status = {};
-    models.forEach(model => {
-      status[model.id] = {
-        isTraining: model.status === 'training',
-        progress: model.status === 'training' ? Math.floor(Math.random() * 100) : 100
-      };
-    });
-    setTrainingStatus(status);
-  };
 
   const startModelTraining = async (modelId) => {
     try {
@@ -434,8 +558,8 @@ const TranslationManagement = () => {
       }
 
       // Update model status
-      setMlModels(prev => prev.map(model => 
-        model.id === modelId 
+      setMlModels(prev => prev.map(model =>
+        model.id === modelId
           ? { ...model, status: 'trained', lastTrained: new Date().toISOString() }
           : model
       ));
@@ -469,7 +593,7 @@ const TranslationManagement = () => {
   };
 
   // ===== CONTENT UPDATE DETECTION =====
-  
+
   const loadContentUpdates = () => {
     const updates = [
       {
@@ -497,7 +621,7 @@ const TranslationManagement = () => {
         status: 'pending-translation'
       }
     ];
-    
+
     setContentUpdates(updates);
   };
 
@@ -601,11 +725,10 @@ const TranslationManagement = () => {
             setShowMLDashboard(false);
             setShowScanDashboard(false);
           }}
-          className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-            !showWorkflowBuilder && !showMLDashboard && !showScanDashboard
+          className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${!showWorkflowBuilder && !showMLDashboard && !showScanDashboard
               ? 'bg-white text-gray-900 shadow-sm'
               : 'text-gray-600 hover:text-gray-900'
-          }`}
+            }`}
         >
           Translations
         </button>
@@ -615,11 +738,10 @@ const TranslationManagement = () => {
             setShowMLDashboard(false);
             setShowScanDashboard(false);
           }}
-          className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-            showWorkflowBuilder
+          className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${showWorkflowBuilder
               ? 'bg-white text-gray-900 shadow-sm'
               : 'text-gray-600 hover:text-gray-900'
-          }`}
+            }`}
         >
           Automated Workflows
         </button>
@@ -629,11 +751,10 @@ const TranslationManagement = () => {
             setShowMLDashboard(true);
             setShowScanDashboard(false);
           }}
-          className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-            showMLDashboard
+          className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${showMLDashboard
               ? 'bg-white text-gray-900 shadow-sm'
               : 'text-gray-600 hover:text-gray-900'
-          }`}
+            }`}
         >
           Machine Learning
         </button>
@@ -643,11 +764,10 @@ const TranslationManagement = () => {
             setShowMLDashboard(false);
             setShowScanDashboard(true);
           }}
-          className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-            showScanDashboard
+          className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${showScanDashboard
               ? 'bg-white text-gray-900 shadow-sm'
               : 'text-gray-600 hover:text-gray-900'
-          }`}
+            }`}
         >
           Code Scanner
         </button>
@@ -665,11 +785,10 @@ const TranslationManagement = () => {
                   <button
                     key={lang.code}
                     onClick={() => setSelectedLanguage(lang.code)}
-                    className={`flex items-center space-x-2 px-4 py-2 rounded-lg border transition-colors ${
-                      selectedLanguage === lang.code
+                    className={`flex items-center space-x-2 px-4 py-2 rounded-lg border transition-colors ${selectedLanguage === lang.code
                         ? 'border-blue-500 bg-blue-50 text-blue-700'
                         : 'border-gray-300 hover:border-gray-400'
-                    }`}
+                      }`}
                   >
                     <span className="text-xl">{lang.flag}</span>
                     <span>{lang.name}</span>
@@ -689,8 +808,8 @@ const TranslationManagement = () => {
                     {missingTranslations.length} translation keys are missing in one or both languages.
                   </p>
                 </div>
-                <Button 
-                  onClick={autoTranslateMissing} 
+                <Button
+                  onClick={autoTranslateMissing}
                   disabled={autoTranslateMode}
                   size="sm"
                 >
@@ -731,7 +850,7 @@ const TranslationManagement = () => {
                   </select>
                 </div>
                 <div className="flex items-end">
-                  <Button 
+                  <Button
                     onClick={() => {
                       setSearchTerm('');
                       setFilterCategory('all');
@@ -843,7 +962,7 @@ const TranslationManagement = () => {
                     {autoTranslateMode ? 'Translating...' : 'Translate Missing'}
                   </Button>
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="p-4 bg-blue-50 rounded-lg">
                     <h4 className="font-medium text-blue-900 mb-2">Translation Services</h4>
@@ -862,7 +981,7 @@ const TranslationManagement = () => {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="p-4 bg-green-50 rounded-lg">
                     <h4 className="font-medium text-green-900 mb-2">Quality Features</h4>
                     <div className="space-y-2 text-sm text-green-800">
@@ -898,20 +1017,19 @@ const TranslationManagement = () => {
                   Back to Translations
                 </Button>
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {workflowTemplates.map(workflow => (
                   <Card key={workflow.id} className="p-4">
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
                         <h3 className="text-lg font-semibold text-gray-900">{workflow.name}</h3>
-                        <div className={`w-3 h-3 rounded-full ${
-                          workflow.isActive ? 'bg-green-500' : 'bg-gray-300'
-                        }`}></div>
+                        <div className={`w-3 h-3 rounded-full ${workflow.isActive ? 'bg-green-500' : 'bg-gray-300'
+                          }`}></div>
                       </div>
-                      
+
                       <p className="text-sm text-gray-600">{workflow.description}</p>
-                      
+
                       <div className="space-y-2">
                         <h4 className="text-sm font-medium text-gray-700">Steps:</h4>
                         <div className="space-y-1">
@@ -925,7 +1043,7 @@ const TranslationManagement = () => {
                           ))}
                         </div>
                       </div>
-                      
+
                       <div className="flex space-x-2">
                         {workflow.isActive ? (
                           <>
@@ -1010,9 +1128,8 @@ const TranslationManagement = () => {
                 {contentUpdates.map(update => (
                   <div key={update.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
                     <div className="flex items-center space-x-3">
-                      <div className={`w-3 h-3 rounded-full ${
-                        update.status === 'pending-translation' ? 'bg-yellow-500' : 'bg-green-500'
-                      }`}></div>
+                      <div className={`w-3 h-3 rounded-full ${update.status === 'pending-translation' ? 'bg-yellow-500' : 'bg-green-500'
+                        }`}></div>
                       <div>
                         <h4 className="font-medium text-gray-900">{update.content}</h4>
                         <p className="text-sm text-gray-600">
@@ -1021,11 +1138,10 @@ const TranslationManagement = () => {
                       </div>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <span className={`px-2 py-1 text-xs rounded-full ${
-                        update.status === 'pending-translation' 
-                          ? 'bg-yellow-100 text-yellow-800' 
+                      <span className={`px-2 py-1 text-xs rounded-full ${update.status === 'pending-translation'
+                          ? 'bg-yellow-100 text-yellow-800'
                           : 'bg-green-100 text-green-800'
-                      }`}>
+                        }`}>
                         {update.status.replace('-', ' ')}
                       </span>
                       {update.status === 'pending-translation' && (
@@ -1053,24 +1169,23 @@ const TranslationManagement = () => {
                   Back to Translations
                 </Button>
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {mlModels.map(model => (
                   <Card key={model.id} className="p-4">
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
                         <h3 className="text-lg font-semibold text-gray-900">{model.name}</h3>
-                        <span className={`px-2 py-1 text-xs rounded-full ${
-                          model.status === 'trained' ? 'bg-green-100 text-green-800' :
-                          model.status === 'training' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-blue-100 text-blue-800'
-                        }`}>
+                        <span className={`px-2 py-1 text-xs rounded-full ${model.status === 'trained' ? 'bg-green-100 text-green-800' :
+                            model.status === 'training' ? 'bg-yellow-100 text-yellow-800' :
+                              'bg-blue-100 text-blue-800'
+                          }`}>
                           {model.status}
                         </span>
                       </div>
-                      
+
                       <p className="text-sm text-gray-600">{model.description}</p>
-                      
+
                       <div className="space-y-2">
                         <div className="flex justify-between text-sm">
                           <span className="text-gray-600">Accuracy:</span>
@@ -1085,7 +1200,7 @@ const TranslationManagement = () => {
                           <span className="font-medium">{new Date(model.lastTrained).toLocaleDateString()}</span>
                         </div>
                       </div>
-                      
+
                       {trainingStatus[model.id]?.isTraining && (
                         <div className="space-y-2">
                           <div className="flex justify-between text-sm">
@@ -1093,14 +1208,14 @@ const TranslationManagement = () => {
                             <span className="font-medium">{trainingStatus[model.id].progress}%</span>
                           </div>
                           <div className="w-full bg-gray-200 rounded-full h-2">
-                            <div 
+                            <div
                               className="bg-blue-600 h-2 rounded-full transition-all duration-300"
                               style={{ width: `${trainingStatus[model.id].progress}%` }}
                             ></div>
                           </div>
                         </div>
                       )}
-                      
+
                       <div className="flex space-x-2">
                         {model.status === 'ready' && (
                           <Button
@@ -1122,7 +1237,7 @@ const TranslationManagement = () => {
                           </Button>
                         )}
                         <Button
-                          onClick={() => {}} // View model details
+                          onClick={() => { }} // View model details
                           variant="outline"
                           size="sm"
                         >

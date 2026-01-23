@@ -327,7 +327,7 @@ const createProductionIndexes = async () => {
     await db.collection('notifications').createIndex({ "expiresAt": 1 }, { expireAfterSeconds: 0, background: true });
 
     // Optimize slow notification queries
-    await db.collection('notificationenhanceds').createIndex({ "expiresAt": 1 }, { background: true });
+    await db.collection('notificationenhanceds').createIndex({ "expiresAt": 1 }, { expireAfterSeconds: 0, background: true });
     await db.collection('notificationenhanceds').createIndex({ "user": 1, "isRead": 1, "createdAt": -1 }, { background: true });
 
     // Analytics Collection Indexes

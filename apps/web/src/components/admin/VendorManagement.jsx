@@ -24,9 +24,9 @@ const VendorManagement = () => {
 
   useEffect(() => {
     fetchVendors();
-  }, [filters, pagination.page]);
+  }, [fetchVendors]);
 
-  const fetchVendors = async () => {
+  const fetchVendors = useCallback(async () => {
     try {
       setLoading(true);
       const params = new URLSearchParams({
@@ -47,7 +47,7 @@ const VendorManagement = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [pagination.page, pagination.limit, filters]);
 
   const handleFilterChange = (key, value) => {
     setFilters(prev => ({ ...prev, [key]: value }));
@@ -72,7 +72,7 @@ const VendorManagement = () => {
   const toggleVendorStatus = async (vendorId, currentStatus) => {
     const note = prompt('Add a note for this status change (optional):');
     if (note === null) return; // User cancelled
-    
+
     try {
       const statusEntry = {
         status: !currentStatus ? 'active' : 'inactive',
@@ -386,11 +386,10 @@ const VendorManagement = () => {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <button
                       onClick={() => toggleVendorStatus(vendor._id, vendor.isActive)}
-                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        vendor.isActive
+                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${vendor.isActive
                           ? 'bg-green-100 text-green-800 hover:bg-green-200'
                           : 'bg-red-100 text-red-800 hover:bg-red-200'
-                      } transition-colors`}
+                        } transition-colors`}
                     >
                       {vendor.isActive ? 'Active' : 'Inactive'}
                     </button>

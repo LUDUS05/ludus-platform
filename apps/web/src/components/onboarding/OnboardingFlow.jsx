@@ -35,7 +35,6 @@ const OnboardingFlow = () => {
     completeOnboarding,
     getCurrentStepConfig,
     getProgressPercentage,
-    t: onboardingT,
   } = useOnboarding();
 
   // Set Arabic as default language on component mount

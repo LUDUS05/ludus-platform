@@ -3,15 +3,15 @@
  * Enhanced image loading with Unsplash integration, BlurHash, and animations
  */
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Blurhash } from 'react-blurhash';
 import { unsplashService } from '../../services/unsplashService';
 
-const ProgressiveImage = ({ 
-  unsplashId, 
-  src, 
-  alt, 
+const ProgressiveImage = ({
+  unsplashId,
+  src,
+  alt,
   blurHash,
   className = "",
   width,
@@ -32,11 +32,9 @@ const ProgressiveImage = ({
     const loadImage = async () => {
       setIsLoading(true);
       setError(false);
-      
+
       try {
         let finalSrc = src;
-        let finalBlurHash = blurHash;
-        let userData = null;
 
         // Priority 1: Use provided src
         if (src) {
@@ -46,11 +44,9 @@ const ProgressiveImage = ({
         else if (unsplashId) {
           const data = await unsplashService.getImageById(unsplashId);
           if (data) {
-            finalSrc = width && height 
+            finalSrc = width && height
               ? unsplashService.getOptimizedUrl(data.urls.regular, width, height, quality)
               : data.urls.regular;
-            finalBlurHash = data.blurHash;
-            userData = data.user;
             setImageData(data);
           }
         }
@@ -60,11 +56,9 @@ const ProgressiveImage = ({
             width: width || 800,
             height: height || 600
           });
-          
+
           if (imageResult) {
             finalSrc = imageResult.optimizedUrl || imageResult.urls.regular;
-            finalBlurHash = imageResult.blurHash;
-            userData = imageResult.user;
             setImageData(imageResult);
           }
         }
@@ -76,21 +70,21 @@ const ProgressiveImage = ({
             setImageSrc(finalSrc);
             setImageLoaded(true);
             setIsLoading(false);
-            
+
             // Track download for Unsplash compliance
             if (imageData?.downloadUrl) {
               unsplashService.trackDownload(imageData.downloadUrl);
             }
-            
+
             onLoad?.(imageData);
           };
-          
+
           img.onerror = () => {
             console.error('Failed to load image:', finalSrc);
             setError(true);
             setIsLoading(false);
           };
-          
+
           img.src = finalSrc;
         } else {
           setError(true);
@@ -110,7 +104,7 @@ const ProgressiveImage = ({
   if (error) {
     return (
       <div className={`bg-warm dark:bg-dark-bg-tertiary flex items-center justify-center ${className}`}>
-        <motion.div 
+        <motion.div
           className="text-center p-4"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -155,7 +149,7 @@ const ProgressiveImage = ({
       {/* Fallback gradient if no blurHash */}
       <AnimatePresence>
         {!imageLoaded && !blurHash && fallbackGradient && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -182,13 +176,13 @@ const ProgressiveImage = ({
             alt={alt || imageData?.alt || 'Activity image'}
             className="w-full h-full object-cover"
             initial={{ opacity: 0, scale: 1.05 }}
-            animate={{ 
+            animate={{
               opacity: imageLoaded ? 1 : 0,
               scale: imageLoaded ? 1 : 1.05
             }}
-            transition={{ 
-              duration: 0.6, 
-              ease: [0.25, 0.46, 0.45, 0.94] 
+            transition={{
+              duration: 0.6,
+              ease: [0.25, 0.46, 0.45, 0.94]
             }}
             onLoad={() => setImageLoaded(true)}
           />
@@ -211,14 +205,14 @@ const ProgressiveImage = ({
               transition-opacity duration-200
             "
           >
-            <a 
+            <a
               href={imageData.user.profileUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="hover:underline flex items-center gap-1"
             >
               <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
               </svg>
               {imageData.user.name}
             </a>
