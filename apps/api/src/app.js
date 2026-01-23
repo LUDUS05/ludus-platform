@@ -354,52 +354,87 @@ app.post('/api/create-partner-terms', async (req, res) => {
   }
 });
 
-// API Routes
-app.use('/api/auth', require('./routes/auth'));
-// Backward compatibility route (temporary fix for frontend deployment issue)
-app.use('/auth', require('./routes/auth'));
-app.use('/api/users', require('./routes/users'));
-app.use('/users', require('./routes/users'));
-app.use('/api/activities', require('./routes/activities'));
-app.use('/activities', require('./routes/activities'));
-app.use('/api/vendors', require('./routes/vendors'));
-app.use('/vendors', require('./routes/vendors'));
-app.use('/api/bookings', require('./routes/bookings'));
-app.use('/bookings', require('./routes/bookings'));
-app.use('/api/payments', require('./routes/payments'));
-app.use('/payments', require('./routes/payments'));
-app.use('/api/wallet', require('./routes/wallet'));
-app.use('/api/ratings', require('./routes/ratings'));
-app.use('/api/rating-system', require('./routes/enhancedRating'));
-app.use('/api/admin', require('./routes/admin'));
-app.use('/api/pages', require('./routes/pages'));
-app.use('/api', require('./routes/translations'));
-app.use('/api/uploads', require('./routes/uploads'));
-app.use('/api/site-settings', require('./routes/siteSettings'));
-app.use('/api/contact', require('./routes/contact'));
-app.use('/api/referrals', require('./routes/referrals'));
-app.use('/api/invitations', require('./routes/invitations'));
-app.use('/api/notifications', require('./routes/notifications'));
-app.use('/api/analytics', require('./routes/analytics'));
-app.use('/api/reports', require('./routes/reports'));
-app.use('/api/monitoring', require('./routes/monitoring'));
-app.use('/api/qr', require('./routes/qr'));
-app.use('/api/onboarding', require('./routes/onboarding'));
-app.use('/api/social', require('./routes/social'));
-app.use('/api/setup', require('./routes/setup'));
-app.use('/api/render-mcp', require('./routes/renderMCP'));
-app.use('/api/jwt', require('./routes/jwtManagement'));
-const formsRoutes = require('./routes/forms');
-app.use('/api/forms', formsRoutes.publicRouter);
-app.use('/api/admin/forms', formsRoutes.adminRouter);
+// Basic health check route for immediate availability
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'healthy', startup: 'in_progress' });
+});
 
-// Remove the catch-all 404 handler - Render should handle frontend routes
-// app.use('*', (req, res) => {
-//   res.status(404).json({
-//     success: false,
-//     message: 'Route not found'
-//   });
-// });
+// Centralized API Router
+const apiRouter = express.Router();
+
+// Mount routes on specialized router
+apiRouter.use('/auth', require('./routes/auth'));
+apiRouter.use('/users', require('./routes/users'));
+apiRouter.use('/activities', require('./routes/activities'));
+apiRouter.use('/vendors', require('./routes/vendors'));
+apiRouter.use('/bookings', require('./routes/bookings'));
+apiRouter.use('/payments', require('./routes/payments'));
+apiRouter.use('/wallet', require('./routes/wallet'));
+apiRouter.use('/ratings', require('./routes/ratings'));
+apiRouter.use('/rating-system', require('./routes/enhancedRating'));
+apiRouter.use('/admin', require('./routes/admin'));
+apiRouter.use('/pages', require('./routes/pages'));
+apiRouter.use('/translations', require('./routes/translations'));
+apiRouter.use('/uploads', require('./routes/uploads'));
+apiRouter.use('/site-settings', require('./routes/siteSettings'));
+apiRouter.use('/contact', require('./routes/contact'));
+apiRouter.use('/referrals', require('./routes/referrals'));
+apiRouter.use('/invitations', require('./routes/invitations'));
+apiRouter.use('/notifications', require('./routes/notifications'));
+apiRouter.use('/analytics', require('./routes/analytics'));
+apiRouter.use('/reports', require('./routes/reports'));
+apiRouter.use('/monitoring', require('./routes/monitoring'));
+apiRouter.use('/qr', require('./routes/qr'));
+apiRouter.use('/onboarding', require('./routes/onboarding'));
+apiRouter.use('/social', require('./routes/social'));
+apiRouter.use('/setup', require('./routes/setup'));
+apiRouter.use('/render-mcp', require('./routes/renderMCP'));
+apiRouter.use('/jwt', require('./routes/jwtManagement'));
+
+// Forms routes
+const formsRoutes = require('./routes/forms');
+apiRouter.use('/forms', formsRoutes.publicRouter);
+apiRouter.use('/admin/forms', formsRoutes.adminRouter);
+
+// Health check inside /api for monitoring
+apiRouter.get('/health', (req, res) => {
+  res.status(200).json({ status: 'healthy', startup: 'in_progress' });
+});
+
+// Detailed health check (backward compatibility)
+apiRouter.get('/health/detailed', (req, res) => {
+  res.status(200).json({
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    environment: process.env.NODE_ENV || 'production',
+    version: process.env.npm_package_version || '1.0.0'
+  });
+});
+
+// Mount Centralized Router
+app.use('/api', apiRouter);
+
+// LEGACY SUPPORT: Direct mounting for backward compatibility with frontend
+// These can be removed once the frontend is updated to use /api prefix everywhere
+app.use('/auth', require('./routes/auth'));
+app.use('/users', require('./routes/users'));
+app.use('/activities', require('./routes/activities'));
+app.use('/vendors', require('./routes/vendors'));
+app.use('/bookings', require('./routes/bookings'));
+app.use('/payments', require('./routes/payments'));
+app.use('/reports', require('./routes/reports'));
+
+// manual endpoint for page creation
+app.post('/api/create-partner-terms', async (req, res) => {
+  try {
+    await createPartnerTermsPage();
+    res.json({ success: true, message: 'Partner terms page created successfully' });
+  } catch (error) {
+    logger.error({ error }, 'Failed to create partner terms page via API');
+    res.status(500).json({ success: false, message: 'Failed to create partner terms page' });
+  }
+});
 
 // Global error handler (must be last middleware)
 app.use(require('./middleware/errorHandler'));
