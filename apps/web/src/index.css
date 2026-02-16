@@ -7,201 +7,216 @@
 
 @layer base {
   :root {
-    /* Base Colors - Adjusted for Glassmorphism */
-    --background: 210 40% 98%; /* Light gray base */
-    --foreground: 222.2 84% 4.9%;
+    /* Dark Premium Glass Palette */
+    --background: 240 10% 4%;
+    /* Deep Charcoal #0a0a0b */
+    --foreground: 0 0% 100%;
 
-    /* Glass Card Variables */
+    /* Glass Card Variables - Dark Mode Default */
     --card: 0 0% 100%;
-    --card-opacity: 0.7; /* High transparency for glass effect */
-    --card-foreground: 222.2 84% 4.9%;
+    /* Base for overlay */
+    --card-opacity: 0.03;
+    /* Extremely subtle fill */
+    --card-foreground: 0 0% 100%;
     --card-border: 0 0% 100%;
-    
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    
+
+    --popover: 240 10% 4%;
+    --popover-foreground: 0 0% 100%;
+
     --primary: 222.2 47.4% 11.2%;
     --primary-foreground: 210 40% 98%;
-    
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222.2 84% 4.9%;
-    
-    --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    
-    --accent: 210 40% 96%;
-    --accent-foreground: 222.2 84% 4.9%;
-    
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-    --radius: 1rem; /* Increased radius for modern feel */
-  }
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    
-    --card: 222.2 84% 4.9%;
-    --card-opacity: 0.6;
-    --card-foreground: 210 40% 98%;
-    --card-border: 217.2 32.6% 25%;
-    
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
-    
+
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
-    
+
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
-    
+
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-    
+
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+    --radius: 1.5rem;
+    /* Large radius for premium feel */
   }
 
   body {
     font-family: 'Inter', system-ui, sans-serif;
-    background-color: hsl(var(--background));
-    /* Mesh Gradient Background */
-    background-image: 
-      radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
-      radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
-      radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
-    background-attachment: fixed; /* Parallax-like feel */
+    background-color: #050505;
+    color: #ffffff;
+    /* Deep Abstract Background */
+    background-image:
+      radial-gradient(circle at 15% 50%, rgba(76, 29, 149, 0.15), transparent 45%),
+      /* Deep Purple */
+      radial-gradient(circle at 85% 30%, rgba(56, 189, 248, 0.1), transparent 45%),
+      /* Subtle Blue */
+      radial-gradient(circle at 50% 80%, rgba(255, 255, 255, 0.03), transparent 50%);
+    /* Base Glow */
+    background-attachment: fixed;
     min-height: 100vh;
-  }
-  
-  /* Light mode override for background to be more airy */
-  @media (prefers-color-scheme: light) {
-    body {
-       background-image: 
-        radial-gradient(at 0% 0%, hsla(25, 100%, 94%, 1) 0, transparent 50%), 
-        radial-gradient(at 50% 0%, hsla(189, 100%, 96%, 1) 0, transparent 50%), 
-        radial-gradient(at 100% 0%, hsla(339, 100%, 95%, 1) 0, transparent 50%);
-    }
-    .dark body {
-        /* Re-apply dark theme gradient if .dark class is present */
-        background-image: 
-          radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
-          radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
-          radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
-    }
+    -webkit-font-smoothing: antialiased;
   }
 }
 
 @layer components {
+
   /* LUDUS Typography Classes */
-  .text-display-xl { @apply text-4xl font-bold leading-tight tracking-tight; }
-  .text-display-lg { @apply text-3xl font-semibold leading-tight tracking-tight; }
-  .text-display-md { @apply text-2xl font-semibold leading-tight; }
-  .text-display-sm { @apply text-xl font-semibold leading-normal; }
-  .text-display-xs { @apply text-lg font-semibold leading-normal; }
+  .text-display-xl {
+    @apply text-4xl font-bold leading-tight tracking-tight text-white;
+  }
 
-  .text-body-lg { @apply text-lg font-normal leading-relaxed; }
-  .text-body-md { @apply text-base font-normal leading-normal; }
-  .text-body-sm { @apply text-sm font-normal leading-normal; }
-  .text-body-xs { @apply text-xs font-normal leading-normal; }
+  .text-display-lg {
+    @apply text-3xl font-semibold leading-tight tracking-tight text-white;
+  }
 
-  .text-label-lg { @apply text-base font-medium leading-normal; }
-  .text-label-md { @apply text-sm font-medium leading-normal; }
-  .text-label-sm { @apply text-xs font-medium leading-normal uppercase tracking-wider; }
+  .text-display-md {
+    @apply text-2xl font-semibold leading-tight text-white;
+  }
 
-  /* LUDUS Glass Button Components */
-  .btn-ludus-primary {
-    @apply bg-ludus-orange/90 hover:bg-ludus-orange text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed backdrop-blur-sm;
-    background-image: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
-    border: 1px solid rgba(255,255,255,0.2);
+  .text-display-sm {
+    @apply text-xl font-semibold leading-normal text-white;
   }
-  
-  .btn-ludus-secondary {
-    @apply bg-white/10 text-ludus-orange hover:bg-white/20 font-semibold py-3 px-4 rounded-xl transition-all duration-300 backdrop-blur-md border border-ludus-orange/50 hover:border-ludus-orange;
+
+  .text-display-xs {
+    @apply text-lg font-semibold leading-normal text-white;
   }
-  
-  .btn-ludus-ghost {
-    @apply bg-transparent text-charcoal hover:bg-white/10 font-medium py-3 px-4 rounded-xl transition-all duration-200 backdrop-blur-sm;
+
+  .text-body-lg {
+    @apply text-lg font-normal leading-relaxed text-gray-200;
   }
-  
-  /* LUDUS Glass Input Components */
-  .input-ludus {
-    @apply w-full px-4 py-3 rounded-xl bg-white/50 text-charcoal placeholder-gray-500 focus:outline-none transition-all duration-200 backdrop-blur-md;
-    border: 1px solid rgba(255,255,255,0.4);
-    box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+
+  .text-body-md {
+    @apply text-base font-normal leading-normal text-gray-300;
   }
-  .input-ludus:focus {
-     @apply ring-2 ring-ludus-orange/30 border-ludus-orange/60 bg-white/70;
+
+  .text-body-sm {
+    @apply text-sm font-normal leading-normal text-gray-400;
   }
-  
-  .input-ludus-error {
-    @apply border-error-red/60 focus:border-error-red focus:ring-error-red/20 bg-error-red/5;
+
+  .text-body-xs {
+    @apply text-xs font-normal leading-normal text-gray-500;
   }
-  
-  /* LUDUS Glass Card Components */
+
+  .text-label-lg {
+    @apply text-base font-medium leading-normal text-gray-200;
+  }
+
+  .text-label-md {
+    @apply text-sm font-medium leading-normal text-gray-300;
+  }
+
+  .text-label-sm {
+    @apply text-xs font-medium leading-normal uppercase tracking-wider text-gray-500;
+  }
+
+  /* Premium Glass Card */
   .card-ludus {
-    @apply rounded-2xl transition-shadow duration-300 overflow-hidden;
-    background: rgba(255, 255, 255, 0.7); /* Fallback */
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.3));
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    @apply rounded-3xl transition-all duration-300 overflow-hidden relative;
+    /* High Blur, Low Opacity Background */
+    background: rgba(20, 20, 20, 0.4);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    /* Edge Lighting */
+    box-shadow:
+      0 1px 0 0 rgba(255, 255, 255, 0.2) inset,
+      /* Top Highlight */
+      0 0 0 1px rgba(255, 255, 255, 0.05),
+      /* Subtle Outline */
+      0 20px 40px -10px rgba(0, 0, 0, 0.5);
+    /* Deep Shadow */
   }
-  
-  .dark .card-ludus {
-    background: linear-gradient(135deg, rgba(30, 30, 30, 0.7), rgba(30, 30, 30, 0.3));
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  }
-  
+
   .card-ludus-hover {
-    @apply transition-all duration-300 ease-out hover:shadow-2xl hover:-translate-y-1;
+    @apply hover:-translate-y-1;
+
     &:hover {
-         box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.25);
+      background: rgba(30, 30, 30, 0.5);
+      box-shadow:
+        0 1px 0 0 rgba(255, 255, 255, 0.3) inset,
+        0 0 0 1px rgba(255, 255, 255, 0.1),
+        0 30px 60px -12px rgba(0, 0, 0, 0.7);
     }
   }
-  
-  /* Legacy Components for Compatibility - Glassified */
+
+  /* Glass Button Components */
+  .btn-ludus-primary {
+    @apply relative overflow-hidden bg-white/10 hover:bg-white/20 text-white font-semibold py-3 px-6 rounded-2xl transition-all duration-300 backdrop-blur-md;
+    box-shadow:
+      0 1px 0 0 rgba(255, 255, 255, 0.2) inset,
+      0 0 0 1px rgba(255, 255, 255, 0.1),
+      0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  .btn-ludus-primary:hover {
+    box-shadow:
+      0 1px 0 0 rgba(255, 255, 255, 0.4) inset,
+      0 0 0 1px rgba(255, 255, 255, 0.2),
+      0 8px 24px rgba(0, 0, 0, 0.4);
+  }
+
+  .btn-ludus-secondary {
+    @apply bg-transparent text-gray-300 hover:text-white font-semibold py-3 px-6 rounded-2xl transition-all duration-300 border border-white/10 hover:border-white/30 backdrop-blur-sm;
+  }
+
+  .btn-ludus-ghost {
+    @apply bg-transparent text-gray-400 hover:text-white hover:bg-white/5 font-medium py-3 px-4 rounded-xl transition-all duration-200;
+  }
+
+  /* Glass Input Components */
+  .input-ludus {
+    @apply w-full px-5 py-3 rounded-2xl bg-black/20 text-white placeholder-gray-600 focus:outline-none transition-all duration-200 backdrop-blur-sm;
+    box-shadow:
+      0 1px 0 0 rgba(255, 255, 255, 0.05) inset,
+      0 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+
+  .input-ludus:focus {
+    @apply bg-black/40;
+    box-shadow:
+      0 1px 0 0 rgba(255, 255, 255, 0.1) inset,
+      0 0 0 1px rgba(255, 255, 255, 0.3),
+      0 0 0 4px rgba(255, 255, 255, 0.05);
+  }
+
+  .input-ludus-error {
+    @apply bg-red-500/10;
+    box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.5);
+  }
+
+  /* Legacy Components mapped to new style */
   .btn-primary {
     @apply btn-ludus-primary;
   }
-  
+
   .btn-secondary {
     @apply btn-ludus-secondary;
   }
-  
+
   .btn-outline {
-     @apply border border-primary-600/50 text-primary-600 hover:bg-primary-600 hover:text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 backdrop-blur-sm;
+    @apply btn-ludus-secondary;
   }
-  
+
   .input-field {
     @apply input-ludus;
   }
-  
+
   .card {
     @apply card-ludus;
   }
-  
+
   .card-header {
-    @apply px-6 py-4 border-b border-gray-200/20;
+    @apply px-6 py-5 border-b border-white/5;
   }
-  
+
   .card-body {
     @apply p-6;
   }
-  
+
   .container-padding {
     @apply px-4 sm:px-6 lg:px-8;
   }
@@ -211,65 +226,53 @@
   .text-balance {
     text-wrap: balance;
   }
-  
-  /* Line clamping utilities */
+
   .line-clamp-1 {
     overflow: hidden;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
   }
-  
+
   .line-clamp-2 {
     overflow: hidden;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
   }
-  
+
   .line-clamp-3 {
     overflow: hidden;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
   }
-  
-  /* Animation utilities */
-  .animate-scale-in {
-    animation: scaleIn 0.2s ease-out;
-  }
-  
-  .animate-bounce-in {
-    animation: bounceIn 0.6s ease-out;
-  }
-  
+
   /* RTL Support for Arabic */
   [dir="rtl"] {
     text-align: right;
   }
 
-  /* Fix RTL spacing for navigation menus */
-  [dir="rtl"] nav.space-x-8 > * + * {
+  [dir="rtl"] nav.space-x-8>*+* {
     margin-left: 0;
     margin-right: 2rem;
   }
 
-  [dir="rtl"] .space-x-4 > * + * {
+  [dir="rtl"] .space-x-4>*+* {
     margin-left: 0;
     margin-right: 1rem;
   }
 
-  [dir="rtl"] .space-x-3 > * + * {
+  [dir="rtl"] .space-x-3>*+* {
     margin-left: 0;
     margin-right: 0.75rem;
   }
 
-  [dir="rtl"] .space-x-2 > * + * {
+  [dir="rtl"] .space-x-2>*+* {
     margin-left: 0;
     margin-right: 0.5rem;
   }
 
-  /* Fix specific margin classes for RTL */
   [dir="rtl"] .ml-2 {
     margin-left: 0;
     margin-right: 0.5rem;
@@ -290,7 +293,6 @@
     margin-left: 1rem;
   }
 
-  /* Fix padding classes for RTL */
   [dir="rtl"] .pl-4 {
     padding-left: 0;
     padding-right: 1rem;
@@ -301,7 +303,6 @@
     padding-left: 1rem;
   }
 
-  /* Fix text alignment for RTL */
   [dir="rtl"] .text-left {
     text-align: right;
   }
@@ -310,7 +311,6 @@
     text-align: left;
   }
 
-  /* Fix positioning for RTL */
   [dir="rtl"] .left-0 {
     left: auto;
     right: 0;
@@ -321,25 +321,23 @@
     left: 0;
   }
 
-  /* Header-specific RTL fixes */
-  [dir="rtl"] header nav.space-x-8 > * + * {
+  [dir="rtl"] header nav.space-x-8>*+* {
     margin-left: 0 !important;
     margin-right: 2rem !important;
   }
 
-  [dir="rtl"] header .space-x-4 > * + * {
+  [dir="rtl"] header .space-x-4>*+* {
     margin-left: 0 !important;
     margin-right: 1rem !important;
   }
 
-  [dir="rtl"] header .space-x-3 > * + * {
+  [dir="rtl"] header .space-x-3>*+* {
     margin-left: 0 !important;
     margin-right: 0.75rem !important;
   }
 
-  [dir="rtl"] header .space-x-2 > * + * {
+  [dir="rtl"] header .space-x-2>*+* {
     margin-left: 0 !important;
     margin-right: 0.5rem !important;
   }
-}/* Force rebuild Mon Oct 13 20:28:59 +03 2025 */
-/* Cache bust Mon Oct 13 21:05:24 +03 2025 */
+}

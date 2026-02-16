@@ -22,7 +22,7 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-white dark:bg-dark-bg-secondary shadow-sm border-b border-warm dark:border-dark-border-secondary backdrop-blur-sm transition-all duration-300">
+    <header className="bg-transparent border-b border-white/10 backdrop-blur-sm transition-all duration-300 relative z-20">
       <div className="max-w-7xl mx-auto container-padding">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}

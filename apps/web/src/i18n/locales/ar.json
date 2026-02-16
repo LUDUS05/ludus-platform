@@ -272,10 +272,13 @@
     "close": "إغلاق"
   },
   "activities": {
-    "title": "الأنشطة",
+    "title": "اكتشف أنشطة مذهلة",
+    "subtitle": "ابحث واحجز تجارب فريدة في المملكة العربية السعودية",
     "search": "البحث في الأنشطة...",
     "category": "الفئة",
+    "allCategories": "كل الفئات",
     "city": "المدينة",
+    "allCities": "كل المدن",
     "priceRange": "نطاق السعر",
     "duration": "المدة",
     "rating": "التقييم",
@@ -313,6 +316,21 @@
       "entertainment": "ترفيه",
       "sports": "رياضة",
       "wellness": "صحة ولياقة"
+    },
+    "common": {
+      "latest": "الأحدث",
+      "priceLowToHigh": "السعر: من الأقل للأعلى",
+      "priceHighToLow": "السعر: من الأعلى للأقل",
+      "nameAZ": "الاسم أ-ي",
+      "mostPopular": "الأكثر شعبية",
+      "minPrice": "الحد الأدنى للسعر (ريال)",
+      "sortBy": "ترتيب حسب",
+      "activitiesFound": "أنشطة موجودة",
+      "resetFilters": "إعادة تعيين المرشحات",
+      "noActivitiesFound": "لم يتم العثور على أنشطة",
+      "tryAdjustingSearch": "حاول تعديل مرشحات البحث أو تصفح جميع الأنشطة",
+      "showAllActivities": "عرض جميع الأنشطة",
+      "error": "خطأ"
     },
     "card": {
       "availableSeats": "المقاعد المتاحة",
@@ -1449,7 +1467,6 @@
       "completeOnboarding": "فشل في إكمال التسجيل",
       "networkError": "خطأ في الشبكة. يرجى المحاولة مرة أخرى."
     },
-
     "gamification": {
       "pointsAwarded": "+{{points}} نقاط",
       "onboardingCompleteBonus": "اكتملت عملية الانضمام! مكافأة +{{points}}",

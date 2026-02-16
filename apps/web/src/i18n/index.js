@@ -11,22 +11,62 @@ i18n
   .init({
     resources: {
       en: {
-        translation: en
+        translation: en,
+        common: en.common,
+        auth: en.auth,
+        navigation: en.navigation,
+        home: en.home,
+        activities: en.activities,
+        booking: en.booking,
+        payment: en.payment,
+        dashboard: en.dashboard,
+        admin: en.admin,
+        vendor: en.vendor,
+        wallet: en.wallet,
+        map: en.map,
+        referral: en.referral,
+        language: en.language,
+        profile: en.profile,
+        reviews: en.reviews,
+        messages: en.messages,
+        notifications: en.notifications,
+        errors: en.errors,
+        success: en.success
       },
       ar: {
-        translation: ar
+        translation: ar,
+        common: ar.common,
+        auth: ar.auth,
+        navigation: ar.navigation,
+        home: ar.home,
+        activities: ar.activities,
+        booking: ar.booking,
+        payment: ar.payment,
+        dashboard: ar.dashboard,
+        admin: ar.admin,
+        vendor: ar.vendor,
+        wallet: ar.wallet,
+        map: ar.map,
+        referral: ar.referral,
+        language: ar.language,
+        profile: ar.profile,
+        reviews: ar.reviews,
+        messages: ar.messages,
+        notifications: ar.notifications,
+        errors: ar.errors,
+        success: ar.success
       }
     },
     fallbackLng: 'ar',
     lng: 'ar', // Set Arabic as default
     debug: true,
-    
+
     detection: {
       order: ['localStorage', 'navigator', 'htmlTag'],
       caches: ['localStorage'],
       lookupLocalStorage: 'preferred-language'
     },
-    
+
     // Clear cache to force reload of translations
     initImmediate: false,
 
@@ -37,11 +77,11 @@ i18n
     // Arabic pluralization rules
     pluralSeparator: '_',
     contextSeparator: '_',
-    
+
     // Custom plural rule for Arabic
     pluralRules: {
       ar: {
-        plurals: function(n) {
+        plurals: function (n) {
           if (n === 0) return 0; // zero
           if (n === 1) return 1; // one
           if (n === 2) return 2; // two
@@ -62,15 +102,15 @@ i18n.on('initialized', (options) => {
 // Setup document attributes for RTL/LTR support
 function setupDocumentAttributes(language) {
   const isRTL = language === 'ar';
-  
+
   // Update document attributes
   document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
   document.documentElement.lang = language;
-  
+
   // Update body class
   document.body.classList.remove('rtl', 'ltr');
   document.body.classList.add(isRTL ? 'rtl' : 'ltr');
-  
+
   // Store preference
   localStorage.setItem('preferred-language', language);
 }
