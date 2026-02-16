@@ -1,0 +1,1030 @@
+openapi: 3.0.3
+info:
+  title: LUDUS Platform API
+  description: |
+    Comprehensive API for the LUDUS social activity platform serving the Saudi Arabian market.
+    
+    ## Features
+    - User authentication and management
+    - Activity discovery and booking
+    - Payment processing with Moyasar
+    - Review and rating system
+    - Multi-language support (Arabic/English)
+    - RTL layout support
+    
+    ## Authentication
+    All endpoints require JWT authentication except for public endpoints.
+    Include the JWT token in the Authorization header: `Bearer <token>`
+    
+    ## Rate Limiting
+    - General API: 100 requests per 15 minutes per IP
+    - Authentication: 5 attempts per minute per IP
+    - Payment API: 10 requests per minute per user
+    
+  version: 1.0.0
+  contact:
+    name: LUDUS Development Team
+    email: dev@ludus.sa
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://api.ludus.sa
+    description: Production server
+  - url: http://localhost:5000
+    description: Development server
+
+security:
+  - BearerAuth: []
+
+paths:
+  # Authentication Endpoints
+  /api/auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: Register new user
+      description: Create a new user account with email verification
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+            example:
+              email: "user@example.com"
+              password: "SecurePass123!"
+              firstName: "أحمد"
+              lastName: "محمد"
+              phone: "+966501234567"
+              dateOfBirth: "1990-01-01"
+              gender: "male"
+      responses:
+        '201':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: User already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: User login
+      description: Authenticate user and return JWT tokens
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            example:
+              email: "user@example.com"
+              password: "SecurePass123!"
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/auth/me:
+    get:
+      tags:
+        - Authentication
+      summary: Get current user profile
+      description: Retrieve the authenticated user's profile information
+      responses:
+        '200':
+          description: User profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # Activity Endpoints
+  /api/activities:
+    get:
+      tags:
+        - Activities
+      summary: List activities
+      description: Get paginated list of activities with filtering options
+      security: []
+      parameters:
+        - name: page
+          in: query
+          description: Page number for pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          description: Number of items per page
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 20
+        - name: category
+          in: query
+          description: Filter by activity category
+          schema:
+            type: string
+        - name: city
+          in: query
+          description: Filter by city
+          schema:
+            type: string
+        - name: minPrice
+          in: query
+          description: Minimum price filter
+          schema:
+            type: number
+        - name: maxPrice
+          in: query
+          description: Maximum price filter
+          schema:
+            type: number
+        - name: search
+          in: query
+          description: Search term for activity title/description
+          schema:
+            type: string
+        - name: lat
+          in: query
+          description: Latitude for location-based search
+          schema:
+            type: number
+        - name: lng
+          in: query
+          description: Longitude for location-based search
+          schema:
+            type: number
+        - name: radius
+          in: query
+          description: Search radius in kilometers
+          schema:
+            type: number
+            default: 10
+      responses:
+        '200':
+          description: Activities retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityListResponse'
+
+    post:
+      tags:
+        - Activities
+      summary: Create new activity
+      description: Create a new activity (requires partner or admin role)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateActivityRequest'
+      responses:
+        '201':
+          description: Activity created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Activity'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/activities/{id}:
+    get:
+      tags:
+        - Activities
+      summary: Get activity details
+      description: Retrieve detailed information about a specific activity
+      security: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Activity ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Activity details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Activity'
+        '404':
+          description: Activity not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # Booking Endpoints
+  /api/bookings:
+    get:
+      tags:
+        - Bookings
+      summary: List user bookings
+      description: Get paginated list of user's bookings
+      parameters:
+        - name: page
+          in: query
+          description: Page number for pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          description: Number of items per page
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 20
+        - name: status
+          in: query
+          description: Filter by booking status
+          schema:
+            type: string
+            enum: [pending, confirmed, cancelled, completed]
+      responses:
+        '200':
+          description: Bookings retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingListResponse'
+
+    post:
+      tags:
+        - Bookings
+      summary: Create new booking
+      description: Create a new booking for an activity
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBookingRequest'
+      responses:
+        '201':
+          description: Booking created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Booking conflict (time slot unavailable)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/bookings/{id}:
+    get:
+      tags:
+        - Bookings
+      summary: Get booking details
+      description: Retrieve detailed information about a specific booking
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Booking ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Booking details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '404':
+          description: Booking not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/bookings/{id}/cancel:
+    post:
+      tags:
+        - Bookings
+      summary: Cancel booking
+      description: Cancel an existing booking
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Booking ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Booking cancelled successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: Cannot cancel booking (too close to activity time)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Booking not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # Payment Endpoints
+  /api/payments/create:
+    post:
+      tags:
+        - Payments
+      summary: Create payment
+      description: Create a new payment for a booking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePaymentRequest'
+      responses:
+        '201':
+          description: Payment created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/payments/{id}:
+    get:
+      tags:
+        - Payments
+      summary: Get payment details
+      description: Retrieve payment information
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Payment ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Payment details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+        '404':
+          description: Payment not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # Health Check
+  /api/health:
+    get:
+      tags:
+        - System
+      summary: Health check
+      description: Check API health status
+      security: []
+      responses:
+        '200':
+          description: API is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    # Request Schemas
+    RegisterRequest:
+      type: object
+      required:
+        - email
+        - password
+        - firstName
+        - lastName
+      properties:
+        email:
+          type: string
+          format: email
+          description: User email address
+        password:
+          type: string
+          minLength: 8
+          description: User password
+        firstName:
+          type: string
+          description: User first name
+        lastName:
+          type: string
+          description: User last name
+        phone:
+          type: string
+          pattern: '^\+966[0-9]{9}$'
+          description: Saudi phone number
+        dateOfBirth:
+          type: string
+          format: date
+          description: User date of birth
+        gender:
+          type: string
+          enum: [male, female]
+          description: User gender
+
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+
+    CreateActivityRequest:
+      type: object
+      required:
+        - title
+        - description
+        - category
+        - location
+        - pricing
+        - schedule
+      properties:
+        title:
+          $ref: '#/components/schemas/LocalizedText'
+        description:
+          $ref: '#/components/schemas/LocalizedText'
+        category:
+          type: string
+        subcategory:
+          type: string
+        location:
+          $ref: '#/components/schemas/Location'
+        pricing:
+          $ref: '#/components/schemas/Pricing'
+        schedule:
+          $ref: '#/components/schemas/Schedule'
+        requirements:
+          $ref: '#/components/schemas/Requirements'
+
+    CreateBookingRequest:
+      type: object
+      required:
+        - activityId
+        - participants
+      properties:
+        activityId:
+          type: string
+          description: ID of the activity to book
+        participants:
+          type: array
+          items:
+            $ref: '#/components/schemas/Participant'
+        notes:
+          type: string
+          description: Additional notes for the booking
+
+    CreatePaymentRequest:
+      type: object
+      required:
+        - bookingId
+        - amount
+        - currency
+      properties:
+        bookingId:
+          type: string
+        amount:
+          type: number
+        currency:
+          type: string
+          default: SAR
+        paymentMethod:
+          type: string
+          enum: [credit_card, bank_transfer, apple_pay, google_pay]
+
+    # Response Schemas
+    AuthResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: object
+          properties:
+            user:
+              $ref: '#/components/schemas/User'
+            accessToken:
+              type: string
+            refreshToken:
+              type: string
+        message:
+          type: string
+          example: "Authentication successful"
+
+    UserProfile:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          $ref: '#/components/schemas/User'
+        message:
+          type: string
+
+    ActivityListResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: object
+          properties:
+            activities:
+              type: array
+              items:
+                $ref: '#/components/schemas/Activity'
+            pagination:
+              $ref: '#/components/schemas/Pagination'
+        message:
+          type: string
+
+    BookingListResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: object
+          properties:
+            bookings:
+              type: array
+              items:
+                $ref: '#/components/schemas/Booking'
+            pagination:
+              $ref: '#/components/schemas/Pagination'
+        message:
+          type: string
+
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: "ok"
+        timestamp:
+          type: string
+          format: date-time
+        services:
+          type: object
+          properties:
+            database:
+              type: string
+              example: "ok"
+            redis:
+              type: string
+              example: "ok"
+            payment:
+              type: string
+              example: "ok"
+
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            details:
+              type: object
+        timestamp:
+          type: string
+          format: date-time
+        requestId:
+          type: string
+
+    # Data Models
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        phone:
+          type: string
+        dateOfBirth:
+          type: string
+          format: date
+        gender:
+          type: string
+        preferences:
+          $ref: '#/components/schemas/UserPreferences'
+        role:
+          type: string
+          enum: [user, partner, admin]
+        isVerified:
+          type: boolean
+        isActive:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    UserPreferences:
+      type: object
+      properties:
+        language:
+          type: string
+          default: ar
+        notifications:
+          type: object
+          properties:
+            email:
+              type: boolean
+            sms:
+              type: boolean
+            push:
+              type: boolean
+        interests:
+          type: array
+          items:
+            type: string
+        location:
+          $ref: '#/components/schemas/Location'
+
+    Activity:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          $ref: '#/components/schemas/LocalizedText'
+        description:
+          $ref: '#/components/schemas/LocalizedText'
+        category:
+          type: string
+        subcategory:
+          type: string
+        location:
+          $ref: '#/components/schemas/Location'
+        pricing:
+          $ref: '#/components/schemas/Pricing'
+        schedule:
+          $ref: '#/components/schemas/Schedule'
+        requirements:
+          $ref: '#/components/schemas/Requirements'
+        media:
+          $ref: '#/components/schemas/Media'
+        partner:
+          $ref: '#/components/schemas/Partner'
+        status:
+          type: string
+          enum: [draft, published, suspended, archived]
+        isActive:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    Booking:
+      type: object
+      properties:
+        id:
+          type: string
+        user:
+          $ref: '#/components/schemas/UserInfo'
+        activity:
+          $ref: '#/components/schemas/ActivityInfo'
+        participants:
+          type: array
+          items:
+            $ref: '#/components/schemas/Participant'
+        pricing:
+          $ref: '#/components/schemas/BookingPricing'
+        payment:
+          $ref: '#/components/schemas/PaymentInfo'
+        status:
+          type: string
+          enum: [pending, confirmed, cancelled, completed]
+        qrCode:
+          type: string
+        checkInAt:
+          type: string
+          format: date-time
+        notes:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    Payment:
+      type: object
+      properties:
+        id:
+          type: string
+        bookingId:
+          type: string
+        amount:
+          type: number
+        currency:
+          type: string
+        status:
+          type: string
+          enum: [pending, completed, failed, refunded]
+        method:
+          type: string
+        transactionId:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    # Supporting Schemas
+    LocalizedText:
+      type: object
+      properties:
+        ar:
+          type: string
+        en:
+          type: string
+
+    Location:
+      type: object
+      properties:
+        name:
+          type: string
+        address:
+          type: string
+        city:
+          type: string
+        coordinates:
+          type: object
+          properties:
+            type:
+              type: string
+              example: Point
+            coordinates:
+              type: array
+              items:
+                type: number
+              example: [46.6753, 24.7136]
+
+    Pricing:
+      type: object
+      properties:
+        adult:
+          type: number
+        child:
+          type: number
+        family:
+          type: number
+        currency:
+          type: string
+          default: SAR
+
+    Schedule:
+      type: object
+      properties:
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        timeSlots:
+          type: array
+          items:
+            type: object
+            properties:
+              startTime:
+                type: string
+              endTime:
+                type: string
+              maxParticipants:
+                type: integer
+
+    Requirements:
+      type: object
+      properties:
+        minAge:
+          type: integer
+        maxAge:
+          type: integer
+        difficulty:
+          type: string
+          enum: [easy, medium, hard]
+        equipment:
+          type: array
+          items:
+            type: string
+        specialRequirements:
+          type: string
+
+    Media:
+      type: object
+      properties:
+        images:
+          type: array
+          items:
+            type: string
+        videos:
+          type: array
+          items:
+            type: string
+        thumbnail:
+          type: string
+
+    Partner:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        contact:
+          type: string
+
+    UserInfo:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+
+    ActivityInfo:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        date:
+          type: string
+          format: date
+        timeSlot:
+          type: string
+
+    Participant:
+      type: object
+      properties:
+        name:
+          type: string
+        age:
+          type: integer
+        type:
+          type: string
+          enum: [adult, child]
+
+    BookingPricing:
+      type: object
+      properties:
+        subtotal:
+          type: number
+        tax:
+          type: number
+        total:
+          type: number
+        currency:
+          type: string
+
+    PaymentInfo:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+        method:
+          type: string
+        transactionId:
+          type: string
+
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        limit:
+          type: integer
+        total:
+          type: integer
+        pages:
+          type: integer
+        hasNext:
+          type: boolean
+        hasPrev:
+          type: boolean

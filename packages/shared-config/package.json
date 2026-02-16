@@ -1,0 +1,31 @@
+{
+  "name": "@ludus/shared-config",
+  "version": "1.0.0",
+  "description": "Shared configuration files for LUDUS platform",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint . --ext .js,.ts",
+    "lint:fix": "eslint . --ext .js,.ts --fix"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-react": "^7.33.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "jest": "^29.0.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "eslint/",
+    "prettier/",
+    "typescript/",
+    "jest/"
+  ],
+  "publishConfig": {
+    "access": "restricted"
+  }
+}

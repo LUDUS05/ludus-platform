@@ -1,0 +1,31 @@
+{
+  "name": "@ludus/shared-utils",
+  "version": "1.0.0",
+  "description": "Shared utility functions for LUDUS platform",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "test": "jest"
+  },
+  "dependencies": {
+    "joi": "^17.9.0",
+    "moment": "^2.29.0",
+    "lodash": "^4.17.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/lodash": "^4.14.0",
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "restricted"
+  }
+}

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project ATHENA - Onboarding Experience | LUDUS Platform</title>
+  <link rel="stylesheet" href="onboarding.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/favicon.ico">
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div id="loading-screen" class="loading-screen">
+    <div class="loading-content">
+      <div class="loading-logo">
+        <div class="logo-circle"></div>
+        <div class="logo-text">LUDUS</div>
+      </div>
+      <div class="loading-progress">
+        <div class="progress-bar"></div>
+        <div class="loading-text">Loading Project ATHENA...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Onboarding Container -->
+  <div id="onboarding-container" class="onboarding-container" role="main" aria-label="Project ATHENA Onboarding">
+    
+    <!-- Step 1: Welcome -->
+    <div class="onboarding-step active" id="step1">
+      <div class="step-content">
+        <div class="step-header">
+          <div class="step-number">01</div>
+          <h1 class="step-title">Welcome to Project ATHENA</h1>
+          <p class="step-subtitle">Enhanced UI/UX with GSAP Integration</p>
+        </div>
+        
+        <div class="step-visual">
+          <div class="floating-elements">
+            <div class="floating-card card-1">
+              <div class="card-icon">🎬</div>
+              <div class="card-text">GSAP Animations</div>
+            </div>
+            <div class="floating-card card-2">
+              <div class="card-icon">🌍</div>
+              <div class="card-text">RTL Support</div>
+            </div>
+            <div class="floating-card card-3">
+              <div class="card-icon">📱</div>
+              <div class="card-text">Mobile Ready</div>
+            </div>
+            <div class="floating-card card-4">
+              <div class="card-icon">⚡</div>
+              <div class="card-text">Fast & Smooth</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="step-description">
+          <p>Experience the next generation of social activity platform with smooth 60fps animations, Arabic language support, and enhanced user interactions.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Features Showcase -->
+    <div class="onboarding-step" id="step2">
+      <div class="step-content">
+        <div class="step-header">
+          <div class="step-number">02</div>
+          <h1 class="step-title">Enhanced Features</h1>
+          <p class="step-subtitle">Discover what's new in Project ATHENA</p>
+        </div>
+        
+        <div class="features-grid">
+          <div class="feature-card" data-feature="animations">
+            <div class="feature-icon">🎭</div>
+            <h3>GSAP Animations</h3>
+            <p>Smooth 60fps animations powered by GreenSock Animation Platform</p>
+            <div class="feature-demo">
+              <div class="demo-circle"></div>
+            </div>
+          </div>
+          
+          <div class="feature-card" data-feature="rtl">
+            <div class="feature-icon">🌍</div>
+            <h3>RTL Support</h3>
+            <p>Full Arabic language support with right-to-left layout</p>
+            <div class="feature-demo">
+              <div class="demo-text">مرحباً بك في منصة لودس</div>
+            </div>
+          </div>
+          
+          <div class="feature-card" data-feature="social">
+            <div class="feature-icon">👥</div>
+            <h3>Social Interactions</h3>
+            <p>Enhanced social features with real-time engagement</p>
+            <div class="feature-demo">
+              <div class="demo-buttons">
+                <button class="demo-btn like-btn">❤️ 42</button>
+                <button class="demo-btn share-btn">📤 Share</button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="feature-card" data-feature="referral">
+            <div class="feature-icon">🎁</div>
+            <h3>Referral System</h3>
+            <p>Earn rewards by inviting friends to join LUDUS</p>
+            <div class="feature-demo">
+              <div class="demo-reward">+50 Points</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: Interactive Demo -->
+    <div class="onboarding-step" id="step3">
+      <div class="step-content">
+        <div class="step-header">
+          <div class="step-number">03</div>
+          <h1 class="step-title">Interactive Demo</h1>
+          <p class="step-subtitle">Try the enhanced features yourself</p>
+        </div>
+        
+        <div class="demo-section">
+          <div class="demo-activity-card">
+            <div class="activity-header">
+              <div class="activity-avatar">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=50&h=50&fit=crop&crop=face" alt="User Avatar">
+              </div>
+              <div class="activity-info">
+                <h4>Ahmed Al-Rashid</h4>
+                <p>Football Match at King Fahd Stadium</p>
+              </div>
+              <div class="activity-time">2h ago</div>
+            </div>
+            
+            <div class="activity-content">
+              <div class="activity-image">
+                <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=400&h=200&fit=crop" alt="Football Match">
+              </div>
+              <div class="activity-description">
+                <p>Join us for an exciting football match this weekend! We have 8 players confirmed and need 4 more to make it a full game. All skill levels welcome!</p>
+              </div>
+            </div>
+            
+            <div class="activity-actions">
+              <button class="action-btn like-btn" data-count="12">
+                <span class="btn-icon">❤️</span>
+                <span class="btn-text">Like</span>
+                <span class="btn-count">12</span>
+              </button>
+              <button class="action-btn comment-btn" data-count="5">
+                <span class="btn-icon">💬</span>
+                <span class="btn-text">Comment</span>
+                <span class="btn-count">5</span>
+              </button>
+              <button class="action-btn share-btn">
+                <span class="btn-icon">📤</span>
+                <span class="btn-text">Share</span>
+              </button>
+              <button class="action-btn join-btn">
+                <span class="btn-icon">🎯</span>
+                <span class="btn-text">Join Activity</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4: Get Started -->
+    <div class="onboarding-step" id="step4">
+      <div class="step-content">
+        <div class="step-header">
+          <div class="step-number">04</div>
+          <h1 class="step-title">Ready to Explore?</h1>
+          <p class="step-subtitle">Start your LUDUS journey with Project ATHENA</p>
+        </div>
+        
+        <div class="final-cta">
+          <div class="cta-visual">
+            <div class="success-animation">
+              <div class="checkmark">
+                <div class="checkmark-circle"></div>
+                <div class="checkmark-stem"></div>
+                <div class="checkmark-kick"></div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="cta-content">
+            <h2>Project ATHENA is Live!</h2>
+            <p>Experience enhanced UI/UX with smooth animations, Arabic language support, and powerful social features.</p>
+            
+            <div class="cta-stats">
+              <div class="stat-item">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">Test Success Rate</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-number">60fps</div>
+                <div class="stat-label">Smooth Animations</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-number">RTL</div>
+                <div class="stat-label">Arabic Support</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="onboarding-navigation">
+      <div class="nav-progress">
+        <div class="progress-dots">
+          <div class="dot active" data-step="1"></div>
+          <div class="dot" data-step="2"></div>
+          <div class="dot" data-step="3"></div>
+          <div class="dot" data-step="4"></div>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill"></div>
+        </div>
+      </div>
+      
+      <div class="nav-buttons">
+        <button id="prev-btn" class="nav-btn prev-btn" disabled>
+          <span>Previous</span>
+        </button>
+        <button id="next-btn" class="nav-btn next-btn">
+          <span>Next</span>
+          <div class="btn-arrow">→</div>
+        </button>
+        <button id="finish-btn" class="nav-btn finish-btn" style="display: none;">
+          <span>Get Started</span>
+          <div class="btn-arrow">🚀</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Language Toggle -->
+    <div class="language-toggle">
+      <button id="lang-toggle" class="lang-btn">
+        <span class="lang-text">العربية</span>
+        <div class="lang-icon">🌍</div>
+      </button>
+    </div>
+  </div>
+
+  <!-- GSAP CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
+  
+  <!-- Onboarding Script -->
+  <script src="onboarding.js"></script>
+</body>
+</html>

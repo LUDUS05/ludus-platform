@@ -1,214 +1,91 @@
-# LUDUS Platform - MVP Implementation
+# LUDUS Platform - Monorepo
 
-A social activity discovery platform connecting users with local experiences and vendors.
+**Version:** 1.0.0  
+**Status:** Development  
+**Package Manager:** pnpm
+**Market:** Saudi Arabia (Arabic-First)
+
+---
+
+## 🏗️ Architecture Overview
+
+LUDUS is a comprehensive social activity platform built as a monorepo. It leverages a modern tech stack designed for scalability, security, and cultural integration.
+
+```text
+ludus-platform/
+├── apps/                    # Core Applications
+│   ├── web/                # React/Next.js Frontend (Arabic-First)
+│   ├── api/                # Node.js/Express Backend
+│   └── ai-agents/          # Python/FastAPI AI Services
+├── packages/               # Shared Workspace Packages
+│   ├── shared-types/       # TypeScript Definitions
+│   └── shared-utils/       # Utility Functions & Logic
+├── scripts/                # Deployment, Testing & Utility Scripts
+└── docs/                   # Consolidated Documentation
+```
+
+## 📚 Documentation
+
+Detailed documentation is available in the [docs/](./docs) directory:
+
+| Document | Description |
+|----------|-------------|
+| [Constitution](./docs/CONSTITUTION.md) | Immutable development and cultural principles |
+| [Technical Architecture](./docs/TECHNICAL_ARCHITECTURE.md) | System design and implementation blueprint |
+| [API Specifications](./docs/API_SPECIFICATIONS.md) | RESTful API endpoints and integration patterns |
+| [Database Schema](./docs/DATABASE_SCHEMA.md) | MongoDB design and data models |
+| [Security Requirements](./docs/SECURITY_REQUIREMENTS.md) | Security framework and compliance |
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 18+ and npm
-- MongoDB Atlas account (or local MongoDB)
-- Moyasar account (for Saudi payments)
-- Cloudinary account (for image storage)
+- Node.js >= 18.0.0
+- pnpm >= 8.0.0
+- Python >= 3.9.0 (for AI agents)
+- MongoDB >= 6.0.0
+- Redis >= 6.0.0
 
-### Installation
+### Installation & Setup
 
-1. **Clone and install dependencies:**
 ```bash
-cd lds-app
-npm install
-cd client && npm install
-cd ../server && npm install
+# Install dependencies
+pnpm install
+
+# Setup development environment
+pnpm run setup
+
+# Start all development services
+pnpm dev
 ```
 
-2. **Environment Setup:**
-```bash
-cp .env.example .env
-# Edit .env with your actual credentials
-```
+## 🛠️ Development Commands
 
-3. **Quick Setup (with sample data):**
-```bash
-cd server
-npm run setup  # Seeds database with sample vendors and activities
-```
+| Command | Description |
+|---------|-------------|
+| `pnpm dev` | Start all services (Web, API, AI) |
+| `pnpm build` | Build all packages and apps |
+| `pnpm test` | Run tests across the monorepo |
+| `pnpm lint` | Lint all packages |
+| `pnpm type-check` | Run TypeScript type checking |
+| `pnpm clean` | Clean build artifacts and node_modules |
 
-4. **Manual Environment Variables (if needed):**
-```env
-# Database
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/ludus_mvp
-JWT_SECRET=your-super-secret-jwt-key
+## 📦 Service Details
 
-# Moyasar Payment Gateway (Saudi Arabia)
-MOYASAR_PUBLISHABLE_KEY=pk_test_your_moyasar_key
-MOYASAR_SECRET_KEY=sk_test_your_moyasar_secret
-MOYASAR_WEBHOOK_SECRET=your_webhook_secret
+### Frontend (`@ludus/web`)
+- **Tech:** React 19, TypeScript, Tailwind CSS
+- **Features:** RTL Design, GSAP Animations, i18n
+- **Port:** 3000
 
-# Cloudinary
-CLOUDINARY_CLOUD_NAME=your-cloud-name
-CLOUDINARY_API_KEY=your-api-key
-CLOUDINARY_API_SECRET=your-api-secret
-```
+### Backend (`@ludus/api`)
+- **Tech:** Node.js, Express, MongoDB, Redis
+- **Features:** JWT Auth, Moyasar Payments, RESTful
+- **Port:** 5000
 
-5. **Start Development Servers:**
-```bash
-# Terminal 1 - Backend
-cd server && npm run dev
-
-# Terminal 2 - Frontend  
-cd client && npm start
-```
-
-6. **Test API (optional):**
-```bash
-cd server && npm run test-api
-```
-
-## 📁 Project Structure
-
-```
-lds-app/
-├── client/                    # React frontend
-│   ├── src/
-│   │   ├── components/        # React components
-│   │   ├── pages/            # Page components
-│   │   ├── services/         # API services
-│   │   ├── context/          # React context
-│   │   └── utils/            # Utility functions
-│   └── package.json
-├── server/                   # Express backend
-│   ├── src/
-│   │   ├── controllers/      # Route handlers
-│   │   ├── models/          # Mongoose schemas
-│   │   ├── routes/          # Express routes
-│   │   ├── middleware/      # Custom middleware
-│   │   ├── services/        # Business logic
-│   │   └── config/          # Configuration
-│   └── package.json
-└── Guide/                   # Documentation
-```
-
-## 🛠 Development Status
-
-### ✅ Completed (Week 1)
-- [x] Project structure and environment setup
-- [x] Express.js backend with MongoDB integration
-- [x] User authentication system (JWT-based)
-- [x] Core data models (User, Vendor, Activity, Booking)
-- [x] React frontend with Tailwind CSS
-- [x] Authentication context and services
-- [x] Basic routing and header component
-
-### 🚧 In Progress (Week 2)
-- [ ] Admin panel for vendor/activity management
-- [ ] Activity browsing and search functionality
-- [ ] Vendor profile pages
-- [ ] User dashboard
-
-### 📋 Upcoming (Week 3-4)
-- [ ] Booking system with payment integration
-- [ ] Email notifications
-- [ ] Image upload functionality
-- [ ] Activity filtering and search
-
-## 🔧 API Endpoints
-
-### Authentication
-- `POST /api/auth/register` - User registration
-- `POST /api/auth/login` - User login
-- `POST /api/auth/refresh` - Refresh access token
-- `GET /api/auth/me` - Get current user
-
-### Activities
-- `GET /api/activities` - List activities with filters
-- `GET /api/activities/:id` - Get activity details
-- `GET /api/activities/search` - Search activities
-
-### Admin (Admin only)
-- `POST /api/admin/vendors` - Create vendor
-- `POST /api/admin/activities` - Create activity
-- `GET /api/admin/dashboard/stats` - Dashboard statistics
-
-## 🎯 MVP Features
-
-### Core User Flow
-1. **Discovery** - Browse and search activities by category, location, price
-2. **Booking** - Select date/time, enter details, process payment
-3. **Management** - View bookings, cancel if needed, leave reviews
-
-### Admin Features
-1. **Vendor Management** - Create/edit vendor profiles
-2. **Activity Management** - Add/edit activities with images and details
-3. **Booking Oversight** - Monitor all bookings and handle issues
-
-## 🔐 Authentication & Security
-- JWT-based authentication with refresh tokens
-- Password hashing with bcrypt
-- Rate limiting on API endpoints
-- Input validation and sanitization
-- CORS configuration
-
-## 💾 Database Schema
-
-### User Model
-- Personal information and preferences
-- Location data for nearby activities
-- Authentication and session management
-
-### Vendor Model
-- Business information and credentials
-- Location and contact details
-- Images and social media links
-
-### Activity Model
-- Detailed activity information
-- Pricing and capacity management
-- Scheduling and availability
-- Reviews and ratings
-
-### Booking Model
-- Complete booking lifecycle
-- Payment tracking with Stripe
-- Participant details and special requirements
-
-## 🚀 Deployment
-
-The application will be deployed using:
-- **Frontend**: Vercel or Netlify
-- **Backend**: Railway or Render
-- **Database**: MongoDB Atlas
-- **Images**: Cloudinary
-- **Payments**: Stripe
-
-## 📊 Success Metrics
-
-**Week 4 Goals:**
-- Working authentication system
-- 10+ vendor profiles created
-- 20+ activities with full details
-- Admin panel operational
-
-**Week 8 Launch:**
-- 15+ active vendors
-- 30+ bookable activities
-- Complete booking flow
-- Mobile responsive design
-
-## 🤝 Contributing
-
-This is an MVP implementation following the curated approach outlined in the implementation guide. Focus areas:
-
-1. **Quality over quantity** - Perfect core features before adding complexity
-2. **User experience first** - Ensure smooth, intuitive interactions
-3. **Admin efficiency** - Make vendor/activity management effortless
-4. **Mobile responsive** - Works perfectly on all devices
-
-## 📞 Support
-
-For development questions or issues:
-1. Check the implementation guide in `/Guide/`
-2. Review the development tracker
-3. Test with the provided API endpoints
+### AI Services (`@ludus/ai-agents`)
+- **Tech:** Python, FastAPI, LangChain
+- **Features:** Recommendation Engine, Content Generation
+- **Port:** 8001
 
 ---
 
-**Built with:** React, Node.js, Express, MongoDB, Tailwind CSS, Stripe, Cloudinary
+**Built with ❤️ for the Saudi Arabian market**

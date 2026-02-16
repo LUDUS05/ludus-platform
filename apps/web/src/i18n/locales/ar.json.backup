@@ -1,0 +1,1358 @@
+{
+  "common": {
+    "loading": "جاري التحميل...",
+    "error": "خطأ",
+    "success": "نجح",
+    "cancel": "إلغاء",
+    "confirm": "تأكيد",
+    "save": "حفظ",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "view": "عرض",
+    "search": "بحث",
+    "filter": "تصفية",
+    "clear": "مسح",
+    "back": "رجوع",
+    "next": "التالي",
+    "previous": "السابق",
+    "submit": "إرسال",
+    "login": "تسجيل الدخول",
+    "logout": "تسجيل الخروج",
+    "register": "التسجيل",
+    "or": "أو",
+    "welcome": "مرحباً",
+    "explore": "استكشف",
+    "getStarted": "ابدأ الآن",
+    "signIn": "تسجيل الدخول",
+    "signUp": "إنشاء حساب",
+    "account": "الحساب",
+    "showPassword": "إظهار كلمة المرور",
+    "hidePassword": "إخفاء كلمة المرور",
+    "forgotPasswordLink": "نسيت كلمة المرور؟",
+    "noAccount": "ليس لديك حساب؟",
+    "haveAccount": "لديك حساب بالفعل؟",
+    "signInHere": "سجل الدخول هنا",
+    "share": "مشاركة",
+    "copyReferralLink": "نسخ رابط الإحالة",
+    "referralQRCode": "رمز QR للإحالة",
+    "yourReferralQRCode": "رمز QR للإحالة الخاص بك",
+    "viewAll": "عرض الكل",
+    "contactInformation": "معلومات الاتصال",
+    "about": "حول",
+    "contact": "اتصل بنا",
+    "nextSteps": "الخطوات التالية",
+    "contactVendor": "اتصل بالبائع مباشرة إذا كان لديك أي أسئلة",
+    "shareLudusWithFriends": "شارك لودوس مع الأصدقاء واكسب المكافآت!",
+    "referralProgram": "برنامج الإحالة",
+    "viewFullDashboard": "عرض لوحة التحكم الكاملة",
+    "earnRewardsByReferring": "اكسب المكافآت من خلال إحالة الأصدقاء",
+    "startReferring": "ابدأ الإحالة",
+    "totalSpent": "إجمالي المبلغ المنفق",
+    "minPrice": "الحد الأدنى للسعر (ريال)",
+    "sortBy": "ترتيب حسب",
+    "latest": "الأحدث",
+    "priceLowToHigh": "السعر: من الأقل للأعلى",
+    "priceHighToLow": "السعر: من الأعلى للأقل",
+    "nameAZ": "الاسم أ-ي",
+    "mostPopular": "الأكثر شعبية",
+    "activitiesFound": "أنشطة موجودة",
+    "resetFilters": "إعادة تعيين المرشحات",
+    "noActivitiesFound": "لم يتم العثور على أنشطة",
+    "tryAdjustingSearch": "حاول تعديل مرشحات البحث أو تصفح جميع الأنشطة",
+    "showAllActivities": "عرض جميع الأنشطة",
+    "previous": "السابق",
+    "next": "التالي",
+    "by": "بواسطة",
+    "back": "رجوع",
+    "continue": "متابعة",
+    "adventureToursSaudi": "جولات المغامرات السعودية",
+    "riyadhProvince": "منطقة الرياض",
+    "businessAccountName": "اسم الحساب التجاري",
+    "accountNumber": "رقم الحساب",
+    "adventureActivities": "أنشطة المغامرات",
+    "desertSafariAdventure": "مغامرة رحلة الصحراء",
+    "alKhobar": "الخبر",
+    "deleteNotification": "حذف الإشعار",
+    "clearSearch": "مسح البحث",
+    "johnDoe": "محمد أحمد",
+    "enterYourName": "أدخل اسمك",
+    "emailAddress": "عنوان البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "disabledInput": "حقل معطل",
+    "editPage": "تعديل الصفحة",
+    "duplicatePage": "نسخ الصفحة",
+    "previewPage": "معاينة الصفحة",
+    "deletePage": "حذف الصفحة",
+    "contactForm": "نموذج الاتصال",
+    "noFieldsAdded": "لم يتم إضافة حقول بعد. انقر على \"إضافة حقل\" للبدء.",
+    "contactUs": "اتصل بنا",
+    "fieldLabel": "تسمية الحقل",
+    "adventureToursSaudi": "جولات المغامرات السعودية",
+    "riyadhProvince": "منطقة الرياض",
+    "businessAccountName": "اسم الحساب التجاري",
+    "accountNumber": "رقم الحساب",
+    "adventureActivities": "أنشطة المغامرات",
+    "desertSafariAdventure": "مغامرة رحلة الصحراء",
+    "alKhobar": "الخبر",
+    "natureLandscape": "منظر طبيعي",
+    "desertLandscape": "منظر صحراوي",
+    "validInput": "إدخال صحيح",
+    "invalidInput": "إدخال غير صحيح",
+    "neumorphicInput": "إدخال نيومورفيك",
+    "pressedInput": "إدخال مضغوط",
+    "clearSearch": "مسح البحث",
+    "johnDoe": "أحمد محمد",
+    "deleteNotification": "حذف الإشعار",
+    "textInput": "إدخال نص",
+    "emailInput": "إدخال بريد إلكتروني",
+    "passwordInput": "إدخال كلمة مرور",
+    "numberInput": "إدخال رقم",
+    "phoneNumber": "رقم الهاتف",
+    "websiteUrl": "رابط الموقع",
+    "search": "بحث...",
+    "normalInput": "إدخال عادي",
+    "readOnlyInput": "إدخال للقراءة فقط",
+    "yourName": "اسمك",
+    "yourMessage": "رسالتك"
+  },
+  "admin": {
+    "translationScan": {
+      "title": "لوحة تحكم فحص الترجمة",
+      "subtitle": "اكتشف تلقائياً المحتوى غير المترجم وأخطاء الترجمة",
+      "scanning": "جاري الفحص...",
+      "startScan": "بدء الفحص",
+      "totalIssues": "إجمالي المشاكل",
+      "highSeverity": "خطورة عالية",
+      "mediumSeverity": "خطورة متوسطة",
+      "suggestions": "اقتراحات",
+      "filters": "مرشحات",
+      "allCategories": "جميع الفئات",
+      "hardcodedText": "نص مُرمز",
+      "missingTranslations": "ترجمات مفقودة",
+      "unusedTranslations": "ترجمات غير مستخدمة",
+      "translationErrors": "أخطاء الترجمة",
+      "allSeverities": "جميع الخطورة",
+      "high": "عالي",
+      "medium": "متوسط",
+      "low": "منخفض",
+      "exportJson": "تصدير JSON",
+      "exportCsv": "تصدير CSV",
+      "autoScan": "فحص تلقائي",
+      "scanHistory": "تاريخ الفحص"
+    }
+  },
+  "language": {
+    "arabic": "العربية",
+    "english": "English",
+    "switchLanguage": "تبديل اللغة",
+    "ar": "ع",
+    "en": "En"
+  },
+  "navigation": {
+    "home": "الرئيسية",
+    "activities": "الأنشطة",
+    "dashboard": "لوحة التحكم",
+    "profile": "الملف الشخصي",
+    "admin": "الإدارة",
+    "about": "حول",
+    "contact": "اتصل بنا",
+    "map": "الخريطة",
+    "howItWorks": {
+      "title": "كيف يعمل لودوس",
+      "subtitle": "اكتشف كيف يمكنك بسهولة العثور على أنشطة رائعة وحجزها والاستمتاع بها في المملكة العربية السعودية",
+      "gettingStarted": "ابدأ رحلتك",
+      "whyChoose": "لماذا تختار لودوس؟",
+      "readyToStart": "مستعد للبدء؟",
+      "joinAdventurers": "انضم إلى آلاف المغامرين الذين يثقون بنا لاكتشاف تجارب لا تُنسى",
+      "browseActivities": "تصفح الأنشطة",
+      "signUpNow": "سجل الآن",
+      "steps": {
+        "browse": {
+          "title": "تصفح الأنشطة",
+          "description": "اكتشف مجموعة واسعة من الأنشطة المثيرة في جميع أنحاء المملكة العربية السعودية"
+        },
+        "choose": {
+          "title": "اختر وتاريخك",
+          "description": "اختر النشاط المفضل لديك وحدد التاريخ والوقت المناسبين لك"
+        },
+        "pay": {
+          "title": "ادفع بأمان",
+          "description": "استمتع بمعالجة دفع آمنة وسريعة مع ضمان استرداد الأموال"
+        },
+        "enjoy": {
+          "title": "استمتع بالتجربة",
+          "description": "احضر النشاط واستمتع بتجربة لا تُنسى مع ذكريات تدوم مدى الحياة"
+        }
+      },
+      "features": {
+        "verified": {
+          "title": "مقدمون موثوقون",
+          "description": "جميع مقدمي الخدمات لدينا معتمدون ومتحققون لضمان جودة عالية"
+        },
+        "instant": {
+          "title": "حجز فوري",
+          "description": "احصل على تأكيد فوري لحجزك مع إمكانية الإلغاء المجاني"
+        },
+        "secure": {
+          "title": "دفع آمن",
+          "description": "معالجة دفع آمنة ومشفرة لحماية معلوماتك المالية"
+        },
+        "support": {
+          "title": "دعم 24/7",
+          "description": "فريق دعم متاح على مدار الساعة لمساعدتك في أي وقت"
+        }
+      },
+      "trustedBy": "موثوق من قبل أكثر من 1000 مغامر",
+      "rating": "تقييم 4.9/5"
+    },
+    "wallet": "المحفظة"
+  },
+  "profile": {
+    "manageAccount": "إدارة إعدادات حسابك والمعلومات الشخصية",
+    "profileUpdated": "تم تحديث الملف الشخصي بنجاح",
+    "updateFailed": "فشل في تحديث الملف الشخصي"
+  },
+  "auth": {
+    "continueWith": "أو المتابعة مع",
+    "continueWithGoogle": "المتابعة مع جوجل",
+    "continueWithFacebook": "المتابعة مع فيسبوك",
+    "continueWithApple": "المتابعة مع آبل",
+    "login": "تسجيل الدخول",
+    "register": "إنشاء حساب",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "firstName": "الاسم الأول",
+    "lastName": "اسم العائلة",
+    "phone": "الهاتف",
+    "forgotPassword": "نسيت كلمة المرور؟",
+    "rememberMe": "تذكرني",
+    "loginSuccess": "تم تسجيل الدخول بنجاح",
+    "registerSuccess": "تم التسجيل بنجاح",
+    "loginError": "البريد الإلكتروني أو كلمة المرور غير صحيحة",
+    "registerError": "فشل في التسجيل",
+    "signInToAccount": "تسجيل الدخول إلى حسابك",
+    "createNewAccount": "إنشاء حساب جديد",
+    "enterEmail": "أدخل بريدك الإلكتروني",
+    "enterPassword": "أدخل كلمة المرور",
+    "confirmNewPassword": "تأكيد كلمة المرور الجديدة",
+    "enterFirstName": "أدخل اسمك الأول",
+    "enterLastName": "أدخل اسم العائلة",
+    "enterPhoneNumber": "أدخل رقم الهاتف",
+    "passwordsDoNotMatch": "كلمات المرور غير متطابقة",
+    "passwordMinLength": "يجب أن تكون كلمة المرور 6 أحرف على الأقل",
+    "registrationFailed": "فشل في التسجيل",
+    "phonePlaceholder": "+966 XX XXX XXXX",
+    "language": "اللغة",
+    "termsAndConditions": "الشروط والأحكام",
+    "acceptanceOfTerms": "قبول الشروط",
+    "userAccount": "حساب المستخدم",
+    "privacyPolicy": "سياسة الخصوصية",
+    "userConduct": "سلوك المستخدم",
+    "bookingAndCancellation": "الحجز والإلغاء",
+    "paymentTerms": "شروط الدفع",
+    "limitationOfLiability": "تحديد المسؤولية",
+    "changesToTerms": "تغييرات الشروط",
+    "contactInformation": "معلومات الاتصال",
+    "lastUpdated": "آخر تحديث",
+    "agreeToTerms": "أوافق على الشروط والأحكام",
+    "scrollToReadTerms": "يرجى التمرير للأسفل لقراءة الشروط",
+    "close": "إغلاق"
+  },
+  "activities": {
+    "title": "الأنشطة",
+    "search": "البحث في الأنشطة...",
+    "category": "الفئة",
+    "city": "المدينة",
+    "priceRange": "نطاق السعر",
+    "duration": "المدة",
+    "rating": "التقييم",
+    "bookNow": "احجز الآن",
+    "viewDetails": "عرض التفاصيل",
+    "noActivities": "لم يتم العثور على أنشطة",
+    "activity_0": "لا توجد أنشطة",
+    "activity_1": "نشاط واحد",
+    "activity_2": "نشاطان اثنان",
+    "activity_few": "{{count}} أنشطة",
+    "activity_many": "{{count}} نشاط",
+    "activity_other": "{{count}} نشاط",
+    "result_0": "لا توجد نتائج",
+    "result_1": "نتيجة واحدة",
+    "result_2": "نتيجتان اثنتان",
+    "result_few": "{{count}} نتائج",
+    "result_many": "{{count}} نتيجة",
+    "result_other": "{{count}} نتيجة",
+    "hour_0": "أقل من ساعة",
+    "hour_1": "ساعة واحدة",
+    "hour_2": "ساعتان اثنتان",
+    "hour_few": "{{count}} ساعات",
+    "hour_many": "{{count}} ساعة",
+    "hour_other": "{{count}} ساعة",
+    "minute_0": "أقل من دقيقة",
+    "minute_1": "دقيقة واحدة",
+    "minute_2": "دقيقتان اثنتان",
+    "minute_few": "{{count}} دقائق",
+    "minute_many": "{{count}} دقيقة",
+    "minute_other": "{{count}} دقيقة",
+    "categories": {
+      "adventure": "مغامرة",
+      "cultural": "ثقافي",
+      "educational": "تعليمي",
+      "entertainment": "ترفيه",
+      "sports": "رياضة",
+      "wellness": "صحة ولياقة"
+    }
+  },
+  "booking": {
+    "title": "الحجز",
+    "selectDate": "اختر التاريخ",
+    "selectTime": "اختر الوقت",
+    "numberOfPeople": "عدد الأشخاص",
+    "totalPrice": "السعر الإجمالي",
+    "confirmBooking": "تأكيد الحجز",
+    "bookingConfirmed": "تم تأكيد الحجز بنجاح",
+    "bookingFailed": "فشل في تأكيد الحجز"
+  },
+  "payment": {
+    "title": "الدفع",
+    "paymentMethod": "طريقة الدفع",
+    "cardNumber": "رقم البطاقة",
+    "expiryDate": "تاريخ انتهاء الصلاحية",
+    "cvv": "رمز الأمان",
+    "payNow": "ادفع الآن",
+    "paymentSuccessful": "تم الدفع بنجاح",
+    "paymentFailed": "فشل في الدفع"
+  },
+  "dashboard": {
+    "title": "لوحة التحكم",
+    "overview": "نظرة عامة",
+    "recentBookings": "الحجوزات الحديثة",
+    "upcomingActivities": "الأنشطة القادمة",
+    "earnings": "الأرباح",
+    "statistics": "الإحصائيات",
+    "myBookings": "حجوزاتي",
+    "noBookingsYet": "لا توجد حجوزات بعد",
+    "startExploring": "ابدأ استكشاف الأنشطة لعمل أول حجز لك!",
+    "exploreActivities": "استكشف الأنشطة",
+    "welcomeBack": "مرحباً بعودتك، {{name}}!",
+    "manageBookings": "إدارة حجوزاتك وملفك الشخصي وتفضيلاتك",
+    "totalBookings": "إجمالي الحجوزات",
+    "upcoming": "القادمة",
+    "completed": "مكتملة",
+    "totalSpent": "إجمالي المبلغ المنفق",
+    "quickActions": "إجراءات سريعة",
+    "exploreActivitiesDesc": "اكتشف تجارب جديدة",
+    "updateProfile": "تحديث الملف الشخصي",
+    "updateProfileDesc": "حافظ على معلوماتك محدثة",
+    "preferences": "التفضيلات",
+    "preferencesDesc": "خصص تجربتك",
+    "referralProgram": "برنامج الإحالة",
+    "viewFullDashboard": "عرض لوحة التحكم الكاملة",
+    "earnRewards": "اكسب المكافآت من خلال إحالة الأصدقاء",
+    "referralDesc": "شارك رابط الإحالة الفريد الخاص بك مع الأصدقاء واكسب المكافآت عند انضمامهم إلى لودوس!",
+    "startReferring": "ابدأ الإحالة",
+    "profileInformation": "معلومات الملف الشخصي",
+    "firstName": "الاسم الأول",
+    "lastName": "اسم العائلة",
+    "email": "البريد الإلكتروني",
+    "phone": "الهاتف",
+    "dateOfBirth": "تاريخ الميلاد",
+    "location": "الموقع",
+    "address": "العنوان",
+    "city": "المدينة",
+    "stateProvince": "المنطقة/المحافظة",
+    "updateProfileButton": "تحديث الملف الشخصي",
+    "preferencesSettings": "التفضيلات والإعدادات",
+    "preferredCategories": "فئات الأنشطة المفضلة",
+    "priceRangePreference": "تفضيل نطاق السعر",
+    "minimumPrice": "الحد الأدنى للسعر (ريال)",
+    "maximumPrice": "الحد الأقصى للسعر (ريال)",
+    "notificationPreferences": "تفضيلات الإشعارات",
+    "emailNotifications": "إشعارات البريد الإلكتروني",
+    "emailNotificationsDesc": "تلقي تأكيدات الحجز والتحديثات عبر البريد الإلكتروني",
+    "smsNotifications": "إشعارات الرسائل النصية",
+    "smsNotificationsDesc": "تلقي التذكيرات والتحديثات عبر الرسائل النصية",
+    "marketingCommunications": "التواصل التسويقي",
+    "marketingCommunicationsDesc": "تلقي النشرات الإخبارية والعروض الترويجية",
+    "savePreferences": "حفظ التفضيلات",
+    "participants": "مشاركين",
+    "participant": "مشارك"
+  },
+  "admin": {
+    "title": "الإدارة",
+    "dashboard": "لوحة التحكم",
+    "users": "المستخدمون",
+    "vendors": "البائعون",
+    "activities": "الأنشطة",
+    "bookings": "الحجوزات",
+    "payments": "المدفوعات",
+    "settings": "الإعدادات",
+    "reports": "التقارير"
+  },
+  "vendor": {
+    "title": "البائع",
+    "profile": "الملف الشخصي",
+    "activities": "الأنشطة",
+    "reviews": "التقييمات",
+    "earnings": "الأرباح",
+    "settings": "الإعدادات"
+  },
+  "wallet": {
+    "title": "محفظتي",
+    "balance": "الرصيد",
+    "availableBalance": "الرصيد المتاح",
+    "addFunds": "إضافة أموال للمحفظة",
+    "withdrawFunds": "سحب الأموال",
+    "walletSettings": "إعدادات المحفظة",
+    "walletUnavailable": "المحفظة غير متاحة",
+    "tryAgain": "حاول مرة أخرى",
+    "deposit": "إيداع",
+    "withdrawal": "سحب",
+    "transactions": "المعاملات",
+    "recentTransactions": "المعاملات الحديثة",
+    "transactionHistory": "سجل المعاملات",
+    "amount": "المبلغ",
+    "description": "الوصف",
+    "date": "التاريخ",
+    "status": "الحالة",
+    "type": "النوع",
+    "processing": "جاري المعالجة...",
+    "addFundsTitle": "إضافة أموال للمحفظة",
+    "withdrawFundsTitle": "سحب الأموال",
+    "enterAmount": "أدخل المبلغ",
+    "enterDescription": "أدخل الوصف (اختياري)",
+    "insufficientBalance": "رصيد غير كافي",
+    "addFundsToWallet": "أضف أموال للمحفظة",
+    "walletPaymentBenefits": "مزايا الدفع بالمحفظة",
+    "instantPayment": "دفع فوري",
+    "noFees": "بدون رسوم إضافية",
+    "easyRefunds": "استرداد سهل للمحفظة",
+    "secureTransactions": "معاملات آمنة"
+  },
+  "map": {
+    "title": "اكتشف الأنشطة القريبة منك",
+    "subtitle": "استكشف الأنشطة والفعاليات المحلية على الخريطة",
+    "searchLocation": "البحث عن الموقع",
+    "searchLocationPlaceholder": "البحث عن موقع...",
+    "searchActivitiesPlaceholder": "البحث في الأنشطة...",
+    "activitiesFound": "تم العثور على {{count}} نشاط",
+    "loading": "جاري التحميل...",
+    "noActivitiesFound": "لم يتم العثور على أنشطة"
+  },
+  "home": {
+    "title": "اكتشف أنشطة رائعة في منطقتك",
+    "subtitle": "احجز الأنشطة والفعاليات المحلية بسهولة",
+    "getStarted": "ابدأ الآن",
+    "exploreActivities": "استكشف الأنشطة",
+    "popularCategories": "الفئات الشائعة",
+    "featuredActivities": "الأنشطة المميزة",
+    "welcomeTitle": "مرحباً بك في لودوس",
+    "welcomeSubtitle": "اكتشف الأنشطة والفعاليات المحلية المذهلة",
+    "whyChooseLudus": "لماذا تختار لودوس؟",
+    "whyChooseSubtitle": "اكتشف تجارب فريدة وتواصل مع مقدمي الأنشطة المحلية في جميع أنحاء المملكة العربية السعودية",
+    "curatedExperiences": "تجارب مختارة بعناية",
+    "curatedExperiencesDesc": "أنشطة مختارة بعناية من مقدمي خدمات محليين موثوقين لضمان الجودة والأصالة",
+    "securePayments": "مدفوعات آمنة",
+    "securePaymentsDesc": "حجز آمن ومضمون مع دعم طرق الدفع المحلية بما في ذلك مدى وSTC Pay",
+    "mobileOptimized": "محسن للهواتف المحمولة",
+    "mobileOptimizedDesc": "احجز وأدر أنشطتك بسلاسة على أي جهاز، في أي مكان، في أي وقت",
+    "readyToStartAdventure": "مستعد لبدء مغامرتك؟",
+    "readyToStartDesc": "انضم إلى آلاف المستكشفين الذين يكتشفون تجارب مذهلة في جميع أنحاء المملكة العربية السعودية",
+    "browseActivities": "تصفح الأنشطة",
+    "becomePartner": "كن شريكاً"
+  },
+  "referral": {
+    "title": "لوحة الإحالة",
+    "totalReferrals": "إجمالي الإحالات",
+    "totalEarnings": "إجمالي الأرباح",
+    "pendingRewards": "المكافآت المعلقة",
+    "yourReferralCode": "رمز الإحالة الخاص بك",
+    "referralCode": "رمز الإحالة",
+    "generateReferralCode": "إنشاء رمز الإحالة",
+    "referralHistory": "تاريخ الإحالات",
+    "noReferralsYet": "لا توجد إحالات بعد. ابدأ المشاركة لرؤية تاريخك هنا!",
+    "shareQRCode": "شارك رمز QR هذا مع الأصدقاء لكسب المكافآت",
+    "downloadQRCode": "تحميل رمز QR",
+    "copyLink": "نسخ الرابط",
+    "shareLink": "مشاركة الرابط",
+    "viewDetails": "عرض التفاصيل",
+    "loadMore": "تحميل المزيد",
+    "refreshData": "تحديث البيانات",
+    "somethingWentWrong": "حدث خطأ ما",
+    "failedToLoad": "فشل في التحميل",
+    "loadingReferralData": "جاري تحميل بيانات الإحالة",
+    "shareAndEarn": "شارك واكسب",
+    "shareReferralLink": "شارك رابط الإحالة الخاص بك مع الأصدقاء واكسب المكافآت عند انضمامهم إلى لودوس!",
+    "whatsapp": "واتساب",
+    "facebook": "فيسبوك",
+    "twitter": "تويتر",
+    "telegram": "تيليجرام",
+    "howReferralsWork": "كيف تعمل الإحالات",
+    "shareYourLink": "شارك رابطك",
+    "shareYourLinkDesc": "شارك رابط الإحالة الفريد الخاص بك مع الأصدقاء عبر وسائل التواصل الاجتماعي أو البريد الإلكتروني أو الرسائل",
+    "friendsJoin": "انضمام الأصدقاء",
+    "friendsJoinDesc": "عندما يسجل الأصدقاء باستخدام رابطك، تكسب مكافأة التسجيل",
+    "earnMore": "اكسب المزيد",
+    "earnMoreDesc": "اكسب مكافآت إضافية عندما يقوم أصدقاؤك بأول حجز لهم",
+    "loadingQRCode": "جاري تحميل رمز QR...",
+    "shareQRCodeWithFriends": "شارك رمز QR هذا مع الأصدقاء لكسب المكافآت!",
+    "downloadQRCode": "تحميل رمز QR",
+    "copyReferralLink": "نسخ رابط الإحالة"
+  },
+  "user": {
+    "title": "المستخدم",
+    "profile": "الملف الشخصي",
+    "settings": "الإعدادات",
+    "bookings": "الحجوزات",
+    "favorites": "المفضلة",
+    "registration": {
+      "title": "انضم إلى لودوس",
+      "subtitle": "اكتشف أنشطة رائعة واستمتع بتجارب لا تُنسى في المملكة العربية السعودية",
+      "getStarted": "ابدأ الآن",
+      "alreadyHaveAccount": "هل لديك حساب بالفعل؟",
+      "questions": {
+        "firstName": {
+          "question": "ما اسمك الأول؟",
+          "placeholder": "أدخل اسمك الأول",
+          "buttonText": "متابعة"
+        },
+        "lastName": {
+          "question": "ما هو اسم عائلتك، {{name}}؟",
+          "placeholder": "أدخل اسم العائلة",
+          "buttonText": "متابعة"
+        },
+        "email": {
+          "question": "ما بريدك الإلكتروني، {{name}}؟",
+          "placeholder": "example@email.com",
+          "buttonText": "متابعة"
+        },
+        "password": {
+          "question": "اختر كلمة مرور قوية",
+          "placeholder": "أدخل كلمة المرور",
+          "buttonText": "متابعة"
+        },
+        "confirmPassword": {
+          "question": "تأكيد كلمة المرور",
+          "placeholder": "أعد إدخال كلمة المرور",
+          "buttonText": "متابعة"
+        },
+        "phone": {
+          "question": "ما رقم هاتفك؟ (اختياري)",
+          "placeholder": "+966 XX XXX XXXX",
+          "buttonText": "متابعة"
+        },
+        "dateOfBirth": {
+          "question": "ما تاريخ ميلادك؟ (اختياري)",
+          "placeholder": "اختر التاريخ",
+          "buttonText": "متابعة"
+        }
+      },
+      "validation": {
+        "required": "هذا الحقل مطلوب",
+        "invalidEmail": "يرجى إدخال بريد إلكتروني صحيح",
+        "passwordTooShort": "كلمة المرور يجب أن تكون 8 أحرف على الأقل",
+        "passwordMismatch": "كلمات المرور غير متطابقة",
+        "invalidPhone": "يرجى إدخال رقم هاتف صحيح",
+        "termsRequired": "يجب الموافقة على الشروط والأحكام",
+        "submissionError": "حدث خطأ أثناء التسجيل"
+      },
+      "terms": {
+        "title": "شروط وأحكام الاستخدام، {{name}}",
+        "checkbox": "قراءة الشروط والأحكام",
+        "submit": "إنشاء الحساب",
+        "submitting": "جاري إنشاء الحساب...",
+        "content": {
+          "section1": "باستخدام منصة لودوس، فإنك توافق على الالتزام بشروط وأحكام هذه الاتفاقية.",
+          "section2": "أنت مسؤول عن الحفاظ على سرية حسابك وكلمة المرور. توافق على قبول المسؤولية عن جميع الأنشطة التي تحدث تحت حسابك.",
+          "section3": "خصوصيتك مهمة بالنسبة لنا. يرجى مراجعة سياسة الخصوصية الخاصة بنا، والتي تحكم أيضاً استخدامك للخدمة، لفهم ممارساتنا.",
+          "section4": "توافق على عدم استخدام الخدمة لنقل أي مادة مسيئة أو غير مقبولة.",
+          "section5": "جميع الحجوزات تخضع لسياسة الإلغاء الخاصة بالبائع. يرجى مراجعة شروط النشاط الفردية قبل الحجز.",
+          "section6": "يتم معالجة المدفوعات بأمان من خلال شركاء الدفع لدينا. جميع الأسعار بالريال السعودي ما لم يُذكر خلاف ذلك.",
+          "section7": "لودوس غير مسؤولة عن أي أضرار ناشئة عن استخدام منصتنا أو المشاركة في الأنشطة.",
+          "section8": "نحتفظ بالحق في تعديل هذه الشروط في أي وقت. الاستمرار في استخدام المنصة يعني قبول الشروط الجديدة.",
+          "section9": "للاستفسارات حول هذه الشروط، يرجى التواصل معنا على support@letsludus.com"
+        }
+      },
+      "success": {
+        "title": "مرحباً بك في لودوس!",
+        "message": "تم إنشاء حسابك بنجاح، {{name}}! استعد لاكتشاف أنشطة رائعة.",
+        "redirecting": "سيتم توجيهك إلى لوحة التحكم..."
+      }
+    }
+  },
+  "partner": {
+    "title": "الشريك",
+    "becomePartner": "كن شريكاً",
+    "partnerBenefits": "مزايا الشراكة",
+    "registration": {
+      "title": "انضم إلى لودوس كشريك",
+      "subtitle": "شارك تجاربك الفريدة مع آلاف المستخدمين في المملكة العربية السعودية",
+      "getStarted": "ابدأ الآن",
+      "questions": {
+        "contactName": {
+          "question": "ما اسمك؟",
+          "placeholder": "أدخل اسمك الكامل",
+          "buttonText": "متابعة"
+        },
+        "companyName": {
+          "question": "ما اسم شركتك{{name}}؟",
+          "placeholder": "أدخل اسم الشركة أو المؤسسة",
+          "buttonText": "متابعة"
+        },
+        "email": {
+          "question": "ما بريدك الإلكتروني{{name}}؟",
+          "placeholder": "example@company.com",
+          "buttonText": "متابعة"
+        },
+        "phone": {
+          "question": "ما رقم هاتفك؟",
+          "placeholder": "+966 XX XXX XXXX",
+          "buttonText": "متابعة"
+        },
+        "website": {
+          "question": "هل لديك موقع ويب لـ {{company}}؟",
+          "placeholder": "https://www.example.com",
+          "buttonText": "متابعة"
+        },
+        "description": {
+          "question": "أخبرنا عن {{company}} والأنشطة التي تقدمها",
+          "placeholder": "صف الأنشطة والخدمات التي تقدمها...",
+          "buttonText": "متابعة"
+        }
+      },
+      "validation": {
+        "required": "هذا الحقل مطلوب",
+        "invalidEmail": "يرجى إدخال بريد إلكتروني صحيح",
+        "invalidWebsite": "يرجى إدخال رابط موقع ويب صحيح",
+        "invalidPhone": "يرجى إدخال رقم هاتف صحيح",
+        "descriptionTooShort": "يرجى كتابة وصف أطول (20 حرف على الأقل)",
+        "termsRequired": "يجب الموافقة على الشروط والأحكام",
+        "submissionError": "حدث خطأ أثناء إرسال الطلب"
+      },
+      "terms": {
+        "title": "شروط وأحكام الشراكة، {{name}}",
+        "checkbox": "أوافق على شروط وأحكام الشراكة",
+        "link": "شروط وأحكام الشراكة",
+        "submit": "إرسال الطلب",
+        "submitting": "جاري الإرسال...",
+        "modalTitle": "شروط وأحكام الشراكة",
+        "loading": "جاري تحميل الشروط...",
+        "close": "إغلاق",
+        "accept": "موافقة"
+      },
+      "success": {
+        "title": "تم إرسال طلب الشراكة بنجاح!",
+        "message": "شكراً لك {{name}}! لقد تلقينا طلب شراكة {{company}} وسنتواصل معك قريباً.",
+        "nextSteps": {
+          "title": "الخطوات التالية:",
+          "step1": "سنراجع طلبك خلال 2-3 أيام عمل",
+          "step2": "سنتواصل معك على {{email}}",
+          "step3": "سنقوم بإعداد حساب الشريك الخاص بك",
+          "step4": "ستتمكن من إضافة أنشطتك وبدء الحصول على الحجوزات"
+        }
+      },
+      "defaultTerms": {
+        "title": "شروط وأحكام الشراكة",
+        "lastUpdated": "آخر تحديث: {{date}}",
+        "section1": {
+          "title": "1. قبول الشروط",
+          "content": "بالتسجيل كشريك في منصة لودوس، فإنك توافق على الالتزام بشروط وأحكام هذه الاتفاقية."
+        },
+        "section2": {
+          "title": "2. حساب الشريك",
+          "content": "أنت مسؤول عن الحفاظ على سرية حسابك وكلمة المرور. توافق على قبول المسؤولية عن جميع الأنشطة التي تحدث تحت حسابك."
+        },
+        "section3": {
+          "title": "3. سياسة الخصوصية",
+          "content": "خصوصيتك مهمة بالنسبة لنا. يرجى مراجعة سياسة الخصوصية الخاصة بنا، والتي تحكم أيضاً استخدامك للخدمة."
+        },
+        "section4": {
+          "title": "4. سلوك الشريك",
+          "content": "توافق على عدم استخدام الخدمة لنقل أي مادة مسيئة أو غير مقبولة."
+        },
+        "section5": {
+          "title": "5. الحجز والإلغاء",
+          "content": "جميع الحجوزات تخضع لسياسة الإلغاء الخاصة بالشريك. يرجى مراجعة شروط النشاط الفردية قبل الحجز."
+        },
+        "section6": {
+          "title": "6. شروط الدفع",
+          "content": "يتم معالجة المدفوعات بأمان من خلال شركاء الدفع لدينا. جميع الأسعار بالريال السعودي ما لم يُذكر خلاف ذلك."
+        },
+        "section7": {
+          "title": "7. تحديد المسؤولية",
+          "content": "لودوس غير مسؤولة عن أي أضرار ناشئة عن استخدام منصتنا أو المشاركة في الأنشطة."
+        },
+        "contact": "للاستفسارات حول هذه الشروط، يرجى التواصل معنا على support@letsludus.com"
+      }
+    }
+  },
+  "uiShowcase": {
+    "title": "عرض واجهة المستخدم",
+    "translationSystemDemo": "عرض نظام الترجمة",
+    "commonActions": "الإجراءات الشائعة",
+    "navigation": "التنقل",
+    "languageInformation": "معلومات اللغة",
+    "currentLanguage": "اللغة الحالية",
+    "textDirection": "اتجاه النص",
+    "documentLanguage": "لغة المستند",
+    "documentDirection": "اتجاه المستند",
+    "uiComponentsDemo": "عرض مكونات واجهة المستخدم",
+    "buttons": "الأزرار",
+    "inputs": "حقول الإدخال",
+    "alerts": "التنبيهات",
+    "rtlLtrDemo": "عرض RTL/LTR",
+    "layoutBehavior": "سلوك التخطيط",
+    "ltrEnglish": "LTR (الإنجليزية): العناصر تتدفق من اليسار إلى اليمين، الهوامش/الحشو على اليسار",
+    "rtlArabic": "RTL (العربية): العناصر تتدفق من اليمين إلى اليسار، الهوامش/الحشو على اليمين",
+    "spacing": "المسافات: يستخدم rtl:space-x-reverse للمسافات المناسبة",
+    "flexbox": "Flexbox: يستخدم flex-row-reverse للتخطيطات RTL",
+    "dynamicContentDemo": "عرض المحتوى الديناميكي",
+    "pluralization": "التعددية",
+    "interpolation": "الاستيفاء",
+    "toggleAlert": "تبديل التنبيه",
+    "firstItem": "العنصر الأول",
+    "secondItem": "العنصر الثاني",
+    "thirdItem": "العنصر الثالث",
+    "firstItemDesc": "هذا يوضح كيف يتغير التخطيط مع اللغة",
+    "secondItemDesc": "لاحظ التغييرات في الترتيب والمسافات",
+    "thirdItemDesc": "اللغات RTL تتدفق من اليمين إلى اليسار"
+  },
+  "workflowBuilder": {
+    "title": "منشئ سير العمل",
+    "createNewWorkflow": "إنشاء سير عمل جديد",
+    "editWorkflow": "تعديل سير العمل",
+    "workflowName": "اسم سير العمل",
+    "workflowNamePlaceholder": "أدخل اسم سير العمل",
+    "description": "الوصف",
+    "descriptionPlaceholder": "صف ما يفعله سير العمل هذا",
+    "schedule": "الجدول الزمني",
+    "priority": "الأولوية",
+    "triggers": "المحفزات",
+    "addTrigger": "إضافة محفز...",
+    "workflowSteps": "خطوات سير العمل",
+    "addStep": "إضافة خطوة...",
+    "saveChanges": "حفظ التغييرات",
+    "updateWorkflow": "تحديث سير العمل",
+    "activeWorkflows": "سير العمل النشط",
+    "allWorkflows": "جميع سير العمل",
+    "activateWorkflow": "تفعيل سير العمل",
+    "deactivateWorkflow": "إلغاء تفعيل سير العمل",
+    "executeWorkflow": "تنفيذ سير العمل",
+    "runNow": "تشغيل الآن",
+    "stop": "إيقاف",
+    "deleteWorkflow": "حذف سير العمل",
+    "workflowStatus": "حالة سير العمل",
+    "startedAt": "بدأ في",
+    "steps": "الخطوات",
+    "scheduleTypes": {
+      "manual": "يدوي - تنفيذ فقط عند التفعيل اليدوي",
+      "realtime": "في الوقت الفعلي - مراقبة وتنفيذ تلقائي",
+      "daily": "يومي - تنفيذ مرة واحدة يومياً",
+      "weekly": "أسبوعي - تنفيذ مرة واحدة أسبوعياً",
+      "monthly": "شهري - تنفيذ مرة واحدة شهرياً"
+    },
+    "priorities": {
+      "low": "منخفض - أولوية منخفضة، يمكن تأخيرها",
+      "medium": "متوسط - أولوية عادية",
+      "high": "عالي - أولوية عالية، تنفيذ سريع",
+      "critical": "حرج - أولوية حرجة، تنفيذ فوري"
+    }
+  },
+  "workflowSteps": {
+    "detectNewContent": "اكتشاف محتوى جديد",
+    "extractText": "استخراج النص",
+    "translateContent": "ترجمة المحتوى",
+    "validateTranslation": "التحقق من صحة الترجمة",
+    "deployUpdates": "نشر التحديثات",
+    "collectFeedback": "جمع التعليقات",
+    "analyzeIssues": "تحليل المشاكل",
+    "retrainModels": "إعادة تدريب النماذج",
+    "testImprovements": "اختبار التحسينات",
+    "validateImport": "التحقق من صحة الاستيراد",
+    "batchTranslate": "ترجمة الدفعات",
+    "qualityCheck": "فحص الجودة",
+    "approveTranslations": "الموافقة على الترجمات",
+    "deployBatch": "نشر الدفعات",
+    "trackUsage": "تتبع الاستخدام",
+    "analyzePatterns": "تحليل الأنماط",
+    "updateContextModel": "تحديث نموذج السياق",
+    "validateImprovements": "التحقق من صحة التحسينات",
+    "deployContextUpdates": "نشر تحديثات السياق"
+  },
+  "workflowTriggers": {
+    "newContent": "محتوى جديد",
+    "contentUpdate": "تحديث المحتوى",
+    "userFeedback": "تعليقات المستخدم",
+    "qualityScore": "درجة الجودة",
+    "scheduled": "مجدول",
+    "bulkImport": "استيراد جماعي",
+    "userInteraction": "تفاعل المستخدم",
+    "translationUsage": "استخدام الترجمة"
+  },
+  "translationManagement": {
+    "title": "إدارة الترجمة",
+    "manageAndAutomate": "إدارة وأتمتة الترجمات لموقعك",
+    "export": "تصدير",
+    "import": "استيراد",
+    "saveChanges": "حفظ التغييرات",
+    "saving": "جاري الحفظ...",
+    "selectLanguage": "اختر اللغة",
+    "missingTranslationsDetected": "تم اكتشاف ترجمات مفقودة!",
+    "translationKeysMissing": "مفاتيح الترجمة مفقودة في لغة واحدة أو كلتيهما",
+    "autoTranslateMissing": "ترجمة تلقائية للمفقود",
+    "translating": "جاري الترجمة...",
+    "searchTranslations": "البحث في الترجمات",
+    "searchByKeyOrValue": "البحث بالمفتاح أو القيمة...",
+    "filterByCategory": "تصفية حسب الفئة",
+    "allCategories": "جميع الفئات",
+    "clearFilters": "مسح المرشحات",
+    "translationEditor": "محرر الترجمة",
+    "translationKey": "مفتاح الترجمة",
+    "value": "القيمة",
+    "enterTranslation": "أدخل الترجمة",
+    "translationHistory": "تاريخ الترجمة",
+    "noTranslationHistory": "لا يوجد تاريخ ترجمة بعد",
+    "changesSaved": "تم حفظ التغييرات",
+    "autoTranslationSettings": "إعدادات الترجمة التلقائية",
+    "aiPoweredTranslation": "ترجمة مدعومة بالذكاء الاصطناعي",
+    "automaticallyTranslateMissing": "ترجمة تلقائية للمحتوى المفقود باستخدام خدمات الذكاء الاصطناعي",
+    "translationServices": "خدمات الترجمة",
+    "googleTranslateAPI": "واجهة برمجة تطبيقات جوجل للترجمة",
+    "deeplAPI": "واجهة برمجة تطبيقات DeepL",
+    "microsoftTranslator": "خدمات مايكروسوفت للترجمة",
+    "qualityFeatures": "ميزات الجودة",
+    "contextAwareTranslation": "ترجمة واعية بالسياق",
+    "pluralizationSupport": "دعم التعددية",
+    "culturalAdaptation": "التكيف الثقافي"
+  },
+  "automatedWorkflows": {
+    "title": "سير العمل الآلي",
+    "createAndManage": "إنشاء وإدارة سير العمل الآلي للترجمة",
+    "contentUpdateWorkflow": "سير عمل تحديث المحتوى",
+    "automaticallyDetectAndTranslate": "اكتشاف وترجمة تلقائية للمحتوى الجديد",
+    "qualityImprovementWorkflow": "سير عمل تحسين الجودة",
+    "continuouslyImproveTranslation": "تحسين مستمر لجودة الترجمة باستخدام الذكاء الاصطناعي",
+    "bulkTranslationWorkflow": "سير عمل الترجمة الجماعية",
+    "handleLargeScaleTranslation": "التعامل مع مشاريع الترجمة واسعة النطاق",
+    "contextLearningWorkflow": "سير عمل تعلم السياق",
+    "learnFromUserInteractions": "التعلم من تفاعلات المستخدم لتحسين فهم السياق",
+    "activateWorkflow": "تفعيل سير العمل",
+    "deactivateWorkflow": "إلغاء تفعيل سير العمل",
+    "executeNow": "تنفيذ الآن",
+    "running": "جاري التشغيل...",
+    "activeWorkflows": "سير العمل النشط",
+    "allWorkflows": "جميع سير العمل",
+    "workflowStatus": "حالة سير العمل",
+    "startedAt": "بدأ في",
+    "steps": "الخطوات",
+    "schedule": "الجدول الزمني",
+    "priority": "الأولوية"
+  },
+  "machineLearning": {
+    "title": "نماذج الذكاء الاصطناعي",
+    "translationQualityModel": "نموذج جودة الترجمة",
+    "aiModelForAssessing": "نموذج ذكاء اصطناعي لتقييم جودة ودقة الترجمة",
+    "contextUnderstandingModel": "نموذج فهم السياق",
+    "deepLearningModelFor": "نموذج تعلم عميق للترجمة الواعية بالسياق",
+    "culturalAdaptationModel": "نموذج التكيف الثقافي",
+    "modelForCulturalContext": "نموذج للسياق الثقافي والتعريب",
+    "pluralizationRulesModel": "نموذج قواعد التعددية",
+    "specializedModelFor": "نموذج متخصص لأنماط التعددية العربية",
+    "domainSpecializationModel": "نموذج التخصص في المجال",
+    "modelSpecializedFor": "نموذج متخصص لمجالات الأعمال والأنشطة",
+    "startTraining": "بدء التدريب",
+    "retrainModel": "إعادة تدريب النموذج",
+    "training": "تدريب...",
+    "modelDetails": "تفاصيل النموذج",
+    "accuracy": "الدقة",
+    "precision": "الدقة",
+    "recall": "الاسترجاع",
+    "f1Score": "درجة F1",
+    "trainingData": "بيانات التدريب",
+    "lastTrained": "آخر تدريب",
+    "modelSize": "حجم النموذج",
+    "version": "الإصدار",
+    "performanceMetrics": "مقاييس الأداء",
+    "overallAccuracy": "الدقة الإجمالية",
+    "contextUnderstanding": "فهم السياق",
+    "culturalAdaptation": "التكيف الثقافي",
+    "pluralization": "التعددية",
+    "domainSpecialization": "التخصص في المجال",
+    "trainingHistory": "تاريخ التدريب",
+    "trainAgain": "تدريب مرة أخرى",
+    "modelStatus": "حالة النموذج",
+    "ready": "جاهز",
+    "trained": "مدرب",
+    "training": "جاري التدريب",
+    "failed": "فشل"
+  },
+  "rating": {
+    "title": "نظام التقييم",
+    "rateActivity": "قيم النشاط",
+    "rateParticipants": "قيم المشاركين",
+    "rateVendor": "قيم المقدم",
+    "yourRating": "تقييمك",
+    "overallRating": "التقييم العام",
+    "criteria": {
+      "punctuality": "الالتزام بالمواعيد",
+      "engagement": "الانخراط والمشاركة",
+      "respectfulness": "الاحترام واللباقة",
+      "teamwork": "العمل الجماعي",
+      "punctualityDescription": "يصل في الوقت المحدد ويحترم الجدولة",
+      "engagementDescription": "مشاركة نشطة وحماس",
+      "respectfulnessDescription": "يعامل الآخرين بأدب واحترام",
+      "teamworkDescription": "يعمل بشكل جيد مع الآخرين ويساهم بشكل إيجابي"
+    },
+    "tiers": {
+      "bronze": "مستكشف برونزي",
+      "silver": "مغامر فضي",
+      "gold": "بطل ذهبي",
+      "platinum": "أسطورة بلاتينية",
+      "bronzeDescription": "مستكشف جديد في عالم الأنشطة",
+      "silverDescription": "مغامر نشط ومتحمس",
+      "goldDescription": "بطل متميز في المجتمع",
+      "platinumDescription": "أسطورة حقيقية في المنصة"
+    },
+    "benefits": {
+      "basic_booking_access": "وصول أساسي للحجز",
+      "priority_booking": "حجز أولوية",
+      "exclusive_events": "فعاليات حصرية",
+      "priority_support": "دعم أولوية",
+      "free_credits": "رصيد مجاني",
+      "personal_concierge": "كونسيرج شخصي",
+      "early_access": "وصول مبكر",
+      "special_offers": "عروض خاصة",
+      "discount": "خصم {{rate}}%",
+      "unlocked": "مفتوح",
+      "locked": "مقفل"
+    },
+    "scoring": {
+      "excellent": "ممتاز",
+      "veryGood": "جيد جداً",
+      "good": "جيد",
+      "fair": "مقبول",
+      "poor": "ضعيف",
+      "star": "نجمة",
+      "stars": "نجوم",
+      "outOf": "من أصل",
+      "average": "متوسط",
+      "total": "المجموع",
+      "weighted": "مرجح"
+    },
+    "comments": {
+      "title": "تعليقات إضافية",
+      "placeholder": "شارك تجربتك مع هذا الشخص...",
+      "generalComment": "تعليق عام",
+      "wouldParticipateAgain": "هل تود المشاركة مع هذا الشخص مرة أخرى؟",
+      "yes": "نعم",
+      "no": "لا",
+      "maybe": "ربما"
+    },
+    "submission": {
+      "submitRating": "إرسال التقييم",
+      "submitting": "جاري الإرسال...",
+      "success": "تم إرسال التقييم بنجاح",
+      "error": "فشل في إرسال التقييم",
+      "required": "هذا الحقل مطلوب",
+      "minLength": "يجب أن يكون التعليق على الأقل {{min}} أحرف",
+      "maxLength": "يجب أن يكون التعليق أقل من {{max}} أحرف"
+    },
+    "notifications": {
+      "ratingReminder": "تذكير التقييم",
+      "ratingDue": "لديك تقييمات معلقة",
+      "tierUpgrade": "ترقية المستوى!",
+      "tierDowngrade": "انخفاض المستوى",
+      "newBenefit": "فائدة جديدة مفتوحة",
+      "ratingReceived": "تقييم جديد",
+      "streakMilestone": "إنجاز الشوط",
+      "monthlyBonus": "مكافأة شهرية"
+    },
+    "analytics": {
+      "title": "إحصائيات التقييم",
+      "yourRating": "تقييمك",
+      "averageRating": "متوسط التقييم",
+      "totalRatings": "إجمالي التقييمات",
+      "ratingTrend": "اتجاه التقييم",
+      "improving": "يتحسن",
+      "stable": "مستقر",
+      "declining": "ينخفض",
+      "tierProgress": "تقدم المستوى",
+      "nextTier": "المستوى التالي",
+      "progressToNext": "التقدم للمستوى التالي",
+      "streakCount": "عدد الشوط",
+      "longestStreak": "أطول شوط",
+      "currentStreak": "الشوط الحالي",
+      "monthlyActivity": "النشاط الشهري",
+      "participationCount": "عدد المشاركات",
+      "bonusEarned": "المكافأة المكتسبة",
+      "consecutiveMonths": "أشهر متتالية"
+    },
+    "admin": {
+      "title": "إدارة نظام التقييم",
+      "configuration": "التكوين",
+      "criteria": "المعايير",
+      "tiers": "المستويات",
+      "rewards": "المكافآت",
+      "settings": "الإعدادات",
+      "analytics": "التحليلات",
+      "reports": "التقارير",
+      "moderation": "الإشراف",
+      "flaggedRatings": "التقييمات المرفوعة",
+      "userProfiles": "ملفات المستخدمين",
+      "systemHealth": "صحة النظام",
+      "performance": "الأداء",
+      "distribution": "التوزيع",
+      "coverage": "التغطية",
+      "balance": "التوازن",
+      "quality": "الجودة"
+    },
+    "errors": {
+      "ratingRequired": "التقييم مطلوب",
+      "commentRequired": "التعليق مطلوب",
+      "invalidRating": "تقييم غير صحيح",
+      "alreadyRated": "تم التقييم بالفعل",
+      "ratingExpired": "انتهت صلاحية التقييم",
+      "insufficientPermissions": "صلاحيات غير كافية",
+      "systemError": "خطأ في النظام",
+      "networkError": "خطأ في الشبكة",
+      "validationError": "خطأ في التحقق"
+    },
+    "pluralization": {
+      "rating_0": "لا توجد تقييمات",
+      "rating_1": "تقييم واحد",
+      "rating_2": "تقييمان",
+      "rating_few": "{{count}} تقييمات",
+      "rating_many": "{{count}} تقييماً",
+      "rating_other": "{{count}} تقييم",
+      "participant_0": "لا يوجد مشاركين",
+      "participant_1": "مشارك واحد",
+      "participant_2": "مشاركان",
+      "participant_few": "{{count}} مشاركين",
+      "participant_many": "{{count}} مشاركاً",
+      "participant_other": "{{count}} مشارك",
+      "benefit_0": "لا توجد فوائد",
+      "benefit_1": "فائدة واحدة",
+      "benefit_2": "فائدتان",
+      "benefit_few": "{{count}} فوائد",
+      "benefit_many": "{{count}} فائدة",
+      "benefit_other": "{{count}} فائدة"
+    }
+  },
+  "onboarding": {
+    "title": "مرحباً بك في لودوس",
+    "subtitle": "اكتشف أنشطة رائعة وتواصل مع أشخاص متشابهين في التفكير",
+      "getStarted": "ابدأ الآن",
+    "continue": "متابعة",
+    "back": "رجوع",
+    "skip": "تخطي",
+    "maybeLater": "ربما لاحقاً",
+    "complete": "إكمال الإعداد",
+    "completeLater": "إكمال لاحقًا",
+    "completeLaterHint": "يمكنك إكمال هذه الخطوات لاحقًا من ملفك الشخصي.",
+    "progress": "الخطوة {{current}} من {{total}}",
+    "steps": {
+      "socialProof": {
+        "title": "موثوق من مجتمع لودوس",
+        "subtitle": "حجم أنشطة حقيقي ومجتمع متنامٍ في الرياض",
+        "activities": { "title": "أكثر من 12,000 حجز هذا الشهر", "subtitle": "إقبال كبير عبر أشهر الفئات" },
+        "members": { "title": "أكثر من 50,000 عضو نشط", "subtitle": "اعثر على مجموعتك في الرياض" },
+        "rating": { "title": "متوسط تقييم 4.9/5", "subtitle": "محبوب من مجتمعنا" }
+      },
+      "welcome": {
+        "title": "مرحباً بك في لودوس",
+        "subtitle": "اكتشف أنشطة رائعة وتواصل مع أشخاص متشابهين في التفكير",
+        "valuePropositions": {
+          "discover": {
+            "title": "اكتشف",
+            "description": "اعثر على أنشطة رائعة في مدينتك"
+          },
+          "share": {
+            "title": "شارك",
+            "description": "تواصل مع أشخاص متشابهين في التفكير"
+          },
+          "engage": {
+            "title": "تفاعل",
+            "description": "ابن مجتمعات دائمة"
+          }
+        }
+      },
+      "auth": {
+        "title": "لنبدأ حسابك",
+        "subtitle": "اختر طريقة التسجيل",
+        "continueWithGoogle": "المتابعة عبر جوجل",
+        "continueWithApple": "المتابعة عبر آبل",
+        "continueWithFacebook": "المتابعة عبر فيسبوك",
+        "createAccount": "إنشاء حساب",
+        "emailSubtitle": "أدخل بياناتك للبدء",
+        "firstName": "الاسم الأول",
+        "lastName": "اسم العائلة",
+        "email": "عنوان البريد الإلكتروني",
+        "password": "كلمة المرور",
+        "socialProof": "انضم إلى أكثر من 10,000 مستخدم يكتشفون الأنشطة",
+        "alreadyHaveAccount": "هل لديك حساب بالفعل؟",
+        "signInHere": "سجل الدخول هنا",
+        "privacyNote": "بياناتك آمنة معنا. يمكنك تأكيد البريد لاحقًا."
+      },
+      "profile": {
+        "title": "أخبرنا عن نفسك",
+      "questions": {
+        "firstName": {
+            "question": "ماذا نسميك؟",
+            "placeholder": "أدخل اسمك الأول"
+        },
+        "lastName": {
+            "question": "ما هو اسم عائلتك، {{name}}؟",
+            "placeholder": "أدخل اسم العائلة"
+        },
+        "email": {
+            "question": "أين يمكننا الوصول إليك؟",
+            "placeholder": "example@email.com"
+        },
+        "phone": {
+            "question": "رقم هاتفك",
+            "placeholder": "+966 XX XXX XXXX"
+        },
+        "dateOfBirth": {
+            "question": "ما تاريخ ميلادك؟ (اختياري)",
+            "placeholder": "اختر التاريخ"
+          }
+        }
+      },
+      "referral": {
+        "title": "مرحباً بك في لودوس، {{name}}!",
+        "subtitle": "ادع الأصدقاء واكسب المكافآت!",
+        "qrCodeTitle": "رمز QR للإحالة الخاص بك",
+        "ctaShareFriends": "شارك LUDUS مع اصدقائك",
+        "sharingOptions": {
+          "whatsapp": "واتساب",
+          "twitter": "تويتر",
+          "instagram": "قصص إنستغرام",
+          "copy": "نسخ الرابط"
+        },
+        "incentiveMessage": "ادع الأصدقاء واكسب المكافآت!",
+        "skipOption": "ربما لاحقاً"
+      },
+      "interests": {
+        "title": "ما الأنشطة التي تهمك؟",
+        "subtitle": "اختر على الأقل {{min}} فئات لتخصيص تجربتك",
+        "selectedCount": "{{count}} من {{total}} مختارة",
+        "categories": {
+          "fitness": {
+            "name": "اللياقة البدنية والرياضة",
+            "icon": "🏃‍♂️"
+          },
+          "arts": {
+            "name": "الفنون والإبداع",
+            "icon": "🎨"
+          },
+          "food": {
+            "name": "الطعام والطبخ",
+            "icon": "🍳"
+          },
+          "gaming": {
+            "name": "الألعاب والتكنولوجيا",
+            "icon": "🎮"
+          },
+          "outdoor": {
+            "name": "مغامرات في الهواء الطلق",
+            "icon": "🏞️"
+          },
+          "learning": {
+            "name": "التعلم وورش العمل",
+            "icon": "📚"
+          },
+          "music": {
+            "name": "الموسيقى والترفيه",
+            "icon": "🎵"
+          },
+          "wellness": {
+            "name": "الصحة واليقظة",
+            "icon": "🧘‍♀️"
+          },
+          "automotive": {
+            "name": "السيارات",
+            "icon": "🚗"
+          },
+          "photography": {
+            "name": "التصوير",
+            "icon": "📸"
+          },
+          "events": {
+            "name": "الفعاليات والمهرجانات",
+            "icon": "🎪"
+          },
+          "networking": {
+            "name": "الشبكات المهنية",
+            "icon": "🧑‍💼"
+          }
+        }
+      },
+      "preferences": {
+        "title": "دعنا نخصص تجربتك",
+        "preferences": {
+          "language": {
+            "label": "اللغة",
+            "description": "اختر لغتك المفضلة",
+            "options": {
+              "ar": "العربية",
+              "en": "English"
+            }
+          },
+          "theme": {
+            "label": "المظهر",
+            "description": "اختر مظهرك المفضل",
+            "options": {
+              "light": "فاتح",
+              "dark": "داكن"
+            }
+          },
+          "locationSharing": {
+            "label": "مشاركة الموقع",
+            "description": "تفعيل للحصول على توصيات أفضل"
+          },
+          "emailNotifications": {
+            "label": "إشعارات البريد الإلكتروني",
+            "description": "توصيات الأنشطة والتحديثات"
+          },
+          "pushNotifications": {
+            "label": "الإشعارات الفورية",
+            "description": "تأكيدات الحجز والتحديثات"
+          },
+          "profileVisibility": {
+            "label": "رؤية الملف الشخصي",
+            "description": "تحكم في من يمكنه رؤية ملفك الشخصي",
+            "options": {
+              "public": "عام",
+              "friends": "الأصدقاء فقط"
+            }
+          }
+        }
+      }
+    },
+    "welcome": {
+      "startJourney": "ابدأ رحلتك",
+      "dataSafe": "بياناتك آمنة معنا"
+    },
+    "registration": {
+      "title": "انضم إلى LUDUS",
+      "subtitle": "تواصل واكتشف الأنشطة",
+      "googleBtn": "متابعة بحساب جوجل",
+      "email": "عنوان البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "signupBtn": "إنشاء حساب",
+      "privacy": "بياناتك آمنة معنا"
+    },
+    "profile": {
+      "title": "إعداد الملف الشخصي",
+      "subtitle": "ساعد الآخرين على اكتشافك",
+      "photoLabel": "الصورة الشخصية",
+      "nameLabel": "اسم العرض",
+      "namePlaceholder": "كيف يجب أن يناديك الآخرون؟",
+      "bioLabel": "النبذة الشخصية (اختيارية)",
+      "bioPlaceholder": "أخبرنا عن نفسك...",
+      "socialLabel": "الشبكات الاجتماعية (اختياري)",
+      "instagramPlaceholder": "اسم مستخدم انستغرام",
+      "facebookPlaceholder": "رابط ملف فيسبوك",
+      "snapchatPlaceholder": "اسم مستخدم سناب شات",
+      "saveBtn": "متابعة",
+      "skipBtn": "إكمال لاحقاً",
+      "uploadingText": "جاري الرفع..."
+    },
+    "interests": {
+      "title": "اختر اهتماماتك",
+      "subtitle": "اختر الأنشطة التي تحبها",
+      "continueBtn": "متابعة",
+      "skipBtn": "تخطي الآن",
+      "minError": "اختر على الأقل 3 اهتمامات",
+      "selected": "مختار",
+      "sportsFitness": "الرياضة واللياقة",
+      "foodDining": "الطعام والمطاعم",
+      "artsCulture": "الفنون والثقافة",
+      "entertainment": "الترفيه",
+      "learningWorkshops": "التعلم وورش العمل",
+      "outdoorAdventures": "المغامرات الخارجية",
+      "socialEvents": "الفعاليات الاجتماعية"
+    },
+    "findDiscover": {
+      "title": "ابحث واكتشف",
+      "subtitle": "استكشف الأنشطة القريبة منك"
+    },
+    "connectParticipate": {
+      "title": "تواصل وشارك",
+      "subtitle": "انضم إلى الآخرين الذين يشاركونك نفس الاهتمامات"
+    },
+    "referral": {
+      "title": "شارك LUDUS",
+      "subtitle": "ادع الأصدقاء واحصل على مكافآت",
+      "reward": "احصل على 5 ريال لكل صديق ينضم",
+      "qrTitle": "رمز الاستجابة السريعة",
+      "linkTitle": "رابط الدعوة",
+      "copyBtn": "نسخ الرابط",
+      "copiedText": "تم النسخ!",
+      "finishBtn": "ابدأ الاستكشاف",
+      "skipBtn": "تخطي الآن",
+      "shareText": "انضم إلي على LUDUS - اكتشف أنشطة رائعة بالقرب منك!",
+      "whatsapp": "مشاركة عبر الواتساب",
+      "share": "مشاركة الرابط"
+    },
+    "comingSoon": {
+      "badge": "قريباً",
+      "title": "LUDUS قادم قريباً",
+      "subtitle": "نحن نبني شيئاً مذهلاً. استعد لاكتشاف أنشطة وتجارب لا تُنسى في مدينتك!",
+      "userRegistration": {
+        "title": "انضم كمستخدم",
+        "description": "كن أول من يكتشف أنشطة وتجارب مذهلة عند إطلاقنا.",
+        "cta": "سجل الآن"
+      },
+      "partnerRegistration": {
+        "title": "انضم كشريك",
+        "description": "اعرض عملك وتواصل مع العملاء الذين يبحثون عن تجارب رائعة.",
+        "cta": "كن شريكاً"
+      },
+      "followUs": "تابعنا للحصول على التحديثات",
+      "footer": "أسئلة؟ اتصل بنا على",
+      "newsletter": "النشرة الإخبارية",
+      "instagram": "إنستغرام",
+      "twitter": "تويتر"
+    },
+    "welcomeTaglineAr": "اكتشف. احجز. تواصل",
+    "welcomeTaglineEn": "Discover. Book. Connect",
+    "valuePromise": "اعثر على مجموعتك من خلال أنشطة رائعة في الرياض",
+    "validation": {
+      "required": "هذا الحقل مطلوب",
+      "invalidEmail": "يرجى إدخال بريد إلكتروني صحيح",
+      "invalidPhone": "يرجى إدخال رقم هاتف صحيح",
+      "minSelections": "يرجى اختيار {{min}} فئات على الأقل",
+      "maxSelections": "يرجى اختيار {{max}} فئات كحد أقصى"
+    },
+    "success": {
+      "title": "مرحباً بك في لودوس!",
+      "message": "تم إعداد حسابك بنجاح. استعد لاكتشاف أنشطة رائعة!",
+      "redirecting": "سيتم توجيهك إلى لوحة التحكم..."
+    },
+    "errors": {
+      "loadConfig": "فشل في تحميل إعدادات التسجيل",
+      "completeStep": "فشل في إكمال الخطوة",
+      "completeOnboarding": "فشل في إكمال التسجيل",
+      "networkError": "خطأ في الشبكة. يرجى المحاولة مرة أخرى."
+    },
+
+    "gamification": {
+      "pointsAwarded": "+{{points}} نقاط",
+      "onboardingCompleteBonus": "اكتملت عملية الانضمام! مكافأة +{{points}}",
+      "badgeUnlocked": {
+        "first_login": "شارة جديدة: أول تسجيل دخول",
+        "profile_complete": "شارة جديدة: اكتمال الملف الشخصي",
+        "interests_selected": "شارة جديدة: اختيار الاهتمامات",
+        "referral_connected": "شارة جديدة: ربط الإحالة",
+        "onboarding_complete": "شارة جديدة: بطل الانضمام"
+      }
+    },
+    "leaderboard": {
+      "title": "لوحة صدارة التسجيل",
+      "topN": "أفضل {{n}}",
+      "points": "{{points}} نقطة",
+      "streak": "🔥 {{n}}"
+    }
+  }
+}

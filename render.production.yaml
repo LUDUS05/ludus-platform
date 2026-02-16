@@ -1,0 +1,293 @@
+services:
+  # ===========================================
+  # LUDUS BACKEND API SERVICE
+  # ===========================================
+  - type: web
+    name: ludus-backend-prod
+    env: node
+    plan: starter
+    region: oregon
+    buildCommand: |
+      cd apps/api &&
+      npm ci --only=production --legacy-peer-deps &&
+      npm run build
+    startCommand: cd apps/api && node --max-old-space-size=512 --expose-gc src/app.js
+    healthCheckPath: /api/health
+    healthCheckGracePeriod: 60s
+    autoDeploy: true
+    branch: main
+    envVars:
+      # Core Configuration
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5001
+      - key: RENDER_ENVIRONMENT
+        value: production
+
+      # Database Configuration
+      - key: MONGODB_URI
+        sync: false # Set in Render dashboard
+
+      # Authentication & Security
+      - key: JWT_SECRET
+        sync: false # Set in Render dashboard
+      - key: JWT_REFRESH_SECRET
+        sync: false # Set in Render dashboard
+      - key: BCRYPT_SALT_ROUNDS
+        value: "12"
+
+      # Payment Gateway
+      - key: MOYASAR_SECRET_KEY
+        sync: false # Set in Render dashboard
+      - key: MOYASAR_PUBLISHABLE_KEY
+        sync: false # Set in Render dashboard
+      - key: MOYASAR_WEBHOOK_SECRET
+        sync: false # Set in Render dashboard
+
+      # Social Authentication
+      - key: GOOGLE_CLIENT_ID
+        sync: false # Set in Render dashboard
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false # Set in Render dashboard
+
+      # Email Service
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_USER
+        sync: false # Set in Render dashboard
+      - key: SMTP_PASS
+        sync: false # Set in Render dashboard
+      - key: EMAIL_FROM
+        value: noreply@letsludus.com
+
+      # SMS Service
+      - key: TWILIO_ACCOUNT_SID
+        sync: false # Set in Render dashboard
+      - key: TWILIO_AUTH_TOKEN
+        sync: false # Set in Render dashboard
+      - key: TWILIO_PHONE_NUMBER
+        sync: false # Set in Render dashboard
+
+      # File Storage
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false # Set in Render dashboard
+      - key: CLOUDINARY_API_KEY
+        sync: false # Set in Render dashboard
+      - key: CLOUDINARY_API_SECRET
+        sync: false # Set in Render dashboard
+
+      # Monitoring
+      - key: SENTRY_DSN
+        sync: false # Set in Render dashboard
+
+      # External APIs
+      - key: GOOGLE_MAPS_API_KEY
+        sync: false # Set in Render dashboard
+      - key: UNSPLASH_ACCESS_KEY
+        sync: false # Set in Render dashboard
+
+      # CORS Configuration
+      - key: CORS_ORIGIN
+        value: https://ludus-frontend-prod.onrender.com
+      - key: CORS_CREDENTIALS
+        value: "true"
+
+      # Rate Limiting
+      - key: RATE_LIMIT_WINDOW_MS
+        value: "900000"
+      - key: RATE_LIMIT_MAX_REQUESTS
+        value: "100"
+
+      # Feature Flags
+      - key: ANIMATION_ENABLED
+        value: "true"
+      - key: RTL_SUPPORT
+        value: "true"
+      - key: PERFORMANCE_MONITORING
+        value: "true"
+      - key: DEBUG_MODE
+        value: "false"
+      - key: MAINTENANCE_MODE
+        value: "false"
+
+      # Logging
+      - key: LOG_LEVEL
+        value: info
+      - key: LOG_FORMAT
+        value: combined
+
+  # ===========================================
+  # LUDUS FRONTEND SERVICE
+  # ===========================================
+  - type: web
+    name: ludus-frontend-prod
+    env: static
+    plan: starter
+    region: oregon
+    buildCommand: |
+      cd apps/web &&
+      npm ci --legacy-peer-deps &&
+      npm run build:render
+    staticPublishPath: apps/web/build
+    autoDeploy: true
+    branch: main
+    routes:
+      # API Routes (proxy to backend)
+      - type: rewrite
+        source: /api/*
+        destination: https://ludus-backend-prod.onrender.com/api/$1
+
+      # SPA Routes
+      - type: rewrite
+        source: /login
+        destination: /index.html
+      - type: rewrite
+        source: /register
+        destination: /index.html
+      - type: rewrite
+        source: /admin
+        destination: /index.html
+      - type: rewrite
+        source: /admin/*
+        destination: /index.html
+      - type: rewrite
+        source: /profile
+        destination: /index.html
+      - type: rewrite
+        source: /profile/*
+        destination: /index.html
+      - type: rewrite
+        source: /activities
+        destination: /index.html
+      - type: rewrite
+        source: /activities/*
+        destination: /index.html
+      - type: rewrite
+        source: /bookings
+        destination: /index.html
+      - type: rewrite
+        source: /bookings/*
+        destination: /index.html
+      - type: rewrite
+        source: /share
+        destination: /index.html
+      - type: rewrite
+        source: /share/*
+        destination: /index.html
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+    headers:
+      # Security Headers
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: X-XSS-Protection
+        value: 1; mode=block
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+      - path: /*
+        name: Permissions-Policy
+        value: camera=(), microphone=(), geolocation=()
+      - path: /*
+        name: Strict-Transport-Security
+        value: max-age=31536000; includeSubDomains
+
+      # Cache Headers for Static Assets
+      - path: /static/css/*
+        name: Content-Type
+        value: text/css
+      - path: /static/css/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /static/js/*
+        name: Content-Type
+        value: application/javascript
+      - path: /static/js/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /static/media/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /favicon.ico
+        name: Cache-Control
+        value: public, max-age=86400
+      - path: /manifest.json
+        name: Cache-Control
+        value: public, max-age=86400
+
+      # HTML Cache Headers
+      - path: /*
+        name: Cache-Control
+        value: public, max-age=0, must-revalidate
+
+    envVars:
+      # Core API Configuration
+      - key: REACT_APP_API_URL
+        value: https://ludus-backend-prod.onrender.com
+      - key: REACT_APP_CLIENT_URL
+        value: https://ludus-frontend-prod.onrender.com
+
+      # Feature Flags
+      - key: REACT_APP_ANIMATION_ENABLED
+        value: "true"
+      - key: REACT_APP_RTL_SUPPORT
+        value: "true"
+      - key: REACT_APP_PERFORMANCE_MONITORING
+        value: "true"
+      - key: REACT_APP_DEBUG_MODE
+        value: "false"
+      - key: REACT_APP_MAINTENANCE_MODE
+        value: "false"
+
+      # External Services
+      - key: REACT_APP_GOOGLE_CLIENT_ID
+        sync: false # Set in Render dashboard
+      - key: REACT_APP_GOOGLE_MAPS_API_KEY
+        sync: false # Set in Render dashboard
+      - key: REACT_APP_MOYASAR_PUBLISHABLE_KEY
+        sync: false # Set in Render dashboard
+      - key: REACT_APP_UNSPLASH_ACCESS_KEY
+        sync: false # Set in Render dashboard
+
+      # Monitoring
+      - key: REACT_APP_SENTRY_DSN
+        sync: false # Set in Render dashboard
+      - key: REACT_APP_GOOGLE_ANALYTICS_ID
+        sync: false # Set in Render dashboard
+
+  # ===========================================
+  # REDIS CACHE SERVICE
+  # ===========================================
+  - type: redis
+    name: ludus-redis-prod
+    plan: starter
+    region: oregon
+    maxmemoryPolicy: allkeys-lru
+    envVars:
+      - key: REDIS_PASSWORD
+        sync: false # Set in Render dashboard
+
+  # ===========================================
+  # POSTGRESQL DATABASE (for analytics)
+  # ===========================================
+  - type: pserv
+    name: ludus-postgres-prod
+    plan: starter
+    region: oregon
+    envVars:
+      - key: POSTGRES_DB
+        value: ludus_analytics
+      - key: POSTGRES_USER
+        value: ludus_user
+      - key: POSTGRES_PASSWORD
+        sync: false # Set in Render dashboard

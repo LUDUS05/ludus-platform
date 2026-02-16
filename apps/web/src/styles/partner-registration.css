@@ -1,0 +1,189 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&display=swap');
+
+/* Partner Registration Typewriter Styles */
+.partner-registration-page {
+  font-family: 'IBM Plex Mono', 'Courier New', monospace !important;
+  background: #fefefe;
+  background-image: radial-gradient(circle at 1px 1px, rgba(0,0,0,0.02) 1px, transparent 0);
+  background-size: 20px 20px;
+  color: #2a2a2a;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+.partner-registration-page * {
+  font-family: 'IBM Plex Mono', 'Courier New', monospace !important;
+}
+
+.partner-registration-page .form-input, 
+.partner-registration-page .form-textarea {
+  font-family: 'IBM Plex Mono', 'Courier New', monospace !important;
+  font-size: 16px;
+  font-weight: 400;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid #e0e0e0;
+  padding: 12px 0 8px 0;
+  outline: none;
+  color: #2a2a2a;
+  transition: border-color 0.3s ease;
+  caret-color: #2a2a2a;
+  width: 100%;
+}
+
+.partner-registration-page .form-input:focus, 
+.partner-registration-page .form-textarea:focus {
+  border-bottom-color: #2a2a2a;
+  animation: underline-glow 0.3s ease;
+}
+
+@keyframes underline-glow {
+  0% { border-bottom-color: #e0e0e0; }
+  50% { border-bottom-color: #666; }
+  100% { border-bottom-color: #2a2a2a; }
+}
+
+.partner-registration-page .form-input::placeholder, 
+.partner-registration-page .form-textarea::placeholder {
+  color: transparent;
+}
+
+.partner-registration-page .form-label {
+  position: absolute;
+  left: 0;
+  top: 12px;
+  font-size: 16px;
+  color: #999;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  font-weight: 300;
+  font-family: 'IBM Plex Mono', 'Courier New', monospace !important;
+}
+
+.partner-registration-page .form-input:focus + .form-label,
+.partner-registration-page .form-input.has-value + .form-label,
+.partner-registration-page .form-textarea:focus + .form-label,
+.partner-registration-page .form-textarea.has-value + .form-label {
+  top: -8px;
+  font-size: 12px;
+  color: #666;
+  transform: translateY(-4px);
+}
+
+.partner-registration-page .form-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.partner-registration-page .error-message {
+  font-size: 12px;
+  color: #d73a49;
+  margin-top: 5px;
+  font-weight: 300;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  font-family: 'IBM Plex Mono', 'Courier New', monospace !important;
+}
+
+.partner-registration-page .form-input.error, 
+.partner-registration-page .form-textarea.error {
+  border-bottom-color: #d73a49;
+  animation: error-shake 0.3s ease;
+}
+
+.partner-registration-page .form-input.error + .form-label,
+.partner-registration-page .form-textarea.error + .form-label {
+  color: #d73a49;
+}
+
+.partner-registration-page .form-group.error .error-message {
+  opacity: 1;
+}
+
+@keyframes error-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  75% { transform: translateX(2px); }
+}
+
+.partner-registration-page .submit-btn {
+  font-family: 'IBM Plex Mono', 'Courier New', monospace !important;
+  font-size: 16px;
+  font-weight: 400;
+  background: transparent;
+  border: none;
+  color: #2a2a2a;
+  cursor: pointer;
+  text-decoration: none;
+  position: relative;
+  padding: 0;
+  transition: all 0.3s ease;
+}
+
+.partner-registration-page .submit-btn::before {
+  content: '[';
+  margin-right: 2px;
+}
+
+.partner-registration-page .submit-btn::after {
+  content: ']';
+  margin-left: 2px;
+}
+
+.partner-registration-page .submit-btn:hover {
+  color: #666;
+}
+
+.partner-registration-page .submit-btn:hover::before,
+.partner-registration-page .submit-btn:hover::after {
+  animation: bracket-blink 0.5s ease;
+}
+
+@keyframes bracket-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.partner-registration-page .submit-btn:active {
+  transform: translateY(1px);
+}
+
+.partner-registration-page .submit-btn:disabled {
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Modal Styles */
+.partner-registration-page .terms-modal {
+  background: #fefefe;
+  background-image: radial-gradient(circle at 1px 1px, rgba(0,0,0,0.02) 1px, transparent 0);
+  background-size: 20px 20px;
+  color: #2a2a2a;
+  font-family: 'IBM Plex Mono', 'Courier New', monospace !important;
+}
+
+.partner-registration-page .terms-modal * {
+  font-family: 'IBM Plex Mono', 'Courier New', monospace !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .partner-registration-page .form-input,
+  .partner-registration-page .form-textarea,
+  .partner-registration-page .form-label {
+    font-size: 14px;
+  }
+  
+  .partner-registration-page .form-input:focus + .form-label,
+  .partner-registration-page .form-input.has-value + .form-label,
+  .partner-registration-page .form-textarea:focus + .form-label,
+  .partner-registration-page .form-textarea.has-value + .form-label {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .partner-registration-page {
+    padding: 30px 15px;
+  }
+}

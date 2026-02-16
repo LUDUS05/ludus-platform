@@ -71,5 +71,18 @@ server/dist/
 .DS_Store
 Thumbs.db
 
-# Deployment
-.vercel
+*storybook.log
+storybook-static
+
+# MCP Configuration with secrets
+.cursor/mcp.json
+.cursor/mcp.json.backup*
+.cursor/mcp-*.json
+
+# Environment files with real secrets
+development.env
+
+# Setup scripts with tokens
+setup-*-tokens.sh
+restart-mcp.sh
+setup-tokens.sh

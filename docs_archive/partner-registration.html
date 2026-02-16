@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partner Registration - LUDUS</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'IBM Plex Mono', 'Courier New', monospace;
+            background: #fefefe;
+            background-image: 
+                radial-gradient(circle at 1px 1px, rgba(0,0,0,0.02) 1px, transparent 0);
+            background-size: 20px 20px;
+            color: #2a2a2a;
+            line-height: 1.6;
+            padding: 0;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+        
+        .form-header {
+            margin-bottom: 50px;
+        }
+        
+        .form-header h1 {
+            font-size: 24px;
+            font-weight: 400;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+        
+        .form-header p {
+            font-size: 14px;
+            color: #666;
+            font-weight: 300;
+        }
+        
+        .form-group {
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .input-container {
+            position: relative;
+            width: 100%;
+        }
+        
+        .form-input {
+            width: 100%;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 400;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid #e0e0e0;
+            padding: 12px 0 8px 0;
+            outline: none;
+            color: #2a2a2a;
+            transition: border-color 0.3s ease;
+            caret-color: #2a2a2a;
+            caret-width: 2px;
+        }
+        
+        .form-input:focus {
+            border-bottom-color: #2a2a2a;
+            animation: underline-glow 0.3s ease;
+        }
+        
+        @keyframes underline-glow {
+            0% { border-bottom-color: #e0e0e0; }
+            50% { border-bottom-color: #666; }
+            100% { border-bottom-color: #2a2a2a; }
+        }
+        
+        .form-input::placeholder {
+            color: transparent;
+        }
+        
+        .form-label {
+            position: absolute;
+            left: 0;
+            top: 12px;
+            font-size: 16px;
+            color: #999;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            font-weight: 300;
+        }
+        
+        .form-input:focus + .form-label,
+        .form-input:not(:placeholder-shown) + .form-label,
+        .form-input.has-value + .form-label {
+            top: -8px;
+            font-size: 12px;
+            color: #666;
+            transform: translateY(-4px);
+        }
+        
+        .form-textarea {
+            width: 100%;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 400;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid #e0e0e0;
+            padding: 12px 0 8px 0;
+            outline: none;
+            color: #2a2a2a;
+            resize: vertical;
+            min-height: 80px;
+            transition: border-color 0.3s ease;
+            caret-color: #2a2a2a;
+            caret-width: 2px;
+        }
+        
+        .form-textarea:focus {
+            border-bottom-color: #2a2a2a;
+            animation: underline-glow 0.3s ease;
+        }
+        
+        .form-textarea::placeholder {
+            color: transparent;
+        }
+        
+        .form-textarea:focus + .form-label,
+        .form-textarea:not(:placeholder-shown) + .form-label,
+        .form-textarea.has-value + .form-label {
+            top: -8px;
+            font-size: 12px;
+            color: #666;
+            transform: translateY(-4px);
+        }
+        
+        .error-message {
+            font-size: 12px;
+            color: #d73a49;
+            margin-top: 5px;
+            font-weight: 300;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .form-input.error,
+        .form-textarea.error {
+            border-bottom-color: #d73a49;
+            animation: error-shake 0.3s ease;
+        }
+        
+        .form-input.error + .form-label,
+        .form-textarea.error + .form-label {
+            color: #d73a49;
+        }
+        
+        .form-group.error .error-message {
+            opacity: 1;
+        }
+        
+        @keyframes error-shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            75% { transform: translateX(2px); }
+        }
+        
+        .submit-container {
+            margin-top: 60px;
+        }
+        
+        .submit-btn {
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 400;
+            background: transparent;
+            border: none;
+            color: #2a2a2a;
+            cursor: pointer;
+            text-decoration: none;
+            position: relative;
+            padding: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-btn::before {
+            content: '[';
+            margin-right: 2px;
+        }
+        
+        .submit-btn::after {
+            content: ']';
+            margin-left: 2px;
+        }
+        
+        .submit-btn:hover {
+            color: #666;
+        }
+        
+        .submit-btn:hover::before,
+        .submit-btn:hover::after {
+            animation: bracket-blink 0.5s ease;
+        }
+        
+        @keyframes bracket-blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
+        .submit-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .submit-btn:disabled {
+            color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 20px;
+                max-width: 100%;
+            }
+            
+            .form-header h1 {
+                font-size: 20px;
+            }
+            
+            .form-input,
+            .form-textarea,
+            .form-label {
+                font-size: 14px;
+            }
+            
+            .form-input:focus + .form-label,
+            .form-input:not(:placeholder-shown) + .form-label,
+            .form-input.has-value + .form-label,
+            .form-textarea:focus + .form-label,
+            .form-textarea:not(:placeholder-shown) + .form-label,
+            .form-textarea.has-value + .form-label {
+                font-size: 11px;
+            }
+            
+            .form-group {
+                margin-bottom: 35px;
+            }
+            
+            .submit-container {
+                margin-top: 50px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 15px;
+            }
+            
+            .form-header {
+                margin-bottom: 40px;
+            }
+            
+            .form-group {
+                margin-bottom: 30px;
+            }
+            
+            .submit-container {
+                margin-top: 40px;
+            }
+        }
+        
+        /* Focus animation for better terminal feel */
+        .form-input:focus,
+        .form-textarea:focus {
+            position: relative;
+        }
+        
+        .form-input:focus::after,
+        .form-textarea:focus::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            width: 2px;
+            height: 20px;
+            background: #2a2a2a;
+            animation: cursor-blink 1s infinite;
+        }
+        
+        @keyframes cursor-blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        /* Success state */
+        .form-success {
+            text-align: center;
+            padding: 40px 0;
+        }
+        
+        .form-success h2 {
+            font-size: 18px;
+            font-weight: 400;
+            margin-bottom: 10px;
+            color: #28a745;
+        }
+        
+        .form-success p {
+            font-size: 14px;
+            color: #666;
+            font-weight: 300;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-header">
+            <h1>Partner Registration</h1>
+            <p>Join the LUDUS network and connect with our community</p>
+        </div>
+        
+        <form id="partnerForm" class="partner-form" novalidate>
+            <div class="form-group">
+                <div class="input-container">
+                    <input 
+                        type="text" 
+                        id="companyName" 
+                        name="companyName" 
+                        class="form-input" 
+                        placeholder=" "
+                        required
+                        autocomplete="organization"
+                    >
+                    <label for="companyName" class="form-label">Company Name</label>
+                </div>
+                <div class="error-message" id="companyNameError"></div>
+            </div>
+            
+            <div class="form-group">
+                <div class="input-container">
+                    <input 
+                        type="text" 
+                        id="contactName" 
+                        name="contactName" 
+                        class="form-input" 
+                        placeholder=" "
+                        required
+                        autocomplete="name"
+                    >
+                    <label for="contactName" class="form-label">Contact Person Name</label>
+                </div>
+                <div class="error-message" id="contactNameError"></div>
+            </div>
+            
+            <div class="form-group">
+                <div class="input-container">
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        class="form-input" 
+                        placeholder=" "
+                        required
+                        autocomplete="email"
+                    >
+                    <label for="email" class="form-label">Email Address</label>
+                </div>
+                <div class="error-message" id="emailError"></div>
+            </div>
+            
+            <div class="form-group">
+                <div class="input-container">
+                    <input 
+                        type="tel" 
+                        id="phone" 
+                        name="phone" 
+                        class="form-input" 
+                        placeholder=" "
+                        required
+                        autocomplete="tel"
+                    >
+                    <label for="phone" class="form-label">Phone Number</label>
+                </div>
+                <div class="error-message" id="phoneError"></div>
+            </div>
+            
+            <div class="form-group">
+                <div class="input-container">
+                    <input 
+                        type="url" 
+                        id="website" 
+                        name="website" 
+                        class="form-input" 
+                        placeholder=" "
+                        autocomplete="url"
+                    >
+                    <label for="website" class="form-label">Website URL (Optional)</label>
+                </div>
+                <div class="error-message" id="websiteError"></div>
+            </div>
+            
+            <div class="form-group">
+                <div class="input-container">
+                    <textarea 
+                        id="description" 
+                        name="description" 
+                        class="form-textarea" 
+                        placeholder=" "
+                        required
+                        rows="4"
+                    ></textarea>
+                    <label for="description" class="form-label">Company Description</label>
+                </div>
+                <div class="error-message" id="descriptionError"></div>
+            </div>
+            
+            <div class="submit-container">
+                <button type="submit" class="submit-btn">Submit</button>
+            </div>
+        </form>
+        
+        <div id="successMessage" class="form-success hidden">
+            <h2>Registration Submitted</h2>
+            <p>Thank you for your interest. We'll be in touch soon.</p>
+        </div>
+    </div>
+
+    <script>
+        class PartnerRegistrationForm {
+            constructor() {
+                this.form = document.getElementById('partnerForm');
+                this.inputs = this.form.querySelectorAll('.form-input, .form-textarea');
+                this.submitBtn = this.form.querySelector('.submit-btn');
+                this.successMessage = document.getElementById('successMessage');
+                
+                this.init();
+            }
+            
+            init() {
+                this.bindEvents();
+                this.setupInputHandlers();
+            }
+            
+            bindEvents() {
+                this.form.addEventListener('submit', this.handleSubmit.bind(this));
+                
+                // Handle input changes for floating labels
+                this.inputs.forEach(input => {
+                    input.addEventListener('input', this.handleInputChange.bind(this));
+                    input.addEventListener('blur', this.handleInputBlur.bind(this));
+                    input.addEventListener('focus', this.handleInputFocus.bind(this));
+                });
+            }
+            
+            setupInputHandlers() {
+                // Set initial state for inputs with values
+                this.inputs.forEach(input => {
+                    if (input.value.trim() !== '') {
+                        input.classList.add('has-value');
+                    }
+                });
+            }
+            
+            handleInputChange(e) {
+                const input = e.target;
+                const formGroup = input.closest('.form-group');
+                
+                // Update has-value class
+                if (input.value.trim() !== '') {
+                    input.classList.add('has-value');
+                } else {
+                    input.classList.remove('has-value');
+                }
+                
+                // Clear error state on input
+                if (formGroup.classList.contains('error')) {
+                    this.clearFieldError(input);
+                }
+            }
+            
+            handleInputBlur(e) {
+                const input = e.target;
+                this.validateField(input);
+            }
+            
+            handleInputFocus(e) {
+                const input = e.target;
+                const formGroup = input.closest('.form-group');
+                
+                // Clear error state on focus
+                if (formGroup.classList.contains('error')) {
+                    this.clearFieldError(input);
+                }
+            }
+            
+            validateField(input) {
+                const value = input.value.trim();
+                const fieldName = input.name;
+                let isValid = true;
+                let errorMessage = '';
+                
+                // Required field validation
+                if (input.hasAttribute('required') && !value) {
+                    isValid = false;
+                    errorMessage = `${this.getFieldLabel(fieldName)} is required`;
+                }
+                
+                // Specific field validations
+                if (value && fieldName === 'email') {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(value)) {
+                        isValid = false;
+                        errorMessage = 'Please enter a valid email address';
+                    }
+                }
+                
+                if (value && fieldName === 'website') {
+                    const urlRegex = /^https?:\/\/.+\..+/;
+                    if (!urlRegex.test(value)) {
+                        isValid = false;
+                        errorMessage = 'Please enter a valid URL (include http:// or https://)';
+                    }
+                }
+                
+                if (value && fieldName === 'phone') {
+                    const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+                    if (!phoneRegex.test(value.replace(/[\s\-\(\)]/g, ''))) {
+                        isValid = false;
+                        errorMessage = 'Please enter a valid phone number';
+                    }
+                }
+                
+                if (fieldName === 'description' && value && value.length < 10) {
+                    isValid = false;
+                    errorMessage = 'Company description must be at least 10 characters';
+                }
+                
+                if (!isValid) {
+                    this.showFieldError(input, errorMessage);
+                } else {
+                    this.clearFieldError(input);
+                }
+                
+                return isValid;
+            }
+            
+            validateForm() {
+                let isFormValid = true;
+                
+                this.inputs.forEach(input => {
+                    if (!this.validateField(input)) {
+                        isFormValid = false;
+                    }
+                });
+                
+                return isFormValid;
+            }
+            
+            showFieldError(input, message) {
+                const formGroup = input.closest('.form-group');
+                const errorElement = formGroup.querySelector('.error-message');
+                
+                input.classList.add('error');
+                formGroup.classList.add('error');
+                errorElement.textContent = message;
+            }
+            
+            clearFieldError(input) {
+                const formGroup = input.closest('.form-group');
+                const errorElement = formGroup.querySelector('.error-message');
+                
+                input.classList.remove('error');
+                formGroup.classList.remove('error');
+                errorElement.textContent = '';
+            }
+            
+            getFieldLabel(fieldName) {
+                const labels = {
+                    companyName: 'Company Name',
+                    contactName: 'Contact Person Name',
+                    email: 'Email Address',
+                    phone: 'Phone Number',
+                    website: 'Website URL',
+                    description: 'Company Description'
+                };
+                return labels[fieldName] || fieldName;
+            }
+            
+            async handleSubmit(e) {
+                e.preventDefault();
+                
+                if (!this.validateForm()) {
+                    return;
+                }
+                
+                // Disable submit button during submission
+                this.submitBtn.disabled = true;
+                this.submitBtn.textContent = 'Submitting...';
+                
+                // Simulate API call
+                await this.simulateSubmission();
+                
+                // Show success message
+                this.showSuccess();
+            }
+            
+            async simulateSubmission() {
+                // Simulate network delay
+                return new Promise(resolve => {
+                    setTimeout(resolve, 1500);
+                });
+            }
+            
+            showSuccess() {
+                this.form.classList.add('hidden');
+                this.successMessage.classList.remove('hidden');
+                
+                // Reset form after showing success
+                setTimeout(() => {
+                    this.resetForm();
+                }, 3000);
+            }
+            
+            resetForm() {
+                this.form.reset();
+                this.inputs.forEach(input => {
+                    input.classList.remove('has-value', 'error');
+                    this.clearFieldError(input);
+                });
+                
+                this.submitBtn.disabled = false;
+                this.submitBtn.textContent = 'Submit';
+                
+                this.form.classList.remove('hidden');
+                this.successMessage.classList.add('hidden');
+            }
+        }
+        
+        // Initialize the form when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new PartnerRegistrationForm();
+        });
+        
+        // Optional: Add keyboard navigation enhancement
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Tab') {
+                // Enhance tab navigation feel
+                const activeElement = document.activeElement;
+                if (activeElement.classList.contains('form-input') || 
+                    activeElement.classList.contains('form-textarea')) {
+                    activeElement.style.transition = 'all 0.1s ease';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

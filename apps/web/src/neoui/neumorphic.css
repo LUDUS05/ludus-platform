@@ -1,0 +1,626 @@
+/* Core Neumorphic Styles */
+.neumorphic {
+  background: #e0e5ec;
+  box-shadow: 
+    9px 9px 16px #a3b1c6,
+    -9px -9px 16px #ffffff;
+}
+
+.neumorphic-pressed {
+  background: #e0e5ec;
+  box-shadow: 
+    inset 9px 9px 16px #a3b1c6,
+    inset -9px -9px 16px #ffffff;
+}
+
+.neumorphic-subtle {
+  background: #f0f2f5;
+  box-shadow: 
+    4px 4px 8px #d1d9e6,
+    -4px -4px 8px #ffffff;
+}
+
+.text-neumorphic {
+  color: #4a5568;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Layout Components */
+.neo-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0f2f5 0%, #e0e5ec 100%);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.neo-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.neo-content {
+  flex: 1;
+  padding: 1rem;
+  max-width: 800px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .neo-container {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    align-items: stretch;
+    justify-content: flex-start;
+  }
+  
+  .neo-content {
+    padding: 0.75rem;
+    padding-bottom: 120px; /* Space for bottom nav on mobile */
+  }
+}
+
+/* LUDUS Logo Styles */
+.neo-onboarding-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.neo-onboarding-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.neo-logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.neo-logo-graphic {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin-bottom: 1rem;
+}
+
+.neo-logo-bar {
+  position: absolute;
+  background: #ff6b35; /* LUDUS Orange */
+  border-radius: 2px;
+}
+
+.neo-logo-bar-left {
+  width: 12px;
+  height: 60px;
+  left: 0;
+  top: 0;
+  transform: skew(-15deg);
+}
+
+.neo-logo-bar-right {
+  width: 8px;
+  height: 40px;
+  right: 0;
+  top: 20px;
+  transform: skew(15deg);
+}
+
+.neo-logo-bar-bottom {
+  width: 60px;
+  height: 8px;
+  left: 10px;
+  bottom: 0;
+  transform: skew(-15deg);
+}
+
+.neo-logo-text {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #ff6b35; /* LUDUS Orange */
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.neo-welcome-title {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #2d3748;
+  margin-bottom: 1rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.neo-welcome-subtitle {
+  font-size: 1.25rem;
+  color: #4a5568;
+  line-height: 1.6;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.neo-onboarding-actions {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+/* Compact Vertical Navigation Bar - Positioned right next to content */
+.neo-nav-vertical {
+  position: sticky;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100px;
+  flex-shrink: 0;
+  z-index: 100;
+  align-self: center;
+  margin-left: 0;
+}
+
+@media (max-width: 768px) {
+  .neo-nav-vertical {
+    position: fixed;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    top: auto;
+    width: auto;
+    order: 2; /* Move to bottom on mobile */
+  }
+}
+
+.neo-nav-vertical-container {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 1rem 0.75rem;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    0 4px 16px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .neo-nav-vertical-container {
+    flex-direction: row;
+    padding: 0.75rem;
+    gap: 0.5rem;
+    border-radius: 20px;
+  }
+}
+
+.neo-language-section {
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .neo-language-section {
+    order: 2; /* Move language to the right on mobile */
+  }
+}
+
+.neo-language-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-radius: 16px;
+  background: rgba(240, 242, 245, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+@media (max-width: 768px) {
+  .neo-language-item {
+    flex-direction: row;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+.neo-language-button-compact {
+  background: none;
+  border: none;
+  color: #4a5568;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 50px;
+  text-align: center;
+}
+
+.neo-language-button-compact:hover {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+  transform: translateY(-1px);
+}
+
+.neo-language-button-compact:active {
+  transform: translateY(0);
+}
+
+.neo-nav-items-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .neo-nav-items-vertical {
+    flex-direction: row;
+    gap: 0.25rem;
+    order: 1; /* Move nav items to the left on mobile */
+  }
+}
+
+.neo-nav-item-vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 0.5rem;
+  border-radius: 16px;
+  text-decoration: none;
+  color: #6b7280;
+  transition: all 0.3s ease;
+  min-height: 60px;
+  justify-content: center;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .neo-nav-item-vertical {
+    min-height: 50px;
+    min-width: 60px;
+    padding: 0.5rem;
+  }
+}
+
+.neo-nav-item-vertical:hover {
+  color: #3b82f6;
+  transform: translateY(-2px);
+  background: rgba(59, 130, 246, 0.05);
+}
+
+@media (max-width: 768px) {
+  .neo-nav-item-vertical:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.neo-nav-item-vertical.active {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  font-weight: 600;
+  box-shadow: 
+    0 4px 16px rgba(59, 130, 246, 0.3),
+    0 2px 8px rgba(59, 130, 246, 0.2);
+}
+
+.neo-nav-item-vertical.active:hover {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .neo-nav-item-vertical.active:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* Activity Card */
+.neo-activity-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    0 4px 16px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.neo-activity-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.15),
+    0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.neo-activity-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 20px 20px 0 0;
+}
+
+.neo-price-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+}
+
+.neo-category-badge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  color: #4a5568;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 500;
+  font-size: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Interest Selector */
+.neo-interest-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.neo-interest-item {
+  background: white;
+  border-radius: 20px;
+  padding: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.1),
+    0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 2px solid transparent;
+  position: relative;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.neo-interest-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 
+    0 8px 24px rgba(0, 0, 0, 0.15),
+    0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.neo-interest-item.selected {
+  border-color: #3b82f6;
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  box-shadow: 
+    0 8px 24px rgba(59, 130, 246, 0.2),
+    0 4px 12px rgba(59, 130, 246, 0.1);
+}
+
+.neo-interest-item .emoji {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.neo-interest-check {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: #3b82f6;
+  color: white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+/* Search and Filters */
+.neo-search-bar {
+  background: white;
+  border-radius: 20px;
+  padding: 1rem 1.5rem;
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.1),
+    0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin-bottom: 1.5rem;
+}
+
+.neo-filter-toggle {
+  background: white;
+  border: none;
+  border-radius: 16px;
+  padding: 0.75rem 1.5rem;
+  color: #4a5568;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.1),
+    0 2px 8px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.neo-filter-toggle:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 6px 20px rgba(0, 0, 0, 0.15),
+    0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.neo-filter-container {
+  background: white;
+  border-radius: 20px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    0 4px 16px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.neo-filter-pill {
+  background: rgba(240, 242, 245, 0.8);
+  border: none;
+  border-radius: 20px;
+  padding: 0.75rem 1.5rem;
+  color: #4a5568;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin: 0.25rem;
+  backdrop-filter: blur(5px);
+}
+
+.neo-filter-pill:hover {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+  transform: translateY(-1px);
+}
+
+.neo-filter-pill.active {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+}
+
+/* Buttons */
+.neo-button {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  border: none;
+  border-radius: 16px;
+  padding: 1rem 2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 4px 16px rgba(59, 130, 246, 0.3),
+    0 2px 8px rgba(59, 130, 246, 0.2);
+}
+
+.neo-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 6px 20px rgba(59, 130, 246, 0.4),
+    0 3px 10px rgba(59, 130, 246, 0.3);
+}
+
+.neo-button:active {
+  transform: translateY(0);
+}
+
+.neo-button.primary {
+  background: linear-gradient(135deg, #ff6b35, #e55a2b);
+  box-shadow: 
+    0 4px 16px rgba(255, 107, 53, 0.3),
+    0 2px 8px rgba(255, 107, 53, 0.2);
+}
+
+.neo-button.primary:hover {
+  box-shadow: 
+    0 6px 20px rgba(255, 107, 53, 0.4),
+    0 3px 10px rgba(255, 107, 53, 0.3);
+}
+
+.neo-button.disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Loading States */
+.neo-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  gap: 1.5rem;
+}
+
+.neo-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(59, 130, 246, 0.1);
+  border-left: 4px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.neo-spinner-inner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(59, 130, 246, 0.1);
+  border-right: 3px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite reverse;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Empty States */
+.neo-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  text-align: center;
+  gap: 1rem;
+}
+
+.neo-empty-icon {
+  font-size: 4rem;
+  opacity: 0.5;
+  margin-bottom: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .neo-nav-item-vertical {
+    padding: 0.5rem;
+    min-height: 50px;
+    min-width: 50px;
+  }
+  
+  .neo-nav-item-vertical .text-xs {
+    font-size: 0.625rem;
+  }
+  
+  .neo-language-section {
+    min-width: 60px;
+  }
+}
+

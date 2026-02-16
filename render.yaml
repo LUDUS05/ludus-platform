@@ -1,15 +1,15 @@
 services:
+  # Backend Service (Node.js API) - Standard
   - type: web
     name: ludus-backend
     env: node
     plan: starter
-    buildCommand: cd server && npm install
-    startCommand: cd server && npm start
+    buildCommand: cd apps/api && npm install --legacy-peer-deps
+    startCommand: cd apps/api && node --max-old-space-size=512 --expose-gc src/app.js
+    healthCheckPath: /health
     envVars:
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: 5000
       - key: MONGODB_URI
         sync: false # Set in Render dashboard
       - key: JWT_SECRET
@@ -23,14 +23,247 @@ services:
       - key: MOYASAR_WEBHOOK_SECRET
         sync: false # Set in Render dashboard
       - key: CLIENT_URL
-        value: https://ludus-platform.vercel.app
+        value: https://app.letsludus.com
+      - key: ANIMATION_ENABLED
+        value: "true"
+      - key: RENDER_ENVIRONMENT
+        value: "production"
+      # Google OAuth Configuration
+      - key: GOOGLE_CLIENT_ID
+        sync: false # Set in Render dashboard
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false # Set in Render dashboard
+      # Render MCP API Configuration
+      - key: RENDER_API_TOKEN
+        sync: false # Set in Render dashboard
 
+  # Frontend Service (Static React App) - Standard
   - type: web
     name: ludus-frontend
     env: static
-    buildCommand: cd client && npm install && npm run build
-    staticPublishPath: client/build
+    plan: starter
+    buildCommand: cd apps/web && rm -rf build && npm install --legacy-peer-deps && npm run build:render
+    staticPublishPath: apps/web/build
     routes:
+      - type: rewrite
+        source: /login
+        destination: /index.html
+      - type: rewrite
+        source: /admin
+        destination: /index.html
+      - type: rewrite
+        source: /admin/*
+        destination: /index.html
+      - type: rewrite
+        source: /share
+        destination: /index.html
       - type: rewrite
         source: /*
         destination: /index.html
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
+        name: X-XSS-Protection
+        value: 1; mode=block
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+      - path: /static/css/*
+        name: Content-Type
+        value: text/css
+      - path: /static/css/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /static/js/*
+        name: Content-Type
+        value: application/javascript
+      - path: /static/js/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /static/media/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+    envVars:
+      # Core API Configuration - REQUIRED
+      - key: REACT_APP_API_URL
+        value: https://ludus-backend-jzc5.onrender.com
+      # Animation Configuration - REQUIRED
+      - key: REACT_APP_ANIMATION_ENABLED
+        value: "true"
+      - key: REACT_APP_RTL_SUPPORT
+        value: "true"
+      # Performance Monitoring - REQUIRED
+      - key: REACT_APP_PERFORMANCE_MONITORING
+        value: "true"
+      - key: REACT_APP_DEBUG_MODE
+        value: "false"
+      # Google OAuth Configuration
+      - key: REACT_APP_GOOGLE_CLIENT_ID
+        sync: false # Set in Render dashboard
+
+  # Backend Service (Node.js API) - Enhanced for ATHENA
+  - type: web
+    name: ludus-backend-athena
+    env: node
+    plan: starter
+    buildCommand: cd apps/api && npm install --legacy-peer-deps
+    startCommand: cd apps/api && node --max-old-space-size=512 --expose-gc src/app.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false # Set in Render dashboard
+      - key: JWT_SECRET
+        sync: false # Set in Render dashboard
+      - key: JWT_REFRESH_SECRET
+        sync: false # Set in Render dashboard
+      - key: MOYASAR_SECRET_KEY
+        sync: false # Set in Render dashboard
+      - key: MOYASAR_PUBLISHABLE_KEY
+        sync: false # Set in Render dashboard
+      - key: MOYASAR_WEBHOOK_SECRET
+        sync: false # Set in Render dashboard
+      - key: CLIENT_URL
+        value: https://app.letsludus.com
+      - key: ANIMATION_ENABLED
+        value: "true"
+      - key: RENDER_ENVIRONMENT
+        value: "production"
+      # Google OAuth Configuration
+      - key: GOOGLE_CLIENT_ID
+        sync: false # Set in Render dashboard
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false # Set in Render dashboard
+      # Render MCP API Configuration
+      - key: RENDER_API_TOKEN
+        sync: false # Set in Render dashboard
+
+  # Frontend Service (Static React App) - Enhanced for ATHENA
+  - type: web
+    name: ludus-frontend-athena
+    env: static
+    plan: starter
+    buildCommand: cd apps/web && npm install --legacy-peer-deps && npm run build:render
+    staticPublishPath: apps/web/build
+    routes:
+      - type: rewrite
+        source: /login
+        destination: /index.html
+      - type: rewrite
+        source: /admin
+        destination: /index.html
+      - type: rewrite
+        source: /admin/*
+        destination: /index.html
+      - type: rewrite
+        source: /share
+        destination: /index.html
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
+        name: X-XSS-Protection
+        value: 1; mode=block
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+      - path: /static/css/*
+        name: Content-Type
+        value: text/css
+      - path: /static/css/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /static/js/*
+        name: Content-Type
+        value: application/javascript
+      - path: /static/js/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /static/media/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+    envVars:
+      # Core API Configuration - REQUIRED
+      - key: REACT_APP_API_URL
+        value: https://ludus-backend-athena.onrender.com
+      # Animation Configuration - REQUIRED
+      - key: REACT_APP_ANIMATION_ENABLED
+        value: "true"
+      - key: REACT_APP_RTL_SUPPORT
+        value: "true"
+      # Performance Monitoring - REQUIRED
+      - key: REACT_APP_PERFORMANCE_MONITORING
+        value: "true"
+      - key: REACT_APP_DEBUG_MODE
+        value: "false"
+      # Optional Services (uncomment and set values as needed)
+      # - key: REACT_APP_GOOGLE_MAPS_API_KEY
+      #   sync: false # Set in Render dashboard
+      - key: REACT_APP_GOOGLE_CLIENT_ID
+        sync: false # Set in Render dashboard
+      # - key: REACT_APP_FACEBOOK_APP_ID
+      #   sync: false # Set in Render dashboard
+      # - key: REACT_APP_MOYASAR_PUBLISHABLE_KEY
+      #   sync: false # Set in Render dashboard
+      # - key: REACT_APP_UNSPLASH_ACCESS_KEY
+      #   sync: false # Set in Render dashboard
+      # - key: REACT_APP_UNSPLASH_SECRET_KEY
+      #   sync: false # Set in Render dashboard
+      # - key: REACT_APP_SENTRY_DSN
+      #   sync: false # Set in Render dashboard
+
+  # Agents API (FastAPI)
+  - type: web
+    name: ludus-agents-api
+    env: docker
+    plan: starter
+    dockerfilePath: agents/Dockerfile.api
+    healthCheckPath: /health
+    envVars:
+      - key: REDIS_URL
+        sync: false
+      - key: OLLAMA_HOST
+        value: https://ludus-ollama.onrender.com
+      - key: RENDER_ENVIRONMENT
+        value: production
+
+  # Agents UI (Streamlit)
+  - type: web
+    name: ludus-agents-ui
+    env: docker
+    plan: starter
+    dockerfilePath: agents/Dockerfile.ui
+    envVars:
+      - key: AGENTS_API_URL
+        value: https://ludus-agents-api.onrender.com
+      - key: RENDER_ENVIRONMENT
+        value: production
+
+  # Ollama Service (Custom LUDUS Model)
+  - type: web
+    name: ludus-ollama
+    env: docker
+    plan: starter
+    dockerfilePath: ollama/Dockerfile
+    healthCheckPath: /api/tags
+    healthCheckGracePeriod: 120s
+    envVars:
+      - key: OLLAMA_HOST
+        value: 0.0.0.0
+      - key: OLLAMA_ORIGINS
+        value: "*"
+      - key: OLLAMA_KEEP_ALIVE
+        value: "24h"
+      - key: OLLAMA_NUM_PARALLEL
+        value: "1"
+      - key: OLLAMA_MAX_LOADED_MODELS
+        value: "1"
+      - key: RENDER_ENVIRONMENT
+        value: production

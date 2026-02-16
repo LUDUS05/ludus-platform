@@ -1,0 +1,32 @@
+[build]
+  publish = "build"
+
+## Disabled SPA catch-all redirect to stop automatic rewrites
+# [[redirects]]
+#   from = "/*"
+#   to = "/index.html"
+#   status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[headers]]
+  for = "/static/css/*"
+  [headers.values]
+    Content-Type = "text/css"
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/static/js/*"
+  [headers.values]
+    Content-Type = "application/javascript"
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/static/media/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
