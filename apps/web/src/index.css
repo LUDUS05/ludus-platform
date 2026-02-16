@@ -7,45 +7,67 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    /* Base Colors - Adjusted for Glassmorphism */
+    --background: 210 40% 98%; /* Light gray base */
     --foreground: 222.2 84% 4.9%;
+
+    /* Glass Card Variables */
     --card: 0 0% 100%;
+    --card-opacity: 0.7; /* High transparency for glass effect */
     --card-foreground: 222.2 84% 4.9%;
+    --card-border: 0 0% 100%;
+    
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
+    
     --primary: 222.2 47.4% 11.2%;
     --primary-foreground: 210 40% 98%;
+    
     --secondary: 210 40% 96%;
     --secondary-foreground: 222.2 84% 4.9%;
+    
     --muted: 210 40% 96%;
     --muted-foreground: 215.4 16.3% 46.9%;
+    
     --accent: 210 40% 96%;
     --accent-foreground: 222.2 84% 4.9%;
+    
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
+    
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
-    --radius: 0.5rem;
+    --radius: 1rem; /* Increased radius for modern feel */
   }
 
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
+    
     --card: 222.2 84% 4.9%;
+    --card-opacity: 0.6;
     --card-foreground: 210 40% 98%;
+    --card-border: 217.2 32.6% 25%;
+    
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
+    
     --primary: 210 40% 98%;
     --primary-foreground: 222.2 47.4% 11.2%;
+    
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
+    
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
+    
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
+    
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
+    
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
@@ -53,6 +75,31 @@
 
   body {
     font-family: 'Inter', system-ui, sans-serif;
+    background-color: hsl(var(--background));
+    /* Mesh Gradient Background */
+    background-image: 
+      radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+      radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+      radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+    background-attachment: fixed; /* Parallax-like feel */
+    min-height: 100vh;
+  }
+  
+  /* Light mode override for background to be more airy */
+  @media (prefers-color-scheme: light) {
+    body {
+       background-image: 
+        radial-gradient(at 0% 0%, hsla(25, 100%, 94%, 1) 0, transparent 50%), 
+        radial-gradient(at 50% 0%, hsla(189, 100%, 96%, 1) 0, transparent 50%), 
+        radial-gradient(at 100% 0%, hsla(339, 100%, 95%, 1) 0, transparent 50%);
+    }
+    .dark body {
+        /* Re-apply dark theme gradient if .dark class is present */
+        background-image: 
+          radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+          radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+          radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+    }
   }
 }
 
@@ -73,60 +120,82 @@
   .text-label-md { @apply text-sm font-medium leading-normal; }
   .text-label-sm { @apply text-xs font-medium leading-normal uppercase tracking-wider; }
 
-  /* LUDUS Button Components */
+  /* LUDUS Glass Button Components */
   .btn-ludus-primary {
-    @apply bg-ludus-orange hover:bg-ludus-orange-dark text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply bg-ludus-orange/90 hover:bg-ludus-orange text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed backdrop-blur-sm;
+    background-image: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+    border: 1px solid rgba(255,255,255,0.2);
   }
   
   .btn-ludus-secondary {
-    @apply bg-white border-2 border-ludus-orange text-ludus-orange hover:bg-ludus-orange hover:text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200;
+    @apply bg-white/10 text-ludus-orange hover:bg-white/20 font-semibold py-3 px-4 rounded-xl transition-all duration-300 backdrop-blur-md border border-ludus-orange/50 hover:border-ludus-orange;
   }
   
   .btn-ludus-ghost {
-    @apply bg-transparent text-charcoal hover:bg-warm-light font-medium py-3 px-4 rounded-xl transition-all duration-200;
+    @apply bg-transparent text-charcoal hover:bg-white/10 font-medium py-3 px-4 rounded-xl transition-all duration-200 backdrop-blur-sm;
   }
   
-  /* LUDUS Input Components */
+  /* LUDUS Glass Input Components */
   .input-ludus {
-    @apply w-full px-4 py-3 rounded-xl border-2 border-warm bg-white text-charcoal placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-ludus-orange/20 focus:border-ludus-orange transition-colors duration-200;
+    @apply w-full px-4 py-3 rounded-xl bg-white/50 text-charcoal placeholder-gray-500 focus:outline-none transition-all duration-200 backdrop-blur-md;
+    border: 1px solid rgba(255,255,255,0.4);
+    box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+  }
+  .input-ludus:focus {
+     @apply ring-2 ring-ludus-orange/30 border-ludus-orange/60 bg-white/70;
   }
   
   .input-ludus-error {
-    @apply border-error-red focus:border-error-red focus:ring-error-red/20;
+    @apply border-error-red/60 focus:border-error-red focus:ring-error-red/20 bg-error-red/5;
   }
   
-  /* LUDUS Card Components */
+  /* LUDUS Glass Card Components */
   .card-ludus {
-    @apply bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden;
+    @apply rounded-2xl transition-shadow duration-300 overflow-hidden;
+    background: rgba(255, 255, 255, 0.7); /* Fallback */
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.3));
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  }
+  
+  .dark .card-ludus {
+    background: linear-gradient(135deg, rgba(30, 30, 30, 0.7), rgba(30, 30, 30, 0.3));
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   }
   
   .card-ludus-hover {
-    @apply transition-all duration-300 ease-out hover:shadow-xl hover:-translate-y-1;
+    @apply transition-all duration-300 ease-out hover:shadow-2xl hover:-translate-y-1;
+    &:hover {
+         box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.25);
+    }
   }
   
-  /* Legacy Components for Compatibility */
+  /* Legacy Components for Compatibility - Glassified */
   .btn-primary {
-    @apply bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+    @apply btn-ludus-primary;
   }
   
   .btn-secondary {
-    @apply bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+    @apply btn-ludus-secondary;
   }
   
   .btn-outline {
-    @apply border border-primary-600 text-primary-600 hover:bg-primary-600 hover:text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+     @apply border border-primary-600/50 text-primary-600 hover:bg-primary-600 hover:text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 backdrop-blur-sm;
   }
   
   .input-field {
-    @apply block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500;
+    @apply input-ludus;
   }
   
   .card {
-    @apply bg-white rounded-lg shadow-md overflow-hidden;
+    @apply card-ludus;
   }
   
   .card-header {
-    @apply px-6 py-4 border-b border-gray-200;
+    @apply px-6 py-4 border-b border-gray-200/20;
   }
   
   .card-body {
