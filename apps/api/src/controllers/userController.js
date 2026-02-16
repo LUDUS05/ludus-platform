@@ -857,8 +857,72 @@ const searchUsersAdvanced = async (req, res) => {
       success: false,
       message: 'Failed to search users'
     });
+    res.status(500).json({
+      success: false,
+      message: 'Failed to search users'
+    });
   }
 };
+
+/**
+ * Get user favorites (placeholder).
+ */
+const getUserFavorites = async (req, res) => {
+  try {
+    // TODO: Implement favorites logic
+    res.status(200).json({
+      success: true,
+      data: { favorites: [] }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch user favorites'
+    });
+  }
+};
+
+/**
+ * Add to favorites (placeholder).
+ */
+const addToFavorites = async (req, res) => {
+  try {
+    // TODO: Implement add to favorites logic
+    res.status(200).json({
+      success: true,
+      message: 'Added to favorites'
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to add to favorites'
+    });
+  }
+};
+
+/**
+ * Remove from favorites (placeholder).
+ */
+const removeFromFavorites = async (req, res) => {
+  try {
+    // TODO: Implement remove from favorites logic
+    res.status(200).json({
+      success: true,
+      message: 'Removed from favorites'
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to remove from favorites'
+    });
+  }
+};
+
+/**
+ * Get dashboard stats (alias to getUserStats).
+ */
+const getDashboardStats = getUserStats;
+
 
 module.exports = {
   getUserProfile,
