@@ -1,8 +1,0 @@
-# SPA Routing - Serve index.html for all routes to enable React Router
-/*    /index.html   200
-
-# Specific routes for better handling
-/login    /index.html   200
-/admin    /index.html   200
-/share    /index.html   200
-/hi       /index.html   200

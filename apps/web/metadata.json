@@ -1,0 +1,7 @@
+{
+  "name": "LUDUS",
+  "description": "Comprehensive social activity discovery platform for the Saudi market connecting users with local experiences.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
