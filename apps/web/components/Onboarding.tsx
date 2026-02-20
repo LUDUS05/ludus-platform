@@ -146,7 +146,7 @@ export const Onboarding: React.FC<OnboardingProps> = ({ lang, onClose }) => {
                 </div>
                 <input
                   type="checkbox"
-                  className="hidden"
+                  className="sr-only"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
                 />

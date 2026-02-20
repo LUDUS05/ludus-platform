@@ -3,12 +3,9 @@ import axios, { AxiosInstance, InternalAxiosRequestConfig, AxiosError } from 'ax
 // API configuration for Vite
 const getApiBaseUrl = (): string => {
     // Production
-    if (import.meta.env.PROD) {
-        const envUrl = import.meta.env.VITE_API_URL;
-        if (envUrl) {
-            return envUrl.endsWith('/api') ? envUrl : `${envUrl}/api`;
-        }
-        return 'https://ludus-backend-jzc5.onrender.com/api';
+    if (import.meta.env.PROD || import.meta.env.MODE === 'production') {
+        const envUrl = import.meta.env.VITE_API_URL || 'https://ludus-backend-jzc5.onrender.com';
+        return envUrl.endsWith('/api') ? envUrl : `${envUrl}/api`;
     }
 
     // Development
