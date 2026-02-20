@@ -60,8 +60,9 @@ export const Onboarding: React.FC<OnboardingProps> = ({ lang, onClose }) => {
   };
 
   const { login } = useAuth();
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(() => localStorage.getItem('rememberedEmail') || 'admin@ludusapp.com');
   const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(() => !!localStorage.getItem('rememberedEmail'));
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -70,6 +71,11 @@ export const Onboarding: React.FC<OnboardingProps> = ({ lang, onClose }) => {
     setError('');
     setLoading(true);
     try {
+      if (rememberMe) {
+        localStorage.setItem('rememberedEmail', email);
+      } else {
+        localStorage.removeItem('rememberedEmail');
+      }
       await login({ email, password });
       onClose(); // Close onboarding on success
     } catch (err: any) {
@@ -127,6 +133,31 @@ export const Onboarding: React.FC<OnboardingProps> = ({ lang, onClose }) => {
                 placeholder="••••••••"
                 required
               />
+            </div>
+
+            <div className="flex items-center justify-between mt-2 px-1">
+              <label className="flex items-center gap-2 cursor-pointer group">
+                <div className={`w-5 h-5 rounded border ${rememberMe ? 'bg-primary border-primary' : 'bg-white border-zinc-300'} flex items-center justify-center transition-colors`}>
+                  {rememberMe && (
+                    <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-none stroke-white stroke-[3] stroke-linecap-round stroke-linejoin-round">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  )}
+                </div>
+                <input
+                  type="checkbox"
+                  className="hidden"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                />
+                <span className="text-sm font-bold text-zinc-600 group-hover:text-zinc-900 transition-colors">
+                  {lang === 'ar' ? 'تذكرني' : 'Remember me'}
+                </span>
+              </label>
+
+              <button type="button" className="text-sm font-bold text-primary hover:text-orange-600 transition-colors">
+                {lang === 'ar' ? 'نسيت كلمة المرور؟' : 'Forgot password?'}
+              </button>
             </div>
 
             <button
