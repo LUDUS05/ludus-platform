@@ -145,7 +145,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, lang, setLang }) => {
               <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-primary rounded-full border-2 border-white"></span>
             </button>
 
-            <Link to="/profile" className="w-12 h-12 rounded-full bg-gradient-to-r from-primary to-orange-600 p-[2px] shadow-md block transition-transform hover:scale-105">
+            <Link to="/dashboard" className="w-12 h-12 rounded-full bg-gradient-to-r from-primary to-orange-600 p-[2px] shadow-md block transition-transform hover:scale-105">
               <div className="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden">
                 <User size={22} className="text-zinc-600" />
               </div>
