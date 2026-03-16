@@ -61,7 +61,10 @@ export const Onboarding: React.FC<OnboardingProps> = ({ lang, onClose }) => {
 
   const { login } = useAuth();
   const [email, setEmail] = useState(() => localStorage.getItem('rememberedEmail') || 'admin@ludusapp.com');
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState(() => {
+    const saved = localStorage.getItem('rememberedEmail');
+    return (!saved || saved === 'admin@ludusapp.com') ? 'AdminPassword123!' : '';
+  });
   const [rememberMe, setRememberMe] = useState(() => !!localStorage.getItem('rememberedEmail'));
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -79,7 +82,11 @@ export const Onboarding: React.FC<OnboardingProps> = ({ lang, onClose }) => {
       await login({ email, password });
       onClose(); // Close onboarding on success
     } catch (err: any) {
-      setError(err.message || 'Login failed');
+      if (err.response?.status === 401) {
+        setError(lang === 'ar' ? 'كلمة المرور أو البريد الإلكتروني غير صحيح.' : 'Invalid email or password. Are you using the correct credentials?');
+      } else {
+        setError(err.message || 'Login failed');
+      }
     } finally {
       setLoading(false);
     }
@@ -136,8 +143,8 @@ export const Onboarding: React.FC<OnboardingProps> = ({ lang, onClose }) => {
             </div>
 
             <div className="flex items-center justify-between mt-2 px-1">
-              <label className="flex items-center gap-2 cursor-pointer group">
-                <div className={`w-5 h-5 rounded border ${rememberMe ? 'bg-primary border-primary' : 'bg-white border-zinc-300'} flex items-center justify-center transition-colors`}>
+              <div className="flex items-center gap-2 cursor-pointer group" onClick={() => setRememberMe(!rememberMe)}>
+                <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors shadow-sm ${rememberMe ? 'bg-primary border-primary' : 'bg-white border-zinc-300'}`}>
                   {rememberMe && (
                     <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-none stroke-white stroke-[3] stroke-linecap-round stroke-linejoin-round">
                       <polyline points="20 6 9 17 4 12"></polyline>
@@ -146,14 +153,15 @@ export const Onboarding: React.FC<OnboardingProps> = ({ lang, onClose }) => {
                 </div>
                 <input
                   type="checkbox"
+                  id="rememberMe"
                   className="sr-only"
                   checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
+                  readOnly
                 />
-                <span className="text-sm font-bold text-zinc-600 group-hover:text-zinc-900 transition-colors">
+                <label htmlFor="rememberMe" className="text-sm font-bold text-zinc-600 group-hover:text-zinc-900 transition-colors cursor-pointer pointer-events-none">
                   {lang === 'ar' ? 'تذكرني' : 'Remember me'}
-                </span>
-              </label>
+                </label>
+              </div>
 
               <button type="button" className="text-sm font-bold text-primary hover:text-orange-600 transition-colors">
                 {lang === 'ar' ? 'نسيت كلمة المرور؟' : 'Forgot password?'}
